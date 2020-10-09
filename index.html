@@ -5,15 +5,39 @@
     <title>Monopoly</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-    <link rel="icon" href="favicon.png" type="image/x-icon"/>
-  </head>
-
-  <style>
+    <!--<link rel="icon" href="favicon.png" type="image/x-icon"/>-->
+    <link rel="stylesheet" href="style.css" type="text/css">
+    
 
     
-  </style>
+
+  </head>
 
   <body>
 
+    <div id="board">
+
+      <div id="south-row" class="row">
+        <div id="pentonville-road" class="lightblue property">PENTONVILLE ROAD</div>
+        <div id="euston-road" class="lightblue property">EUSTON ROAD</div>
+        <div class="chance">CHANCE</div>
+        <div id="the-angel-islington" class="lightblue property">THE ANGEL ISLINGTON</div>
+        <div id="marylebone-station" class="station">MARYLEBONE STATION</div>
+        <div id="income-tax" class="special">INCOME TAX Pay £200</div>
+        <div id="whitechapel-road" class="brown property">WHITECHAPEL ROAD</div>
+        <div class="community-chest">COMMUNITY CHEST</div>
+        <div id="old-kent-road" class="brown property">OLD KENT ROAD</div>
+      </div>
+
+    </div>
+    
+    <div id="popup">
+      <div id="popup-inner">
+        <img id="popup-close" src="images/close.svg">
+        <div id="popup-message">Default popup message</div>
+      </div>
+    </div>
+
+    <script src="monopoly.js"></script>
   </body>
 </html>

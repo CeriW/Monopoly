@@ -1,0 +1,135 @@
+/* Monopoly SCSS */
+/* Created by Ceri Woolway beginning October 2020 */
+
+// General colours
+$lightgreen  : #d5e8d4;
+$black       : #000;
+
+
+// Property colours
+
+$brown      : #824c26;
+$lightblue  : #99d1f4;
+$pink       : #d52788;
+$orange     : #f1970b;
+$red        : #db0926;
+$yellow     : #e9ed38;
+$green      : #0aa959;
+$darkblue   : #3e64ad;
+
+
+$border: 3px solid $black;
+
+/* @font-face kit by Fonts2u (https://fonts2u.com) */
+@font-face {font-family:"Kabel-Heavy";src:url("fonts/Kabel-Heavy.eot?") format("eot"),url("fonts/Kabel-Heavy.woff") format("woff"),url("fonts/Kabel-Heavy.ttf") format("truetype"),url("fonts/Kabel-Heavy.svg#Kabel-Heavy") format("svg");font-weight:normal;font-style:normal;}
+
+body{
+    font-family: 'Kabel-Heavy', sans-serif;
+    font-size: 24px;
+    min-height: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    background: $lightgreen;
+}
+
+
+#board{
+    border: $border;
+}
+
+.row{
+    display: flex;
+}
+
+.row > div{
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 7%;
+    font-size: 1vw;
+}
+
+.property,
+.community-chest,
+.special,
+.station,
+.chance{
+    border-top: $border;
+    border-left: $border;
+    padding: 1vw;
+    text-align: center;
+}
+
+/* Normal property -------------------------------------------------*/
+
+.property{
+    position: relative;
+    padding-top: 30%;
+    text-align: center;
+    border-top: $border;
+    border-left: $border;
+
+    &:before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 25%;
+        border-bottom: $border;
+    }
+}
+
+.property.brown:before{background: $brown;}
+.property.lightblue:before{background: $lightblue;}
+
+/* Special property -------------------------------------------------*/
+
+.community-chest{
+    background: url('images/community-chest.svg') center no-repeat;
+    background-size: contain;
+}
+
+.station{
+    background: url('images/station.svg') center no-repeat;
+    background-size: contain;
+}
+
+.chance{
+    background: url('images/chance.svg') center no-repeat;
+    background-size: contain;
+}
+
+
+/* Popup ----------------------------------------------------------*/
+
+#popup{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba($black, 0.3);
+}
+
+#popup-inner{
+    background: #fff;
+    border: $border;
+    padding: 20px;
+    width: 800px;
+    max-width: 100%;
+    position: relative;
+    text-align: center;
+}
+
+#popup-close{
+    width: 35px;
+    float: right;
+}
+
+body:not(.popup-open) #popup{
+    display: none;
+}
