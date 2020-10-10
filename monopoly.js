@@ -1,3 +1,7 @@
+// monopoly.js by Ceri Woolway - cxv712@gmail.com
+
+// VARIABLE DECLARATIONS -----------------------------------------------------//
+
 
 // All of the possible community chest cards
 let communityChestCards = 
@@ -9,8 +13,20 @@ let communityChestCards =
     {description: 'card5'}
   ]
 
+let chanceCards = 
+  [
+    {description: 'cardA'},
+    {description: 'cardB'},
+    {description: 'cardC'},
+    {description: 'cardD'},
+    {description: 'cardE'}
+  ]
+
+
 let popupMessage = document.querySelector('#popup-message')
 
+
+// ---------------------------------------------------------------------------//
 
 initialisePage()
 
@@ -23,10 +39,25 @@ function initialisePage(){
         })
     })
 
+    ;[].forEach.call(document.querySelectorAll('.chance'), function(node){
+        // TODO - is this really the most efficient way of running this on click?
+        node.addEventListener('click', function(){
+            drawCard('chance')
+        })
+    })
+
     // Add the close functionality to the popup
     document.querySelector('#popup-close').addEventListener('click', closePopup)
 
+    // Shuffle the chance and community chest cards
+    shuffleCards(communityChestCards)
+    console.log(communityChestCards)
+    shuffleCards(chanceCards)
+    console.log(chanceCards)
+
 }
+
+// COMMUNITY CHEST AND CHANGE FUNCTIONS --------------------------------------//
 
 function drawCard(type){
 
@@ -35,17 +66,25 @@ function drawCard(type){
     // When drawn, the card is returned to the bottom of the pile.
     // This way, they always stay in the same rotation.
 
-    //TODO
-    let chosenCard = Math.floor(Math.random() * communityChestCards.length)
+    let cardList = (type === "community-chest") ? communityChestCards : chanceCards
+    let chosenCard = cardList.shift()
+    openPopup(chosenCard.description)
+    cardList.push(chosenCard)
+  
+}
 
-    if (type === "community-chest"){
-        openPopup(communityChestCards[chosenCard].description)
-        console.log(communityChestCards[chosenCard].description)
-    } else{
-        console.log('oops!')
+
+// A function which does a Durstenfeld shuffle
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleCards(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
+
+// POPUP FUNCTIONS -----------------------------------------------------------//
 
 function closePopup(){
     document.body.classList.remove('popup-open')
