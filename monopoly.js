@@ -60,11 +60,99 @@ let chanceCards =
 let popupMessage = document.querySelector('#popup-message')
 
 
+let spaces =  [
+    {name: 'Go',                    type: 'special',            price: null,    colour: null,           boardposition: 'south'},
+    {name: 'Old Kent Road',         type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'south'},
+    {name: 'Whitechapel Road',      type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
+    {name: 'Income tax',            type: 'special',            price: null,    colour: null,           boardposition: 'south'},
+    {name: 'Kings Cross Station',   type: 'station',            price: 200,     colour: null,           boardposition: 'south'},
+    {name: 'The Angel Islington',   type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
+    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'south'},
+    {name: 'Euston Road',           type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
+    {name: 'Pentonville Road',      type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
+
+    {name: 'Jail',                  type: 'special',            price: null,    colour: null,           boardposition: 'west'},
+    {name: 'Pall Mall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
+    {name: 'Electric Company',      type: 'utility',            price: 150,     colour: null,           boardposition: 'west'},
+    {name: 'Whitehall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
+    {name: 'Northumberland Avenue', type: 'property',           price: 150,     colour: 'pink',         boardposition: 'west'},
+    {name: 'Marylebone Station',    type: 'station',            price: 200,     colour: null,           boardposition: 'west'},
+    {name: 'Bow Street',            type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west'},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'west'},
+    {name: 'Marlborough Street',    type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west'},
+    {name: 'Vine Street',           type: 'property',           price: 200,     colour: 'orange',       boardposition: 'west'},
+
+    {name: 'Free Parking',          type: 'special',            price: null,    colour: null,           boardposition: 'north'},
+    {name: 'Strand',                type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
+    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'north'},
+    {name: 'Fleet Street',          type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
+    {name: 'Trafalgar Square',      type: 'property',           price: 240,     colour: 'red',          boardposition: 'north'},
+    {name: 'Fenchurch St. Station', type: 'station',            price: 200,     colour: null,           boardposition: 'north'},
+    {name: 'Leicester Square',      type: 'property',           price: 220,     colour: 'yellow',       boardposition: 'north'},
+    {name: 'Water Works',           type: 'utility',            price: 150,     colour: null,           boardposition: 'north'},
+    {name: 'Coventry Street',       type: 'property',           price: 260,     colour: 'yellow',       boardposition: 'north'},
+    {name: 'Piccadilly',            type: 'property',           price: 280,     colour: 'yellow',       boardposition: 'north'},
+    
+    {name: 'Go To Jail',            type: 'special',            price: null,    colour: null,           boardposition: 'east'},
+    {name: 'Regent Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
+    {name: 'Oxford Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'east'},
+    {name: 'Bond Street',           type: 'property',           price: 320,     colour: 'green',        boardposition: 'east'},
+    {name: 'Liverpool St. Station', type: 'station',            price: 200,     colour: null,           boardposition: 'east'},
+    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'east'},
+    {name: 'Park Lane',             type: 'property',           price: 350,     colour: 'darkblue',     boardposition: 'east'},
+    {name: 'Super Tax',             type: 'special',            price: null,    colour: null,           boardposition: 'east'},
+    {name: 'Mayfair',               type: 'property',           price: 400,     colour: 'darkblue',     boardposition: 'east'},
+]
+
+
+
+
 // ---------------------------------------------------------------------------//
 
 initialisePage()
 
 function initialisePage(){
+
+    // Generate all of the spaces on the board
+    // While this could be done in the HTML, doing it based on a JS array means
+    // I can potentially add other international boards easily in the future.
+    generateBoard()
+
+    // Shuffle both decks of cards
+    shuffleCards(communityChestCards)
+    shuffleCards(chanceCards)
+
+    // Add all of the required event listeners
+    addEvents()
+}
+
+function generateBoard(){
+
+    let board = document.querySelector('#board')
+
+    spaces.forEach(function(space){
+        let newSpace = document.createElement('div')
+        newSpace.setAttribute('id', space.name.replace(/\s+/g, '-').toLowerCase())
+        newSpace.classList.add(space.type)
+
+        if (space.colour){
+            newSpace.classList.add(space.colour)
+        }
+        
+        newSpace.innerHTML = space.name.toUpperCase()
+
+        if (space.price){
+            newSpace.innerHTML += '<div class="property-price">£' + space.price + '</div>'
+            newSpace.setAttribute('price', space.price)
+        }
+
+        board.querySelector('#' + space.boardposition).appendChild(newSpace)
+    })
+}
+
+function addEvents(){
     //TODO - Obviously this doesn't happen on click. Click will do for now.
     ;[].forEach.call(document.querySelectorAll('.community-chest'), function(node){
         // TODO - is this really the most efficient way of running this on click?
@@ -90,16 +178,7 @@ function initialisePage(){
             closePopup()
         }
     }
-
-    // Shuffle the chance and community chest cards
-    shuffleCards(communityChestCards)
-    console.log(communityChestCards)
-    shuffleCards(chanceCards)
-    console.log(chanceCards)
-
 }
-
-
 
 
 // COMMUNITY CHEST AND CHANGE FUNCTIONS --------------------------------------//
