@@ -14,6 +14,9 @@
 
 */
 
+let board = document.querySelector('#board')
+let popupMessage = document.querySelector('#popup-message')
+
 // All of the possible community chest cards
 let communityChestCards = 
   [
@@ -57,11 +60,8 @@ let chanceCards =
   ]
 
 
-let popupMessage = document.querySelector('#popup-message')
-
-
 let spaces =  [
-    {name: 'Go',                    type: 'special',            price: null,    colour: null,           boardposition: 'south'},
+    {name: 'Go',                    type: 'special',            price: null,    colour: 'corner',           boardposition: 'south'},
     {name: 'Old Kent Road',         type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'south'},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
@@ -72,7 +72,7 @@ let spaces =  [
     {name: 'Euston Road',           type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
     {name: 'Pentonville Road',      type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
 
-    {name: 'Jail',                  type: 'special',            price: null,    colour: null,           boardposition: 'west'},
+    {name: 'Jail',                  type: 'special',            price: null,    colour: 'corner',           boardposition: 'west'},
     {name: 'Pall Mall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
     {name: 'Electric Company',      type: 'utility',            price: 150,     colour: null,           boardposition: 'west'},
     {name: 'Whitehall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
@@ -83,7 +83,7 @@ let spaces =  [
     {name: 'Marlborough Street',    type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west'},
     {name: 'Vine Street',           type: 'property',           price: 200,     colour: 'orange',       boardposition: 'west'},
 
-    {name: 'Free Parking',          type: 'special',            price: null,    colour: null,           boardposition: 'north'},
+    {name: 'Free Parking',          type: 'special',            price: null,    colour: 'corner',           boardposition: 'north'},
     {name: 'Strand',                type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
     {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'north'},
     {name: 'Fleet Street',          type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
@@ -94,7 +94,7 @@ let spaces =  [
     {name: 'Coventry Street',       type: 'property',           price: 260,     colour: 'yellow',       boardposition: 'north'},
     {name: 'Piccadilly',            type: 'property',           price: 280,     colour: 'yellow',       boardposition: 'north'},
     
-    {name: 'Go To Jail',            type: 'special',            price: null,    colour: null,           boardposition: 'east'},
+    {name: 'Go To Jail',            type: 'special',            price: null,    colour: 'corner',           boardposition: 'east'},
     {name: 'Regent Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
     {name: 'Oxford Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'east'},
@@ -178,6 +178,15 @@ function addEvents(){
             closePopup()
         }
     }
+
+    // Ensure the board's height is always the same as its width,
+    // so it is always square
+    resizeBoard()
+    window.addEventListener('resize', resizeBoard)
+}
+
+function resizeBoard(){
+    board.style.height = board.offsetWidth + 'px'
 }
 
 
