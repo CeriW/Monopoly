@@ -14,10 +14,12 @@ body {
   padding: 30px;
   margin: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  background: #d5e8d4; }
+  background: #d5e8d4;
+  text-align: center; }
 
 #board {
   border: 3px solid #000;
@@ -133,7 +135,7 @@ body {
   font-size: 10px;
   min-height: 50px; }
 
-/* Normal property -------------------------------------------------*/
+/* Normal property -----------------------------------------------------------*/
 .property {
   position: relative;
   padding-top: 20px;
@@ -174,7 +176,7 @@ body {
 .property-price {
   font-size: 14px; }
 
-/* Special property -------------------------------------------------*/
+/* Special property ----------------------------------------------------------*/
 .community-chest {
   background: url("images/community-chest.svg") center no-repeat;
   background-size: contain; }
@@ -187,7 +189,55 @@ body {
   background: url("images/chance.svg") center no-repeat;
   background-size: contain; }
 
-/* Popup ----------------------------------------------------------*/
+/* Dice ----------------------------------------------------------------------*/
+.dice {
+  width: 35px;
+  height: 35px;
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 5px;
+  background-size: contain; }
+
+.dice-roll-1 {
+  background-image: url("images/dice-1.svg"); }
+
+.dice-roll-2 {
+  background-image: url("images/dice-2.svg"); }
+
+.dice-roll-3 {
+  background-image: url("images/dice-3.svg"); }
+
+.dice-roll-4 {
+  background-image: url("images/dice-4.svg"); }
+
+.dice-roll-5 {
+  background-image: url("images/dice-5.svg"); }
+
+.dice-roll-6 {
+  background-image: url("images/dice-6.svg"); }
+
+#doubles {
+  font-size: 0.8em; }
+
+#dice-roll {
+  display: flex;
+  align-items: center; }
+  #dice-roll span {
+    padding: 10px; }
+  #dice-roll #dice-total {
+    font-weight: bold;
+    font-size: 1.2em; }
+
+.double1 .dice {
+  background-color: #e9ed38; }
+
+.double2 .dice {
+  background-color: #f1970b; }
+
+.double3 .dice {
+  background-color: #db0926; }
+
+/* Popup ---------------------------------------------------------------------*/
 #popup {
   position: fixed;
   top: 0;
