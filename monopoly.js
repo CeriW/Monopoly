@@ -17,6 +17,15 @@
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 
+// Dice related elements
+let doublesCount = 0
+let diceContainer = document.querySelector('#dice-roll')
+let dice1 = document.querySelector('#dice-1')
+let dice2 = document.querySelector('#dice-2')
+let diceTotal = document.querySelector('#dice-total')
+let diceDoubles = document.querySelector('#doubles')
+let diceRollButton = document.querySelector('#dice-roll-button')
+
 // All of the possible community chest cards
 let communityChestCards = 
   [
@@ -109,7 +118,7 @@ let spaces =  [
 
 
 
-// ---------------------------------------------------------------------------//
+// Page setup functions ------------------------------------------------------//
 
 initialisePage()
 
@@ -123,6 +132,9 @@ function initialisePage(){
     // Shuffle both decks of cards
     shuffleCards(communityChestCards)
     shuffleCards(chanceCards)
+
+    // Make the board the same height as its width
+    resizeBoard()
 
     // Add all of the required event listeners
     addEvents()
@@ -181,8 +193,10 @@ function addEvents(){
 
     // Ensure the board's height is always the same as its width,
     // so it is always square
-    resizeBoard()
     window.addEventListener('resize', resizeBoard)
+
+    diceRollButton.addEventListener('click', rollDice)
+
 }
 
 function resizeBoard(){
@@ -227,4 +241,57 @@ function openPopup(message){
     popupMessage.innerText = message
     document.body.classList.add('popup-open')
 }
+
+// DICE FUNCTIONS -----------------------------------------------------------//
+
+function rollDice(){
+    let roll1 = Math.ceil(Math.random() * 6)
+    let roll2 = Math.ceil(Math.random() * 6)
+    let total = roll1 + roll2
+    let doubles = false
+
+    // If the two numbers are the same, report that we rolled doubles.
+    // Three doubles in a row sends you to jail.
+    if (roll1 === roll2){
+        doubles = true
+    }
+
+    //return [roll1, roll2, total, doubles]
+
+    dice1.className = "dice dice-roll-" + roll1
+    dice2.className = "dice dice-roll-" + roll2
+    diceTotal.innerText = total
+    
+
+
+    if (doubles){
+        doublesCount++
+    } else{
+        diceDoubles.innerText = ""
+        doublesCount = 0
+    }
+
+    switch (doublesCount){
+        case 0:
+            diceDoubles.innerText = ""
+            diceContainer.className = "double0"
+            break
+        case 1:
+            diceDoubles.innerText = "1st double"
+            diceContainer.className ="double1"
+            break
+        case 2:
+            diceDoubles.innerText = "2nd double"
+            diceContainer.className = "double2"
+            break
+        case 3:
+            diceDoubles.innerText = "3rd double! Go to jail."
+            diceContainer.className = "double3"
+            doublesCount = 0
+            // Presumably there'll be a goToJail function eventually.
+    }    
+}
+
+
+
 

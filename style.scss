@@ -30,10 +30,12 @@ body{
     padding: 30px;
     margin: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     background: $lightgreen;
+    text-align: center;
 }
 
 
@@ -154,7 +156,7 @@ $columnsize: 75px;
 
 
 
-/* Normal property -------------------------------------------------*/
+/* Normal property -----------------------------------------------------------*/
 
 .property{
     position: relative;
@@ -185,7 +187,7 @@ $columnsize: 75px;
     font-size: 14px;
 }
 
-/* Special property -------------------------------------------------*/
+/* Special property ----------------------------------------------------------*/
 
 .community-chest{
     background: url('images/community-chest.svg') center no-repeat;
@@ -203,7 +205,54 @@ $columnsize: 75px;
 }
 
 
-/* Popup ----------------------------------------------------------*/
+/* Dice ----------------------------------------------------------------------*/
+
+.dice{
+    width: 35px;
+    height: 35px;
+    background: #fff;
+    border: $border;
+    border-radius: 5px;
+    background-size: contain;
+}
+
+@for $i from 1 through 6 {
+    .dice-roll-#{$i}{
+        background-image: url('images/dice-#{$i}.svg')
+    }
+  }
+
+#doubles{
+    font-size: 0.8em;
+}
+
+#dice-roll{
+    display: flex;
+    align-items: center;
+
+    span{
+        padding: 10px;
+    }
+
+    #dice-total{
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+}
+
+.double1 .dice{
+    background-color: $yellow;
+}
+
+.double2 .dice{
+    background-color: $orange;
+}
+
+.double3 .dice{
+    background-color: $red;
+}
+
+/* Popup ---------------------------------------------------------------------*/
 
 #popup{
     position: fixed;
