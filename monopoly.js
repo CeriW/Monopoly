@@ -70,7 +70,7 @@ let chanceCards =
 
 
 let spaces =  [
-    {name: 'Go',                    type: 'special',            price: null,    colour: 'corner',           boardposition: 'south'},
+    {name: 'Go',                    type: 'special',            price: null,    colour: 'corner',       boardposition: 'south'},
     {name: 'Old Kent Road',         type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'south'},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
@@ -81,7 +81,7 @@ let spaces =  [
     {name: 'Euston Road',           type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
     {name: 'Pentonville Road',      type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
 
-    {name: 'Jail',                  type: 'special',            price: null,    colour: 'corner',           boardposition: 'west'},
+    {name: 'Jail',                  type: 'special',            price: null,    colour: 'corner',       boardposition: 'west'},
     {name: 'Pall Mall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
     {name: 'Electric Company',      type: 'utility',            price: 150,     colour: null,           boardposition: 'west'},
     {name: 'Whitehall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
@@ -248,13 +248,10 @@ function rollDice(){
     let roll1 = Math.ceil(Math.random() * 6)
     let roll2 = Math.ceil(Math.random() * 6)
     let total = roll1 + roll2
-    let doubles = false
 
     // If the two numbers are the same, report that we rolled doubles.
     // Three doubles in a row sends you to jail.
-    if (roll1 === roll2){
-        doubles = true
-    }
+    let doubles = (roll1 === roll2) ? true : false
 
     //return [roll1, roll2, total, doubles]
 
@@ -291,7 +288,3 @@ function rollDice(){
             // Presumably there'll be a goToJail function eventually.
     }    
 }
-
-
-
-
