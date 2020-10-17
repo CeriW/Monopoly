@@ -17,6 +17,10 @@
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 
+
+// TODO - temporary until I add support for multiple tokens
+let token = document.querySelector('#token')
+
 // Dice related elements
 let doublesCount = 0
 let diceContainer = document.querySelector('#dice-roll')
@@ -252,7 +256,7 @@ function openPopup(message){
 
 // A variable for how many sides the dice has. Used in testing where 
 // smaller numbers are desirable.
-let diceSides = 2
+let diceSides = 3
 
 function rollDice(){
     let roll1 = Math.ceil(Math.random() * diceSides)
@@ -269,6 +273,8 @@ function rollDice(){
     dice2.className = "dice dice-roll-" + roll2
     diceTotal.innerText = total
     
+
+    moveToken(total)
 
 
     if (doubles){
@@ -294,83 +300,53 @@ function rollDice(){
         case 3:
             diceDoubles.innerText = "3rd double! Go to jail."
             diceContainer.className = "double3"
+            
+            goToJail()
             doublesCount = 0
             // Presumably there'll be a goToJail function eventually.
     }
 
-    moveToken(total)
+
 
 }
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//
 
 function moveToken(total){
-    let token = document.querySelector('#token')
     let startPosition = parseInt(token.getAttribute('position'))
     let endPosition = startPosition + total
     token.setAttribute('position', endPosition)
 
+    // TODO - would a switch statement be better? I had trouble getting it to
+    // evaluate <= statements    
+    if (endPosition <=10){
+        token.setAttribute('area', 'south')
+        positionToken(endPosition)
+    } else if (endPosition >10 && endPosition <=20){
+        token.setAttribute('area', 'west')
+        positionToken(endPosition)
+    } else if (endPosition >20 && endPosition <=29){
+        token.setAttribute('area', 'north')
+        positionToken(endPosition)
+    } else if (endPosition === 30){ 
+        goToJail()
+    } else {
+        token.setAttribute('area', 'east')
+        positionToken(endPosition)
+    }
 
+}
 
+function positionToken(endPosition){
     let matchingProperty = document.querySelector('#board > .row div[position="' + endPosition + '"]')
     token.style.top = matchingProperty.offsetTop + 'px'
     token.style.left = matchingProperty.offsetLeft + 'px'
-    token.style.right = matchingProperty.offsetright + 'px'
+    token.style.right = matchingProperty.offsetRight + 'px'
     token.style.bottom = matchingProperty.offsetBottom + 'px'
+}
 
-    // TODO
-    // I'm sure this cannot be the most efficient way of doing this, but I had
-    // some trouble getting it to evaluate <= statements
-    switch (endPosition){
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-            token.setAttribute('area', 'south')
-            break
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-        case 20:
-            token.setAttribute('area', 'west')
-            break
-        case 21:
-        case 22:
-        case 23:
-        case 24:
-        case 25:
-        case 26:
-        case 27:
-        case 28:
-        case 29:
-        case 30:
-            token.setAttribute('area', 'north')
-            break
-        case 31:
-        case 32:
-        case 33:
-        case 34:
-        case 35:
-        case 36:
-        case 37:
-        case 38:
-        case 39:
-        case 40:
-            token.setAttribute('area', 'east')
-    }   
-
-
+function goToJail(){
+    token.setAttribute('position', 10)
+    token.setAttribute('area', 'west')
+    positionToken(10)
 }

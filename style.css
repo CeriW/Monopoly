@@ -221,7 +221,10 @@ body {
 
 #dice-roll {
   display: flex;
-  align-items: center; }
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%; }
   #dice-roll span {
     padding: 10px; }
   #dice-roll #dice-total {
@@ -287,6 +290,3 @@ body {
 
 body:not(.popup-open) #popup {
   display: none; }
-
-#test-grid {
-  display: grid; }
