@@ -235,6 +235,12 @@ $columnsize: 80px;
     display: flex;
     align-items: center;
 
+
+    // Just dumping this in the middle of the board for now for ease of testing.
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
     span{
         padding: 10px;
     }
@@ -323,7 +329,3 @@ body:not(.popup-open) #popup{
 
 
 
-
-#test-grid{
-    display: grid;
-}
