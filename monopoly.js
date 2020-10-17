@@ -308,8 +308,17 @@ function moveToken(total){
     let token = document.querySelector('#token')
     let startPosition = parseInt(token.getAttribute('position'))
     let endPosition = startPosition + total
+    token.setAttribute('position', endPosition)
 
 
+
+    let matchingProperty = document.querySelector('#board > .row div[position="' + endPosition + '"]')
+    token.style.top = matchingProperty.offsetTop + 'px'
+    token.style.left = matchingProperty.offsetLeft + 'px'
+    token.style.right = matchingProperty.offsetright + 'px'
+    token.style.bottom = matchingProperty.offsetBottom + 'px'
+
+    // TODO
     // I'm sure this cannot be the most efficient way of doing this, but I had
     // some trouble getting it to evaluate <= statements
     switch (endPosition){
@@ -363,5 +372,5 @@ function moveToken(total){
             token.setAttribute('area', 'east')
     }   
 
-    token.setAttribute('position', endPosition)
+
 }
