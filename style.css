@@ -24,18 +24,17 @@ body {
 #board {
   border: 3px solid #000;
   display: grid;
-  grid-template-columns: 75px auto 75px;
-  grid-template-rows: 75px auto 75px;
+  grid-template-columns: 80px auto 80px;
+  grid-template-rows: 80px auto 80px;
   max-width: 900px;
   position: relative; }
 
 #south {
   grid-column: 2 / 4;
   grid-row: 3 / 4;
-  display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto auto auto auto 75px; }
+  display: flex;
+  flex-direction: row-reverse; }
   #south > div {
-    grid-row: 1 / 1;
     border-left: 3px solid #000;
     border-top: 3px solid #000; }
   #south > div:last-child {
@@ -111,7 +110,7 @@ body {
     border-bottom: none; }
 
 .corner.special {
-  flex-basis: 75px;
+  flex-basis: 80px;
   flex-grow: unset;
   flex-shrink: unset; }
 
@@ -241,152 +240,23 @@ body {
 /* Player tokens -------------------------------------------------------------*/
 #token {
   background: url("images/token.svg") center no-repeat;
-  background-size: contain; }
+  background-size: 35px; }
 
 .token {
-  width: 35px;
-  height: 35px;
+  width: 80px;
+  height: 80px;
   position: absolute;
   z-index: 2; }
 
-/* SOUTH ----------------------------- */
-.token[area="south"] {
-  bottom: 0; }
-
-.token[position="0"] {
-  right: 0; }
-
-.token[position="1"] {
-  right: 10%; }
-
-.token[position="2"] {
-  right: 20%; }
-
-.token[position="3"] {
-  right: 30%; }
-
-.token[position="4"] {
-  right: 40%; }
-
-.token[position="5"] {
-  right: 50%; }
-
-.token[position="6"] {
-  right: 60%; }
-
-.token[position="7"] {
-  right: 70%; }
-
-.token[position="8"] {
-  right: 80%; }
-
-.token[position="9"] {
-  right: 90%; }
-
-/* WEST ----------------------------- */
-.token[area="west"] {
-  left: 0;
-  right: unset; }
-
-.token[position="10"] {
-  bottom: 0; }
-
-.token[position="11"] {
-  bottom: 10%; }
-
-.token[position="12"] {
-  bottom: 20%; }
-
-.token[position="13"] {
-  bottom: 30%; }
-
-.token[position="14"] {
-  bottom: 40%; }
-
-.token[position="15"] {
-  bottom: 50%; }
-
-.token[position="16"] {
-  bottom: 60%; }
-
-.token[position="17"] {
-  bottom: 70%; }
-
-.token[position="18"] {
-  bottom: 80%; }
-
-.token[position="19"] {
-  bottom: 90%; }
-
-/* NORTH ----------------------------- */
-.token[area="north"] {
-  top: 0;
-  bottom: unset; }
-
-.token[position="20"] {
-  left: 0; }
-
-.token[position="21"] {
-  left: 10%; }
-
-.token[position="22"] {
-  left: 20%; }
-
-.token[position="23"] {
-  left: 30%; }
-
-.token[position="24"] {
-  left: 40%; }
-
-.token[position="25"] {
-  left: 50%; }
-
-.token[position="26"] {
-  left: 60%; }
-
-.token[position="27"] {
-  left: 70%; }
-
-.token[position="28"] {
-  left: 80%; }
-
-.token[position="29"] {
-  left: 90%; }
-
-/* EAST ----------------------------- */
+/* Due to the way the JS calculates the correct position for the token and the 
+   side the borders end up on, there are slightly irregularities. Likely
+   not even noticeable but it bothers me otherwise */
+.token[area="south"],
 .token[area="east"] {
-  right: 0;
-  left: unset; }
+  margin-left: 1px; }
 
-.token[position="30"] {
-  left: 0; }
-
-.token[position="31"] {
-  left: 10%; }
-
-.token[position="32"] {
-  left: 20%; }
-
-.token[position="33"] {
-  left: 30%; }
-
-.token[position="34"] {
-  left: 40%; }
-
-.token[position="35"] {
-  left: 50%; }
-
-.token[position="36"] {
-  left: 60%; }
-
-.token[position="37"] {
-  left: 70%; }
-
-.token[position="38"] {
-  left: 80%; }
-
-.token[position="39"] {
-  left: 90%; }
+.token[area="west"] {
+  margin-left: -1px; }
 
 /* Popup ---------------------------------------------------------------------*/
 #popup {
