@@ -47,6 +47,7 @@ $columnsize: 75px;
     grid-template-columns: $columnsize auto $columnsize;
     grid-template-rows: $columnsize auto $columnsize;
     max-width: 900px;
+    position: relative;
 }
 
 #south{
@@ -251,6 +252,97 @@ $columnsize: 75px;
 .double3 .dice{
     background-color: $red;
 }
+
+/* Player tokens -------------------------------------------------------------*/
+
+// Eventually there'll be mutliple token types, with each player being able to
+// choose their token. This will do for now.
+#token{
+    background: url('images/token.svg') center no-repeat;
+    background-size: contain;
+}
+
+.token{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    z-index: 2;
+}
+
+/* SOUTH ----------------------------- */
+
+.token[area="south"]{
+    bottom: 0;
+}
+
+.token[position="0"] {right: 0;}
+.token[position="1"] {right: 10%;}
+.token[position="2"] {right: 20%;}
+.token[position="3"] {right: 30%;}
+.token[position="4"] {right: 40%;}
+.token[position="5"] {right: 50%;}
+.token[position="6"] {right: 60%;}
+.token[position="7"] {right: 70%;}
+.token[position="8"] {right: 80%;}
+.token[position="9"] {right: 90%;}
+
+
+/* WEST ----------------------------- */
+
+.token[area="west"]{
+    left: 0;
+    right: unset;
+}
+
+.token[position="10"] {bottom: 0;}
+.token[position="11"] {bottom: 10%;}
+.token[position="12"] {bottom: 20%;}
+.token[position="13"] {bottom: 30%;}
+.token[position="14"] {bottom: 40%;}
+.token[position="15"] {bottom: 50%;}
+.token[position="16"] {bottom: 60%;}
+.token[position="17"] {bottom: 70%;}
+.token[position="18"] {bottom: 80%;}
+.token[position="19"] {bottom: 90%;}
+
+
+/* NORTH ----------------------------- */
+
+.token[area="north"]{
+    top: 0;
+    bottom: unset;
+}
+
+.token[position="20"] {left: 0;}
+.token[position="21"] {left: 10%;}
+.token[position="22"] {left: 20%;}
+.token[position="23"] {left: 30%;}
+.token[position="24"] {left: 40%;}
+.token[position="25"] {left: 50%;}
+.token[position="26"] {left: 60%;}
+.token[position="27"] {left: 70%;}
+.token[position="28"] {left: 80%;}
+.token[position="29"] {left: 90%;}
+
+
+/* EAST ----------------------------- */
+
+.token[area="east"]{
+    right: 0;
+    left:  unset;
+}
+
+.token[position="30"] {left: 0;}
+.token[position="31"] {left: 10%;}
+.token[position="32"] {left: 20%;}
+.token[position="33"] {left: 30%;}
+.token[position="34"] {left: 40%;}
+.token[position="35"] {left: 50%;}
+.token[position="36"] {left: 60%;}
+.token[position="37"] {left: 70%;}
+.token[position="38"] {left: 80%;}
+.token[position="39"] {left: 90%;}
+
 
 /* Popup ---------------------------------------------------------------------*/
 

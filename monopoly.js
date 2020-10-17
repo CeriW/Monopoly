@@ -143,6 +143,7 @@ function initialisePage(){
 function generateBoard(){
 
     let board = document.querySelector('#board')
+    let positionNumber = 0
 
     spaces.forEach(function(space){
         let newSpace = document.createElement('div')
@@ -159,6 +160,11 @@ function generateBoard(){
             newSpace.innerHTML += '<div class="property-price">£' + space.price + '</div>'
             newSpace.setAttribute('price', space.price)
         }
+
+        // Add a position number to each property.
+        // This will be used to move the tokens around the board
+        newSpace.setAttribute('position', positionNumber)
+        positionNumber++
 
         board.querySelector('#' + space.boardposition).appendChild(newSpace)
     })
@@ -196,7 +202,7 @@ function addEvents(){
     window.addEventListener('resize', resizeBoard)
 
     diceRollButton.addEventListener('click', rollDice)
-
+    
 }
 
 function resizeBoard(){
@@ -242,11 +248,15 @@ function openPopup(message){
     document.body.classList.add('popup-open')
 }
 
-// DICE FUNCTIONS -----------------------------------------------------------//
+// DICE FUNCTIONS ------------------------------------------------------------//
+
+// A variable for how many sides the dice has. Used in testing where 
+// smaller numbers are desirable.
+let diceSides = 2
 
 function rollDice(){
-    let roll1 = Math.ceil(Math.random() * 6)
-    let roll2 = Math.ceil(Math.random() * 6)
+    let roll1 = Math.ceil(Math.random() * diceSides)
+    let roll2 = Math.ceil(Math.random() * diceSides)
     let total = roll1 + roll2
 
     // If the two numbers are the same, report that we rolled doubles.
@@ -286,5 +296,72 @@ function rollDice(){
             diceContainer.className = "double3"
             doublesCount = 0
             // Presumably there'll be a goToJail function eventually.
-    }    
+    }
+
+    moveToken(total)
+
+}
+
+// TOKEN FUNCTIONS -----------------------------------------------------------//
+
+function moveToken(total){
+    let token = document.querySelector('#token')
+    let startPosition = parseInt(token.getAttribute('position'))
+    let endPosition = startPosition + total
+
+
+    // I'm sure this cannot be the most efficient way of doing this, but I had
+    // some trouble getting it to evaluate <= statements
+    switch (endPosition){
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            token.setAttribute('area', 'south')
+            break
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+            token.setAttribute('area', 'west')
+            break
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+        case 30:
+            token.setAttribute('area', 'north')
+            break
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+        case 37:
+        case 38:
+        case 39:
+        case 40:
+            token.setAttribute('area', 'east')
+    }   
+
+    token.setAttribute('position', endPosition)
 }
