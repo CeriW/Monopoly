@@ -30,6 +30,14 @@ let diceTotal = document.querySelector('#dice-total')
 let diceDoubles = document.querySelector('#doubles')
 let diceRollButton = document.querySelector('#dice-roll-button')
 
+// A variable for how many sides the dice has. Used in testing where 
+// smaller numbers are desirable.
+let diceSides = 3
+
+// TODO - Could these arrays be better implemented as JSON files? They are
+// already quite large, and will get even larger if I add support for multiple
+// international/theme board types.
+
 // All of the possible community chest cards
 let communityChestCards = 
   [
@@ -96,7 +104,7 @@ let spaces =  [
     {name: 'Marlborough Street',    type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west'},
     {name: 'Vine Street',           type: 'property',           price: 200,     colour: 'orange',       boardposition: 'west'},
 
-    {name: 'Free Parking',          type: 'special',            price: null,    colour: 'corner',           boardposition: 'north'},
+    {name: 'Free Parking',          type: 'special',            price: null,    colour: 'corner',       boardposition: 'north'},
     {name: 'Strand',                type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
     {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'north'},
     {name: 'Fleet Street',          type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
@@ -107,7 +115,7 @@ let spaces =  [
     {name: 'Coventry Street',       type: 'property',           price: 260,     colour: 'yellow',       boardposition: 'north'},
     {name: 'Piccadilly',            type: 'property',           price: 280,     colour: 'yellow',       boardposition: 'north'},
     
-    {name: 'Go To Jail',            type: 'special',            price: null,    colour: 'corner',           boardposition: 'east'},
+    {name: 'Go To Jail',            type: 'special',            price: null,    colour: 'corner',       boardposition: 'east'},
     {name: 'Regent Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
     {name: 'Oxford Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'east'},
@@ -254,10 +262,6 @@ function openPopup(message){
 
 // DICE FUNCTIONS ------------------------------------------------------------//
 
-// A variable for how many sides the dice has. Used in testing where 
-// smaller numbers are desirable.
-let diceSides = 3
-
 function rollDice(){
     let roll1 = Math.ceil(Math.random() * diceSides)
     let roll2 = Math.ceil(Math.random() * diceSides)
@@ -274,14 +278,17 @@ function rollDice(){
     diceTotal.innerText = total
     
 
-    moveToken(total)
-
-
     if (doubles){
         doublesCount++
     } else{
         diceDoubles.innerText = ""
         doublesCount = 0
+    }
+
+    if (doublesCount === 3){
+        goToJail()
+    } else{
+        moveToken(total)
     }
 
     switch (doublesCount){
@@ -301,13 +308,9 @@ function rollDice(){
             diceDoubles.innerText = "3rd double! Go to jail."
             diceContainer.className = "double3"
             
-            goToJail()
+            //goToJail()
             doublesCount = 0
-            // Presumably there'll be a goToJail function eventually.
     }
-
-
-
 }
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//
@@ -317,35 +320,36 @@ function moveToken(total){
     let endPosition = startPosition + total
     token.setAttribute('position', endPosition)
 
-    // TODO - would a switch statement be better? I had trouble getting it to
-    // evaluate <= statements    
-    if (endPosition <=10){
-        token.setAttribute('area', 'south')
-        positionToken(endPosition)
-    } else if (endPosition >10 && endPosition <=20){
-        token.setAttribute('area', 'west')
-        positionToken(endPosition)
-    } else if (endPosition >20 && endPosition <=29){
-        token.setAttribute('area', 'north')
-        positionToken(endPosition)
-    } else if (endPosition === 30){ 
-        goToJail()
-    } else {
-        token.setAttribute('area', 'east')
-        positionToken(endPosition)
-    }
 
+    // If we're going to jail, do that, otherwise animate the token
+    if (endPosition === 30){
+        goToJail()
+    } else{
+        let i = startPosition
+        window.setInterval(function(){
+           if (i <= endPosition){
+            positionToken(i)
+            i++
+           } else{
+               window.clearInterval()
+           }
+        }, 250)
+    }
 }
 
-function positionToken(endPosition){
-    let matchingProperty = document.querySelector('#board > .row div[position="' + endPosition + '"]')
+
+
+function positionToken(position){
+    let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
     token.style.top = matchingProperty.offsetTop + 'px'
     token.style.left = matchingProperty.offsetLeft + 'px'
     token.style.right = matchingProperty.offsetRight + 'px'
     token.style.bottom = matchingProperty.offsetBottom + 'px'
 }
 
+
 function goToJail(){
+    // TODO - trigger some kind of fancy animation
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
     positionToken(10)
