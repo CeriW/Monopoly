@@ -290,3 +290,87 @@ body {
 
 body:not(.popup-open) #popup {
   display: none; }
+
+/* Jail  ---------------------------------------------------------------------*/
+#jail-overlay {
+  pointer-events: none;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100; }
+  #jail-overlay:before {
+    background: rgba(0, 0, 255, 0.4);
+    animation-delay: 0.5s; }
+  #jail-overlay:after {
+    background: rgba(255, 0, 0, 0.4); }
+  #jail-overlay:before, #jail-overlay:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    animation-name: jailAnimation;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite; }
+
+.bars {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3; }
+
+.bars:first-child {
+  background: url("images/jail-bars-1.png");
+  animation: bars-1 0.6s both; }
+
+.bars:last-child {
+  background: url("images/jail-bars-2.png");
+  animation: bars-2 0.6s both; }
+
+.jailAnimation #jail-overlay {
+  display: block;
+  animation: jailFadeOut 0.7s;
+  animation-delay: 2.3s; }
+
+.jailAnimation #token {
+  animation: jailTokenAnimation 1s; }
+
+@keyframes bars-1 {
+  from {
+    transform: translateY(-100%); }
+  to {
+    transform: translateY(0); } }
+
+@keyframes bars-2 {
+  from {
+    transform: translateY(100%); }
+  to {
+    transform: translateY(0); } }
+
+@keyframes jailAnimation {
+  0% {
+    opacity: 0; }
+  50% {
+    opacity: 1; }
+  100% {
+    opacity: 0; } }
+
+@keyframes jailTokenAnimation {
+  from {
+    transform: scale(3); }
+  to {
+    transform: scale(1); } }
+
+@keyframes jailFadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }

@@ -32,7 +32,8 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 6
+let diceSides = 1
+
 
 // TODO - Could these arrays be better implemented as JSON files? They are
 // already quite large, and will get even larger if I add support for multiple
@@ -364,4 +365,11 @@ function goToJail(){
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
     positionToken(10)
+
+    // Add a class which allows a police animation to play.
+    // After 3 seconds, remove it.
+    document.body.classList.add('jailAnimation')
+    window.setTimeout(function(){
+        document.body.classList.remove('jailAnimation')
+    }, 3000)
 }
