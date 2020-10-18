@@ -31,8 +31,8 @@ let diceDoubles = document.querySelector('#doubles')
 let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
-// smaller numbers are desirable.
-let diceSides = 3
+// larger/smaller numbers are desirable.
+let diceSides = 6
 
 // TODO - Could these arrays be better implemented as JSON files? They are
 // already quite large, and will get even larger if I add support for multiple
@@ -318,7 +318,9 @@ function rollDice(){
 function moveToken(total){
     let startPosition = parseInt(token.getAttribute('position'))
     let endPosition = startPosition + total
-    token.setAttribute('position', endPosition)
+    endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
+
+    //token.setAttribute('position', endPosition)
 
 
     // If we're going to jail, do that, otherwise animate the token
@@ -327,10 +329,19 @@ function moveToken(total){
     } else{
         let i = startPosition
         window.setInterval(function(){
-           if (i <= endPosition){
-            positionToken(i)
-            i++
+            if (i <= endPosition){
+                positionToken(i)
+                i++
+
+                // If i is 40, that means we've landed back on 'Go.
+                // Reset i and endPosition
+                if (i === 40){
+                    i = 0
+                    endPosition = endPosition - 40
+                }
+
            } else{
+               // Once the token has reached where it needs to be, stop the animation
                window.clearInterval()
            }
         }, 250)
