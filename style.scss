@@ -423,3 +423,15 @@ $jailAnimationLength: 1.5;
     from{opacity: 1;}
     to  {opacity: 0;}
 }
+
+/* New players  --------------------------------------------------------------*/
+
+#new-player-overlay{
+    background: $lightgreen;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+}
