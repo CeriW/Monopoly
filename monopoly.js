@@ -16,7 +16,7 @@
 
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
-
+let playerSummary = document.querySelector('#player-summary')
 
 // TODO - temporary until I add support for multiple tokens
 let token = document.querySelector('#token')
@@ -128,6 +128,8 @@ let spaces =  [
     {name: 'Mayfair',               type: 'property',           price: 400,     colour: 'darkblue',     boardposition: 'east'},
 ]
 
+// An empty array for now. Will be filled with player info later.
+let players = []
 
 
 
@@ -222,8 +224,65 @@ function resizeBoard(){
     board.style.height = board.offsetWidth + 'px'
 }
 
+// PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
-// COMMUNITY CHEST AND CHANGE FUNCTIONS --------------------------------------//
+function createPlayers(){
+    let newPlayersOverlay = document.querySelector('#new-player-overlay')
+    let numberOfPlayers = document.querySelector('#no-of-players').value
+
+    //console.log(numberOfPlayers)
+
+    // Generate an object for each player, and add it to the players array
+    for (i = 0; i < numberOfPlayers; i++){
+        console.log(i)
+        let newPlayer = {name:"Player " + (i + 1), money:1500}
+        players.push(newPlayer)
+    }
+
+    // Generate a summary for each player
+    players.forEach(generatePlayerSummary)
+
+    // Remove the player select overlay once done.
+    newPlayersOverlay.parentNode.removeChild(newPlayersOverlay)
+}
+
+function generatePlayerSummary(player){
+    let newSummary = document.createElement('div')
+    
+    let title = document.createElement('h2')
+    title.innerText = player.name
+    newSummary.appendChild(title)
+    
+    // Generate the table of label/value pairs
+    let newTable = document.createElement('table')
+    let keys = Object.keys(player)
+    let values = Object.values(player)
+
+    // We don't want to do value 0 as it already has a h2
+    for (i = keys.length - 1; i > 0; i--){
+        
+        //  Create the new row
+        let newRow = newTable.insertRow(0)
+        
+        // Generate the label
+        let newLabel = newRow.insertCell(0)
+        newLabel.innerText = keys[i] + ':'
+        newRow.appendChild(newLabel)
+
+        // Generate the value
+        let newValue = newRow.insertCell(1)
+        newValue.innerText = values[i]
+        newRow.appendChild(newValue)
+    }
+
+    newSummary.appendChild(newTable)
+    playerSummary.appendChild(newSummary)
+
+}
+
+
+
+// COMMUNITY CHEST AND CHANCE FUNCTIONS --------------------------------------//
 
 function drawCard(type){
 
