@@ -30,9 +30,9 @@ body{
     padding: 30px;
     margin: 0;
     display: flex;
-    flex-direction: column;
+    //flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     box-sizing: border-box;
     background: $lightgreen;
     text-align: center;
@@ -235,12 +235,6 @@ $columnsize: 80px;
     display: flex;
     align-items: center;
 
-
-    // Just dumping this in the middle of the board for now for ease of testing.
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
     span{
         padding: 10px;
     }
@@ -267,9 +261,9 @@ $columnsize: 80px;
 
 // Eventually there'll be mutliple token types, with each player being able to
 // choose their token. This will do for now.
-#token{
-    background: url('images/token.svg') center no-repeat;
-    background-size: 35px;
+.token{
+    //background: url('images/token.svg') center no-repeat;
+    //background-size: 35px;
 }
 
 .token{
@@ -277,7 +271,34 @@ $columnsize: 80px;
     height: 80px;
     position: absolute;
     z-index: 2;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
+
+@for $i from 1 through 4 {
+    #player#{$i}token{
+        background-image: url('images/token-#{$i}.svg');
+    }
+}
+
+#player1token{
+    background-position: left bottom;
+}
+
+#player2token{
+    background-position: 33% bottom;
+}
+
+#player3token{
+    background-position: 66% bottom;
+}
+
+#player4token{
+    background-position: right bottom;
+}
+
+
 
 /* Due to the way the JS calculates the correct position for the token and the 
    side the borders end up on, there are slightly irregularities. Likely
@@ -434,4 +455,21 @@ $jailAnimationLength: 1.5;
     right: 0;
     bottom: 0;
     z-index: 100;
+}
+
+/* Player summary  -----------------------------------------------------------*/
+
+#player-summary{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    box-sizing: border-box;
+
+    h2{
+        margin: 0;
+    }
+
+    & > div{
+        padding: 40px 20px;
+    }
 }

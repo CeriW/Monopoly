@@ -32,7 +32,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 1
+let diceSides = 6
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -235,12 +235,23 @@ function createPlayers(){
     // Generate an object for each player, and add it to the players array
     for (i = 0; i < numberOfPlayers; i++){
         console.log(i)
-        let newPlayer = {name:"Player " + (i + 1), money:1500}
+        let newPlayer = {id:i, name:"Player " + (i + 1), money:1500}
         players.push(newPlayer)
     }
 
     // Generate a summary for each player
     players.forEach(generatePlayerSummary)
+
+    // Create a token for each player
+    players.forEach(function(player){
+        let newToken = document.createElement('div')
+        newToken.classList.add('token')
+        newToken.setAttribute('id', 'player' + (player.id + 1) + 'token')
+        newToken.setAttribute('position', 0)
+        newToken.setAttribute('area', 'south')
+        board.appendChild(newToken)
+        
+    })
 
     // Remove the player select overlay once done.
     newPlayersOverlay.parentNode.removeChild(newPlayersOverlay)
