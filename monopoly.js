@@ -18,8 +18,12 @@ let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
 
+// Stores which player's turn it is.
+// Since the function starts with a ++ we'll initialise as 0
+let turn = 0
+
 // TODO - temporary until I add support for multiple tokens
-let token = document.querySelector('#token')
+//let token = document.querySelector('#token')
 
 // Dice related elements
 let doublesCount = 0
@@ -131,7 +135,10 @@ let spaces =  [
 // An empty array for now. Will be filled with player info later.
 let players = []
 
-
+let availableActions = {
+    rollDice: true,
+    endTurn: false
+}
 
 // Page setup functions ------------------------------------------------------//
 
@@ -153,6 +160,12 @@ function initialisePage(){
 
     // Add all of the required event listeners
     addEvents()
+
+    // Start off with player 1's turn
+    // TODO - at the beginning of the game, players should all roll the dice.
+    // The highest roll wins. If it is a tie, the tying players should roll again.
+    increasePlayerTurn()
+
 }
 
 function generateBoard(){
@@ -212,16 +225,25 @@ function addEvents(){
         }
     }
 
+    // TODO - this may be better achieved using a listener on the
+    // availableActions object, rather than every time someone clicks.
+    window.addEventListener('click', setAvailableActions)
+
     // Ensure the board's height is always the same as its width,
     // so it is always square
     window.addEventListener('resize', resizeBoard)
 
-    diceRollButton.addEventListener('click', rollDice)
+    //diceRollButton.addEventListener('click', rollDice)
     
 }
 
 function resizeBoard(){
     board.style.height = board.offsetWidth + 'px'
+}
+
+function setAvailableActions(){
+    document.body.setAttribute('dice-roll-available', availableActions.rollDice)
+    document.body.setAttribute('end-turn-available', availableActions.endTurn)
 }
 
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
@@ -234,13 +256,22 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     for (i = 0; i < numberOfPlayers; i++){
-        console.log(i)
-        let newPlayer = {name:"Player " + (i + 1), money:1500}
+        let newPlayer = {id:i + 1, name:"Player " + (i + 1), money:1500}
         players.push(newPlayer)
     }
 
     // Generate a summary for each player
     players.forEach(generatePlayerSummary)
+
+    // Create a token for each player
+    players.forEach(function(player){
+        let newToken = document.createElement('div')
+        newToken.classList.add('token')
+        newToken.setAttribute('id', 'player' + (player.id) + 'token')
+        newToken.setAttribute('position', 0)
+        newToken.setAttribute('area', 'south')
+        board.appendChild(newToken)
+    })
 
     // Remove the player select overlay once done.
     newPlayersOverlay.parentNode.removeChild(newPlayersOverlay)
@@ -248,6 +279,7 @@ function createPlayers(){
 
 function generatePlayerSummary(player){
     let newSummary = document.createElement('div')
+    newSummary.setAttribute('id', 'player' + player.id + 'summary')
     
     let title = document.createElement('h2')
     title.innerText = player.name
@@ -274,8 +306,26 @@ function generatePlayerSummary(player){
         newValue.innerText = values[i]
         newRow.appendChild(newValue)
     }
+    
+    // Create the buttons that allow players to end their turns.
+    // CSS will be used to only show this for the player whose turn it is.
+    let newEndTurnButton = document.createElement('button')
+    newEndTurnButton.innerText = 'End turn'
+    newEndTurnButton.classList.add('end-turn-button', 'player-action-button')
+    newEndTurnButton.addEventListener('click', increasePlayerTurn)
 
+
+    // Create the buttons that allow players to roll the dice.
+    let newRollDiceButton = document.createElement('button')
+    newRollDiceButton.innerText = 'Roll dice'
+    newRollDiceButton.classList.add('roll-dice-button', 'player-action-button')
+    newRollDiceButton.classList
+    newRollDiceButton.addEventListener('click', rollDice)
+
+    // Append all these new elements to the relevant player summary
     newSummary.appendChild(newTable)
+    newSummary.appendChild(newRollDiceButton)
+    newSummary.appendChild(newEndTurnButton)
     playerSummary.appendChild(newSummary)
 
 }
@@ -340,13 +390,17 @@ function rollDice(){
 
     if (doubles){
         doublesCount++
+        availableActions.rollDice = true
     } else{
         diceDoubles.innerText = ""
         doublesCount = 0
+        availableActions.rollDice = false
+        availableActions.endTurn = true
     }
 
     if (doublesCount === 3){
-        goToJail()
+        let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
+        goToJail(token)
     } else{
         moveToken(total)
     }
@@ -375,7 +429,10 @@ function rollDice(){
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//
 
+// The actual maths involved in moving the token, including passing go and going to jail.
 function moveToken(total){
+    let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
+
     let startPosition = parseInt(token.getAttribute('position'))
     let endPosition = startPosition + total
     endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
@@ -385,12 +442,12 @@ function moveToken(total){
 
     // If we're going to jail, do that, otherwise animate the token
     if (endPosition === 30){
-        goToJail()
+        goToJail(token)
     } else{
         let i = startPosition
         window.setInterval(function(){
             if (i <= endPosition){
-                positionToken(i)
+                positionToken(token, i)
                 i++
 
                 // If i is 40, that means we've landed back on 'Go.
@@ -409,8 +466,8 @@ function moveToken(total){
 }
 
 
-
-function positionToken(position){
+// Puts the token where you want it to be using CSS. No maths is involved.
+function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
     token.style.top = matchingProperty.offsetTop + 'px'
     token.style.left = matchingProperty.offsetLeft + 'px'
@@ -418,12 +475,12 @@ function positionToken(position){
     token.style.bottom = matchingProperty.offsetBottom + 'px'
 }
 
-
-function goToJail(){
-    // TODO - trigger some kind of fancy animation
+// Puts the token in jail and plays an animation. No maths is involved.
+function goToJail(token){
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
-    positionToken(10)
+    positionToken(token,10)
+    availableActions.rollDice = false
 
     // Add a class which allows a police animation to play.
     // After 3 seconds, remove it.
@@ -431,4 +488,18 @@ function goToJail(){
     window.setTimeout(function(){
         document.body.classList.remove('jailAnimation')
     }, 3000)
+}
+
+// TURN BASED FUNCTIONS ------------------------------------------------------//
+
+function increasePlayerTurn(){
+    if (turn === players.length){
+        turn = 1
+    } else{
+        turn ++
+    }
+
+    availableActions.rollDice = true
+    availableActions.endTurn = false
+    document.body.setAttribute('turn', 'player' + turn)
 }

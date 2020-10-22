@@ -14,9 +14,8 @@ body {
   padding: 30px;
   margin: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   box-sizing: border-box;
   background: #d5e8d4;
   text-align: center; }
@@ -222,9 +221,8 @@ body {
 #dice-roll {
   display: flex;
   align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 50%; }
+  justify-content: center;
+  padding: 20px; }
   #dice-roll span {
     padding: 10px; }
   #dice-roll #dice-total {
@@ -241,15 +239,38 @@ body {
   background-color: #db0926; }
 
 /* Player tokens -------------------------------------------------------------*/
-#token {
-  background: url("images/token.svg") center no-repeat;
-  background-size: 35px; }
-
 .token {
   width: 80px;
   height: 80px;
   position: absolute;
-  z-index: 2; }
+  z-index: 2;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center; }
+
+#player1token {
+  background-image: url("images/token-1.svg"); }
+
+#player2token {
+  background-image: url("images/token-2.svg"); }
+
+#player3token {
+  background-image: url("images/token-3.svg"); }
+
+#player4token {
+  background-image: url("images/token-4.svg"); }
+
+#player1token {
+  background-position: left bottom; }
+
+#player2token {
+  background-position: 33% bottom; }
+
+#player3token {
+  background-position: 66% bottom; }
+
+#player4token {
+  background-position: right bottom; }
 
 /* Due to the way the JS calculates the correct position for the token and the 
    side the borders end up on, there are slightly irregularities. Likely
@@ -384,3 +405,36 @@ body:not(.popup-open) #popup {
   right: 0;
   bottom: 0;
   z-index: 100; }
+
+/* Player summary  -----------------------------------------------------------*/
+#player-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box; }
+  #player-summary h2 {
+    margin: 0; }
+  #player-summary > div {
+    padding: 40px 20px; }
+
+/* Player action buttons  ----------------------------------------------------*/
+.player-action-button {
+  display: none; }
+
+body[turn="player1"] #player1summary .player-action-button {
+  display: initial; }
+
+body[turn="player2"] #player2summary .player-action-button {
+  display: initial; }
+
+body[turn="player3"] #player3summary .player-action-button {
+  display: initial; }
+
+body[turn="player4"] #player4summary .player-action-button {
+  display: initial; }
+
+body[dice-roll-available="false"] .roll-dice-button,
+body[end-turn-available="false"] .end-turn-button {
+  pointer-events: none;
+  background: #ccc;
+  color: #8f8f8f; }
