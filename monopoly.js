@@ -18,6 +18,10 @@ let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
 
+// Stores which player's turn it is.
+// Since the function starts with a ++ we'll initialise as 0
+let turn = 0
+
 // TODO - temporary until I add support for multiple tokens
 //let token = document.querySelector('#token')
 
@@ -157,7 +161,7 @@ function initialisePage(){
     // Start off with player 1's turn
     // TODO - at the beginning of the game, players should all roll the dice.
     // The highest roll wins. If it is a tie, the tying players should roll again.
-    setPlayerTurn(1)
+    increasePlayerTurn()
 
 }
 
@@ -222,7 +226,7 @@ function addEvents(){
     // so it is always square
     window.addEventListener('resize', resizeBoard)
 
-    diceRollButton.addEventListener('click', rollDice)
+    //diceRollButton.addEventListener('click', rollDice)
     
 }
 
@@ -241,7 +245,7 @@ function createPlayers(){
     // Generate an object for each player, and add it to the players array
     for (i = 0; i < numberOfPlayers; i++){
         console.log(i)
-        let newPlayer = {id:i, name:"Player " + (i + 1), money:1500}
+        let newPlayer = {id:i + 1, name:"Player " + (i + 1), money:1500}
         players.push(newPlayer)
     }
 
@@ -252,11 +256,10 @@ function createPlayers(){
     players.forEach(function(player){
         let newToken = document.createElement('div')
         newToken.classList.add('token')
-        newToken.setAttribute('id', 'player' + (player.id + 1) + 'token')
+        newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
         board.appendChild(newToken)
-        
     })
 
     // Remove the player select overlay once done.
@@ -265,6 +268,7 @@ function createPlayers(){
 
 function generatePlayerSummary(player){
     let newSummary = document.createElement('div')
+    newSummary.setAttribute('id', 'player' + player.id + 'summary')
     
     let title = document.createElement('h2')
     title.innerText = player.name
@@ -291,8 +295,25 @@ function generatePlayerSummary(player){
         newValue.innerText = values[i]
         newRow.appendChild(newValue)
     }
+    
+    // Create the buttons that allow players to end their turns.
+    // CSS will be used to only show this for the player whose turn it is.
+    let newEndTurnButton = document.createElement('button')
+    newEndTurnButton.innerText = 'End turn'
+    newEndTurnButton.classList.add('end-turn-button', 'player-action-button')
+    newEndTurnButton.addEventListener('click', increasePlayerTurn)
+
+
+    // Create the buttons that allow players to roll the dice.
+    let newRollDiceButton = document.createElement('button')
+    newRollDiceButton.innerText = 'Roll dice'
+    newRollDiceButton.classList.add('roll-dice-button', 'player-action-button')
+    newRollDiceButton.classList
+    newRollDiceButton.addEventListener('click', rollDice)
 
     newSummary.appendChild(newTable)
+    newSummary.appendChild(newRollDiceButton)
+    newSummary.appendChild(newEndTurnButton)
     playerSummary.appendChild(newSummary)
 
 }
@@ -454,6 +475,12 @@ function goToJail(token){
 
 // TURN BASED FUNCTIONS ------------------------------------------------------//
 
-function setPlayerTurn(turn){
+
+function increasePlayerTurn(){
+    if (turn === players.length){
+        turn = 1
+    } else{
+        turn ++
+    }
     document.body.setAttribute('turn', 'player' + turn)
 }

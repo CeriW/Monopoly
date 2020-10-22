@@ -414,3 +414,18 @@ body:not(.popup-open) #popup {
     margin: 0; }
   #player-summary > div {
     padding: 40px 20px; }
+
+.player-action-button {
+  display: none; }
+
+body[turn="player1"] #player1summary .player-action-button {
+  display: initial; }
+
+body[turn="player2"] #player2summary .player-action-button {
+  display: initial; }
+
+body[turn="player3"] #player3summary .player-action-button {
+  display: initial; }
+
+body[turn="player4"] #player4summary .player-action-button {
+  display: initial; }
