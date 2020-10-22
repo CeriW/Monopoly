@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 6
+let diceSides = 1
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -135,7 +135,10 @@ let spaces =  [
 // An empty array for now. Will be filled with player info later.
 let players = []
 
-
+let availableActions = {
+    rollDice: true,
+    endTurn: false
+}
 
 // Page setup functions ------------------------------------------------------//
 
@@ -222,6 +225,10 @@ function addEvents(){
         }
     }
 
+    // TODO - this may be better achieved using a listener on the
+    // availableActions object, rather than every time someone clicks.
+    window.addEventListener('click', setAvailableActions)
+
     // Ensure the board's height is always the same as its width,
     // so it is always square
     window.addEventListener('resize', resizeBoard)
@@ -234,6 +241,11 @@ function resizeBoard(){
     board.style.height = board.offsetWidth + 'px'
 }
 
+function setAvailableActions(){
+    document.body.setAttribute('dice-roll-available', availableActions.rollDice)
+    document.body.setAttribute('end-turn-available', availableActions.endTurn)
+}
+
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
 function createPlayers(){
@@ -244,7 +256,6 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     for (i = 0; i < numberOfPlayers; i++){
-        console.log(i)
         let newPlayer = {id:i + 1, name:"Player " + (i + 1), money:1500}
         players.push(newPlayer)
     }
@@ -311,6 +322,7 @@ function generatePlayerSummary(player){
     newRollDiceButton.classList
     newRollDiceButton.addEventListener('click', rollDice)
 
+    // Append all these new elements to the relevant player summary
     newSummary.appendChild(newTable)
     newSummary.appendChild(newRollDiceButton)
     newSummary.appendChild(newEndTurnButton)
@@ -378,13 +390,17 @@ function rollDice(){
 
     if (doubles){
         doublesCount++
+        availableActions.rollDice = true
     } else{
         diceDoubles.innerText = ""
         doublesCount = 0
+        availableActions.rollDice = false
+        availableActions.endTurn = true
     }
 
     if (doublesCount === 3){
-        goToJail()
+        let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
+        goToJail(token)
     } else{
         moveToken(total)
     }
@@ -459,11 +475,12 @@ function positionToken(token, position){
     token.style.bottom = matchingProperty.offsetBottom + 'px'
 }
 
-
+// Puts the token in jail and plays an animation. No maths is involved.
 function goToJail(token){
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
-    positionToken(10)
+    positionToken(token,10)
+    availableActions.rollDice = false
 
     // Add a class which allows a police animation to play.
     // After 3 seconds, remove it.
@@ -475,12 +492,14 @@ function goToJail(token){
 
 // TURN BASED FUNCTIONS ------------------------------------------------------//
 
-
 function increasePlayerTurn(){
     if (turn === players.length){
         turn = 1
     } else{
         turn ++
     }
+
+    availableActions.rollDice = true
+    availableActions.endTurn = false
     document.body.setAttribute('turn', 'player' + turn)
 }
