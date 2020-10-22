@@ -19,7 +19,7 @@ let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
 
 // TODO - temporary until I add support for multiple tokens
-let token = document.querySelector('#token')
+//let token = document.querySelector('#token')
 
 // Dice related elements
 let doublesCount = 0
@@ -153,6 +153,12 @@ function initialisePage(){
 
     // Add all of the required event listeners
     addEvents()
+
+    // Start off with player 1's turn
+    // TODO - at the beginning of the game, players should all roll the dice.
+    // The highest roll wins. If it is a tie, the tying players should roll again.
+    setPlayerTurn(1)
+
 }
 
 function generateBoard(){
@@ -386,7 +392,10 @@ function rollDice(){
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//
 
+// The actual maths involved in moving the token, including passing go and going to jail.
 function moveToken(total){
+    let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
+
     let startPosition = parseInt(token.getAttribute('position'))
     let endPosition = startPosition + total
     endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
@@ -396,12 +405,12 @@ function moveToken(total){
 
     // If we're going to jail, do that, otherwise animate the token
     if (endPosition === 30){
-        goToJail()
+        goToJail(token)
     } else{
         let i = startPosition
         window.setInterval(function(){
             if (i <= endPosition){
-                positionToken(i)
+                positionToken(token, i)
                 i++
 
                 // If i is 40, that means we've landed back on 'Go.
@@ -420,8 +429,8 @@ function moveToken(total){
 }
 
 
-
-function positionToken(position){
+// Puts the token where you want it to be using CSS. No maths is involved.
+function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
     token.style.top = matchingProperty.offsetTop + 'px'
     token.style.left = matchingProperty.offsetLeft + 'px'
@@ -430,8 +439,7 @@ function positionToken(position){
 }
 
 
-function goToJail(){
-    // TODO - trigger some kind of fancy animation
+function goToJail(token){
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
     positionToken(10)
@@ -442,4 +450,10 @@ function goToJail(){
     window.setTimeout(function(){
         document.body.classList.remove('jailAnimation')
     }, 3000)
+}
+
+// TURN BASED FUNCTIONS ------------------------------------------------------//
+
+function setPlayerTurn(turn){
+    document.body.setAttribute('turn', 'player' + turn)
 }
