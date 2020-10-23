@@ -247,10 +247,16 @@ function setAvailableActions(){
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
 }
 
-function updatePlayerDetails(attribute){
+function updatePlayerDetails(){
     players.forEach(function(player){
-        let updateNode = document.querySelector('#player-' + player.id + '-' + attribute)
-        updateNode.innerText = player.money
+        let keys = Object.keys(player)
+        let values = Object.values(player)
+
+        // Starting at 1 as the first attribute is 'id' which will never change
+        for (i = 1; i < keys.length; i++){
+            let updateNode = document.querySelector('#player-' + (player.id) + '-' + keys[i])
+            updateNode.innerText = values[i]
+        }
     })
 }
 
@@ -464,8 +470,8 @@ function moveToken(total){
                 if (i === 40){
                     i = 0
                     endPosition = endPosition - 40
-
                     players[turn - 1].money += 200
+                    updatePlayerDetails()
                 }
 
            } else{
@@ -483,9 +489,7 @@ function positionToken(token, position){
     token.style.top = matchingProperty.offsetTop + 'px'
     token.style.left = matchingProperty.offsetLeft + 'px'
     token.style.right = matchingProperty.offsetRight + 'px'
-    token.style.bottom = matchingProperty.offsetBottom + 'px'
-
-    updatePlayerDetails('money')
+    token.style.bottom = matchingProperty.offsetBottom + 'px'    
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
