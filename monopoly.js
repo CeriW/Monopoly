@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 10
+let diceSides = 1
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -360,7 +360,9 @@ function drawCard(type){
     let chosenCard = cardList.shift()
     openPopup(chosenCard.description)
     cardList.push(chosenCard)
-  
+    console.log(chosenCard.type)
+    
+
 }
 
 
@@ -372,6 +374,8 @@ function shuffleCards(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+
 
 
 // POPUP FUNCTIONS -----------------------------------------------------------//
@@ -460,7 +464,7 @@ function moveToken(total){
         goToJail(token)
     } else{
         let i = startPosition
-        window.setInterval(function(){
+        let myInterval = setInterval(function(){
             if (i <= endPosition){
                 positionToken(token, i)
                 i++
@@ -473,14 +477,20 @@ function moveToken(total){
                     players[turn - 1].money += 200
                     updatePlayerDetails()
                 }
+            }
 
-           } else{
-               // Once the token has reached where it needs to be, stop the animation
-               window.clearInterval()
-           }
+            else{
+                // Once the token has reached where it needs to be, stop the animation
+                window.clearInterval(myInterval)
+                console.log('done')
+            }
+
         }, 250)
     }
 }
+    
+
+
 
 
 // Puts the token where you want it to be using CSS. No maths is involved.
