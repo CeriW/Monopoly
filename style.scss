@@ -334,6 +334,7 @@ $columnsize: 80px;
     justify-content: center;
     padding: 20px;
     background: rgba($black, 0.7);
+    z-index: 100;
 }
 
 #popup-inner{
@@ -345,6 +346,7 @@ $columnsize: 80px;
     position: relative;
     text-align: center;
     box-shadow: 0 0 20px rgba(black, 0.4);
+
 }
 
 #popup-close{
@@ -370,7 +372,7 @@ $jailAnimationLength: 1.5;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: 99;
 
 
     &:before{
@@ -480,6 +482,26 @@ $jailAnimationLength: 1.5;
     & > div{
         padding: 40px 20px;
     }
+}
+
+.good-change{
+    animation: goodChangeAnimation 1s ease-in-out;
+}
+
+@keyframes goodChangeAnimation{
+    0%   {transform: scale(1);}
+    50%  {transform: scale(1.75); color: $green;}
+    100% {transform: scale(1);}
+}
+
+.bad-change{
+    animation: badChangeAnimation 1s ease-in-out;
+}
+
+@keyframes badChangeAnimation{
+    0%   {transform: scale(1);}
+    50%  {transform: scale(1.75); color: $red;}
+    100% {transform: scale(1);}
 }
 
 

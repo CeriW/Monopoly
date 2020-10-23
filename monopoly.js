@@ -9,9 +9,11 @@
     - : a card which the player has to surrender money to the bank.
     getout : a get out of jail free card which is held onto by the player until used, sold or traded.
     exchange : a card where the players have to exchange money.
-    calc : a card where the amount has to be calculated.
+    calc : a card where the value has to be calculated.
     move: a card which requires the player to move to a specified spot.
 
+ value - for +  and - cards, this will be the amount to give/take.
+       - for move cards, this will be which position to move to.
 */
 
 let board = document.querySelector('#board')
@@ -22,8 +24,6 @@ let playerSummary = document.querySelector('#player-summary')
 // Since the function starts with a ++ we'll initialise as 0
 let turn = 0
 
-// TODO - temporary until I add support for multiple tokens
-//let token = document.querySelector('#token')
 
 // Dice related elements
 let doublesCount = 0
@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 10
+let diceSides = 1
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -46,43 +46,43 @@ let diceSides = 10
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: '+',        amount: 200},
-    {description: "Bank error in your favor — Collect £200",                                    type: '+',        amount: 200},
-    {description: "Doctor's fee — Pay £50",                                                     type: '-',        amount: 50},
-    {description: "From sale of stock you get £50",                                             type: '+',        amount: 50},
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   amount: null},
-    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: '+',        amount: 200},
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', amount: 50 },
-    {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        amount: 100},
-    {description: "Income tax refund – Collect £20",                                            type: '+',        amount: 20 },
-    {description: "It is your birthday — Collect £10",                                          type: '+',        amount: 10 },
-    {description: "Life insurance matures – Collect £100",                                      type: '+',        amount: 100 },
-    {description: "Pay hospital fees of £100",                                                  type: '-',        amount: 100 },
-    {description: "Pay school fees of £150",                                                    type: '-',        amount: 150 },
-    {description: "Receive £25 consultancy fee",                                                type: '-',        amount: 25 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'calc',     amount: null },
-    {description: "You have won second prize in a beauty contest–Collect £10",                  type: '+',        amount: 10},
-    {description: "You inherit £100",                                                           type: '+',        amount: 100 }
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    /*{description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
+    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
+    {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
+    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
+    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
+    {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
+    {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
+    {description: "It is your birthday — Collect £10",                                          type: '+',        value: 10 },
+    {description: "Life insurance matures – Collect £100",                                      type: '+',        value: 100 },
+    {description: "Pay hospital fees of £100",                                                  type: '-',        value: 100 },
+    {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
+    {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'calc',     value: null },
+    {description: "You have won second prize in a beauty contest–Collect £10",                  type: '+',        value: 10},
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
 
 let chanceCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: '+',          amount: 2000 },
-    {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       amount: null },
-    {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       amount: null },
-    {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the amount thrown.", type: 'move',   amount: null },
-    {description: "Advance token to the nearest Railroad and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   amount: null },
-    {description: "Bank pays you dividend of £50",                                              type: '+',          amount: 50 },
-    {description: "Get Out of Jail Free",                                                       type: 'getout',     amount: null },
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       amount: null },
-    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       amount: null },
-    {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100", type: 'calc',   amount: null },
-    {description: "Pay poor tax of £15",                                                        type: '-',          amount: 15 },
-    {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       amount: null },
-    {description: "Advance to Mayfair",                                                         type: 'move',       amount: null },
-    {description: "You have been elected Chairman of the Board–Pay each player £50",            type: 'exchange',   amount: 50 },
-    {description: "Your building and loan matures — Collect £150",                              type: '+',          amount: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          amount: 100 }
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
+    {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
+    {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
+    {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'nearest-station',   value: null },
+    {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
+    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
+    {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100", type: 'calc',   value: null },
+    {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
+    {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
+    {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
+    {description: "You have been elected Chairman of the Board–Pay each player £50",            type: 'exchange',   value: 50 },
+    {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
@@ -200,20 +200,6 @@ function generateBoard(){
 }
 
 function addEvents(){
-    //TODO - Obviously this doesn't happen on click. Click will do for now.
-    ;[].forEach.call(document.querySelectorAll('.community-chest'), function(node){
-        // TODO - is this really the most efficient way of running this on click?
-        node.addEventListener('click', function(){
-            drawCard('community-chest')
-        })
-    })
-
-    ;[].forEach.call(document.querySelectorAll('.chance'), function(node){
-        // TODO - is this really the most efficient way of running this on click?
-        node.addEventListener('click', function(){
-            drawCard('chance')
-        })
-    })
 
     // Close the popup when the close button is clicked,
     // or the escape key is pressed.
@@ -247,10 +233,16 @@ function setAvailableActions(){
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
 }
 
-function updatePlayerDetails(attribute){
+function updatePlayerDetails(){
     players.forEach(function(player){
-        let updateNode = document.querySelector('#player-' + player.id + '-' + attribute)
-        updateNode.innerText = player.money
+        let keys = Object.keys(player)
+        let values = Object.values(player)
+
+        // Starting at 1 as the first attribute is 'id' which will never change
+        for (i = 1; i < keys.length; i++){
+            let updateNode = document.querySelector('#player-' + (player.id) + '-' + keys[i])
+            updateNode.innerText = values[i]
+        }
     })
 }
 
@@ -354,7 +346,56 @@ function drawCard(type){
     let chosenCard = cardList.shift()
     openPopup(chosenCard.description)
     cardList.push(chosenCard)
-  
+    
+    switch (chosenCard.type){
+        case '+':
+            // A card which gains the player money from the bank
+            players[turn - 1].money += chosenCard.value
+            animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'good')
+            break
+        case '-':
+            // A card where the player has to surrender money to the bank
+            players[turn - 1].money -= chosenCard.value
+            animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'bad')
+            break
+        case 'getout':
+            // TODO
+            console.log('getout: a get out of jail free card which is held onto by the player until used, sold or traded.')
+            break
+        case 'exchange':
+            // TODO
+            console.log('exhange: a card where the value has to be calculated.')
+            break
+        case 'calc':
+            // TODO
+            console.log('calc: a card where the value has to be calculated.')
+            break
+        case 'move':
+            // TODO
+            console.log('move: a card which requires the player to move to a specified spot.')
+
+            switch (chosenCard.value){
+                // Go to jail
+                case 10:
+                    goToJail(document.querySelector('#player' + turn + 'token'))
+                    break
+                
+                // Advance to Go
+                case 0:
+                    // The moveToken function works with the number of spaces to move, rather than a position to move to.
+                    // Therefore a little maths is required.
+                    let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
+                    moveToken(endTotal)
+                    break
+                
+                default:
+                    //moveToken(chosenCard.value)
+            }
+            break
+        }
+
+    // While not all cards will require this, a large majority will
+    updatePlayerDetails()
 }
 
 
@@ -366,6 +407,15 @@ function shuffleCards(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+// Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
+function animateUpdate(node, type){
+    node.classList.add(type + '-change')
+    window.setTimeout(function(){
+        node.classList.remove(type + '-change')
+    }, 2000)
+}
+
 
 
 // POPUP FUNCTIONS -----------------------------------------------------------//
@@ -454,7 +504,7 @@ function moveToken(total){
         goToJail(token)
     } else{
         let i = startPosition
-        window.setInterval(function(){
+        let myInterval = setInterval(function(){
             if (i <= endPosition){
                 positionToken(token, i)
                 i++
@@ -464,16 +514,45 @@ function moveToken(total){
                 if (i === 40){
                     i = 0
                     endPosition = endPosition - 40
-
                     players[turn - 1].money += 200
+                    updatePlayerDetails()
+                    animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'good')
                 }
+            }
 
-           } else{
-               // Once the token has reached where it needs to be, stop the animation
-               window.clearInterval()
-           }
+            else{
+                // Once the token has reached where it needs to be, stop the animation
+                window.clearInterval(myInterval)
+                specialEndPositions(endPosition)
+            }
+
         }, 250)
     }
+}
+    
+
+
+function specialEndPositions(endPosition){
+    switch (endPosition){
+        case 2:
+        case 17:
+        case 33:
+            drawCard('community-chest')
+            break
+        case 7:
+        case 22:
+        case 36:
+            drawCard('chance')
+            break
+        case 4:
+            // TODO - income tax
+            break
+        case 38:
+            // TODO - super tax
+            break
+        // Note that jail is covered before the token moves, so is not included here.
+    }
+      
 }
 
 
@@ -483,9 +562,7 @@ function positionToken(token, position){
     token.style.top = matchingProperty.offsetTop + 'px'
     token.style.left = matchingProperty.offsetLeft + 'px'
     token.style.right = matchingProperty.offsetRight + 'px'
-    token.style.bottom = matchingProperty.offsetBottom + 'px'
-
-    updatePlayerDetails('money')
+    token.style.bottom = matchingProperty.offsetBottom + 'px'    
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
