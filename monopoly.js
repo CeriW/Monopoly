@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 1
+let diceSides = 10
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -139,6 +139,7 @@ let availableActions = {
     rollDice: true,
     endTurn: false
 }
+
 
 // Page setup functions ------------------------------------------------------//
 
@@ -246,6 +247,13 @@ function setAvailableActions(){
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
 }
 
+function updatePlayerDetails(attribute){
+    players.forEach(function(player){
+        let updateNode = document.querySelector('#player-' + player.id + '-' + attribute)
+        updateNode.innerText = player.money
+    })
+}
+
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
 function createPlayers(){
@@ -303,6 +311,7 @@ function generatePlayerSummary(player){
 
         // Generate the value
         let newValue = newRow.insertCell(1)
+        newValue.setAttribute('id', 'player-' + player.id + '-' + keys[i])
         newValue.innerText = values[i]
         newRow.appendChild(newValue)
     }
@@ -451,10 +460,12 @@ function moveToken(total){
                 i++
 
                 // If i is 40, that means we've landed back on 'Go.
-                // Reset i and endPosition
+                // Reset i and endPosition and give the player £200
                 if (i === 40){
                     i = 0
                     endPosition = endPosition - 40
+
+                    players[turn - 1].money += 200
                 }
 
            } else{
@@ -473,6 +484,8 @@ function positionToken(token, position){
     token.style.left = matchingProperty.offsetLeft + 'px'
     token.style.right = matchingProperty.offsetRight + 'px'
     token.style.bottom = matchingProperty.offsetBottom + 'px'
+
+    updatePlayerDetails('money')
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
@@ -481,6 +494,7 @@ function goToJail(token){
     token.setAttribute('area', 'west')
     positionToken(token,10)
     availableActions.rollDice = false
+    availableActions.endTurn = true
 
     // Add a class which allows a police animation to play.
     // After 3 seconds, remove it.
@@ -503,3 +517,5 @@ function increasePlayerTurn(){
     availableActions.endTurn = false
     document.body.setAttribute('turn', 'player' + turn)
 }
+
+
