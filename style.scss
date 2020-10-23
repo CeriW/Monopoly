@@ -482,6 +482,26 @@ $jailAnimationLength: 1.5;
     }
 }
 
+.good-change{
+    animation: goodChangeAnimation 1s ease-in-out;
+}
+
+@keyframes goodChangeAnimation{
+    0%   {transform: scale(1);}
+    50%  {transform: scale(1.75); color: $green;}
+    100% {transform: scale(1);}
+}
+
+.bad-change{
+    animation: badChangeAnimation 1s ease-in-out;
+}
+
+@keyframes badChangeAnimation{
+    0%   {transform: scale(1);}
+    50%  {transform: scale(1.75); color: $red;}
+    100% {transform: scale(1);}
+}
+
 
 /* Player action buttons  ----------------------------------------------------*/
 

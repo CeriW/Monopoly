@@ -417,6 +417,30 @@ body:not(.popup-open) #popup {
   #player-summary > div {
     padding: 40px 20px; }
 
+.good-change {
+  animation: goodChangeAnimation 1s ease-in-out; }
+
+@keyframes goodChangeAnimation {
+  0% {
+    transform: scale(1); }
+  50% {
+    transform: scale(1.75);
+    color: #0aa959; }
+  100% {
+    transform: scale(1); } }
+
+.bad-change {
+  animation: badChangeAnimation 1s ease-in-out; }
+
+@keyframes badChangeAnimation {
+  0% {
+    transform: scale(1); }
+  50% {
+    transform: scale(1.75);
+    color: #db0926; }
+  100% {
+    transform: scale(1); } }
+
 /* Player action buttons  ----------------------------------------------------*/
 .player-action-button {
   display: none; }

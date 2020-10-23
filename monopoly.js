@@ -51,7 +51,7 @@ let communityChestCards =
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        amount: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        amount: 50},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   amount: null},
-    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: '+',        amount: 200},
+    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     amount: null},
     {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', amount: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        amount: 100},
     {description: "Income tax refund – Collect £20",                                            type: '+',        amount: 20 },
@@ -360,9 +360,34 @@ function drawCard(type){
     let chosenCard = cardList.shift()
     openPopup(chosenCard.description)
     cardList.push(chosenCard)
-    console.log(chosenCard.type)
     
+    switch (chosenCard.type){
+        case '+':
+            // A card which gains the player money from the bank
+            players[turn - 1].money += chosenCard.amount
+            animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'good')
+            break
+        case '-':
+            // A card where the player has to surrender money to the bank
+            players[turn - 1].money -= chosenCard.amount
+            animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'bad')
+            break
+        case 'getout':
+            console.log('getout: a get out of jail free card which is held onto by the player until used, sold or traded.')
+            break
+        case 'exchange':
+            console.log('exhange: a card where the amount has to be calculated.')
+            break
+        case 'calc':
+            console.log('calc: a card where the amount has to be calculated.')
+            break
+        case 'move':
+            console.log('move: a card which requires the player to move to a specified spot.')
+            break
+        }
 
+    // While not all cards will require this, a large majority will
+    updatePlayerDetails()
 }
 
 
@@ -375,6 +400,13 @@ function shuffleCards(array) {
     }
 }
 
+// Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
+function animateUpdate(node, type){
+    node.classList.add(type + '-change')
+    window.setTimeout(function(){
+        node.classList.remove(type + '-change')
+    }, 2000)
+}
 
 
 
@@ -482,7 +514,7 @@ function moveToken(total){
             else{
                 // Once the token has reached where it needs to be, stop the animation
                 window.clearInterval(myInterval)
-                console.log('done')
+                specialEndPositions(endPosition)
             }
 
         }, 250)
@@ -491,6 +523,28 @@ function moveToken(total){
     
 
 
+function specialEndPositions(endPosition){
+    switch (endPosition){
+        case 2:
+        case 17:
+        case 33:
+            drawCard('community-chest')
+            break
+        case 7:
+        case 22:
+        case 36:
+            drawCard('chance')
+            break
+        case 4:
+            // TODO - income tax
+            break
+        case 38:
+            // TODO - super tax
+            break
+        // Note that jail is covered before the token moves, so is not included here.
+    }
+      
+}
 
 
 // Puts the token where you want it to be using CSS. No maths is involved.
