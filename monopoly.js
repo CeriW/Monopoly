@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 1
+let diceSides = 6
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -47,7 +47,7 @@ let diceSides = 1
 let communityChestCards = 
   [
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
-    /*{description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
+    {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
@@ -62,14 +62,14 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'calc',     value: null },
     {description: "You have won second prize in a beauty contest–Collect £10",                  type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },*/
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
-    {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
+    /*{description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
     {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'nearest-station',   value: null },
     {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
@@ -82,7 +82,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board–Pay each player £50",            type: 'exchange',   value: 50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
 
@@ -342,7 +342,7 @@ function drawCard(type){
     // When drawn, the card is returned to the bottom of the pile.
     // This way, they always stay in the same rotation.
 
-    let cardList = (type === "community-chest") ? communityChestCards : chanceCards
+    let cardList = (type === "community-chest") ? chanceCards : chanceCards
     let chosenCard = cardList.shift()
     openPopup(chosenCard.description)
     cardList.push(chosenCard)
@@ -372,30 +372,50 @@ function drawCard(type){
             break
         case 'move':
             // TODO
-            console.log('move: a card which requires the player to move to a specified spot.')
-
-            switch (chosenCard.value){
-                // Go to jail
-                case 10:
-                    goToJail(document.querySelector('#player' + turn + 'token'))
-                    break
-                
-                // Advance to Go
-                case 0:
-                    // The moveToken function works with the number of spaces to move, rather than a position to move to.
-                    // Therefore a little maths is required.
-                    let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
-                    moveToken(endTotal)
-                    break
-                
-                default:
-                    //moveToken(chosenCard.value)
-            }
+            cardBasedMovement(chosenCard)
             break
         }
 
     // While not all cards will require this, a large majority will
     updatePlayerDetails()
+}
+
+function cardBasedMovement(chosenCard){
+
+    switch (chosenCard.value){
+        // Go to jail
+        case 10:
+            goToJail(document.querySelector('#player' + turn + 'token'))
+            break
+        
+        // Advance to Go
+        case 0:
+            // The moveToken function works with the number of spaces to move, rather than a position to move to.
+            // Therefore a little maths is required.
+            let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
+            moveToken(endTotal)
+            break
+
+        // A basic move card which tells you to move to a numbered position that requires no complicated maths.
+        default:
+            //moveToken(chosenCard.value)
+            moveToken(calculateCardMovement(chosenCard.value))
+
+    }
+}
+
+function calculateCardMovement(endPosition){
+    let currentPosition = document.querySelector('#player' + turn + 'token').getAttribute('position')
+
+    // If we don't need to pass go
+    if (currentPosition < endPosition){
+        return endPosition - currentPosition
+    }
+    
+    // If we DO need to pass go
+    else{  
+        return (endPosition + currentPosition) - 39
+    }
 }
 
 
