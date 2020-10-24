@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 6
+let diceSides = 2
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -67,11 +67,11 @@ let communityChestCards =
 
 let chanceCards = 
   [
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },*/
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
-    /*{description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
+    {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
-    {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'nearest-station',   value: null },
+    {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   value: 'nearest-station' },
     {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
@@ -82,7 +82,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board–Pay each player £50",            type: 'exchange',   value: 50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
@@ -342,7 +342,7 @@ function drawCard(type){
     // When drawn, the card is returned to the bottom of the pile.
     // This way, they always stay in the same rotation.
 
-    let cardList = (type === "community-chest") ? chanceCards : chanceCards
+    let cardList = (type === "community-chest") ? communityChestCards : chanceCards
     let chosenCard = cardList.shift()
     openPopup(chosenCard.description)
     cardList.push(chosenCard)
@@ -380,7 +380,11 @@ function drawCard(type){
     updatePlayerDetails()
 }
 
+// Move the token after drawing a card. 
+// Calculations depending on exactly what type of 'move' card has been drawn.
 function cardBasedMovement(chosenCard){
+
+    let currentPosition = parseInt(document.querySelector('#player' + turn  + 'token').getAttribute('position'))
 
     switch (chosenCard.value){
         // Go to jail
@@ -396,27 +400,62 @@ function cardBasedMovement(chosenCard){
             moveToken(endTotal)
             break
 
+        case 'nearest-utility':
+            // TODO - player should pay rent to the value of 10x dice roll
+            if (currentPosition < 12 || currentPosition > 27){
+                // Electric company
+                moveToken(calculateCardMovement(12))
+            } else{
+                // Water works
+                moveToken(calculateCardMovement(27))
+            }
+            break
+
+        case 'nearest-station':
+            // TODO - player should pay double rent
+
+            if (currentPosition < 5 || currentPosition > 35){
+                // Station 1 (King's Cross)
+                console.log(currentPosition)
+                console.log(calculateCardMovement(5))
+                moveToken(calculateCardMovement(5))
+              } else if (currentPosition < 15){
+                // Station 2 (Marylebone)
+                moveToken(calculateCardMovement(15))
+            } else if (currentPosition < 25){
+                // Station 3 (Fenchurch St)
+                moveToken(calculateCardMovement(25))
+            } else{
+                // Station 4 (Liverpool St)
+                moveToken(calculateCardMovement(35))
+            }
+            break 
         // A basic move card which tells you to move to a numbered position that requires no complicated maths.
         default:
             //moveToken(chosenCard.value)
             moveToken(calculateCardMovement(chosenCard.value))
+    }
 
+
+    // Calculate how far a token needs to move to reach a specified position,
+    // considering whether we need to pass Go or not.
+    function calculateCardMovement(endPosition){
+        // If we don't need to pass go
+        if (currentPosition < endPosition){
+            return endPosition - currentPosition
+        }
+        
+        // If we DO need to pass go
+        else{  
+
+            console.log('End:' + endPosition + ' Start: ' + currentPosition)
+            //return (endPosition + currentPosition) - 39
+            return (40 + endPosition) - currentPosition
+        }
     }
 }
 
-function calculateCardMovement(endPosition){
-    let currentPosition = document.querySelector('#player' + turn + 'token').getAttribute('position')
 
-    // If we don't need to pass go
-    if (currentPosition < endPosition){
-        return endPosition - currentPosition
-    }
-    
-    // If we DO need to pass go
-    else{  
-        return (endPosition + currentPosition) - 39
-    }
-}
 
 
 // A function which does a Durstenfeld shuffle
@@ -546,12 +585,11 @@ function moveToken(total){
                 specialEndPositions(endPosition)
             }
 
-        }, 250)
+        }, 100)
     }
 }
     
-
-
+// Deal with the consequences for when players land on spaces that aren't properties
 function specialEndPositions(endPosition){
     switch (endPosition){
         case 2:
