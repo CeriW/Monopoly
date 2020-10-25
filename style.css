@@ -235,8 +235,12 @@ body {
 .double2 .dice {
   background-color: #f1970b; }
 
-.double3 .dice {
+.double3 .dice,
+.failed-jail-roll .dice {
   background-color: #db0926; }
+
+.successful-jail-roll .dice {
+  background-color: #0aa959; }
 
 /* Player tokens -------------------------------------------------------------*/
 .token {
@@ -463,3 +467,14 @@ body[end-turn-available="false"] .end-turn-button {
   pointer-events: none;
   background: #ccc;
   color: #8f8f8f; }
+
+body[get-out-of-jail="false"] .get-out-50-button,
+body[get-out-of-jail="false"] .roll-doubles-for-jail {
+  display: none !important; }
+
+body[get-out-of-jail="true"] .get-out-50-button,
+body[get-out-of-jail="true"] .roll-doubles-for-jail {
+  display: initial !important; }
+
+body[get-out-of-jail="true"] .roll-dice-button {
+  display: none; }

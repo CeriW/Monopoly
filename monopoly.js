@@ -137,7 +137,8 @@ let players = []
 
 let availableActions = {
     rollDice: true,
-    endTurn: false
+    endTurn: false,
+    getOutOfJail: false
 }
 
 
@@ -162,10 +163,6 @@ function initialisePage(){
     // Add all of the required event listeners
     addEvents()
 
-    // Start off with player 1's turn
-    // TODO - at the beginning of the game, players should all roll the dice.
-    // The highest roll wins. If it is a tie, the tying players should roll again.
-    increasePlayerTurn()
 
 }
 
@@ -231,6 +228,7 @@ function resizeBoard(){
 function setAvailableActions(){
     document.body.setAttribute('dice-roll-available', availableActions.rollDice)
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
+    document.body.setAttribute('get-out-of-jail', availableActions.getOutOfJail)
 }
 
 function updatePlayerDetails(){
@@ -272,9 +270,17 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     for (i = 0; i < numberOfPlayers; i++){
-        let newPlayer = {id:i + 1, name:"Player " + (i + 1), money:1500}
+        let newPlayer = {id:i + 1, name:"Player " + (i + 1), money:1500, inJail: 0}
         players.push(newPlayer)
     }
+
+    /* Note - the inJail numbers mean:
+       0   - not in jail
+       1-3 - on their 1st, 2nd or 3rd turn in jail. Can attempt to roll for doubles,
+             pay £50 or use a get out of jail free card.
+       4   - have used all their chances to get out by rolling doubles.
+             MUST pay £50 to get out of jail.
+    */
 
     // Generate a summary for each player
     players.forEach(generatePlayerSummary)
@@ -291,6 +297,12 @@ function createPlayers(){
 
     // Remove the player select overlay once done.
     newPlayersOverlay.parentNode.removeChild(newPlayersOverlay)
+
+    // Start off with player 1's turn
+    // TODO - at the beginning of the game, players should all roll the dice.
+    // The highest roll wins. If it is a tie, the tying players should roll again.
+    increasePlayerTurn()
+    
 }
 
 function generatePlayerSummary(player){
@@ -324,6 +336,8 @@ function generatePlayerSummary(player){
         newRow.appendChild(newValue)
     }
     
+    // TODO - much of this could probably be achieved much more simply with a loop
+
     // Create the buttons that allow players to end their turns.
     // CSS will be used to only show this for the player whose turn it is.
     let newEndTurnButton = document.createElement('button')
@@ -336,13 +350,26 @@ function generatePlayerSummary(player){
     let newRollDiceButton = document.createElement('button')
     newRollDiceButton.innerText = 'Roll dice'
     newRollDiceButton.classList.add('roll-dice-button', 'player-action-button')
-    newRollDiceButton.classList
     newRollDiceButton.addEventListener('click', rollDice)
+
+    // Create the "Pay £50 to get out of jail" buttons
+    let newGetOut50Button = document.createElement('button')
+    newGetOut50Button.innerText = 'Pay 50 to get out of jail'
+    newGetOut50Button.classList.add('get-out-50-button', 'player-action-button')
+    newGetOut50Button.addEventListener('click', function(){getOutOfJail('pay')})
+
+    // Create the "Roll doubles to get out of jail" buttons
+    let newRollDoublesForJailButton = document.createElement('button')
+    newRollDoublesForJailButton.innerText = "Roll doubles to get out of jail"
+    newRollDoublesForJailButton.classList.add('roll-doubles-for-jail', 'player-action-button')
+    newRollDoublesForJailButton.addEventListener('click', rollDoublesForJail)
 
     // Append all these new elements to the relevant player summary
     newSummary.appendChild(newTable)
     newSummary.appendChild(newRollDiceButton)
     newSummary.appendChild(newEndTurnButton)
+    newSummary.appendChild(newGetOut50Button)
+    newSummary.appendChild(newRollDoublesForJailButton)
     playerSummary.appendChild(newSummary)
 
 }
@@ -404,6 +431,7 @@ function cardBasedMovement(chosenCard){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
+            player[turn].inJail++
             break
         
         // Advance to Go
@@ -492,6 +520,7 @@ function openPopup(message){
 }
 
 // DICE FUNCTIONS ------------------------------------------------------------//
+
 
 function rollDice(){
     let roll1 = Math.ceil(Math.random() * diceSides)
@@ -616,7 +645,6 @@ function specialEndPositions(endPosition){
             break
         // Note that jail is covered before the token moves, so is not included here.
     }
-      
 }
 
 
@@ -636,6 +664,8 @@ function goToJail(token){
     positionToken(token,10)
     availableActions.rollDice = false
     availableActions.endTurn = true
+    players[turn - 1].inJail++
+    updatePlayerDetails()
 
     // Add a class which allows a police animation to play.
     // After 3 seconds, remove it.
@@ -645,9 +675,74 @@ function goToJail(token){
     }, 3000)
 }
 
+// GET OUT OF JAIL -----------------------------------------------------------//
+
+function rollDoublesForJail(){
+    let roll1 = Math.ceil(Math.random() * diceSides)
+    let roll2 = Math.ceil(Math.random() * diceSides)
+
+    // Update the interface
+    dice1.className = "dice dice-roll-" + roll1
+    dice2.className = "dice dice-roll-" + roll2
+
+    // If the two numbers are the same, report that we rolled doubles.
+    // Three doubles in a row sends you to jail.
+    let doubles = (roll1 === roll2) ? true : false
+
+    if(roll1 === roll2){
+        getOutOfJail('doubles')
+        availableActions.rollDice = false
+        availableActions.endTurn = true
+        setAvailableActions()
+        moveToken(roll1 + roll2)
+    } else{
+        diceContainer.className = "failed-jail-roll"
+        player.inJail++
+    }
+}
+
+function getOutOfJail(method){
+    // TODO
+    let player = players[turn - 1]
+  
+    switch (method){
+        case 'pay':
+            player.money -= 50
+            availableActions.rollDice = true
+            break
+        case 'card':
+            //TODO
+            availableActions.rollDice = true
+            break
+        case 'doubles':
+            // Note - you do not get to roll again after rolling doubles
+            // to get out of jail
+            diceContainer.className = "successful-jail-roll"
+            diceDoubles.innerText = "Success!"
+            break
+    }
+
+    
+    availableActions.getOutOfJail = false
+    player.inJail = 0
+    setAvailableActions()
+    updatePlayerDetails()
+  
+  }
+
+function checkJail(){
+    if (players[turn - 1].inJail > 0){
+        availableActions.getOutOfJail = true
+        availableActions.rollDice = false
+        setAvailableActions()
+    }
+}
+
 // TURN BASED FUNCTIONS ------------------------------------------------------//
 
 function increasePlayerTurn(){
+
+
     if (turn === players.length){
         turn = 1
     } else{
@@ -657,6 +752,9 @@ function increasePlayerTurn(){
     availableActions.rollDice = true
     availableActions.endTurn = false
     document.body.setAttribute('turn', 'player' + turn)
+    
+    checkJail()
 }
+
 
 
