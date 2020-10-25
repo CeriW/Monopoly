@@ -138,7 +138,8 @@ let players = []
 let availableActions = {
     rollDice: true,
     endTurn: false,
-    getOutOfJail: false
+    getOutOfJail: false,
+    rollDoublesForJail: false
 }
 
 
@@ -229,6 +230,7 @@ function setAvailableActions(){
     document.body.setAttribute('dice-roll-available', availableActions.rollDice)
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
     document.body.setAttribute('get-out-of-jail', availableActions.getOutOfJail)
+    document.body.setAttribute('roll-doubles-for-jail', availableActions.rollDoublesForJail)
 }
 
 function updatePlayerDetails(){
@@ -431,7 +433,7 @@ function cardBasedMovement(chosenCard){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
-            player[turn].inJail++
+            players[turn - 1].inJail++
             break
         
         // Advance to Go
@@ -693,12 +695,17 @@ function rollDoublesForJail(){
         getOutOfJail('doubles')
         availableActions.rollDice = false
         availableActions.endTurn = true
-        setAvailableActions()
         moveToken(roll1 + roll2)
     } else{
         diceContainer.className = "failed-jail-roll"
-        player.inJail++
+        diceDoubles.innerText = "Failure! You have " + (3 - players[turn - 1].inJail + ' attempts remaining')
+        availableActions.rollDice = false
+        availableActions.endTurn = true
+        availableActions.getOutOfJail = false
+        players[turn - 1].inJail++
     }
+
+    setAvailableActions()
 }
 
 function getOutOfJail(method){
@@ -731,10 +738,21 @@ function getOutOfJail(method){
   }
 
 function checkJail(){
-    if (players[turn - 1].inJail > 0){
+
+    let jailTurn = players[turn - 1].inJail
+
+    if (jailTurn > 0){
         availableActions.getOutOfJail = true
         availableActions.rollDice = false
+        
+        // You only get 3 attempts at rolling doubles before you are forced
+        // to pay/use a card to get out of jail.
+        availableActions.rollDoublesForJail = jailTurn > 3 ? false : true
+
+
+        
         setAvailableActions()
+        
     }
 }
 
@@ -752,6 +770,16 @@ function increasePlayerTurn(){
     availableActions.rollDice = true
     availableActions.endTurn = false
     document.body.setAttribute('turn', 'player' + turn)
+
+    // Move where the class of 'currentPlayer' sits. This allows buttons to be
+    // enabled and disabled in the CSS.
+    let currentPlayer = document.querySelector('.current-player-summary')
+
+    if (currentPlayer){
+        currentPlayer.classList.remove('current-player-summary')
+    }
+
+    document.querySelector('#player' + turn + 'summary').classList.add('current-player-summary')
     
     checkJail()
 }
