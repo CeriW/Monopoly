@@ -450,16 +450,7 @@ body:not(.popup-open) #popup {
 .player-action-button {
   display: none; }
 
-body[turn="player1"] #player1summary .player-action-button {
-  display: initial; }
-
-body[turn="player2"] #player2summary .player-action-button {
-  display: initial; }
-
-body[turn="player3"] #player3summary .player-action-button {
-  display: initial; }
-
-body[turn="player4"] #player4summary .player-action-button {
+.current-player-summary .player-action-button {
   display: initial; }
 
 body[dice-roll-available="false"] .roll-dice-button,
@@ -472,9 +463,14 @@ body[get-out-of-jail="false"] .get-out-50-button,
 body[get-out-of-jail="false"] .roll-doubles-for-jail {
   display: none !important; }
 
-body[get-out-of-jail="true"] .get-out-50-button,
-body[get-out-of-jail="true"] .roll-doubles-for-jail {
+body[get-out-of-jail="true"] .current-player-summary .get-out-50-button,
+body[get-out-of-jail="true"] .current-player-summary .roll-doubles-for-jail {
   display: initial !important; }
 
-body[get-out-of-jail="true"] .roll-dice-button {
+body[get-out-of-jail="true"] .current-player-summary .roll-dice-button {
   display: none; }
+
+body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail {
+  pointer-events: none;
+  background: #ccc;
+  color: #8f8f8f; }

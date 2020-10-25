@@ -518,20 +518,7 @@ $jailAnimationLength: 1.5;
     display: none;
 }
 
-//TODO - make this a loop
-body[turn="player1"] #player1summary .player-action-button{
-    display: initial;
-}
-
-body[turn="player2"] #player2summary .player-action-button{
-    display: initial;
-}
-
-body[turn="player3"] #player3summary .player-action-button{
-    display: initial;
-}
-
-body[turn="player4"] #player4summary .player-action-button{
+.current-player-summary .player-action-button{
     display: initial;
 }
 
@@ -551,7 +538,7 @@ body[get-out-of-jail="false"]{
     }
 }
 
-body[get-out-of-jail="true"]{
+body[get-out-of-jail="true"] .current-player-summary{
     .get-out-50-button,
     .roll-doubles-for-jail{
         display: initial !important;
@@ -560,6 +547,11 @@ body[get-out-of-jail="true"]{
     .roll-dice-button{
         display: none;
     }
+}
+
+body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail{
+    pointer-events: none;
+    @include disabledButton()
 }
 
 
