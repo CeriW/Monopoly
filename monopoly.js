@@ -36,7 +36,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 2
+let diceSides = 1
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -241,9 +241,25 @@ function updatePlayerDetails(){
         // Starting at 1 as the first attribute is 'id' which will never change
         for (i = 1; i < keys.length; i++){
             let updateNode = document.querySelector('#player-' + (player.id) + '-' + keys[i])
+            let currentValue = parseInt(updateNode.innerText)
             updateNode.innerText = values[i]
+            
+            // If the values have changed, animate it based on whether it's a good/bad change
+            if (currentValue > updateNode.innerText){
+                animateUpdate(updateNode, 'bad')
+            }else if (currentValue < updateNode.innerText){
+                animateUpdate(updateNode, 'good')
+            }
         }
     })
+}
+
+// Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
+function animateUpdate(node, type){
+    node.classList.add(type + '-change')
+    window.setTimeout(function(){
+        node.classList.remove(type + '-change')
+    }, 2000)
 }
 
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
@@ -351,12 +367,10 @@ function drawCard(type){
         case '+':
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
-            animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'good')
             break
         case '-':
             // A card where the player has to surrender money to the bank
             players[turn - 1].money -= chosenCard.value
-            animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'bad')
             break
         case 'getout':
             // TODO
@@ -416,8 +430,6 @@ function cardBasedMovement(chosenCard){
 
             if (currentPosition < 5 || currentPosition > 35){
                 // Station 1 (King's Cross)
-                console.log(currentPosition)
-                console.log(calculateCardMovement(5))
                 moveToken(calculateCardMovement(5))
               } else if (currentPosition < 15){
                 // Station 2 (Marylebone)
@@ -447,9 +459,6 @@ function cardBasedMovement(chosenCard){
         
         // If we DO need to pass go
         else{  
-
-            console.log('End:' + endPosition + ' Start: ' + currentPosition)
-            //return (endPosition + currentPosition) - 39
             return (40 + endPosition) - currentPosition
         }
     }
@@ -467,13 +476,7 @@ function shuffleCards(array) {
     }
 }
 
-// Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
-function animateUpdate(node, type){
-    node.classList.add(type + '-change')
-    window.setTimeout(function(){
-        node.classList.remove(type + '-change')
-    }, 2000)
-}
+
 
 
 
@@ -575,7 +578,6 @@ function moveToken(total){
                     endPosition = endPosition - 40
                     players[turn - 1].money += 200
                     updatePlayerDetails()
-                    animateUpdate(document.querySelector('#player-' + players[turn - 1].id + '-money'), 'good')
                 }
             }
 
@@ -603,10 +605,14 @@ function specialEndPositions(endPosition){
             drawCard('chance')
             break
         case 4:
-            // TODO - income tax
+            // Income tax
+            players[turn - 1].money -= 200
+            updatePlayerDetails()
             break
         case 38:
-            // TODO - super tax
+            // Super tax
+            players[turn - 1].money -= 100
+            updatePlayerDetails()
             break
         // Note that jail is covered before the token moves, so is not included here.
     }
