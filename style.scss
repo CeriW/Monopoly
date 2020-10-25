@@ -261,8 +261,13 @@ $columnsize: 80px;
     background-color: $orange;
 }
 
-.double3 .dice{
+.double3 .dice,
+.failed-jail-roll .dice{
     background-color: $red;
+}
+
+.successful-jail-roll .dice{
+    background-color: $green;
 }
 
 /* Player tokens -------------------------------------------------------------*/
@@ -455,6 +460,8 @@ $jailAnimationLength: 1.5;
     to  {opacity: 0;}
 }
 
+
+
 /* New players  --------------------------------------------------------------*/
 
 #new-player-overlay{
@@ -534,5 +541,26 @@ body[end-turn-available="false"] .end-turn-button{
     pointer-events: none;
     @include disabledButton()
 }
+
+// I added loads of specificity to this rule and still had to use important.
+// TODO - maybe revisit this
+body[get-out-of-jail="false"]{
+    .get-out-50-button,
+    .roll-doubles-for-jail{
+        display: none !important;
+    }
+}
+
+body[get-out-of-jail="true"]{
+    .get-out-50-button,
+    .roll-doubles-for-jail{
+        display: initial !important;
+    }
+
+    .roll-dice-button{
+        display: none;
+    }
+}
+
 
 
