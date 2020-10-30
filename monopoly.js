@@ -442,7 +442,6 @@ function cardBasedMovement(chosenCard){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
-            players[turn - 1].inJail++
             break
         
         // Advance to Go
