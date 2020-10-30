@@ -2,19 +2,6 @@
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
-/*
- Community chest and chance cards have a number of properties:
- type - the classification of card as follows:
-    + : a card which gains the player money from the bank.
-    - : a card which the player has to surrender money to the bank.
-    getout : a get out of jail free card which is held onto by the player until used, sold or traded.
-    exchange : a card where the players have to exchange money.
-    calc : a card where the value has to be calculated.
-    move: a card which requires the player to move to a specified spot.
-
- value - for +  and - cards, this will be the amount to give/take.
-       - for move cards, this will be which position to move to.
-*/
 
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
@@ -37,6 +24,21 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
 let diceSides = 1
+
+
+/*
+ Community chest and chance cards have a number of properties:
+ type - the classification of card as follows:
+    + : a card which gains the player money from the bank.
+    - : a card which the player has to surrender money to the bank.
+    getout : a get out of jail free card which is held onto by the player until used, sold or traded.
+    exchange : a card where the players have to exchange money.
+    calc : a card where the value has to be calculated.
+    move: a card which requires the player to move to a specified spot.
+
+ value - for +  and - cards, this will be the amount to give/take.
+       - for move cards, this will be which position to move to.
+*/
 
 
 // TODO - Could these arrays be better implemented as JSON files? They are
@@ -295,7 +297,14 @@ function createPlayers(){
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
         board.appendChild(newToken)
+
+        positionToken(newToken, 0)
+
     })
+
+
+
+
 
     // Remove the player select overlay once done.
     newPlayersOverlay.parentNode.removeChild(newPlayersOverlay)
@@ -783,6 +792,3 @@ function increasePlayerTurn(){
     
     checkJail()
 }
-
-
-
