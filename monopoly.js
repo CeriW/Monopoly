@@ -23,7 +23,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 1
+let diceSides = 6
 
 
 /*
@@ -87,51 +87,61 @@ let chanceCards =
     {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
+//TODO - the rent values are placeholders and need to be updated to the actual values.
+
+/* Rent values are set up as follows:
+   0 : the base rent without any houses
+   1 : the amount of rent with a full colour set.
+   2-5 : the amount of rent with 1-4 houses
+   6 : the amount of rent with a hotel.
+*/
+
+
 
 let spaces =  [
-    {name: 'Go',                    type: 'special',            price: null,    colour: 'corner',       boardposition: 'south'},
-    {name: 'Old Kent Road',         type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
-    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'south'},
-    {name: 'Whitechapel Road',      type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south'},
-    {name: 'Income tax',            type: 'special',            price: null,    colour: null,           boardposition: 'south'},
-    {name: 'Kings Cross Station',   type: 'station',            price: 200,     colour: null,           boardposition: 'south'},
-    {name: 'The Angel Islington',   type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
-    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'south'},
-    {name: 'Euston Road',           type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
-    {name: 'Pentonville Road',      type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south'},
+    {name: 'Go',                    type: 'special',            price: null,    colour: 'corner',       boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Old Kent Road',         type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Whitechapel Road',      type: 'property',           price: 60,      colour: 'brown',        boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Income tax',            type: 'special',            price: null,    colour: null,           boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Kings Cross Station',   type: 'station',            price: 200,     colour: null,           boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'The Angel Islington',   type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Euston Road',           type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Pentonville Road',      type: 'property',           price: 100,     colour: 'lightblue',    boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
 
-    {name: 'Jail',                  type: 'special',            price: null,    colour: 'corner',       boardposition: 'west'},
-    {name: 'Pall Mall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
-    {name: 'Electric Company',      type: 'utility',            price: 150,     colour: null,           boardposition: 'west'},
-    {name: 'Whitehall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west'},
-    {name: 'Northumberland Avenue', type: 'property',           price: 150,     colour: 'pink',         boardposition: 'west'},
-    {name: 'Marylebone Station',    type: 'station',            price: 200,     colour: null,           boardposition: 'west'},
-    {name: 'Bow Street',            type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west'},
-    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'west'},
-    {name: 'Marlborough Street',    type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west'},
-    {name: 'Vine Street',           type: 'property',           price: 200,     colour: 'orange',       boardposition: 'west'},
+    {name: 'Jail',                  type: 'special',            price: null,    colour: 'corner',       boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Pall Mall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Electric Company',      type: 'utility',            price: 150,     colour: null,           boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Whitehall',             type: 'property',           price: 140,     colour: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Northumberland Avenue', type: 'property',           price: 150,     colour: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Marylebone Station',    type: 'station',            price: 200,     colour: null,           boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Bow Street',            type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Marlborough Street',    type: 'property',           price: 180,     colour: 'orange',       boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Vine Street',           type: 'property',           price: 200,     colour: 'orange',       boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
 
-    {name: 'Free Parking',          type: 'special',            price: null,    colour: 'corner',       boardposition: 'north'},
-    {name: 'Strand',                type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
-    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'north'},
-    {name: 'Fleet Street',          type: 'property',           price: 220,     colour: 'red',          boardposition: 'north'},
-    {name: 'Trafalgar Square',      type: 'property',           price: 240,     colour: 'red',          boardposition: 'north'},
-    {name: 'Fenchurch St. Station', type: 'station',            price: 200,     colour: null,           boardposition: 'north'},
-    {name: 'Leicester Square',      type: 'property',           price: 220,     colour: 'yellow',       boardposition: 'north'},
-    {name: 'Water Works',           type: 'utility',            price: 150,     colour: null,           boardposition: 'north'},
-    {name: 'Coventry Street',       type: 'property',           price: 260,     colour: 'yellow',       boardposition: 'north'},
-    {name: 'Piccadilly',            type: 'property',           price: 280,     colour: 'yellow',       boardposition: 'north'},
+    {name: 'Free Parking',          type: 'special',            price: null,    colour: 'corner',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Strand',                type: 'property',           price: 220,     colour: 'red',          boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Fleet Street',          type: 'property',           price: 220,     colour: 'red',          boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Trafalgar Square',      type: 'property',           price: 240,     colour: 'red',          boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Fenchurch St. Station', type: 'station',            price: 200,     colour: null,           boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Leicester Square',      type: 'property',           price: 220,     colour: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Water Works',           type: 'utility',            price: 150,     colour: null,           boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Coventry Street',       type: 'property',           price: 260,     colour: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Piccadilly',            type: 'property',           price: 280,     colour: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
     
-    {name: 'Go To Jail',            type: 'special',            price: null,    colour: 'corner',       boardposition: 'east'},
-    {name: 'Regent Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
-    {name: 'Oxford Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east'},
-    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'east'},
-    {name: 'Bond Street',           type: 'property',           price: 320,     colour: 'green',        boardposition: 'east'},
-    {name: 'Liverpool St. Station', type: 'station',            price: 200,     colour: null,           boardposition: 'east'},
-    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'east'},
-    {name: 'Park Lane',             type: 'property',           price: 350,     colour: 'darkblue',     boardposition: 'east'},
-    {name: 'Super Tax',             type: 'special',            price: null,    colour: null,           boardposition: 'east'},
-    {name: 'Mayfair',               type: 'property',           price: 400,     colour: 'darkblue',     boardposition: 'east'},
+    {name: 'Go To Jail',            type: 'special',            price: null,    colour: 'corner',       boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Regent Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Oxford Street',         type: 'property',           price: 300,     colour: 'green',        boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    colour: null,           boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Bond Street',           type: 'property',           price: 320,     colour: 'green',        boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Liverpool St. Station', type: 'station',            price: 200,     colour: null,           boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Chance',                type: 'chance',             price: null,    colour: null,           boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Park Lane',             type: 'property',           price: 350,     colour: 'darkblue',     boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Super Tax',             type: 'special',            price: null,    colour: null,           boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
+    {name: 'Mayfair',               type: 'property',           price: 400,     colour: 'darkblue',     boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250},
 ]
 
 // An empty array for now. Will be filled with player info later.
@@ -525,7 +535,7 @@ function closePopup(){
 }
 
 function openPopup(message){
-    popupMessage.innerText = message
+    popupMessage.innerHTML = message
     document.body.classList.add('popup-open')
 }
 
@@ -654,6 +664,13 @@ function specialEndPositions(endPosition){
             updatePlayerDetails()
             break
         // Note that jail is covered before the token moves, so is not included here.
+
+        // TODO - Since adding the default, we need to tell it to do nothing on Go and Free Parking
+
+        default:
+            //TODO - this is where we would do stuff when a player lands on a property.
+            console.log('property!')
+            displayPropertyDetails(endPosition)
     }
 }
 
@@ -790,4 +807,35 @@ function increasePlayerTurn(){
     document.querySelector('#player' + turn + 'summary').classList.add('current-player-summary')
     
     checkJail()
+}
+
+// PROPERTY FUNCTIONS --------------------------------------------------------//
+
+function displayPropertyDetails(number){
+    console.log(spaces[number])
+
+    let htmlOutput = '<div class="property-overview">'
+        
+    // Rent table
+    htmlOutput += '<div class="' + spaces[number].colour + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
+    htmlOutput += '<table style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
+    htmlOutput += '<td>Rent</td><td>' + spaces[number].rent[0] + '</td>'
+    htmlOutput += '<tr><td>Rent with colour set</td><td>' + spaces[number].rent[1] + '</td>'
+    for (i = 2; i <=6; i++){
+        htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + spaces[number].rent[i] + '</td></tr>'
+    }
+    htmlOutput += '</table>'
+
+
+    // Houses table
+    htmlOutput += '<table>'
+    htmlOutput += '<tr><td>Houses cost</td><td>' + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td>Hotels cost</td><td>' + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '</table>'
+
+
+
+    htmlOutput += '</div>'
+
+    openPopup(htmlOutput)
 }

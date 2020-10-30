@@ -356,7 +356,9 @@ $columnsize: 80px;
 
 #popup-close{
     width: 35px;
-    float: right;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 body:not(.popup-open) #popup{
@@ -555,4 +557,72 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 }
 
 
+/* Property overview  --------------------------------------------------------*/
 
+.property-overview-title{
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: Montserrat, sans-serif;
+}
+
+.title-deed{
+    font-size: 0.7em;
+}
+
+.property-overview-color{
+    padding: 20px;
+    border: 2px solid $black;
+    display: inline-block;
+    min-width: 220px;
+    margin-bottom: 10px;
+}
+
+
+//TODO - I tried implementing this as an each loop but couldn't get it to work.
+.property-overview-color.brown{background: $brown;}
+.property-overview-color.lightblue{background: $lightblue;}
+.property-overview-color.pink{background: $pink;}
+.property-overview-color.orange{background: $orange;}
+.property-overview-color.red{background: $red;}
+.property-overview-color.yellow{background: $yellow;}
+.property-overview-color.green{background: $green;}
+.property-overview-color.darkblue{background: $darkblue;}
+
+
+$colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
+
+@each $colour in $colours{
+    //.property-overview-color.#{$colour}{
+        //background: '$#{$colour}';
+    //}
+}
+
+.property-overview-house-icon{
+    background: url('images/house-icon.svg') center no-repeat;
+    background-size: contain;
+    padding: 0 9px;
+    color: #fff;
+    display: inline-block;
+    text-align: center;
+    min-width: 14px;
+}
+
+
+.property-overview table{
+    float: none;
+    margin: auto;
+
+    tr td:last-child{
+        text-align: right;
+        width: 60px;
+    }
+
+    tr td:first-child{
+        text-align: left;
+        min-width: 200px;
+    }
+
+    tr:last-child .property-overview-house-icon{
+        background-image: url('images/hotel-icon.svg');
+    }
+}
