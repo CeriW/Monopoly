@@ -312,7 +312,9 @@ body {
 
 #popup-close {
   width: 35px;
-  float: right; }
+  position: absolute;
+  top: 20px;
+  right: 20px; }
 
 body:not(.popup-open) #popup {
   display: none; }
@@ -474,3 +476,64 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   pointer-events: none;
   background: #ccc;
   color: #8f8f8f; }
+
+/* Property overview  --------------------------------------------------------*/
+.property-overview-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: Montserrat, sans-serif; }
+
+.title-deed {
+  font-size: 0.7em; }
+
+.property-overview-color {
+  padding: 20px;
+  border: 2px solid #000;
+  display: inline-block;
+  min-width: 220px;
+  margin-bottom: 10px; }
+
+.property-overview-color.brown {
+  background: #824c26; }
+
+.property-overview-color.lightblue {
+  background: #99d1f4; }
+
+.property-overview-color.pink {
+  background: #d52788; }
+
+.property-overview-color.orange {
+  background: #f1970b; }
+
+.property-overview-color.red {
+  background: #db0926; }
+
+.property-overview-color.yellow {
+  background: #e9ed38; }
+
+.property-overview-color.green {
+  background: #0aa959; }
+
+.property-overview-color.darkblue {
+  background: #3e64ad; }
+
+.property-overview-house-icon {
+  background: url("images/house-icon.svg") center no-repeat;
+  background-size: contain;
+  padding: 0 9px;
+  color: #fff;
+  display: inline-block;
+  text-align: center;
+  min-width: 14px; }
+
+.property-overview table {
+  float: none;
+  margin: auto; }
+  .property-overview table tr td:last-child {
+    text-align: right;
+    width: 60px; }
+  .property-overview table tr td:first-child {
+    text-align: left;
+    min-width: 200px; }
+  .property-overview table tr:last-child .property-overview-house-icon {
+    background-image: url("images/hotel-icon.svg"); }
