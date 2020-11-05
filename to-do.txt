@@ -5,8 +5,6 @@ An incomplete list of all the developments that need to be completed
 - Players to be able to choose their name and token
     - Tokens display on board
 
-- Players to be able to buy properties
-
 - If players choose not to buy properties, they must go to auction
 
 - Trading
@@ -24,3 +22,5 @@ An incomplete list of all the developments that need to be completed
     - Sell
 
 - House rules? (e.g. free parking)
+
+- Currency symbols (this is made a bit harder by the fact that the default symbol isn't a standard character)
