@@ -6,6 +6,7 @@
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
+let feed = document.querySelector('#feed-content')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -63,7 +64,7 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'calc',     value: null },
-    {description: "You have won second prize in a beauty contest–Collect £10",                  type: '+',        value: 10},
+    {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
     {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
@@ -176,6 +177,9 @@ function initialisePage(){
     // Add all of the required event listeners
     addEvents()
 
+    for (i = 0; i <=100; i++){
+        addToFeed('howdy')
+    }
 
 }
 
@@ -236,6 +240,8 @@ function addEvents(){
 
 function resizeBoard(){
     board.style.height = board.offsetWidth + 'px'
+
+    feed.parentElement.style.maxHeight = board.offsetHeight + 'px'
 }
 
 function setAvailableActions(){
@@ -418,26 +424,32 @@ function drawCard(type){
         case '+':
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
+            addToFeed('Player ' + players[turn - 1].id + ' got ' + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card')
             break
         case '-':
             // A card where the player has to surrender money to the bank
             players[turn - 1].money -= chosenCard.value
+
+            addToFeed('Player ' + players[turn - 1].id + ' lost ' + chosenCard.value + ' to a ' + getReadableCardName(type) +' card')
             break
         case 'getout':
             // TODO
             console.log('getout: a get out of jail free card which is held onto by the player until used, sold or traded.')
+            addToFeed('Get out of jail free card')
             break
         case 'exchange':
             // TODO
             console.log('exhange: a card where the value has to be calculated.')
+            addToFeed('Exchange card')
             break
         case 'calc':
             // TODO
             console.log('calc: a card where the value has to be calculated.')
+            addToFeed('Calc card')
             break
         case 'move':
             // TODO
-            cardBasedMovement(chosenCard)
+            cardBasedMovement(chosenCard, type)
             break
         }
 
@@ -445,9 +457,20 @@ function drawCard(type){
     updatePlayerDetails()
 }
 
+// Generates a player-friendly card type name.
+// Used in certain output messages
+function getReadableCardName(type){
+    if(type === 'community-chest'){
+        return 'Community Chest'
+    } else{
+        return 'Chance'
+    }
+  }
+
+
 // Move the token after drawing a card. 
 // Calculations depending on exactly what type of 'move' card has been drawn.
-function cardBasedMovement(chosenCard){
+function cardBasedMovement(chosenCard, type){
 
     let currentPosition = parseInt(document.querySelector('#player' + turn  + 'token').getAttribute('position'))
 
@@ -455,6 +478,7 @@ function cardBasedMovement(chosenCard){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
+            addToFeed('Player ' + players[turn - 1].id + 'drew a' + getReadableCardName(type) + 'and went to jail!')
             break
         
         // Advance to Go
@@ -463,6 +487,7 @@ function cardBasedMovement(chosenCard){
             // Therefore a little maths is required.
             let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
             moveToken(endTotal)
+            addToFeed(getCardMovementFeedMessage())
             break
 
         case 'nearest-utility':
@@ -474,6 +499,7 @@ function cardBasedMovement(chosenCard){
                 // Water works
                 moveToken(calculateCardMovement(27))
             }
+            addToFeed(getCardMovementFeedMessage())
             break
 
         case 'nearest-station':
@@ -492,11 +518,19 @@ function cardBasedMovement(chosenCard){
                 // Station 4 (Liverpool St)
                 moveToken(calculateCardMovement(35))
             }
+
+            addToFeed(getCardMovementFeedMessage())
             break 
         // A basic move card which tells you to move to a numbered position that requires no complicated maths.
         default:
             //moveToken(chosenCard.value)
+            addToFeed(getCardMovementFeedMessage())
             moveToken(calculateCardMovement(chosenCard.value))
+    }
+
+
+    function getCardMovementFeedMessage(){
+        return 'Player ' + players[turn-1].id + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[chosenCard.value].name
     }
 
 
@@ -514,6 +548,7 @@ function cardBasedMovement(chosenCard){
         }
     }
 }
+
 
 
 
@@ -574,6 +609,7 @@ function rollDice(){
     if (doublesCount === 3){
         let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
         goToJail(token)
+        addToFeed('Player ' + players[turn-1].id + ' rolled 3 doubles and went to jail!')
     } else{
         moveToken(total)
     }
@@ -586,10 +622,12 @@ function rollDice(){
         case 1:
             diceDoubles.innerText = "1st double"
             diceContainer.className ="double1"
+            addToFeed('Player ' + players[turn-1].id + ' rolled doubles')
             break
         case 2:
             diceDoubles.innerText = "2nd double"
             diceContainer.className = "double2"
+            addToFeed('Player ' + players[turn-1].id + ' rolled their second double. Careful!')
             break
         case 3:
             diceDoubles.innerText = "3rd double! Go to jail."
@@ -660,11 +698,13 @@ function specialEndPositions(endPosition){
         case 4:
             // Income tax
             players[turn - 1].money -= 200
+            addToFeed('Player ' + players[turn-1].id + ' paid 200 income tax')
             updatePlayerDetails()
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
+            addToFeed('Player ' + players[turn-1].id + ' paid 100 super tax')
             updatePlayerDetails()
             break
         // Note that jail is covered before the token moves, so is not included here.
@@ -672,8 +712,6 @@ function specialEndPositions(endPosition){
         // TODO - Since adding the default, we need to tell it to do nothing on Go and Free Parking
 
         default:
-            //TODO - this is where we would do stuff when a player lands on a property.
-            console.log('property!')
             displayPropertyDetails(endPosition)
     }
 }
@@ -697,6 +735,7 @@ function goToJail(token){
     availableActions.endTurn = true
     players[turn - 1].inJail++
     updatePlayerDetails()
+
 
     // Add a class which allows a police animation to play.
     // After 3 seconds, remove it.
@@ -725,6 +764,7 @@ function rollDoublesForJail(){
         availableActions.rollDice = false
         availableActions.endTurn = true
         moveToken(roll1 + roll2)
+        // Note - feed is updated in the GetOutOfJail function
     } else{
         diceContainer.className = "failed-jail-roll"
         diceDoubles.innerText = "Failure! You have " + (3 - players[turn - 1].inJail + ' attempts remaining')
@@ -732,6 +772,7 @@ function rollDoublesForJail(){
         availableActions.endTurn = true
         availableActions.getOutOfJail = false
         players[turn - 1].inJail++
+        addToFeed('Player ' + players[turn-1].id + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + 'attempts remaining.'))
     }
 
     setAvailableActions()
@@ -745,14 +786,17 @@ function getOutOfJail(method){
         case 'pay':
             player.money -= 50
             availableActions.rollDice = true
+            addToFeed('Player ' + players[turn-1].id + ' paid 50 to get out of jail')
             break
         case 'card':
             //TODO
             availableActions.rollDice = true
+            addToFeed('Player ' + players[turn-1].id + ' used a Get Out Of Jail Free card to get out of jail')
             break
         case 'doubles':
             // Note - you do not get to roll again after rolling doubles
             // to get out of jail
+            addToFeed('Player ' + players[turn-1].id + ' rolled doubles and got out of jail')
             diceContainer.className = "successful-jail-roll"
             diceDoubles.innerText = "Success!"
             break
@@ -868,8 +912,23 @@ function buyProperty(number, player){
     player.money -= spaces[number].price
     player.properties[number] = spaces[number]
     updatePlayerDetails()
+
+    addToFeed('Player ' + player.id + ' bought ' + spaces[number].name)
 }
 
 function auctionProperty(){
     console.log('auction!')
 }
+
+
+// FEED FUNCTIONS ------------------------------------------------------------//
+
+function addToFeed(message){
+    let newMessage = document.createElement('div')
+    newMessage.textContent = message
+    
+    //feed.appendChild(newMessage)
+
+    feed.insertBefore(newMessage, feed.firstChild)
+}
+

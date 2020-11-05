@@ -11,7 +11,7 @@ body {
   font-family: 'Kabel-Heavy', sans-serif;
   font-size: 24px;
   min-height: 100vh;
-  padding: 30px;
+  padding: 15px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -19,6 +19,22 @@ body {
   box-sizing: border-box;
   background: #d5e8d4;
   text-align: center; }
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px; }
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; }
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d5e8d4; }
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b5d6b3; }
 
 #board {
   border: 3px solid #000;
@@ -537,3 +553,31 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
     min-width: 200px; }
   .property-overview table tr:last-child .property-overview-house-icon {
     background-image: url("images/hotel-icon.svg"); }
+
+/* Feed  ---------------------------------------------------------------------*/
+#feed {
+  background: #fff;
+  color: #000;
+  align-self: stretch;
+  flex-basis: 250px;
+  position: relative;
+  border: 3px solid #000;
+  margin-right: 20px;
+  max-height: calc(100vh - 80px); }
+
+#feed-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5px;
+  background: #000;
+  color: #fff; }
+
+#feed-content {
+  max-height: calc(100% - 38px);
+  overflow-y: auto; }
+
+#feed-content div {
+  padding: 10px;
+  font-size: 0.8em; }
