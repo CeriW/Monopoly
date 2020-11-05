@@ -176,11 +176,6 @@ function initialisePage(){
 
     // Add all of the required event listeners
     addEvents()
-
-    for (i = 0; i <=100; i++){
-        addToFeed('howdy')
-    }
-
 }
 
 function generateBoard(){
