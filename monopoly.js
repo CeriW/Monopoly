@@ -538,7 +538,7 @@ function cardBasedMovement(chosenCard, type){
             // Therefore a little maths is required.
             let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
             moveToken(endTotal)
-            addToFeed(getCardMovementFeedMessage())
+            addToFeed(getCardMovementFeedMessage(0))
             break
 
         case 'nearest-utility':
@@ -546,11 +546,12 @@ function cardBasedMovement(chosenCard, type){
             if (currentPosition < 12 || currentPosition > 27){
                 // Electric company
                 moveToken(calculateCardMovement(12))
+                addToFeed(getCardMovementFeedMessage(12))
             } else{
                 // Water works
                 moveToken(calculateCardMovement(27))
+                addToFeed(getCardMovementFeedMessage(27))
             }
-            addToFeed(getCardMovementFeedMessage())
             break
 
         case 'nearest-station':
@@ -559,29 +560,33 @@ function cardBasedMovement(chosenCard, type){
             if (currentPosition < 5 || currentPosition > 35){
                 // Station 1 (King's Cross)
                 moveToken(calculateCardMovement(5))
+                addToFeed(getCardMovementFeedMessage(5))
               } else if (currentPosition < 15){
                 // Station 2 (Marylebone)
                 moveToken(calculateCardMovement(15))
+                addToFeed(getCardMovementFeedMessage(15))
             } else if (currentPosition < 25){
                 // Station 3 (Fenchurch St)
                 moveToken(calculateCardMovement(25))
+                addToFeed(getCardMovementFeedMessage(25))
             } else{
                 // Station 4 (Liverpool St)
                 moveToken(calculateCardMovement(35))
+                addToFeed(getCardMovementFeedMessage(35))
             }
 
-            addToFeed(getCardMovementFeedMessage())
+            
             break 
         // A basic move card which tells you to move to a numbered position that requires no complicated maths.
         default:
             //moveToken(chosenCard.value)
-            addToFeed(getCardMovementFeedMessage())
+            addToFeed(getCardMovementFeedMessage(chosenCard.value))
             moveToken(calculateCardMovement(chosenCard.value))
     }
 
 
-    function getCardMovementFeedMessage(){
-        return 'Player ' + players[turn-1].id + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[chosenCard.value].name
+    function getCardMovementFeedMessage(position){
+        return 'Player ' + players[turn-1].id + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
     }
 
 
@@ -758,9 +763,14 @@ function specialEndPositions(endPosition){
             addToFeed('Player ' + players[turn-1].id + currencySymbolSpan + ' paid 100 super tax')
             updatePlayerDetails()
             break
-        // Note that jail is covered before the token moves, so is not included here.
+        case 0:
+        case 10:
+        case 20:
+            // Go, Jail and Free Parking. Do nothing.
+            // The £200 for passing go is dealt with elsewhere in the code.
+            break
 
-        // TODO - Since adding the default, we need to tell it to do nothing on Go and Free Parking
+
 
         default:
             //displayPropertyDetails(endPosition)
@@ -986,7 +996,7 @@ function landOnProperty(position){
         let rentAmount = spaces[position].rent[0]
         players[owner - 1].money += rentAmount
         currentPlayer.money -= rentAmount
-        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player ' + owner + ' ' + currencySymbolSpan + rentAmount + ' in rent')
+        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player&nbsp;' + owner + ' ' + currencySymbolSpan + rentAmount + ' in rent')
         updatePlayerDetails()
 
 

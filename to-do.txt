@@ -24,3 +24,5 @@ An incomplete list of all the developments that need to be completed
 - Currency symbols (this is made a bit harder by the fact that the default symbol isn't a standard character)
 
 - Icons on feed
+
+- Jail just visiting
