@@ -13,8 +13,6 @@ An incomplete list of all the developments that need to be completed
 
 - Mortgaging
 
-- Add a feed which says what has happened
-
 - Make it so players can do the following with 'Get out of jail free' cards
     - Own
     - Use
@@ -24,3 +22,5 @@ An incomplete list of all the developments that need to be completed
 - House rules? (e.g. free parking)
 
 - Currency symbols (this is made a bit harder by the fact that the default symbol isn't a standard character)
+
+- Icons on feed
