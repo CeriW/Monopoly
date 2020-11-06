@@ -204,6 +204,13 @@ body {
   background: url("images/chance.svg") center no-repeat;
   background-size: contain; }
 
+/* Currency symbol -----------------------------------------------------------*/
+.currencySymbol {
+  display: inline-block;
+  font-size: 80%;
+  transform: rotate(180deg) translateY(5%);
+  margin-top: -10%; }
+
 /* Dice ----------------------------------------------------------------------*/
 .dice {
   width: 35px;
