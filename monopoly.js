@@ -24,7 +24,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 2
+let diceSides = 3
 
 
 /*
@@ -39,6 +39,16 @@ let diceSides = 2
 
  value - for +  and - cards, this will be the amount to give/take.
        - for move cards, this will be which position to move to.
+
+
+ 
+ Another thing to note about the Chance and Community Chest cards is their currency.
+ Since 2008 Monopoly uses a currency called 'Monopoly dollars'. The symbol for this is not
+ an official character with an alt code and does not appear in any fonts.
+ However, it is effectively an upside  down '₩' character - this is for 'Won' - the currency used in North and South Korea.
+
+ To keep the card arrays as simple as possible there is a function which
+ replaces all £ signs with the correct symbol.
 */
 
 
@@ -155,6 +165,8 @@ let availableActions = {
     rollDoublesForJail: false
 }
 
+let currencySymbol = '₩'
+let currencySymbolSpan = '<span class="currencySymbol">' + currencySymbol + '</span>'
 
 // Page setup functions ------------------------------------------------------//
 
@@ -170,6 +182,7 @@ function initialisePage(){
     // Shuffle both decks of cards
     shuffleCards(communityChestCards)
     shuffleCards(chanceCards)
+    cardCurrency()
 
     // Make the board the same height as its width
     resizeBoard()
@@ -178,6 +191,16 @@ function initialisePage(){
     addEvents()
 
     //ownAllProperties(1)
+    
+}
+
+function cardCurrency(){
+    communityChestCards.forEach(replaceSymbols)
+    chanceCards.forEach(replaceSymbols)
+
+    function replaceSymbols(card){
+        card.description = card.description.replace(/£/g, currencySymbolSpan)
+    }
 }
 
 function generateBoard(){
@@ -260,7 +283,14 @@ function updatePlayerDetails(){
         for (i = 1; i < keys.length; i++){
             let updateNode = document.querySelector('#player-' + (player.id) + '-' + keys[i])
             let currentValue = parseInt(updateNode.innerText)
-            updateNode.innerText = values[i]
+            
+            // For the money section we want to add the currency symbol.
+            // For all the others just display the value as-is
+            if (keys[i] === 'money'){
+                updateNode.innerHTML = currencySymbolSpan + values[i]
+            } else{
+                updateNode.innerHTML = values[i]
+            }
             
             // If the values have changed, animate it based on whether it's a good/bad change
             if (currentValue > updateNode.innerText){
@@ -268,6 +298,8 @@ function updatePlayerDetails(){
             }else if (currentValue < updateNode.innerText){
                 animateUpdate(updateNode, 'good')
             }
+
+
         }
     })
 }
@@ -375,7 +407,13 @@ function generatePlayerSummary(player){
         // Generate the value
         let newValue = newRow.insertCell(1)
         newValue.setAttribute('id', 'player-' + player.id + '-' + keys[i])
-        newValue.innerText = values[i]
+        
+        if (keys[i] === 'money'){
+            newValue.innerHTML = currencySymbolSpan + values[i]
+        } else{
+            newValue.innerHTML = values[i]
+        }
+
         newRow.appendChild(newValue)
     }
     
@@ -397,7 +435,7 @@ function generatePlayerSummary(player){
 
     // Create the "Pay £50 to get out of jail" buttons
     let newGetOut50Button = document.createElement('button')
-    newGetOut50Button.innerText = 'Pay 50 to get out of jail'
+    newGetOut50Button.innerHTML = 'Pay ' + currencySymbolSpan + '50 to get out of jail'
     newGetOut50Button.classList.add('get-out-50-button', 'player-action-button')
     newGetOut50Button.addEventListener('click', function(){getOutOfJail('pay')})
 
@@ -437,13 +475,13 @@ function drawCard(type){
         case '+':
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
-            addToFeed('Player ' + players[turn - 1].id + ' got ' + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card')
+            addToFeed('Player ' + players[turn - 1].id + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card')
             break
         case '-':
             // A card where the player has to surrender money to the bank
             players[turn - 1].money -= chosenCard.value
 
-            addToFeed('Player ' + players[turn - 1].id + ' lost ' + chosenCard.value + ' to a ' + getReadableCardName(type) +' card')
+            addToFeed('Player ' + players[turn - 1].id + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card')
             break
         case 'getout':
             // TODO
@@ -491,7 +529,7 @@ function cardBasedMovement(chosenCard, type){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
-            addToFeed('Player ' + players[turn - 1].id + 'drew a' + getReadableCardName(type) + 'and went to jail!')
+            addToFeed('Player ' + players[turn - 1].id + 'drew a ' + getReadableCardName(type) + ' card and went to jail!')
             break
         
         // Advance to Go
@@ -711,13 +749,13 @@ function specialEndPositions(endPosition){
         case 4:
             // Income tax
             players[turn - 1].money -= 200
-            addToFeed('Player ' + players[turn-1].id + ' paid 200 income tax')
+            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '200 income tax')
             updatePlayerDetails()
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
-            addToFeed('Player ' + players[turn-1].id + ' paid 100 super tax')
+            addToFeed('Player ' + players[turn-1].id + currencySymbolSpan + ' paid 100 super tax')
             updatePlayerDetails()
             break
         // Note that jail is covered before the token moves, so is not included here.
@@ -800,7 +838,7 @@ function getOutOfJail(method){
         case 'pay':
             player.money -= 50
             availableActions.rollDice = true
-            addToFeed('Player ' + players[turn-1].id + ' paid 50 to get out of jail')
+            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '50 to get out of jail')
             break
         case 'card':
             //TODO
@@ -880,18 +918,18 @@ function displayPropertyDetails(number){
     // Rent table
     htmlOutput += '<div class="' + spaces[number].colour + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
     htmlOutput += '<table style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
-    htmlOutput += '<td>Rent</td><td>' + spaces[number].rent[0] + '</td>'
-    htmlOutput += '<tr><td>Rent with colour set</td><td>' + spaces[number].rent[1] + '</td>'
+    htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
+    htmlOutput += '<tr><td>Rent with colour set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
     for (i = 2; i <=6; i++){
-        htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + spaces[number].rent[i] + '</td></tr>'
+        htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
     }
     htmlOutput += '</table>'
 
 
     // Houses table
     htmlOutput += '<table>'
-    htmlOutput += '<tr><td>Houses cost</td><td>' + spaces[number].houseCost + '</td></tr>'
-    htmlOutput += '<tr><td>Hotels cost</td><td>' + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
     htmlOutput += '</table>'
     
 
@@ -927,7 +965,7 @@ function buyProperty(number, player){
     player.properties[number] = spaces[number]
     updatePlayerDetails()
 
-    addToFeed('Player ' + player.id + ' bought ' + spaces[number].name)
+    addToFeed('Player ' + player.id + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price)
 }
 
 function auctionProperty(){
@@ -943,16 +981,12 @@ function landOnProperty(position){
 
     if (owner && owner !== currentPlayer.id){
         // Rent is due
-        addToFeed('rent is due')
 
         // TODO - this will need to adjust to colour sets/houses/hotels
         let rentAmount = spaces[position].rent[0]
-
-        addToFeed('owner ' + owner)
-        addToFeed('currentPlayer' + currentPlayer)
         players[owner - 1].money += rentAmount
         currentPlayer.money -= rentAmount
-        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player ' + owner + ' ' + rentAmount + ' in rent')
+        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player ' + owner + ' ' + currencySymbolSpan + rentAmount + ' in rent')
         updatePlayerDetails()
 
 
@@ -980,7 +1014,7 @@ function checkPropertyOwner(position){
 
 function addToFeed(message){
     let newMessage = document.createElement('div')
-    newMessage.textContent = message
+    newMessage.innerHTML = message
     
     //feed.appendChild(newMessage)
 
