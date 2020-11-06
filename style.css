@@ -464,6 +464,10 @@ body:not(.popup-open) #popup {
   100% {
     transform: scale(1); } }
 
+.player-summary-inJail,
+.player-summary-properties {
+  display: none; }
+
 /* Player action buttons  ----------------------------------------------------*/
 .player-action-button {
   display: none; }

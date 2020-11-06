@@ -24,7 +24,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 6
+let diceSides = 2
 
 
 /*
@@ -176,6 +176,8 @@ function initialisePage(){
 
     // Add all of the required event listeners
     addEvents()
+
+    //ownAllProperties(1)
 }
 
 function generateBoard(){
@@ -278,6 +280,21 @@ function animateUpdate(node, type){
     }, 2000)
 }
 
+// TESTING FUNCTIONS ---------------------------------------------------------//
+// A number of functions intended to help with testing.
+// Not intended for actual game use.
+
+// Makes a specified player own all the properties.
+function ownAllProperties(playerID){
+    let player = players[playerID]
+
+    spaces.forEach(function(space){
+        space.owner = player
+        
+    })
+}
+
+
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
 function createPlayers(){
@@ -348,6 +365,7 @@ function generatePlayerSummary(player){
         
         //  Create the new row
         let newRow = newTable.insertRow(0)
+        newRow.classList.add('player-summary-' + keys[i])
         
         // Generate the label
         let newLabel = newRow.insertCell(0)
@@ -707,7 +725,8 @@ function specialEndPositions(endPosition){
         // TODO - Since adding the default, we need to tell it to do nothing on Go and Free Parking
 
         default:
-            displayPropertyDetails(endPosition)
+            //displayPropertyDetails(endPosition)
+            landOnProperty(endPosition)
     }
 }
 
@@ -914,6 +933,47 @@ function buyProperty(number, player){
 function auctionProperty(){
     console.log('auction!')
 }
+
+// RENT FUNCTIONS ------------------------------------------------------------//
+
+function landOnProperty(position){
+
+    let owner = checkPropertyOwner(position)
+    let currentPlayer = players[turn - 1]
+
+    if (owner && owner !== currentPlayer.id){
+        // Rent is due
+        addToFeed('rent is due')
+
+        // TODO - this will need to adjust to colour sets/houses/hotels
+        let rentAmount = spaces[position].rent[0]
+
+        addToFeed('owner ' + owner)
+        addToFeed('currentPlayer' + currentPlayer)
+        players[owner - 1].money += rentAmount
+        currentPlayer.money -= rentAmount
+        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player ' + owner + ' ' + rentAmount + ' in rent')
+        updatePlayerDetails()
+
+
+    } else{
+        // Nobody owns this property
+        displayPropertyDetails(position)
+    }
+}
+
+
+function checkPropertyOwner(position){
+    let owner = spaces[position].owner
+
+    if (owner){
+        return owner = owner.id
+    } else{
+        return null
+    }
+
+}
+
 
 
 // FEED FUNCTIONS ------------------------------------------------------------//
