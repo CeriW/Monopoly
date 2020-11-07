@@ -255,6 +255,8 @@ function addEvents(){
     window.addEventListener('resize', resizeBoard)
 
     //diceRollButton.addEventListener('click', rollDice)
+
+    addTestingEvents()
     
 }
 
@@ -343,6 +345,23 @@ function animateUpdate(node, type){
 // A number of functions intended to help with testing.
 // Not intended for actual game use.
 
+function addTestingEvents(){
+    
+    let testingToggle = document.querySelector('#testing-toggle')
+    testingToggle.addEventListener('change', function(){
+        document.body.classList.toggle('testing-panel-enabled')
+    })
+    
+    let fakeDiceRollButton = document.querySelector('#fake-dice-roll-button')
+    let fakeDiceRollInput = document.querySelector('#fake-dice-roll-total')
+
+    fakeDiceRollButton.addEventListener('click', function(){
+        fakeRollDice(fakeDiceRollInput.value)
+    })
+}
+
+
+
 // Makes a specified player own all the properties.
 function ownAllProperties(playerID){
     let player = players[playerID]
@@ -353,8 +372,8 @@ function ownAllProperties(playerID){
     })
 }
 
-
-
+// Runs a dice roll where you specify the total.
+// Helpful when you need to land on a certain space to test.
 function fakeRollDice(fakeTotal){
     let roll1 = fakeTotal - 1
     let roll2 = 1
