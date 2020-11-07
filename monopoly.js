@@ -24,7 +24,7 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 3
+let diceSides = 6
 
 
 /*
@@ -307,7 +307,7 @@ function updatePlayerDetails(){
 
         player.properties.forEach(function(property){
             let propertyIcon = document.createElement('div')
-            propertyIcon.classList.add('property-icon', property.group )
+            propertyIcon.classList.add('property-icon', property.group, player.properties.indexOf(property) )
 
             if (property.group === 'utility'){
                 let propertyName = property.name
@@ -581,6 +581,8 @@ function generatePlayerSummary(player){
     let playerPortfolio = document.createElement('div')
     playerPortfolio.setAttribute('id', 'player-' + player.id + '-properties')
     playerPortfolio.classList.add('property-portfolio')
+    playerPortfolio.addEventListener('click', portfolioItemPreview)
+
     newSummary.appendChild(playerPortfolio)
 
     
@@ -1117,6 +1119,18 @@ function displayPropertyDetails(number){
     openPopup(htmlOutput)
 
     displayPropertyOptions(number)
+}
+
+function portfolioItemPreview(e){
+    let target = e.target
+
+    if (target.classList.contains('property-icon')){
+        let targetProperty = target.classList.value
+        targetProperty = targetProperty.replace(/\D/g, '')
+        targetProperty = parseInt(targetProperty)
+        displayPropertyDetails(targetProperty)
+    }
+
 }
 
 function displayPropertyOptions(number){
