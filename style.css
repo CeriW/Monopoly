@@ -570,7 +570,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   background: #fff;
   color: #000;
   align-self: stretch;
-  flex-basis: 250px;
+  flex-basis: 275px;
   position: relative;
   border: 3px solid #000;
   margin-right: 20px;
@@ -589,6 +589,61 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   max-height: calc(100% - 38px);
   overflow-y: auto; }
 
-#feed-content div {
-  padding: 10px;
-  font-size: 0.8em; }
+#feed-content > div {
+  padding: 10px 10px 10px 60px;
+  font-size: 0.8em;
+  background-position: 18px center, 10px center;
+  background-size: 28px, 42px;
+  background-repeat: no-repeat;
+  text-align: left;
+  min-height: 42px;
+  position: relative;
+  display: flex;
+  align-items: center; }
+
+#feed-content > div:first-child {
+  animation: feedSlideIn 0.3s linear;
+  animation-iteration-count: 1; }
+
+@keyframes feedSlideIn {
+  from {
+    transform: translateX(-100%); }
+  to {
+    transform: translateX(0); } }
+
+/* Feed icons ----------------------------------------------------------------*/
+.money-plus {
+  background-image: url("images/feed-icons/money-plus.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.money-minus {
+  background-image: url("images/feed-icons/money-minus.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.get-out-card {
+  background-image: url("images/feed-icons/get-out-card.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.go-to-jail {
+  background-image: url("images/feed-icons/go-to-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.advance {
+  background-image: url("images/feed-icons/advance.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.failed-jail-roll {
+  background-image: url("images/feed-icons/failed-jail-roll.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.doubles {
+  background-image: url("images/feed-icons/doubles.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.doubles-2nd {
+  background-image: url("images/feed-icons/doubles-2nd.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.out-of-jail {
+  background-image: url("images/feed-icons/out-of-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.rent {
+  background-image: url("images/feed-icons/rent.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.doubles-out-of-jail {
+  background-image: url("images/feed-icons/doubles-out-of-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.buy-property {
+  background-image: url("images/feed-icons/buy-property.svg"), url("images/feed-icons/feed-circle.svg"); }

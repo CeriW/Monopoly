@@ -166,7 +166,7 @@ let availableActions = {
 }
 
 let currencySymbol = '₩'
-let currencySymbolSpan = '<span class="currencySymbol">' + currencySymbol + '</span>'
+let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol + '</span>'
 
 // Page setup functions ------------------------------------------------------//
 
@@ -466,18 +466,18 @@ function drawCard(type){
         case '+':
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
-            addToFeed('Player ' + players[turn - 1].id + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card')
+            addToFeed('Player ' + players[turn - 1].id + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card', 'money-plus')
             break
         case '-':
             // A card where the player has to surrender money to the bank
             players[turn - 1].money -= chosenCard.value
 
-            addToFeed('Player ' + players[turn - 1].id + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card')
+            addToFeed('Player ' + players[turn - 1].id + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
             break
         case 'getout':
             // TODO
             console.log('getout: a get out of jail free card which is held onto by the player until used, sold or traded.')
-            addToFeed('Get out of jail free card')
+            addToFeed('Get out of jail free card', 'get-out-card')
             break
         case 'exchange':
             // TODO
@@ -520,7 +520,7 @@ function cardBasedMovement(chosenCard, type){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
-            addToFeed('Player ' + players[turn - 1].id + 'drew a ' + getReadableCardName(type) + ' card and went to jail!')
+            addToFeed('Player ' + players[turn - 1].id + 'drew a ' + getReadableCardName(type) + ' card and went to jail!', 'go-to-jail')
             break
         
         // Advance to Go
@@ -529,7 +529,7 @@ function cardBasedMovement(chosenCard, type){
             // Therefore a little maths is required.
             let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
             moveToken(endTotal)
-            addToFeed(getCardMovementFeedMessage(0))
+            addToFeed(getCardMovementFeedMessage(0), 'advance')
             break
 
         case 'nearest-utility':
@@ -537,11 +537,11 @@ function cardBasedMovement(chosenCard, type){
             if (currentPosition < 12 || currentPosition > 27){
                 // Electric company
                 moveToken(calculateCardMovement(12))
-                addToFeed(getCardMovementFeedMessage(12))
+                addToFeed(getCardMovementFeedMessage(12), 'advance')
             } else{
                 // Water works
                 moveToken(calculateCardMovement(27))
-                addToFeed(getCardMovementFeedMessage(27))
+                addToFeed(getCardMovementFeedMessage(27), 'advance')
             }
             break
 
@@ -551,19 +551,19 @@ function cardBasedMovement(chosenCard, type){
             if (currentPosition < 5 || currentPosition > 35){
                 // Station 1 (King's Cross)
                 moveToken(calculateCardMovement(5))
-                addToFeed(getCardMovementFeedMessage(5))
+                addToFeed(getCardMovementFeedMessage(5), 'advance')
               } else if (currentPosition < 15){
                 // Station 2 (Marylebone)
                 moveToken(calculateCardMovement(15))
-                addToFeed(getCardMovementFeedMessage(15))
+                addToFeed(getCardMovementFeedMessage(15), 'advance')
             } else if (currentPosition < 25){
                 // Station 3 (Fenchurch St)
                 moveToken(calculateCardMovement(25))
-                addToFeed(getCardMovementFeedMessage(25))
+                addToFeed(getCardMovementFeedMessage(25), 'advance')
             } else{
                 // Station 4 (Liverpool St)
                 moveToken(calculateCardMovement(35))
-                addToFeed(getCardMovementFeedMessage(35))
+                addToFeed(getCardMovementFeedMessage(35), 'advance')
             }
 
             
@@ -571,7 +571,7 @@ function cardBasedMovement(chosenCard, type){
         // A basic move card which tells you to move to a numbered position that requires no complicated maths.
         default:
             //moveToken(chosenCard.value)
-            addToFeed(getCardMovementFeedMessage(chosenCard.value))
+            addToFeed(getCardMovementFeedMessage(chosenCard.value), 'advance')
             moveToken(calculateCardMovement(chosenCard.value))
     }
 
@@ -657,7 +657,7 @@ function rollDice(){
     if (doublesCount === 3){
         let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
         goToJail(token)
-        addToFeed('Player ' + players[turn-1].id + ' rolled 3 doubles and went to jail!')
+        addToFeed('Player ' + players[turn-1].id + ' rolled 3 doubles and went to jail!', 'go-to-jail')
     } else{
         moveToken(total)
     }
@@ -670,12 +670,12 @@ function rollDice(){
         case 1:
             diceDoubles.innerText = "1st double"
             diceContainer.className ="double1"
-            addToFeed('Player ' + players[turn-1].id + ' rolled doubles')
+            addToFeed('Player ' + players[turn-1].id + ' rolled doubles', 'doubles')
             break
         case 2:
             diceDoubles.innerText = "2nd double"
             diceContainer.className = "double2"
-            addToFeed('Player ' + players[turn-1].id + ' rolled their second double. Careful!')
+            addToFeed('Player ' + players[turn-1].id + ' rolled their second double. Careful!', 'doubles-2nd')
             break
         case 3:
             diceDoubles.innerText = "3rd double! Go to jail."
@@ -717,6 +717,7 @@ function moveToken(total){
                     endPosition = endPosition - 40
                     players[turn - 1].money += 200
                     updatePlayerDetails()
+                    addToFeed('Player ' + players[turn - 1].id + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
                 }
             }
 
@@ -746,13 +747,13 @@ function specialEndPositions(endPosition){
         case 4:
             // Income tax
             players[turn - 1].money -= 200
-            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '200 income tax')
+            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
             updatePlayerDetails()
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
-            addToFeed('Player ' + players[turn-1].id + currencySymbolSpan + ' paid 100 super tax')
+            addToFeed('Player ' + players[turn-1].id + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
             updatePlayerDetails()
             break
         case 0:
@@ -826,7 +827,7 @@ function rollDoublesForJail(){
         availableActions.endTurn = true
         availableActions.getOutOfJail = false
         players[turn - 1].inJail++
-        addToFeed('Player ' + players[turn-1].id + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + 'attempts remaining.'))
+        addToFeed('Player ' + players[turn-1].id + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + 'attempts remaining.'), 'failed-jail-roll')
     }
 
     setAvailableActions()
@@ -840,17 +841,17 @@ function getOutOfJail(method){
         case 'pay':
             player.money -= 50
             availableActions.rollDice = true
-            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '50 to get out of jail')
+            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
             break
         case 'card':
             //TODO
             availableActions.rollDice = true
-            addToFeed('Player ' + players[turn-1].id + ' used a Get Out Of Jail Free card to get out of jail')
+            addToFeed('Player ' + players[turn-1].id + ' used a Get Out Of Jail Free card to get out of jail', 'get-out-card')
             break
         case 'doubles':
             // Note - you do not get to roll again after rolling doubles
             // to get out of jail
-            addToFeed('Player ' + players[turn-1].id + ' rolled doubles and got out of jail')
+            addToFeed('Player ' + players[turn-1].id + ' rolled doubles and got out of jail', 'doubles-out-of-jail')
             diceContainer.className = "successful-jail-roll"
             diceDoubles.innerText = "Success!"
             break
@@ -967,7 +968,7 @@ function buyProperty(number, player){
     player.properties[number] = spaces[number]
     updatePlayerDetails()
 
-    addToFeed('Player ' + player.id + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price)
+    addToFeed('Player ' + player.id + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
 }
 
 function auctionProperty(){
@@ -988,7 +989,7 @@ function landOnProperty(position){
         let rentAmount = spaces[position].rent[0]
         players[owner - 1].money += rentAmount
         currentPlayer.money -= rentAmount
-        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player&nbsp;' + owner + ' ' + currencySymbolSpan + rentAmount + ' in rent')
+        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player&nbsp;' + owner + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
         updatePlayerDetails()
 
 
@@ -1014,9 +1015,10 @@ function checkPropertyOwner(position){
 
 // FEED FUNCTIONS ------------------------------------------------------------//
 
-function addToFeed(message){
+function addToFeed(message,type){
     let newMessage = document.createElement('div')
-    newMessage.innerHTML = message
+    newMessage.innerHTML = '<div>' + message + '</div>'
+    newMessage.classList.add(type)
     
     //feed.appendChild(newMessage)
 
