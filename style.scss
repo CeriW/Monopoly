@@ -35,14 +35,18 @@ body{
     min-height: 100vh;
     padding: 15px;
     margin: 0;
+    background: $lightgreen;
+}
+
+main{
     display: flex;
     //flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    background: $lightgreen;
+    justify-content: space-between; 
     text-align: center;
 }
+
+
 
 /* width */
 ::-webkit-scrollbar {
@@ -191,7 +195,7 @@ $columnsize: 80px;
 
 .property{
     position: relative;
-    padding-top: 20px;
+    padding-top: 20px !important;
     text-align: center;
 
     &:before{
@@ -502,6 +506,7 @@ $jailAnimationLength: 1.5;
     right: 0;
     bottom: 0;
     z-index: 100;
+    text-align: center;
 }
 
 /* Player summary  -----------------------------------------------------------*/
