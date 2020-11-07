@@ -170,12 +170,12 @@ $columnsize: 80px;
     //font-size: 1vw;
 }
 
-.property,
-.community-chest,
-.special,
-.station,
-.chance,
-.utility{
+#board .row > .property,
+#board .row > .community-chest,
+#board .row > .special,
+#board .row > .station,
+#board .row > .chance,
+#board .row > .utility{
     //border-top: $border;
     //border-left: $border;
     padding: 5px;
@@ -226,8 +226,8 @@ $columnsize: 80px;
 }
 
 .station{
-    background: url('images/station.svg') center no-repeat;
-    background-size: contain;
+    background: url('images/station.svg') center calc(100% - 2px) no-repeat;
+    background-size: 40px;
 }
 
 .chance{
@@ -511,6 +511,7 @@ $jailAnimationLength: 1.5;
     flex-direction: column;
     justify-content: space-around;
     box-sizing: border-box;
+    flex-basis: 250px;
 
     h2{
         margin: 0;
@@ -541,11 +542,48 @@ $jailAnimationLength: 1.5;
     100% {transform: scale(1);}
 }
 
-.player-summary-inJail,
-.player-summary-properties{
-    display: none;
+.property-portfolio-title{
+    background: $black;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.7em;
+    display: block;
+    padding: 5px;
 }
 
+.property-portfolio{
+    border: $border;
+    padding: 10px;
+}
+
+.property-icon{
+    width: 15px !important;
+    height: 15px !important;
+    border-radius: 50%;
+    border: 2px solid $black;
+    display: inline-block;
+    margin: 2px;;
+}
+
+.property-icon.brown{background: $brown;}
+.property-icon.lightblue{background: $lightblue;}
+.property-icon.pink{background: $pink;}
+.property-icon.orange{background: $orange;}
+.property-icon.red{background: $red;}
+.property-icon.yellow{background: $yellow;}
+.property-icon.green{background: $green;}
+.property-icon.darkblue{background: $darkblue;}
+
+.property-icon.train-station,
+.property-icon.utility{
+    border: none;
+    border-radius: 0;
+    background-size: contain !important;
+}
+
+.property-icon.train-station{background: url('images/station.svg') center no-repeat;}
+.property-icon.electric-company{background: url('images/electric-company.svg') center no-repeat;}
+.property-icon.water-works{background: url('images/water-works.svg') center no-repeat;}
 
 /* Player action buttons  ----------------------------------------------------*/
 

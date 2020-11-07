@@ -30,3 +30,5 @@ An incomplete list of all the developments that need to be completed
 - Building houses and hotels
 
 - Rent for colour sets, houses and hotels
+
+- Add icon next to players who are in jail
