@@ -275,32 +275,23 @@ function setAvailableActions(){
 // This function should be run every time a player's details have been updated.
 // This will trigger a nice animation.
 function updatePlayerDetails(){
+
     players.forEach(function(player){
-        let keys = Object.keys(player)
-        let values = Object.values(player)
 
-        // Starting at 1 as the first attribute is 'id' which will never change
-        for (i = 1; i < keys.length; i++){
-            let updateNode = document.querySelector('#player-' + (player.id) + '-' + keys[i])
-            let currentValue = parseInt(updateNode.innerText)
-            
-            // For the money section we want to add the currency symbol.
-            // For all the others just display the value as-is
-            if (keys[i] === 'money'){
-                updateNode.innerHTML = currencySymbolSpan + values[i]
-            } else{
-                updateNode.innerHTML = values[i]
-            }
-            
-            // If the values have changed, animate it based on whether it's a good/bad change
-            if (currentValue > updateNode.innerText){
-                animateUpdate(updateNode, 'bad')
-            }else if (currentValue < updateNode.innerText){
-                animateUpdate(updateNode, 'good')
-            }
-
-
+        let updateNode = document.querySelector('#player-' + player.id + '-money')
+        let oldValue = updateNode.textContent
+        oldValue = parseInt(oldValue.replace(/\D/g, ''))
+        let newValue = player.money
+    
+        // If the values have changed, animate it based on whether it's a good/bad change
+        if (oldValue > newValue){
+            animateUpdate(updateNode, 'bad')
+        }else if (oldValue < newValue){
+            animateUpdate(updateNode, 'good')
         }
+
+        updateNode.innerHTML = currencySymbolSpan + player.money
+
     })
 }
 
@@ -585,6 +576,7 @@ function cardBasedMovement(chosenCard, type){
     }
 
 
+    // Outputs a nice player readable message to put in the feed.
     function getCardMovementFeedMessage(position){
         return 'Player ' + players[turn-1].id + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
     }

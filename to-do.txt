@@ -26,3 +26,7 @@ An incomplete list of all the developments that need to be completed
 - Icons on feed
 
 - Jail just visiting
+
+- Building houses and hotels
+
+- Rent for colour sets, houses and hotels
