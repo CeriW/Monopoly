@@ -139,12 +139,12 @@ body {
   box-sizing: border-box;
   flex-basis: 7%; }
 
-.property,
-.community-chest,
-.special,
-.station,
-.chance,
-.utility {
+#board .row > .property,
+#board .row > .community-chest,
+#board .row > .special,
+#board .row > .station,
+#board .row > .chance,
+#board .row > .utility {
   padding: 5px;
   text-align: center;
   font-size: 10px;
@@ -197,8 +197,8 @@ body {
   background-size: contain; }
 
 .station {
-  background: url("images/station.svg") center no-repeat;
-  background-size: contain; }
+  background: url("images/station.svg") center calc(100% - 2px) no-repeat;
+  background-size: 40px; }
 
 .chance {
   background: url("images/chance.svg") center no-repeat;
@@ -441,7 +441,8 @@ body:not(.popup-open) #popup {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  flex-basis: 250px; }
   #player-summary h2 {
     margin: 0; }
   #player-summary > div {
@@ -471,9 +472,64 @@ body:not(.popup-open) #popup {
   100% {
     transform: scale(1); } }
 
-.player-summary-inJail,
-.player-summary-properties {
-  display: none; }
+.property-portfolio-title {
+  background: #000;
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  display: block;
+  padding: 5px; }
+
+.property-portfolio {
+  border: 3px solid #000;
+  padding: 10px; }
+
+.property-icon {
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50%;
+  border: 2px solid #000;
+  display: inline-block;
+  margin: 2px; }
+
+.property-icon.brown {
+  background: #824c26; }
+
+.property-icon.lightblue {
+  background: #99d1f4; }
+
+.property-icon.pink {
+  background: #d52788; }
+
+.property-icon.orange {
+  background: #f1970b; }
+
+.property-icon.red {
+  background: #db0926; }
+
+.property-icon.yellow {
+  background: #e9ed38; }
+
+.property-icon.green {
+  background: #0aa959; }
+
+.property-icon.darkblue {
+  background: #3e64ad; }
+
+.property-icon.train-station,
+.property-icon.utility {
+  border: none;
+  border-radius: 0;
+  background-size: contain !important; }
+
+.property-icon.train-station {
+  background: url("images/station.svg") center no-repeat; }
+
+.property-icon.electric-company {
+  background: url("images/electric-company.svg") center no-repeat; }
+
+.property-icon.water-works {
+  background: url("images/water-works.svg") center no-repeat; }
 
 /* Player action buttons  ----------------------------------------------------*/
 .player-action-button {
