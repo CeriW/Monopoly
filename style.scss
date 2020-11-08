@@ -592,6 +592,35 @@ $jailAnimationLength: 1.5;
 .property-icon.electric-company{background: url('images/electric-company.svg') center no-repeat;}
 .property-icon.water-works{background: url('images/water-works.svg') center no-repeat;}
 
+/* Full portfolio view  ------------------------------------------------------*/
+
+.full-portfolio{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+
+    &:before{
+        content: 'PLAYER PORTFOLIO';
+        color: #fff;
+        background: #000;
+        position: absolute;
+        bottom: calc(100% + 20px);
+        left: -23px;
+        right: -23px;
+        padding: 10px;
+    }
+}
+
+.full-portfolio-item{
+    display: flex;
+    align-items: center;
+    width: 380px;
+
+    & > div{
+        margin: 0 10px 10px 0;
+    }
+}
+
 /* Player action buttons  ----------------------------------------------------*/
 
 .player-action-button{

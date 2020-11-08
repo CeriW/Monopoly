@@ -32,3 +32,5 @@ An incomplete list of all the developments that need to be completed
 - Rent for colour sets, houses and hotels
 
 - Add icon next to players who are in jail
+
+- Refactor all the things with player specific IDs to have player attributes instead.
