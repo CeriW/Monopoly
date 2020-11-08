@@ -576,7 +576,7 @@ function generatePlayerSummary(player){
     let playerPortfolioTitle = document.createElement('span')
     playerPortfolioTitle.setAttribute('player', player.id)
     playerPortfolioTitle.addEventListener('click', fullPortfolioView)
-    playerPortfolioTitle.innerText = 'Property portfolio'
+    playerPortfolioTitle.innerText = 'Property portfolio⯈'
     playerPortfolioTitle.classList.add('property-portfolio-title')
     newSummary.appendChild(playerPortfolioTitle)
 
@@ -1096,7 +1096,17 @@ function increasePlayerTurn(){
 
 function displayPropertyDetails(number){
 
-    let htmlOutput = '<div class="property-overview">'
+    let htmlOutput = '<div class="property-overview"'
+
+    // If the property is owned, set an attribute on the div we can use elsewhere.
+    let owner = spaces[number].owner
+    if (owner){
+        htmlOutput += ' player="' + owner.id + '">'
+    }   else{
+        htmlOutput += '>'
+    }
+
+
         
     // Rent table
     htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
@@ -1131,6 +1141,18 @@ function portfolioItemPreview(e){
         targetProperty = targetProperty.replace(/\D/g, '')
         targetProperty = parseInt(targetProperty)
         displayPropertyDetails(targetProperty)
+
+        console.log(e.target)
+        console.log(e.target.parentNode)
+
+        // If we have come from a full portfolio, give us a back button
+        if (e.target.parentNode.classList.contains('full-portfolio-item')){
+            let backButton = document.createElement('div')
+            backButton.classList.add('back-button')
+            backButton.setAttribute('player', spaces[targetProperty].owner.id)
+            document.querySelector('.property-overview').appendChild(backButton)
+            backButton.addEventListener('click', fullPortfolioView)
+        }
     }
 }
 

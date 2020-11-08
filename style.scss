@@ -393,12 +393,16 @@ $columnsize: 80px;
     position: absolute;
     top: 20px;
     right: 20px;
+    z-index: 2;
 }
 
 body:not(.popup-open) #popup{
     display: none;
 }
 
+#popup-message{
+    min-height: 100px;
+}
 
 /* Jail  ---------------------------------------------------------------------*/
 
@@ -732,6 +736,16 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     tr:last-child .property-overview-house-icon{
         background-image: url('images/hotel-icon.svg');
     }
+}
+
+.back-button{
+    width: 35px;
+    height: 35px;
+    background: url('images/back.svg') center no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: 20px;
+    right: 68px;
 }
 
 
