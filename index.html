@@ -15,31 +15,46 @@
 
   <body>
 
-    <div id="feed">
-      <div id="feed-title">FEED</div>
-      <div id="feed-content"></div>
-    </div>
+    <div id="testing-toggle-panel" style="font-size: 18px;">Testing options: <input id="testing-toggle" type="checkbox"></input></div>
+    <div id="testing-panel">
+      <div id="fake-dice-roll">
+        <input id="fake-dice-roll-total" placeholder="Fake dice roll total"></input>
+        <button id="fake-dice-roll-button">Fake dice</button>
 
-    <div id="board">
-      <div class="row" id="south"></div>
-      <div class="row" id="west"></div>
-      <div class="row" id="north"></div>
-      <div class="row" id="east"></div>
-
-      <!--<div id="token" class="token" position="0" area="south"></div>-->
-    
-      <div id="dice-roll">
-        <div id="dice-1" class="dice"></div>
-        <span> + </span>
-        <div id="dice-2" class="dice"></div>
-        <span> = </span>
-        <div>
-          <span id="dice-total"></div>
-        <span id="doubles"></span>
-        <!--<button id="dice-roll-button">Roll dice</button>-->
       </div>
-    
+
     </div>
+
+    <main>
+
+      <div id="feed">
+        <div id="feed-title">FEED</div>
+        <div id="feed-content"></div>
+      </div>
+
+      <div id="board">
+        <div class="row" id="south"></div>
+        <div class="row" id="west"></div>
+        <div class="row" id="north"></div>
+        <div class="row" id="east"></div>
+
+        <!--<div id="token" class="token" position="0" area="south"></div>-->
+      
+        <div id="dice-roll">
+          <div id="dice-1" class="dice"></div>
+          <span> + </span>
+          <div id="dice-2" class="dice"></div>
+          <span> = </span>
+          <div>
+            <span id="dice-total"></div>
+          <span id="doubles"></span>
+          <!--<button id="dice-roll-button">Roll dice</button>-->
+        </div>
+      
+      </div>
+
+      <div id="player-summary"></div>
+    </main>
 
 
 
@@ -61,9 +76,7 @@
       <button onclick=createPlayers()>Begin game</button>
     </div>
 
-    <div id="player-summary">
 
-    </div>
     
     <div id="popup">
       <div id="popup-inner">
