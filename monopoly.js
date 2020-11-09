@@ -7,6 +7,7 @@ let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
 let feed = document.querySelector('#feed-content')
+let bank = document.querySelector('#bank-content')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -195,8 +196,8 @@ function initialisePage(){
     // Add all of the required event listeners
     addEvents()
 
-    //ownAllProperties(1)
-    
+    // Initialise the bank
+    updateBank()
 }
 
 function cardCurrency(){
@@ -268,7 +269,7 @@ function addEvents(){
 function resizeBoard(){
     board.style.height = board.offsetWidth + 'px'
 
-    feed.parentElement.style.maxHeight = board.offsetHeight + 'px'
+    //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 }
 
 function setAvailableActions(){
@@ -336,6 +337,32 @@ function updatePlayerDetails(){
         })
 
     })
+
+    updateBank()
+}
+
+function updateBank(){
+
+    bank.innerHTML = ''
+
+    let houseContainer = document.createElement('div')
+    for (i = 1; i <= availableHouses; i++){
+        let houseIcon = document.createElement('div')
+        houseIcon.classList.add('bank-house-icon')
+        houseContainer.appendChild(houseIcon)
+    }
+
+    let hotelContainer = document.createElement('div')
+    for (i = 1; i <= availableHotels; i++){
+        let hotelIcon = document.createElement('div')
+        hotelIcon.classList.add('bank-hotel-icon')
+        hotelContainer.style.minWidth = '74px'
+        hotelContainer.style.flexBasis = '74px'
+        hotelContainer.appendChild(hotelIcon)
+    }
+
+    bank.appendChild(houseContainer)
+    bank.appendChild(hotelContainer)
 }
 
 // Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
@@ -357,11 +384,22 @@ function addTestingEvents(){
         document.body.classList.toggle('testing-panel-enabled')
     })
     
-    let fakeDiceRollButton = document.querySelector('#fake-dice-roll-button')
     let fakeDiceRollInput = document.querySelector('#fake-dice-roll-total')
 
-    fakeDiceRollButton.addEventListener('click', function(){
+    fakeDiceRollInput.addEventListener('change', function(){
         fakeRollDice(fakeDiceRollInput.value)
+    })
+
+    let availableHousesInput = document.querySelector('#available-houses-test')
+    availableHousesInput.addEventListener('change', function(){
+        availableHouses = availableHousesInput.value
+        updateBank()
+    })
+
+    let availableHotelsInput = document.querySelector('#available-hotels-test')
+    availableHotelsInput.addEventListener('change', function(){
+        availableHotels = availableHotelsInput.value
+        updateBank()
     })
 }
 

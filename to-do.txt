@@ -19,14 +19,35 @@ An incomplete list of all the developments that need to be completed
     - Trade
     - Sell
 
-- House rules? (e.g. free parking)
-
 - Jail just visiting
-
-- Building houses and hotels
 
 - Rent for colour sets, houses and hotels
 
 - Add icon next to players who are in jail
 
 - Refactor all the things with player specific IDs to have player attributes instead.
+
+-Sell houses/hotels
+
+- Selling hotel shenanigans if there aren't sufficient houses in the bank
+
+- Have to build houses evenly
+
+- Can't build houses/hotels if there aren't any in the bank.
+
+- Update utilities and stations so you can't build houses on them
+
+- Appropriate rent for utilities and stations
+
+- Display houses on the board for properties that have them
+
+- Remove the number 5 on the hotel rent in the property overview window
+
+- Make the tokens reposition when the window is resized.
+
+
+STRETCH GOALS
+
+- Add a Monopoly rulebook
+
+- House rules? (e.g. free parking)
