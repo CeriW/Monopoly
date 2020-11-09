@@ -24,6 +24,7 @@ $border: 3px solid $black;
 @mixin disabledButton{
     background: #ccc;
     color: rgb(143, 143, 143);
+    pointer-events: none;
 }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -237,8 +238,8 @@ $columnsize: 80px;
 }
 
 .chance{
-    background: url('images/chance.svg') center no-repeat;
-    background-size: contain;
+    background: url('images/chance.svg') center calc(100% - 6px) no-repeat;
+    background-size: 50px;
 }
 
 /* Currency symbol -----------------------------------------------------------*/
@@ -529,7 +530,7 @@ $jailAnimationLength: 1.5;
     }
 
     & > div{
-        padding: 40px 20px;
+        padding: 10px 20px;
     }
 }
 
@@ -557,7 +558,7 @@ $jailAnimationLength: 1.5;
     background: $black;
     color: white;
     text-transform: uppercase;
-    font-size: 0.7em;
+    font-size: 0.6em;
     display: block;
     padding: 5px;
 }
@@ -747,6 +748,24 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     top: 20px;
     right: 68px;
 }
+
+/* Building houses on property menu  -----------------------------------------*/
+
+.build-house-button.disabled-button{
+    @include disabledButton();
+}
+
+.house-visual-display{
+    height: 35px;
+}
+
+@for $i from 0 through 5 {
+
+    .house-visual-display[houses="#{$i}"]{
+        background: url('images/house-visual-display-#{$i}.svg') center no-repeat;
+        background-size: contain;
+    }
+  }
 
 
 /* Feed  ---------------------------------------------------------------------*/

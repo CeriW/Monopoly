@@ -27,6 +27,11 @@ let diceRollButton = document.querySelector('#dice-roll-button')
 let diceSides = 6
 
 
+// In a standard Monopoly set there are 32 houses and 12 hotels available.
+// If there are no houses/hotels in the bank, nobody may build any more.
+let availableHouses = 32
+let availableHotels = 12
+
 /*
  Community chest and chance cards have a number of properties:
  type - the classification of card as follows:
@@ -1142,9 +1147,6 @@ function portfolioItemPreview(e){
         targetProperty = parseInt(targetProperty)
         displayPropertyDetails(targetProperty)
 
-        console.log(e.target)
-        console.log(e.target.parentNode)
-
         // If we have come from a full portfolio, give us a back button
         if (e.target.parentNode.classList.contains('full-portfolio-item')){
             let backButton = document.createElement('div')
@@ -1183,6 +1185,7 @@ function fullPortfolioView(e){
 function displayPropertyOptions(number){
     let optionsPanel = document.createElement('div')
 
+    // If this property is unowned, display a button to buy it
     if (spaces[number].owner === null){
         let buyButton = document.createElement('button')
         buyButton.innerText = 'Buy this property'
@@ -1190,11 +1193,73 @@ function displayPropertyOptions(number){
             buyProperty(number, players[turn - 1])
         })
         optionsPanel.appendChild(buyButton)
-    } else{
+    } 
+
+    // If the player owns this property and it is their turn, display options to build/sell houses
+    else if (spaces[number].owner.id === turn){
+        
+        optionsPanel.textContent = 'You own this property!'
+
+        let housePanel = document.createElement('div')
+        optionsPanel.appendChild(housePanel)
+
+        // Create a nice little display to show how many houses are on this property
+        let houseVisualDisplay = document.createElement('div')
+        houseVisualDisplay.classList.add('house-visual-display')
+        houseVisualDisplay.setAttribute('houses', spaces[number].houses)
+        housePanel.appendChild(houseVisualDisplay)
+
+        // Create a button to build houses
+        let buildHouseButton = document.createElement('button')
+        buildHouseButton.classList.add('build-house-button')
+        buildHouseButton.innerText = 'Build house'
+        buildHouseButton.addEventListener('click', function(){
+            buildHouse(number)
+        })
+
+        // If this property already has a hotel, disable the build house button
+        if (spaces[number].houses > 4){
+            buildHouseButton.classList.add('disabled-button')
+        }
+
+        housePanel.appendChild(buildHouseButton)
+
+        
+        // Add all this stuff to the options panel       
+        optionsPanel.appendChild(housePanel)
+        
+    }
+    
+    // If this property is unowned, or it is not currently the owner's turn,
+    // display a message
+    else{
         optionsPanel.innerHTML = 'This property is owned by Player ' + players[turn - 1].id
     }
 
     popupMessage.appendChild(optionsPanel)
+}
+
+function buildHouse(number){
+    let currentHousesOnProperty = spaces[number].houses
+    console.log('Original number of houses: ' + currentHousesOnProperty)
+    spaces[number].houses += 1
+
+    // If there are 3 or less houses, let us build a house.
+    // If there are 4 houses, sell the houses and build a hotel.
+    if (currentHousesOnProperty < 4){
+        availableHouses--
+    } else if (currentHousesOnProperty === 4){
+        availableHouses += 4
+        availableHotels--
+        document.querySelector('.build-house-button').classList.add('disabled-button')
+    }
+
+    players[turn - 1].money -= spaces[number].houseCost
+    updatePlayerDetails()
+
+    document.querySelector('.house-visual-display').setAttribute('houses', spaces[number].houses)
+
+    console.log(spaces[number].houses + 'houses')
 
 }
 
@@ -1212,6 +1277,7 @@ function buyProperty(number, player){
 function auctionProperty(){
     console.log('auction!')
 }
+
 
 // RENT FUNCTIONS ------------------------------------------------------------//
 
