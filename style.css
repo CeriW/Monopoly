@@ -204,8 +204,8 @@ main {
   background-size: 40px; }
 
 .chance {
-  background: url("images/chance.svg") center no-repeat;
-  background-size: contain; }
+  background: url("images/chance.svg") center calc(100% - 6px) no-repeat;
+  background-size: 50px; }
 
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
@@ -454,7 +454,7 @@ body:not(.popup-open) #popup {
   #player-summary h2 {
     margin: 0; }
   #player-summary > div {
-    padding: 40px 20px; }
+    padding: 10px 20px; }
 
 .good-change {
   animation: goodChangeAnimation 1s ease-in-out; }
@@ -484,7 +484,7 @@ body:not(.popup-open) #popup {
   background: #000;
   color: white;
   text-transform: uppercase;
-  font-size: 0.7em;
+  font-size: 0.6em;
   display: block;
   padding: 5px; }
 
@@ -572,7 +572,8 @@ body[dice-roll-available="false"] .roll-dice-button,
 body[end-turn-available="false"] .end-turn-button {
   pointer-events: none;
   background: #ccc;
-  color: #8f8f8f; }
+  color: #8f8f8f;
+  pointer-events: none; }
 
 body[get-out-of-jail="false"] .get-out-50-button,
 body[get-out-of-jail="false"] .roll-doubles-for-jail {
@@ -588,7 +589,8 @@ body[get-out-of-jail="true"] .current-player-summary .roll-dice-button {
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail {
   pointer-events: none;
   background: #ccc;
-  color: #8f8f8f; }
+  color: #8f8f8f;
+  pointer-events: none; }
 
 /* Property overview  --------------------------------------------------------*/
 .property-overview-title {
@@ -659,6 +661,39 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   position: absolute;
   top: 20px;
   right: 68px; }
+
+/* Building houses on property menu  -----------------------------------------*/
+.build-house-button.disabled-button {
+  background: #ccc;
+  color: #8f8f8f;
+  pointer-events: none; }
+
+.house-visual-display {
+  height: 35px; }
+
+.house-visual-display[houses="0"] {
+  background: url("images/house-visual-display-0.svg") center no-repeat;
+  background-size: contain; }
+
+.house-visual-display[houses="1"] {
+  background: url("images/house-visual-display-1.svg") center no-repeat;
+  background-size: contain; }
+
+.house-visual-display[houses="2"] {
+  background: url("images/house-visual-display-2.svg") center no-repeat;
+  background-size: contain; }
+
+.house-visual-display[houses="3"] {
+  background: url("images/house-visual-display-3.svg") center no-repeat;
+  background-size: contain; }
+
+.house-visual-display[houses="4"] {
+  background: url("images/house-visual-display-4.svg") center no-repeat;
+  background-size: contain; }
+
+.house-visual-display[houses="5"] {
+  background: url("images/house-visual-display-5.svg") center no-repeat;
+  background-size: contain; }
 
 /* Feed  ---------------------------------------------------------------------*/
 #feed {
