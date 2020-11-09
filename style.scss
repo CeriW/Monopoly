@@ -767,18 +767,64 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     }
   }
 
+/* Left panel  ---------------------------------------------------------------*/
+
+#left-panel{
+    flex-basis: 275px;
+    margin-right: 20px;
+    align-self: stretch;
+}
+
+/* Bank  ---------------------------------------------------------------------*/
+
+#bank{
+    border: $border;
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+#bank-content{
+    min-height: 115px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#bank-content > div{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#bank-title{
+    background: #000 url('images/bank.svg') 10px center no-repeat;
+    background-size: 20px;
+    padding: 5px;
+    color: #fff;
+}
+
+.bank-house-icon,
+.bank-hotel-icon{
+    width: 20px;
+    height: 20px;
+    background: url('images/house-icon.svg') center no-repeat;
+    background-size: contain;
+    margin: 1px;
+}
+
+.bank-hotel-icon{
+    background-image: url('images/hotel-icon.svg');
+}
+
 
 /* Feed  ---------------------------------------------------------------------*/
 
 #feed{
     background: #fff;
     color: #000;
-    align-self: stretch;
-    flex-basis: 275px;
     position: relative;
     border: $border;
-    margin-right: 20px;
-    max-height: calc(100vh - 80px);
+    min-height: calc(100% - 175px);
 }
 
 #feed-title{
@@ -861,4 +907,6 @@ body:not(.testing-panel-enabled) #testing-panel{
     right: 0;
     top: 0;
     z-index: 1000;
+    justify-content: space-around;
+    display: flex;
 }
