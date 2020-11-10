@@ -39,6 +39,30 @@ main {
 ::-webkit-scrollbar-thumb:hover {
   background: #b5d6b3; }
 
+/* PLAYER CREATOR ------------------------------------------------------------ */
+#player-creator {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.player-creation-panel {
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  margin: 10px;
+  min-width: 200px; }
+  .player-creation-panel h2 {
+    font-size: 1em;
+    margin-bottom: 10px; }
+  .player-creation-panel input {
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #000;
+    padding: 10px 0; }
+  .player-creation-panel ::placeholder {
+    font-style: italic; }
+
+/* BOARD --------------------------------------------------------------------- */
 #board {
   border: 3px solid #000;
   display: grid;

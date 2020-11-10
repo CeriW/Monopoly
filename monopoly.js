@@ -8,6 +8,7 @@ let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
 let feed = document.querySelector('#feed-content')
 let bank = document.querySelector('#bank-content')
+let playerCreator = document.querySelector('#player-creator')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -180,6 +181,9 @@ let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol 
 initialisePage()
 
 function initialisePage(){
+
+    // Generate the page where the players are determined.
+    intialisePlayerCreator()
 
     // Generate all of the spaces on the board
     // While this could be done in the HTML, doing it based on a JS array means
@@ -485,17 +489,52 @@ function fakeRollDice(fakeTotal){
 
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
+function intialisePlayerCreator(){
+    createPlayerCreationPanel(1)
+    createPlayerCreationPanel(2)
+    createPlayerCreationPanel(3)
+
+    function createPlayerCreationPanel(playerID){
+        let newPanel = document.createElement('div')
+        newPanel.classList.add('player-creation-panel')
+        newPanel.setAttribute('player', playerID)
+
+        // Create a nice title
+        let title = document.createElement('h2')
+        title.textContent = 'PLAYER ' + playerID
+        newPanel.appendChild(title)
+
+        // Create a name input
+        let name = document.createElement('input')
+        name.classList.add('player-name-input')
+        name.setAttribute('placeholder', 'player name')
+        newPanel.appendChild(name)
+
+        playerCreator.appendChild(newPanel)
+    }
+    
+}
+
+
 function createPlayers(){
     let newPlayersOverlay = document.querySelector('#new-player-overlay')
-    let numberOfPlayers = document.querySelector('#no-of-players').value
+    //let numberOfPlayers = document.querySelector('#no-of-players').value
+    //let numberOfPlayers = playerCreator.childElementCount
 
     //console.log(numberOfPlayers)
 
     // Generate an object for each player, and add it to the players array
-    for (i = 0; i < numberOfPlayers; i++){
-        let newPlayer = {id:i + 1, name:"Player " + (i + 1), money:1500, inJail: 0, properties: []}
+    ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
+        let newPlayer = {money:1500, inJail: 0, properties: []}
+        newPlayer.id = playerCreationPanel.getAttribute('player')
+
+        // If the user has entered a name for this player, set the name to that.
+        // Otherwise just call them Player 1/2/3/4 as appropriate.
+        let newPlayerName = playerCreationPanel.querySelector('.player-name-input').value
+        newPlayer.name = newPlayerName ? newPlayerName : 'Player ' + playerCreationPanel.getAttribute('player')
+
         players.push(newPlayer)
-    }
+    })
 
     /* Note - the inJail numbers mean:
        0   - not in jail
@@ -807,7 +846,7 @@ function cardBasedMovement(chosenCard, type){
 
     // Outputs a nice player readable message to put in the feed.
     function getCardMovementFeedMessage(position){
-        return 'Player ' + players[turn-1].id + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
+        return 'Player ' + players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
     }
 
 
