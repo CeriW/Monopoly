@@ -165,6 +165,8 @@ let spaces =  [
 // An empty array for now. Will be filled with player info later.
 let players = []
 
+let maxNumberOfPlayers = 4
+
 let availableActions = {
     rollDice: true,
     endTurn: false,
@@ -492,7 +494,24 @@ function fakeRollDice(fakeTotal){
 function intialisePlayerCreator(){
     createPlayerCreationPanel(1)
     createPlayerCreationPanel(2)
-    createPlayerCreationPanel(3)
+    let currentNumberOfPlayers = 2
+
+    let addPlayer = document.createElement('div')
+    addPlayer.classList.add('add-player-button')
+    addPlayer.textContent = 'ADD PLAYER'
+    let icon = document.createElement('img')
+    icon.src = 'images/plus.svg'
+    addPlayer.appendChild(icon)
+    playerCreator.appendChild(addPlayer)
+
+    addPlayer.addEventListener('click', function(){
+        currentNumberOfPlayers++
+        createPlayerCreationPanel(currentNumberOfPlayers)
+
+        if (currentNumberOfPlayers === maxNumberOfPlayers){
+            playerCreator.removeChild(addPlayer)
+        }
+    })
 
     function createPlayerCreationPanel(playerID){
         let newPanel = document.createElement('div')
@@ -510,8 +529,11 @@ function intialisePlayerCreator(){
         name.setAttribute('placeholder', 'player name')
         newPanel.appendChild(name)
 
-        playerCreator.appendChild(newPanel)
+        // Insert it before the add player button
+        playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
+
+
     
 }
 
