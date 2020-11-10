@@ -57,7 +57,8 @@ button{
     border: none;
     font-weight: bold;
     font-family: 'Kabel-Heavy', sans-serif;
-    font-size: 0.8em;
+    font-size: 0.6em;
+    cursor: pointer;
 }
 
 
@@ -104,13 +105,22 @@ button{
         border: 10px solid #fff;
         text-shadow: 3px 3px 0 black;
         width: 650px;
-        box-shadow: 0 0 10px rgba(black, 0.5);
+        box-shadow: 0 0 10px rgba(black, 0.5), inset 0 -10px 20px rgba(0, 0, 0, 0.3);
+        max-width: 100%;
     }
 }
 
 #begin-game{
     background: $red;
     margin-top: 20px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(black, 0.5);
+    font-size: 0.8em;
+    transition: 0.2s;
+
+    &:hover{
+        background: darken($red, 5%);
+    }
 }
 
 
@@ -118,6 +128,9 @@ button{
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    background: rgba($lightgreen, 0.9);
+    border-radius: 10px;
 
     & > div{
         animation: zoomIn 0.5s both;
