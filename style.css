@@ -23,6 +23,16 @@ main {
   justify-content: space-between;
   text-align: center; }
 
+button {
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  text-transform: uppercase;
+  border: none;
+  font-weight: bold;
+  font-family: 'Kabel-Heavy', sans-serif;
+  font-size: 0.8em; }
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px; }
@@ -40,17 +50,56 @@ main {
   background: #b5d6b3; }
 
 /* PLAYER CREATOR ------------------------------------------------------------ */
+#new-player-overlay {
+  background: #d5e8d4 url("images/city.svg") center bottom no-repeat;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  flex-direction: column; }
+  #new-player-overlay h1 {
+    background: #db0926;
+    color: #fff;
+    padding: 10px 20px;
+    border: 10px solid #fff;
+    text-shadow: 3px 3px 0 black;
+    width: 650px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
+
+#begin-game {
+  background: #db0926;
+  margin-top: 20px; }
+
 #player-creator {
   display: flex;
   align-items: center;
   justify-content: center; }
+  #player-creator > div {
+    animation: zoomIn 0.5s both; }
+  #player-creator > div:nth-child(2) {
+    animation-delay: 0.2s; }
+  #player-creator > div:last-child.add-player-button {
+    animation-delay: 0.4s; }
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0); }
+  to {
+    transform: scale(1); } }
 
 .player-creation-panel {
   padding: 20px;
   background: #fff;
   border-radius: 10px;
   margin: 10px;
-  min-width: 200px; }
+  min-width: 200px;
+  animation: zoomIn 0.5s both; }
   .player-creation-panel h2 {
     font-size: 1em;
     margin-bottom: 10px; }
@@ -73,7 +122,8 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #60875E; }
+  color: #60875E;
+  animation: zoomIn 0.5s both; }
   .add-player-button img {
     margin-top: 15px;
     width: 35px; }
@@ -472,17 +522,6 @@ body:not(.popup-open) #popup {
     opacity: 1; }
   to {
     opacity: 0; } }
-
-/* New players  --------------------------------------------------------------*/
-#new-player-overlay {
-  background: #d5e8d4;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100;
-  text-align: center; }
 
 /* Player summary  -----------------------------------------------------------*/
 #player-summary {

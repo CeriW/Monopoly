@@ -492,10 +492,8 @@ function fakeRollDice(fakeTotal){
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
 function intialisePlayerCreator(){
-    createPlayerCreationPanel(1)
-    createPlayerCreationPanel(2)
-    let currentNumberOfPlayers = 2
-
+    
+    // Create the 'Add player' button
     let addPlayer = document.createElement('div')
     addPlayer.classList.add('add-player-button')
     addPlayer.textContent = 'ADD PLAYER'
@@ -512,6 +510,10 @@ function intialisePlayerCreator(){
             playerCreator.removeChild(addPlayer)
         }
     })
+
+    createPlayerCreationPanel(1)
+    createPlayerCreationPanel(2)
+    let currentNumberOfPlayers = 2
 
     function createPlayerCreationPanel(playerID){
         let newPanel = document.createElement('div')
