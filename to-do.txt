@@ -45,6 +45,8 @@ An incomplete list of all the developments that need to be completed
 
 - Make the tokens reposition when the window is resized.
 
+- When you click a property on the board, bring up the window with its details.
+
 
 STRETCH GOALS
 
