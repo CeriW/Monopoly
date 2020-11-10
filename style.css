@@ -663,7 +663,8 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   right: 68px; }
 
 /* Building houses on property menu  -----------------------------------------*/
-.build-house-button.disabled-button {
+.build-house-button.disabled-button,
+body[build-house="false"] .build-house-button {
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }

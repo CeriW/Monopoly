@@ -168,7 +168,8 @@ let availableActions = {
     rollDice: true,
     endTurn: false,
     getOutOfJail: false,
-    rollDoublesForJail: false
+    rollDoublesForJail: false,
+    buildHouse: false
 }
 
 let currencySymbol = '₩'
@@ -277,6 +278,7 @@ function setAvailableActions(){
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
     document.body.setAttribute('get-out-of-jail', availableActions.getOutOfJail)
     document.body.setAttribute('roll-doubles-for-jail', availableActions.rollDoublesForJail)
+    document.body.setAttribute('build-house', availableActions.buildHouse)
 }
 
 
@@ -359,6 +361,10 @@ function updateBank(){
         hotelContainer.style.minWidth = '74px'
         hotelContainer.style.flexBasis = '74px'
         hotelContainer.appendChild(hotelIcon)
+    }
+
+    if (availableHouses < 1){
+        availableActions.buildHouse = false
     }
 
     bank.appendChild(houseContainer)
@@ -841,6 +847,10 @@ function shuffleCards(array) {
 
 function closePopup(){
     document.body.classList.remove('popup-open')
+    
+    // Reset the build house available action. We'll recheck whether it's
+    // appropriate when the window is next opened.
+    availableActions.buildHouse = false
 }
 
 function openPopup(message){
@@ -1237,6 +1247,8 @@ function displayPropertyOptions(number){
     else if (spaces[number].owner.id === turn){
         
         optionsPanel.textContent = 'You own this property!'
+        
+        availableActions.buildHouse = (availableHouses > 0) ? true : false
 
         let housePanel = document.createElement('div')
         optionsPanel.appendChild(housePanel)
@@ -1255,10 +1267,14 @@ function displayPropertyOptions(number){
             buildHouse(number)
         })
 
-        // If this property already has a hotel, disable the build house button
-        if (spaces[number].houses > 4){
-            buildHouseButton.classList.add('disabled-button')
+        // If this property already has a hotel, or the bank doesn't have any
+        // houses, disable the build house button
+        if (spaces[number].houses > 4 || availableHouses < 1){
+            availableActions.buildHouse = false
         }
+
+        
+
 
         housePanel.appendChild(buildHouseButton)
 
@@ -1279,7 +1295,6 @@ function displayPropertyOptions(number){
 
 function buildHouse(number){
     let currentHousesOnProperty = spaces[number].houses
-    console.log('Original number of houses: ' + currentHousesOnProperty)
     spaces[number].houses += 1
 
     // If there are 3 or less houses, let us build a house.
@@ -1297,8 +1312,6 @@ function buildHouse(number){
 
     document.querySelector('.house-visual-display').setAttribute('houses', spaces[number].houses)
 
-    console.log(spaces[number].houses + 'houses')
-
 }
 
 function buyProperty(number, player){
@@ -1314,6 +1327,40 @@ function buyProperty(number, player){
 
 function auctionProperty(){
     console.log('auction!')
+}
+
+// COLOUR SET FUNCTIONS ------------------------------------------------------//
+
+function checkColourSet(colour, player){
+
+    let fullSetOwned = false
+    let colourSet = []
+
+    // Get an array of all of the properties in that colour set.
+    for (i = 0; i < spaces.length; i++){
+        let property = spaces[i]
+        if (property.group === colour){
+            colourSet.push(property)
+        }
+    }
+
+    // Go back through the array to get a list of the owners of all these properties
+    let owners = []
+    colourSet.forEach(function(property){
+        if (property.owner){
+            owners.push(property.owner.id)
+        } else{
+            owners.push(null)
+        }
+    })
+
+    // Check whether all of the owners are the same as the specified player
+    fullSetOwned = owners.every(function(owner){
+        return (owner === player)
+    })
+
+    return fullSetOwned
+
 }
 
 

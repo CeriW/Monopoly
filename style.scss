@@ -751,7 +751,8 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
 
 /* Building houses on property menu  -----------------------------------------*/
 
-.build-house-button.disabled-button{
+.build-house-button.disabled-button,
+body[build-house = "false"] .build-house-button{
     @include disabledButton();
 }
 
