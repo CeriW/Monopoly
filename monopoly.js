@@ -456,7 +456,7 @@ function fakeRollDice(fakeTotal){
     if (doublesCount === 3){
         let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
         goToJail(token)
-        addToFeed('Player ' + players[turn-1].id + ' rolled 3 doubles and went to jail!', 'go-to-jail')
+        addToFeed(players[turn-1].name + ' rolled 3 doubles and went to jail!', 'go-to-jail')
     } else{
         moveToken(total)
     }
@@ -469,12 +469,12 @@ function fakeRollDice(fakeTotal){
         case 1:
             diceDoubles.innerText = "1st double"
             diceContainer.className ="double1"
-            addToFeed('Player ' + players[turn-1].id + ' rolled doubles', 'doubles')
+            addToFeed(players[turn-1].name + ' rolled doubles', 'doubles')
             break
         case 2:
             diceDoubles.innerText = "2nd double"
             diceContainer.className = "double2"
-            addToFeed('Player ' + players[turn-1].id + ' rolled their second double. Careful!', 'doubles-2nd')
+            addToFeed(players[turn-1].name + ' rolled their second double. Careful!', 'doubles-2nd')
             break
         case 3:
             diceDoubles.innerText = "3rd double! Go to jail."
@@ -619,30 +619,15 @@ function generatePlayerSummary(player){
     // The code below creates a more streamlined interface, even if the JS
     // isn't as simple as it could be.
 
-    // NAME
-    let newTable = document.createElement('table')
-    let newRow = newTable.insertRow(0)
-    newRow.classList.add('player-summary-name')
-
-    // Generate the label
-    let newLabel = newRow.insertCell(0)
-    newLabel.innerText = 'Name:'
-    newRow.appendChild(newLabel)
-
-    // Generate the value
-    let newValue = newRow.insertCell(1)
-    newValue.setAttribute('id', 'player-' + player.id + '-name')
-    newValue.innerText = player.name
-    newRow.appendChild(newValue)
-
-    // Add this table to the summary
-    newSummary.appendChild(newTable)
-
+    // Player label
+    let playerLabel = document.createElement('div')
+    playerLabel.textContent = 'Player ' + player.id
+    newSummary.appendChild(playerLabel)
 
 
     // MONEY
-    newTable = document.createElement('table')
-    newRow = newTable.insertRow(0)
+    let newTable = document.createElement('table')
+    let newRow = newTable.insertRow(0)
     newRow.classList.add('player-summary-money')
 
     // Generate the label
@@ -734,13 +719,13 @@ function drawCard(type){
         case '+':
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
-            addToFeed('Player ' + players[turn - 1].id + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card', 'money-plus')
+            addToFeed(players[turn - 1].name + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card', 'money-plus')
             break
         case '-':
             // A card where the player has to surrender money to the bank
             players[turn - 1].money -= chosenCard.value
 
-            addToFeed('Player ' + players[turn - 1].id + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
+            addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
             break
         case 'getout':
             // TODO
@@ -788,7 +773,7 @@ function cardBasedMovement(chosenCard, type){
         // Go to jail
         case 10:
             goToJail(document.querySelector('#player' + turn + 'token'))
-            addToFeed('Player ' + players[turn - 1].id + 'drew a ' + getReadableCardName(type) + ' card and went to jail!', 'go-to-jail')
+            addToFeed(players[turn - 1].name + 'drew a ' + getReadableCardName(type) + ' card and went to jail!', 'go-to-jail')
             break
         
         // Advance to Go
@@ -846,7 +831,7 @@ function cardBasedMovement(chosenCard, type){
 
     // Outputs a nice player readable message to put in the feed.
     function getCardMovementFeedMessage(position){
-        return 'Player ' + players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
+        return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
     }
 
 
@@ -929,7 +914,7 @@ function rollDice(){
     if (doublesCount === 3){
         let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
         goToJail(token)
-        addToFeed('Player ' + players[turn-1].id + ' rolled 3 doubles and went to jail!', 'go-to-jail')
+        addToFeed(players[turn-1].name + ' rolled 3 doubles and went to jail!', 'go-to-jail')
     } else{
         moveToken(total)
     }
@@ -942,12 +927,12 @@ function rollDice(){
         case 1:
             diceDoubles.innerText = "1st double"
             diceContainer.className ="double1"
-            addToFeed('Player ' + players[turn-1].id + ' rolled doubles', 'doubles')
+            addToFeed('Player ' + players[turn-1].name + ' rolled doubles', 'doubles')
             break
         case 2:
             diceDoubles.innerText = "2nd double"
             diceContainer.className = "double2"
-            addToFeed('Player ' + players[turn-1].id + ' rolled their second double. Careful!', 'doubles-2nd')
+            addToFeed('Player ' + players[turn-1].name + ' rolled their second double. Careful!', 'doubles-2nd')
             break
         case 3:
             diceDoubles.innerText = "3rd double! Go to jail."
@@ -989,7 +974,7 @@ function moveToken(total){
                     endPosition = endPosition - 40
                     players[turn - 1].money += 200
                     updatePlayerDetails()
-                    addToFeed('Player ' + players[turn - 1].id + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
+                    addToFeed(players[turn - 1].name + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
                 }
             }
 
@@ -1019,13 +1004,13 @@ function specialEndPositions(endPosition){
         case 4:
             // Income tax
             players[turn - 1].money -= 200
-            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
+            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
             updatePlayerDetails()
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
-            addToFeed('Player ' + players[turn-1].id + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
+            addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
             updatePlayerDetails()
             break
         case 0:
@@ -1099,7 +1084,7 @@ function rollDoublesForJail(){
         availableActions.endTurn = true
         availableActions.getOutOfJail = false
         players[turn - 1].inJail++
-        addToFeed('Player ' + players[turn-1].id + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + 'attempts remaining.'), 'failed-jail-roll')
+        addToFeed(players[turn-1].name + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + 'attempts remaining.'), 'failed-jail-roll')
     }
 
     setAvailableActions()
@@ -1113,17 +1098,16 @@ function getOutOfJail(method){
         case 'pay':
             player.money -= 50
             availableActions.rollDice = true
-            addToFeed('Player ' + players[turn-1].id + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
+            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
             break
         case 'card':
             //TODO
             availableActions.rollDice = true
-            addToFeed('Player ' + players[turn-1].id + ' used a Get Out Of Jail Free card to get out of jail', 'get-out-card')
+            addToFeed(players[turn-1].name + ' used a Get Out Of Jail Free card to get out of jail', 'get-out-card')
             break
         case 'doubles':
-            // Note - you do not get to roll again after rolling doubles
-            // to get out of jail
-            addToFeed('Player ' + players[turn-1].id + ' rolled doubles and got out of jail', 'doubles-out-of-jail')
+            // Note - you do not get to roll again after rolling doubles to get out of jail
+            addToFeed(players[turn-1].name + ' rolled doubles and got out of jail', 'doubles-out-of-jail')
             diceContainer.className = "successful-jail-roll"
             diceDoubles.innerText = "Success!"
             break
@@ -1326,7 +1310,7 @@ function displayPropertyOptions(number){
     // If this property is unowned, or it is not currently the owner's turn,
     // display a message
     else{
-        optionsPanel.innerHTML = 'This property is owned by Player ' + players[turn - 1].id
+        optionsPanel.innerHTML = 'This property is owned by ' + players[turn - 1].name
     }
 
     popupMessage.appendChild(optionsPanel)
@@ -1361,7 +1345,7 @@ function buyProperty(number, player){
 
     updatePlayerDetails()
 
-    addToFeed('Player ' + player.id + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
+    addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
 }
 
 function auctionProperty(){
@@ -1410,14 +1394,14 @@ function landOnProperty(position){
     let owner = checkPropertyOwner(position)
     let currentPlayer = players[turn - 1]
 
-    if (owner && owner !== currentPlayer.id){
+    if (owner && owner.id !== currentPlayer.id){
         // Rent is due
 
         // TODO - this will need to adjust to group sets/houses/hotels
         let rentAmount = spaces[position].rent[0]
-        players[owner - 1].money += rentAmount
+        players[owner.id - 1].money += rentAmount
         currentPlayer.money -= rentAmount
-        addToFeed('Player ' + currentPlayer.id + ' landed on ' + spaces[position].name + ' and paid Player&nbsp;' + owner + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
+        addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + owner.name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
         updatePlayerDetails()
 
 
@@ -1432,7 +1416,7 @@ function checkPropertyOwner(position){
     let owner = spaces[position].owner
 
     if (owner){
-        return owner = owner.id
+        return owner
     } else{
         return null
     }
