@@ -559,9 +559,67 @@ function intialisePlayerCreator(){
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
 
+    let availableTokens = ['dog', 'iron', 'thimble', 'car']
+    
+    // Temporary div
+    let availableTokenContainer = document.createElement('div')
+    let availableTokenContainerInner = document.createElement('div')
+    availableTokenContainer.appendChild(availableTokenContainerInner)
+    availableTokenContainer.classList.add('available-token-container')
+    
+    playerCreator.parentNode.appendChild(availableTokenContainer)
+    let currentToken = 0
+    createTokenSelector()
 
+
+    function createTokenSelector(){
+
+        
+        availableTokenContainer.setAttribute('chosenToken', availableTokens[currentToken])
+
+        availableTokens.forEach(function(token){
+            let option = document.createElement('div')
+            option.classList.add(token + '-option', 'token-option')
+            availableTokenContainerInner.appendChild(option)
+        })
+
+        ;['left', 'right'].forEach(function(direction){
+            let arrow = document.createElement('div')
+            arrow.classList.add('token-creation-arrow', direction)
+            availableTokenContainer.appendChild(arrow)
+            arrow.addEventListener('click', function(){
+                scrollTokenSelector(direction)
+            })
+        })
+    }   
+
+    function scrollTokenSelector(direction){
+        if (direction === 'left'){
+            // If we've got to the start, go to the end. Otherwise decrement.
+            if (currentToken === 0){
+                currentToken = availableTokens.length - 1
+            } else{
+                currentToken--
+            }
+
+            
+
+        } else{
+            // If we've got to the end, go to the start. Otherwise increment.
+            if (currentToken === availableTokens.length - 1){
+                currentToken = 0
+            } else{
+                currentToken++
+            }
+        }
+
+        availableTokenContainer.setAttribute('currentToken', currentToken)
+        console.log(availableTokens[currentToken])
+    }
     
 }
+
+
 
 
 function createPlayers(){
@@ -1517,4 +1575,3 @@ function addToFeed(message,type){
 
     feed.insertBefore(newMessage, feed.firstChild)
 }
-
