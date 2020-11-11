@@ -55,3 +55,5 @@ STRETCH GOALS
 - Add a Monopoly rulebook
 
 - House rules? (e.g. free parking)
+
+- Players to be able to pick their own colour
