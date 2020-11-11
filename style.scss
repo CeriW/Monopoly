@@ -195,6 +195,32 @@ button{
     }
 }
 
+/* TOKEN SELECTOR ----------------------------------------------------------- */
+
+.availableTokenChoices{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 200px;
+}
+
+.token-option,
+.token-selector-chosen-indicator{
+    width: 70px;
+    height: 70px;
+}
+
+$tokens: 'dog', 'iron', 'thimble', 'car';
+
+@each $token in $tokens{
+    .token-option-#{$token}{
+        background: url('images/tokens/#{$token}.svg') center no-repeat;
+        background-size: contain;
+    }
+}
+
+
+
 /* BOARD --------------------------------------------------------------------- */
 
 $columnsize: 80px;
@@ -440,21 +466,42 @@ $columnsize: 80px;
 }
 
 .token{
-    width: 80px;
-    height: 80px;
+    width: 46px;
+    height: 28px;
     position: absolute;
     z-index: 2;
-    background-size: 20px;
+    background-size: 35px;
     background-repeat: no-repeat;
-    background-position: center;
-}
+    background-position: center bottom;
 
-@for $i from 1 through 4 {
-    #player#{$i}token{
-        background-image: url('images/token-#{$i}.svg');
+    &:before{
+        content: '';
+        width: 100%;
+        height: 28px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(50% - 23px);
+        mix-blend-mode: multiply;
+        border-radius: 25px;
+        border: 2px solid #000;
     }
 }
 
+
+@each $token in $tokens{
+    .token.#{$token}{
+        background-image: url('images/tokens/#{$token}.svg');
+    }
+}
+
+#player1token:before{background: yellow;}
+#player2token:before{background: cyan;}
+#player3token:before{background: yellowgreen;}
+#player4token:before{background: orange;}
+
+
+/*
 #player1token{
     background-position: left bottom;
 }
@@ -470,19 +517,21 @@ $columnsize: 80px;
 #player4token{
     background-position: right bottom;
 }
-
-
+*/
 
 /* Due to the way the JS calculates the correct position for the token and the 
    side the borders end up on, there are slightly irregularities. Likely
    not even noticeable but it bothers me otherwise */
-.token[area="south"],
-.token[area="east"]{
+.token[area="south"]{
     margin-left: 1px;
 }
 
+.token[area="north"]{
+    margin-left: -3px;
+}
+
 .token[area="west"]{
-    margin-left: -1px;
+    margin-left: -3px;
 }
 
 
@@ -1009,6 +1058,14 @@ body[build-house = "false"] .build-house-button{
     background: $black;
     color: #fff;
     padding: 10px;
+}
+
+#testing-panel{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
 }
 
 body:not(.testing-panel-enabled) #testing-panel{

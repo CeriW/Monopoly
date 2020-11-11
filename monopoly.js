@@ -2,6 +2,8 @@
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
+let availableTokens = ['dog', 'iron', 'thimble', 'car']
+
 
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
@@ -531,6 +533,28 @@ function intialisePlayerCreator(){
         name.setAttribute('placeholder', 'player name')
         newPanel.appendChild(name)
 
+        // Create a token selector
+        let tokenSelector = document.createElement('div')
+        tokenSelector.classList.add('token-selector')
+
+        // Create a div at the top of the selector to display the chosen one
+        let tokenSelectorChosenIndicator = document.createElement('div')
+        tokenSelectorChosenIndicator.classList.add('token-selector-chosen-indicator')
+        tokenSelectorChosenIndicator.setAttribute('chosenToken', availableTokens[playerID - 1])
+        tokenSelectorChosenIndicator.classList.add('token-option', 'token-option-' + availableTokens[playerID - 1])
+        tokenSelector.appendChild(tokenSelectorChosenIndicator)
+
+        let availableTokenChoices = document.createElement('div')
+        availableTokenChoices.classList.add('availableTokenChoices')
+        availableTokens.forEach(function(token){
+            let tokenOption = document.createElement('div')
+            tokenOption.classList.add('token-option', 'token-option-' + token)
+            availableTokenChoices.appendChild(tokenOption)
+        })
+        tokenSelector.appendChild(availableTokenChoices)
+
+        newPanel.appendChild(tokenSelector)
+
         // Insert it before the add player button
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
@@ -549,8 +573,9 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
-        let newPlayer = {money:1500, inJail: 0, properties: []}
+        let newPlayer = {money:1500, inJail: 0, properties: [], postition: 0}
         newPlayer.id = playerCreationPanel.getAttribute('player')
+        newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
 
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
@@ -575,12 +600,13 @@ function createPlayers(){
     players.forEach(function(player){
         let newToken = document.createElement('div')
         newToken.classList.add('token')
+        newToken.classList.add(player.token)
         newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
         board.appendChild(newToken)
 
-        positionToken(newToken, 0)
+        
 
     })
 
@@ -976,7 +1002,7 @@ function moveToken(total){
     let startPosition = parseInt(token.getAttribute('position'))
     let endPosition = startPosition + total
     endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
-
+    players[turn - 1].position = endPosition
     //token.setAttribute('position', endPosition)
 
 
@@ -1056,10 +1082,40 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
-    token.style.top = matchingProperty.offsetTop + 'px'
-    token.style.left = matchingProperty.offsetLeft + 'px'
-    token.style.right = matchingProperty.offsetRight + 'px'
-    token.style.bottom = matchingProperty.offsetBottom + 'px'    
+    let row = matchingProperty.parentNode.getAttribute('id')
+
+    //token.style.top = matchingProperty.offsetTop + 'px'
+    //token.style.left = matchingProperty.offsetLeft + 'px'
+    //token.style.right = matchingProperty.offsetRight + 'px'
+    //token.style.bottom = matchingProperty.offsetBottom + 'px'  
+    
+    // The token should sit half way from the top of the property, minus half the token's height.
+    let desiredTop = matchingProperty.offsetTop += ((matchingProperty.offsetHeight / 2) - (token.offsetHeight / 2))
+
+    // The token should sit half way from the left of the property, minus half the token's width.
+    let desiredLeft = matchingProperty.offsetLeft += ((matchingProperty.offsetWidth / 2) - (token.offsetWidth / 2))
+
+    let desiredRight = matchingProperty.offsetRight
+    let desiredBottom = matchingProperty.offsetBottom
+
+    let desiredZindex = 1
+
+    // If there are already tokens on the property, move ours
+    for (i = 0; i < players.length; i++){
+        if (players[i].position === position){
+            desiredTop += 10
+            desiredZindex++
+        }
+    }
+
+    token.style.top = desiredTop + 'px'
+    token.style.left = desiredLeft + 'px'
+    token.style.right = desiredRight + 'px'
+    token.style.bottom = desiredBottom + 'px'
+    token.style.Zindex = desiredZindex
+    token.setAttribute('area', row)
+
+    players[turn - 1].position = position
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
@@ -1070,6 +1126,7 @@ function goToJail(token){
     availableActions.rollDice = false
     availableActions.endTurn = true
     players[turn - 1].inJail++
+    players[turn-1].position = 10
     updatePlayerDetails()
 
 
