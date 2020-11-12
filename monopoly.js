@@ -549,8 +549,17 @@ function intialisePlayerCreator(){
         availableTokens.forEach(function(token){
             let tokenOption = document.createElement('div')
             tokenOption.classList.add('token-option', 'token-option-' + token)
+            tokenOption.setAttribute('token', token)
             availableTokenChoices.appendChild(tokenOption)
         })
+
+        availableTokenChoices.addEventListener('click', function(e){
+            let clickedOption = e.target.getAttribute('token')
+            console.log(clickedOption)
+            tokenSelectorChosenIndicator.setAttribute('chosentoken', clickedOption)
+        })
+
+
         tokenSelector.appendChild(availableTokenChoices)
 
         newPanel.appendChild(tokenSelector)
@@ -1406,7 +1415,7 @@ function displayPropertyOptions(number){
     } 
 
     // If the player owns this property and it is their turn, display options to build/sell houses
-    else if (spaces[number].owner.id === turn){
+    else if (spaces[number].owner.id == turn){
         
         optionsPanel.textContent = 'You own this property!'
         
