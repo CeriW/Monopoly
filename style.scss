@@ -197,8 +197,11 @@ button{
 
 /* TOKEN SELECTOR ----------------------------------------------------------- */
 
+$token-selector-grey:  #dbdbdb;
+
 .token-selector{
     position: relative;
+    margin: 15px 0;
 }
 
 .available-token-choices{
@@ -206,7 +209,7 @@ button{
     justify-content: center;
     flex-wrap: wrap;
     max-width: 200px;
-    background: #dbdbdb;
+    background: $token-selector-grey;
     border-radius: 10px;
     position: absolute;
     top: calc(100% + 10px);
@@ -218,7 +221,7 @@ button{
         height: 0;
         border-style: solid;
         border-width: 0 15px 15px 15px;
-        border-color: transparent transparent #dbdbdb transparent;
+        border-color: transparent transparent $token-selector-grey transparent;
         position: absolute;
         top: -15px;
         left: calc(50% - 15px);
@@ -234,6 +237,24 @@ button{
 .token-selector-chosen-indicator{
     float: none;
     margin: 0 auto;
+    position: relative;
+    border: 1px solid $token-selector-grey;
+    border-radius: 50%;
+    background-size: 50px;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &:after{
+        content: '';
+        width: 25px;
+        height: 25px;
+        background: $token-selector-grey url('images/pen.svg') center no-repeat;
+        background-size: 15px;
+        border-radius: 50%;
+        position: absolute;
+        right: -6px;
+        bottom: -6px;
+    }
 }
 
 .available-token-choices .token-option{
@@ -243,10 +264,11 @@ button{
     border: 1px solid transparent;
     border-radius: 50%;
     background-size: 35px;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .available-token-choices .token-option:hover{
-    //border-color: #000;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(black, 0.2);
 }
@@ -268,8 +290,7 @@ $tokens:
 @each $token in $tokens{
     .token-option-#{$token},
     .token-selector-chosen-indicator[chosentoken="#{$token}"]{
-        background: url('images/tokens/#{$token}.svg') center no-repeat;
-        background-size: contain;
+        background-image: url('images/tokens/#{$token}.svg');
     }
 }
 
@@ -549,10 +570,19 @@ $columnsize: 80px;
     }
 }
 
-#player1token:before{background: yellow;}
-#player2token:before{background: cyan;}
-#player3token:before{background: yellowgreen;}
-#player4token:before{background: orange;}
+#player1summary .player-summary-header,
+#player1token:before{
+    background-color: yellow;
+}
+
+#player2summary .player-summary-header,
+#player2token:before{background-color: cyan;}
+
+#player3summary .player-summary-header,
+#player3token:before{background-color: yellowgreen;}
+
+#player4summary .player-summary-header,
+#player4token:before{background-color: orange;}
 
 
 /*
@@ -746,6 +776,8 @@ $jailAnimationLength: 1.5;
 
     h2{
         margin: 0;
+        font-size: 1.1em;
+        text-transform: uppercase;
     }
 
     & > div{
@@ -753,8 +785,42 @@ $jailAnimationLength: 1.5;
     }
 }
 
+.player-summary-header{
+    display: grid;
+    grid-template-columns: 50px auto;
+    grid-template-rows: auto auto;
+    text-align: left;
+    grid-column-gap: 16px;
+    border: $border;
+    padding: 5px 10px;
+
+    .player-token-icon{
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        grid-row: 1 / span 2;
+        position: relative;
+        //background-color: #fff;
+        border-radius: 50%;
+        height: 50px;
+        background-size: 40px;
+        top: 50%;
+        margin-top: -25px;
+    }
+
+}
+
+@each $token in $tokens{
+    .player-token-icon[token="#{$token}"]{
+        background-image: url('images/tokens/#{$token}.svg');
+        
+    }
+}
+
+
 .good-change{
     animation: goodChangeAnimation 1s ease-in-out;
+    transform-origin: left center;
 }
 
 @keyframes goodChangeAnimation{
@@ -765,6 +831,7 @@ $jailAnimationLength: 1.5;
 
 .bad-change{
     animation: badChangeAnimation 1s ease-in-out;
+    transform-origin: left center;
 }
 
 @keyframes badChangeAnimation{
@@ -785,6 +852,9 @@ $jailAnimationLength: 1.5;
 .property-portfolio{
     border: $border;
     padding: 10px;
+    background: #fff;
+    min-height: 55px;
+    box-sizing: border-box;
 }
 
 .property-icon{
@@ -815,6 +885,9 @@ $jailAnimationLength: 1.5;
 .property-icon.train-station{background: url('images/station.svg') center no-repeat;}
 .property-icon.electric-company{background: url('images/electric-company.svg') center no-repeat;}
 .property-icon.water-works{background: url('images/water-works.svg') center no-repeat;}
+
+
+
 
 /* Full portfolio view  ------------------------------------------------------*/
 

@@ -141,7 +141,8 @@ button {
 
 /* TOKEN SELECTOR ----------------------------------------------------------- */
 .token-selector {
-  position: relative; }
+  position: relative;
+  margin: 15px 0; }
 
 .available-token-choices {
   display: flex;
@@ -171,7 +172,23 @@ button {
 
 .token-selector-chosen-indicator {
   float: none;
-  margin: 0 auto; }
+  margin: 0 auto;
+  position: relative;
+  border: 1px solid #dbdbdb;
+  border-radius: 50%;
+  background-size: 50px;
+  background-position: center;
+  background-repeat: no-repeat; }
+  .token-selector-chosen-indicator:after {
+    content: '';
+    width: 25px;
+    height: 25px;
+    background: #dbdbdb url("images/pen.svg") center no-repeat;
+    background-size: 15px;
+    border-radius: 50%;
+    position: absolute;
+    right: -6px;
+    bottom: -6px; }
 
 .available-token-choices .token-option {
   width: 40px;
@@ -179,7 +196,9 @@ button {
   margin: 4px;
   border: 1px solid transparent;
   border-radius: 50%;
-  background-size: 35px; }
+  background-size: 35px;
+  background-position: center;
+  background-repeat: no-repeat; }
 
 .available-token-choices .token-option:hover {
   background-color: #fff;
@@ -187,58 +206,47 @@ button {
 
 .token-option-dog,
 .token-selector-chosen-indicator[chosentoken="dog"] {
-  background: url("images/tokens/dog.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/dog.svg"); }
 
 .token-option-iron,
 .token-selector-chosen-indicator[chosentoken="iron"] {
-  background: url("images/tokens/iron.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/iron.svg"); }
 
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
-  background: url("images/tokens/thimble.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/thimble.svg"); }
 
 .token-option-car,
 .token-selector-chosen-indicator[chosentoken="car"] {
-  background: url("images/tokens/car.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/car.svg"); }
 
 .token-option-battleship,
 .token-selector-chosen-indicator[chosentoken="battleship"] {
-  background: url("images/tokens/battleship.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/battleship.svg"); }
 
 .token-option-hat,
 .token-selector-chosen-indicator[chosentoken="hat"] {
-  background: url("images/tokens/hat.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/hat.svg"); }
 
 .token-option-penguin,
 .token-selector-chosen-indicator[chosentoken="penguin"] {
-  background: url("images/tokens/penguin.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/penguin.svg"); }
 
 .token-option-dinosaur,
 .token-selector-chosen-indicator[chosentoken="dinosaur"] {
-  background: url("images/tokens/dinosaur.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/dinosaur.svg"); }
 
 .token-option-cat,
 .token-selector-chosen-indicator[chosentoken="cat"] {
-  background: url("images/tokens/cat.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/cat.svg"); }
 
 .token-option-ducky,
 .token-selector-chosen-indicator[chosentoken="ducky"] {
-  background: url("images/tokens/ducky.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/ducky.svg"); }
 
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
-  background: url("images/tokens/thimble.svg") center no-repeat;
-  background-size: contain; }
+  background-image: url("images/tokens/thimble.svg"); }
 
 /* BOARD --------------------------------------------------------------------- */
 #board {
@@ -524,17 +532,21 @@ button {
 .token.thimble {
   background-image: url("images/tokens/thimble.svg"); }
 
+#player1summary .player-summary-header,
 #player1token:before {
-  background: yellow; }
+  background-color: yellow; }
 
+#player2summary .player-summary-header,
 #player2token:before {
-  background: cyan; }
+  background-color: cyan; }
 
+#player3summary .player-summary-header,
 #player3token:before {
-  background: yellowgreen; }
+  background-color: yellowgreen; }
 
+#player4summary .player-summary-header,
 #player4token:before {
-  background: orange; }
+  background-color: orange; }
 
 /*
 #player1token{
@@ -694,12 +706,68 @@ body:not(.popup-open) #popup {
   box-sizing: border-box;
   flex-basis: 250px; }
   #player-summary h2 {
-    margin: 0; }
+    margin: 0;
+    font-size: 1.1em;
+    text-transform: uppercase; }
   #player-summary > div {
     padding: 10px 20px; }
 
+.player-summary-header {
+  display: grid;
+  grid-template-columns: 50px auto;
+  grid-template-rows: auto auto;
+  text-align: left;
+  grid-column-gap: 16px;
+  border: 3px solid #000;
+  padding: 5px 10px; }
+  .player-summary-header .player-token-icon {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    grid-row: 1 / span 2;
+    position: relative;
+    border-radius: 50%;
+    height: 50px;
+    background-size: 40px;
+    top: 50%;
+    margin-top: -25px; }
+
+.player-token-icon[token="dog"] {
+  background-image: url("images/tokens/dog.svg"); }
+
+.player-token-icon[token="iron"] {
+  background-image: url("images/tokens/iron.svg"); }
+
+.player-token-icon[token="thimble"] {
+  background-image: url("images/tokens/thimble.svg"); }
+
+.player-token-icon[token="car"] {
+  background-image: url("images/tokens/car.svg"); }
+
+.player-token-icon[token="battleship"] {
+  background-image: url("images/tokens/battleship.svg"); }
+
+.player-token-icon[token="hat"] {
+  background-image: url("images/tokens/hat.svg"); }
+
+.player-token-icon[token="penguin"] {
+  background-image: url("images/tokens/penguin.svg"); }
+
+.player-token-icon[token="dinosaur"] {
+  background-image: url("images/tokens/dinosaur.svg"); }
+
+.player-token-icon[token="cat"] {
+  background-image: url("images/tokens/cat.svg"); }
+
+.player-token-icon[token="ducky"] {
+  background-image: url("images/tokens/ducky.svg"); }
+
+.player-token-icon[token="thimble"] {
+  background-image: url("images/tokens/thimble.svg"); }
+
 .good-change {
-  animation: goodChangeAnimation 1s ease-in-out; }
+  animation: goodChangeAnimation 1s ease-in-out;
+  transform-origin: left center; }
 
 @keyframes goodChangeAnimation {
   0% {
@@ -711,7 +779,8 @@ body:not(.popup-open) #popup {
     transform: scale(1); } }
 
 .bad-change {
-  animation: badChangeAnimation 1s ease-in-out; }
+  animation: badChangeAnimation 1s ease-in-out;
+  transform-origin: left center; }
 
 @keyframes badChangeAnimation {
   0% {
@@ -732,7 +801,10 @@ body:not(.popup-open) #popup {
 
 .property-portfolio {
   border: 3px solid #000;
-  padding: 10px; }
+  padding: 10px;
+  background: #fff;
+  min-height: 55px;
+  box-sizing: border-box; }
 
 .property-icon {
   width: 15px !important;

@@ -704,71 +704,40 @@ function generatePlayerSummary(player){
     let newSummary = document.createElement('div')
     newSummary.setAttribute('id', 'player' + player.id + 'summary')
     
+    let playerSummaryHeader = document.createElement('div')
+    playerSummaryHeader.classList.add('player-summary-header')
+
+    // Player's token
+    let playerToken = document.createElement('div')
+    playerToken.classList.add('player-token-icon')
+    playerToken.setAttribute('token', player.token)
+    playerSummaryHeader.appendChild(playerToken)
+
+
+    // Player's name
     let title = document.createElement('h2')
     title.innerText = player.name
-    newSummary.appendChild(title)
+    playerSummaryHeader.appendChild(title)
+
+    // Player label
+    //let playerLabel = document.createElement('span')
+    //playerLabel.textContent = 'Player ' + player.id
+    //titleContainer.appendChild(playerLabel)
+
+
+    let playerMoney = document.createElement('div')
+    playerMoney.setAttribute('id', 'player-' + player.id + '-money')
+    playerMoney.innerHTML = currencySymbolSpan + player.money
+    playerSummaryHeader.appendChild(playerMoney)
+
+    newSummary.appendChild(playerSummaryHeader)
     
-    /*
-    // Generate the table of label/value pairs
-    let newTable = document.createElement('table')
-    let keys = Object.keys(player)
-    let values = Object.values(player)
-
-    // We don't want to do value 0 as it already has a h2
-    for (i = keys.length - 1; i > 0; i--){
-        
-        //  Create the new row
-        let newRow = newTable.insertRow(0)
-        newRow.classList.add('player-summary-' + keys[i])
-        
-        // Generate the label
-        let newLabel = newRow.insertCell(0)
-        newLabel.innerText = keys[i] + ':'
-        newRow.appendChild(newLabel)
-
-        // Generate the value
-        let newValue = newRow.insertCell(1)
-        newValue.setAttribute('id', 'player-' + player.id + '-' + keys[i])
-        
-        if (keys[i] === 'money'){
-            newValue.innerHTML = currencySymbolSpan + values[i]
-        } else{
-            newValue.innerHTML = values[i]
-        }
-
-        newRow.appendChild(newValue)
-    }*/
 
     // Note - this was originally done with a loop.
     // Eventually it became the case that I didn't want all of the player values
     // to display in the summary, and I wanted different ones to display differently.
     // The code below creates a more streamlined interface, even if the JS
     // isn't as simple as it could be.
-
-    // Player label
-    let playerLabel = document.createElement('div')
-    playerLabel.textContent = 'Player ' + player.id
-    newSummary.appendChild(playerLabel)
-
-
-    // MONEY
-    let newTable = document.createElement('table')
-    let newRow = newTable.insertRow(0)
-    newRow.classList.add('player-summary-money')
-
-    // Generate the label
-    newLabel = newRow.insertCell(0)
-    newLabel.innerText = 'Money:'
-    newRow.appendChild(newLabel)
-
-    // Generate the value
-    newValue = newRow.insertCell(1)
-    newValue.setAttribute('id', 'player-' + player.id + '-money')
-    newValue.innerHTML = currencySymbolSpan + player.money
-    newRow.appendChild(newValue)
-
-    // Add this table to the summary
-    newSummary.appendChild(newTable)
 
 
     // PROPERTIES

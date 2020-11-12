@@ -55,6 +55,8 @@ STRETCH GOALS
 - House rules? (e.g. free parking)
 
 - Players to be able to pick their own colour
+  <input name="Color Picker" type="color"/>
+https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-html/40253949
 
 - Tooltips on appropriate items
 
