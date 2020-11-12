@@ -140,16 +140,50 @@ button {
     width: 35px; }
 
 /* TOKEN SELECTOR ----------------------------------------------------------- */
+.token-selector {
+  position: relative; }
+
 .availableTokenChoices {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 200px; }
+  max-width: 200px;
+  background: #dbdbdb;
+  border-radius: 10px;
+  position: absolute;
+  top: calc(100% + 10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
+  .availableTokenChoices:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 15px 15px 15px;
+    border-color: transparent transparent #dbdbdb transparent;
+    position: absolute;
+    top: -15px;
+    left: calc(50% - 15px); }
 
 .token-option,
 .token-selector-chosen-indicator {
   width: 70px;
   height: 70px; }
+
+.token-selector-chosen-indicator {
+  float: none;
+  margin: 0 auto; }
+
+.availableTokenChoices .token-option {
+  width: 40px;
+  height: 40px;
+  margin: 4px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background-size: 35px; }
+
+.availableTokenChoices .token-option:hover {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
 
 .token-option-dog,
 .token-selector-chosen-indicator[chosentoken="dog"] {
@@ -169,6 +203,41 @@ button {
 .token-option-car,
 .token-selector-chosen-indicator[chosentoken="car"] {
   background: url("images/tokens/car.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-battleship,
+.token-selector-chosen-indicator[chosentoken="battleship"] {
+  background: url("images/tokens/battleship.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-hat,
+.token-selector-chosen-indicator[chosentoken="hat"] {
+  background: url("images/tokens/hat.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-penguin,
+.token-selector-chosen-indicator[chosentoken="penguin"] {
+  background: url("images/tokens/penguin.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-dinosaur,
+.token-selector-chosen-indicator[chosentoken="dinosaur"] {
+  background: url("images/tokens/dinosaur.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-cat,
+.token-selector-chosen-indicator[chosentoken="cat"] {
+  background: url("images/tokens/cat.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-ducky,
+.token-selector-chosen-indicator[chosentoken="ducky"] {
+  background: url("images/tokens/ducky.svg") center no-repeat;
+  background-size: contain; }
+
+.token-option-thimble,
+.token-selector-chosen-indicator[chosentoken="thimble"] {
+  background: url("images/tokens/thimble.svg") center no-repeat;
   background-size: contain; }
 
 /* BOARD --------------------------------------------------------------------- */
@@ -409,7 +478,7 @@ button {
   z-index: 2;
   background-size: 35px;
   background-repeat: no-repeat;
-  background-position: center bottom; }
+  background-position: 7px -2px; }
   .token:before {
     content: '';
     width: 100%;
@@ -433,6 +502,27 @@ button {
 
 .token.car {
   background-image: url("images/tokens/car.svg"); }
+
+.token.battleship {
+  background-image: url("images/tokens/battleship.svg"); }
+
+.token.hat {
+  background-image: url("images/tokens/hat.svg"); }
+
+.token.penguin {
+  background-image: url("images/tokens/penguin.svg"); }
+
+.token.dinosaur {
+  background-image: url("images/tokens/dinosaur.svg"); }
+
+.token.cat {
+  background-image: url("images/tokens/cat.svg"); }
+
+.token.ducky {
+  background-image: url("images/tokens/ducky.svg"); }
+
+.token.thimble {
+  background-image: url("images/tokens/thimble.svg"); }
 
 #player1token:before {
   background: yellow; }
@@ -467,7 +557,7 @@ button {
    side the borders end up on, there are slightly irregularities. Likely
    not even noticeable but it bothers me otherwise */
 .token[area="south"] {
-  margin-left: 1px; }
+  margin-left: 2px; }
 
 .token[area="north"] {
   margin-left: -3px; }

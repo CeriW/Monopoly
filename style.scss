@@ -197,11 +197,32 @@ button{
 
 /* TOKEN SELECTOR ----------------------------------------------------------- */
 
+.token-selector{
+    position: relative;
+}
+
 .availableTokenChoices{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     max-width: 200px;
+    background: #dbdbdb;
+    border-radius: 10px;
+    position: absolute;
+    top: calc(100% + 10px);
+    box-shadow: 0 0 10px rgba(black, 0.2);
+
+    &:before{
+        content: '';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 15px 15px 15px;
+        border-color: transparent transparent #dbdbdb transparent;
+        position: absolute;
+        top: -15px;
+        left: calc(50% - 15px);
+    }
 }
 
 .token-option,
@@ -210,7 +231,39 @@ button{
     height: 70px;
 }
 
-$tokens: 'dog', 'iron', 'thimble', 'car';
+.token-selector-chosen-indicator{
+    float: none;
+    margin: 0 auto;
+}
+
+.availableTokenChoices .token-option{
+    width: 40px;
+    height: 40px;
+    margin: 4px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background-size: 35px;
+}
+
+.availableTokenChoices .token-option:hover{
+    //border-color: #000;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(black, 0.2);
+}
+
+$tokens:
+    'dog',
+    'iron',
+    'thimble',
+    'car',
+    'battleship',
+    'hat',
+    'penguin',
+    'dinosaur',
+    'cat',
+    'ducky',
+    'thimble'
+;
 
 @each $token in $tokens{
     .token-option-#{$token},
@@ -219,8 +272,6 @@ $tokens: 'dog', 'iron', 'thimble', 'car';
         background-size: contain;
     }
 }
-
-
 
 /* BOARD --------------------------------------------------------------------- */
 
@@ -473,7 +524,8 @@ $columnsize: 80px;
     z-index: 2;
     background-size: 35px;
     background-repeat: no-repeat;
-    background-position: center bottom;
+    //background-position: center bottom;
+    background-position: 7px -2px;
 
     &:before{
         content: '';
@@ -524,7 +576,7 @@ $columnsize: 80px;
    side the borders end up on, there are slightly irregularities. Likely
    not even noticeable but it bothers me otherwise */
 .token[area="south"]{
-    margin-left: 1px;
+    margin-left: 2px;
 }
 
 .token[area="north"]{
@@ -534,6 +586,10 @@ $columnsize: 80px;
 .token[area="west"]{
     margin-left: -3px;
 }
+
+
+
+
 
 
 /* Popup ---------------------------------------------------------------------*/

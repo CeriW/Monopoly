@@ -2,7 +2,19 @@
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
-let availableTokens = ['dog', 'iron', 'thimble', 'car']
+let availableTokens = [
+    {name: 'dog',           available: true},
+    {name: 'iron',          available: true},
+    {name: 'thimble',       available: true},
+    {name: 'car',           available: true},
+    {name: 'battleship',    available: true},
+    {name: 'hat',           available: true},
+    {name: 'penguin',       available: true},
+    {name: 'dinosaur',      available: true},
+    {name: 'cat',           available: true},
+    {name: 'ducky',         available: true},
+    {name: 'thimble',       available: true},
+]
 
 
 let board = document.querySelector('#board')
@@ -167,7 +179,8 @@ let spaces =  [
 // An empty array for now. Will be filled with player info later.
 let players = []
 
-let maxNumberOfPlayers = 4
+// The maximum number of players allowed in the game.
+let maxNumberOfPlayers = 11
 
 let availableActions = {
     rollDice: true,
@@ -513,6 +526,12 @@ function intialisePlayerCreator(){
         }
     })
 
+    document.querySelector('#new-player-overlay').addEventListener('click', function(e){
+        if (!e.target.classList.contains('availableTokenChoices')){
+            console.log(e.target)
+        }
+    })
+
     createPlayerCreationPanel(1)
     createPlayerCreationPanel(2)
     let currentNumberOfPlayers = 2
@@ -540,27 +559,64 @@ function intialisePlayerCreator(){
         // Create a div at the top of the selector to display the chosen one
         let tokenSelectorChosenIndicator = document.createElement('div')
         tokenSelectorChosenIndicator.classList.add('token-selector-chosen-indicator')
-        tokenSelectorChosenIndicator.setAttribute('chosenToken', availableTokens[playerID - 1])
-        tokenSelectorChosenIndicator.classList.add('token-option', 'token-option-' + availableTokens[playerID - 1])
+        tokenSelectorChosenIndicator.setAttribute('chosenToken', availableTokens[playerID - 1].name)
+        tokenSelectorChosenIndicator.setAttribute('chosenTokenID', (playerID - 1))
+        tokenSelectorChosenIndicator.classList.add('token-option', 'token-option-' + availableTokens[playerID - 1].name)
+        availableTokens[playerID - 1].available = false
         tokenSelector.appendChild(tokenSelectorChosenIndicator)
 
-        let availableTokenChoices = document.createElement('div')
-        availableTokenChoices.classList.add('availableTokenChoices')
-        availableTokens.forEach(function(token){
-            let tokenOption = document.createElement('div')
-            tokenOption.classList.add('token-option', 'token-option-' + token)
-            tokenOption.setAttribute('token', token)
-            availableTokenChoices.appendChild(tokenOption)
+
+        // When the token indicator is clicked, generate a panel to allow users
+        // to choose their own token from a list.
+        tokenSelectorChosenIndicator.addEventListener('click', function(){
+
+            let availableTokenChoices = document.createElement('div')
+            availableTokenChoices.classList.add('availableTokenChoices')
+            
+            availableTokens.forEach(function(token){
+                if (token.available === true){
+                    let tokenOption = document.createElement('div')
+                    tokenOption.classList.add('token-option', 'token-option-' + token.name)
+                    tokenOption.setAttribute('token', token.name)
+                    tokenOption.setAttribute('id', availableTokens.indexOf(token))
+                    availableTokenChoices.appendChild(tokenOption)
+                }
+            })
+
+            tokenSelector.appendChild(availableTokenChoices)
+
+            // Add a function so that it stores which token has been chosen
+            availableTokenChoices.addEventListener('click', function(e){
+                let clickedOption = e.target
+
+                if (e.target.classList.contains('token-option')){
+
+                    // Set an attribute on the chosen indicator to show what token has been chosen.
+                    tokenSelectorChosenIndicator.setAttribute('chosentoken', clickedOption.getAttribute('token'))
+                    
+                    // Determind what the old chosen one was and reset its availability.                    
+                    let oldSelectedOption = availableTokenChoices.previousElementSibling.getAttribute('chosentokenid')
+                    availableTokens[oldSelectedOption].available = true
+                    tokenSelectorChosenIndicator.setAttribute('chosentokenid', clickedOption.getAttribute('id'))
+                    
+                    // Mark the token we have chosen as unavailable to other players.
+                    availableTokens[clickedOption.getAttribute('id')].available = false
+
+                    // Close the window
+                    availableTokenChoices.parentNode.removeChild(availableTokenChoices)
+                }
+
+            })
         })
 
-        availableTokenChoices.addEventListener('click', function(e){
-            let clickedOption = e.target.getAttribute('token')
-            console.log(clickedOption)
-            tokenSelectorChosenIndicator.setAttribute('chosentoken', clickedOption)
-        })
 
 
-        tokenSelector.appendChild(availableTokenChoices)
+
+
+
+
+
+        
 
         newPanel.appendChild(tokenSelector)
 
