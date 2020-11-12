@@ -27,7 +27,7 @@ An incomplete list of all the developments that need to be completed
 
 - Refactor all the things with player specific IDs to have player attributes instead.
 
--Sell houses/hotels
+- Sell houses/hotels
 
 - Selling hotel shenanigans if there aren't sufficient houses in the bank
 
@@ -55,3 +55,5 @@ STRETCH GOALS
 - House rules? (e.g. free parking)
 
 - Players to be able to pick their own colour
+
+- Tooltips on appropriate items

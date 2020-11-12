@@ -151,19 +151,23 @@ button {
   width: 70px;
   height: 70px; }
 
-.token-option-dog {
+.token-option-dog,
+.token-selector-chosen-indicator[chosentoken="dog"] {
   background: url("images/tokens/dog.svg") center no-repeat;
   background-size: contain; }
 
-.token-option-iron {
+.token-option-iron,
+.token-selector-chosen-indicator[chosentoken="iron"] {
   background: url("images/tokens/iron.svg") center no-repeat;
   background-size: contain; }
 
-.token-option-thimble {
+.token-option-thimble,
+.token-selector-chosen-indicator[chosentoken="thimble"] {
   background: url("images/tokens/thimble.svg") center no-repeat;
   background-size: contain; }
 
-.token-option-car {
+.token-option-car,
+.token-selector-chosen-indicator[chosentoken="car"] {
   background: url("images/tokens/car.svg") center no-repeat;
   background-size: contain; }
 

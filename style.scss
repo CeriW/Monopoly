@@ -213,7 +213,8 @@ button{
 $tokens: 'dog', 'iron', 'thimble', 'car';
 
 @each $token in $tokens{
-    .token-option-#{$token}{
+    .token-option-#{$token},
+    .token-selector-chosen-indicator[chosentoken="#{$token}"]{
         background: url('images/tokens/#{$token}.svg') center no-repeat;
         background-size: contain;
     }
