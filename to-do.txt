@@ -50,8 +50,6 @@ An incomplete list of all the developments that need to be completed
 
 STRETCH GOALS
 
-- Set cookies so that if you refresh the page your game isn't lost.
-
 - Add a Monopoly rulebook
 
 - House rules? (e.g. free parking)
