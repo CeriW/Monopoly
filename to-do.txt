@@ -57,3 +57,5 @@ STRETCH GOALS
 - Players to be able to pick their own colour
 
 - Tooltips on appropriate items
+
+- More tokens https://monopoly.fandom.com/wiki/Tokens

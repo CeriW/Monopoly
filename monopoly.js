@@ -180,7 +180,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let maxNumberOfPlayers = 11
+let maxNumberOfPlayers = 4
 
 let availableActions = {
     rollDice: true,
@@ -526,10 +526,19 @@ function intialisePlayerCreator(){
         }
     })
 
+    
+
     document.querySelector('#new-player-overlay').addEventListener('click', function(e){
-        if (!e.target.classList.contains('availableTokenChoices')){
-            console.log(e.target)
+
+        let condition = e.target.classList.contains('token-option')
+        let existingPanel = document.querySelector('.available-token-choices')
+
+        if (!condition && existingPanel){
+            existingPanel.parentNode.removeChild(existingPanel)
         }
+
+        console.log(e.target)
+        console.log(e.target.classList.contains('token-option'))
     })
 
     createPlayerCreationPanel(1)
@@ -546,11 +555,6 @@ function intialisePlayerCreator(){
         title.textContent = 'PLAYER ' + playerID
         newPanel.appendChild(title)
 
-        // Create a name input
-        let name = document.createElement('input')
-        name.classList.add('player-name-input')
-        name.setAttribute('placeholder', 'player name')
-        newPanel.appendChild(name)
 
         // Create a token selector
         let tokenSelector = document.createElement('div')
@@ -570,8 +574,14 @@ function intialisePlayerCreator(){
         // to choose their own token from a list.
         tokenSelectorChosenIndicator.addEventListener('click', function(){
 
+            let alreadyDisplayingTokenChoicesPanel = document.querySelector('.available-token-choices')
+
+            if (alreadyDisplayingTokenChoicesPanel){
+                alreadyDisplayingTokenChoicesPanel.parentNode.removeChild(alreadyDisplayingTokenChoicesPanel)
+            }
+
             let availableTokenChoices = document.createElement('div')
-            availableTokenChoices.classList.add('availableTokenChoices')
+            availableTokenChoices.classList.add('available-token-choices')
             
             availableTokens.forEach(function(token){
                 if (token.available === true){
@@ -607,20 +617,21 @@ function intialisePlayerCreator(){
                 }
 
             })
-        })
+        })        
 
-
-
-
-
-
-
-
-        
-
+        // Add the token selector to the new player panel
         newPanel.appendChild(tokenSelector)
 
-        // Insert it before the add player button
+
+        // Create a name input
+        let name = document.createElement('input')
+        name.classList.add('player-name-input')
+        name.setAttribute('placeholder', 'player name')
+        newPanel.appendChild(name)
+
+
+
+        // Insert this new player panel before the add player button
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
 
@@ -1042,7 +1053,7 @@ function rollDice(){
         case 1:
             diceDoubles.innerText = "1st double"
             diceContainer.className ="double1"
-            addToFeed('Player ' + players[turn-1].name + ' rolled doubles', 'doubles')
+            addToFeed(players[turn-1].name + ' rolled doubles', 'doubles')
             break
         case 2:
             diceDoubles.innerText = "2nd double"
