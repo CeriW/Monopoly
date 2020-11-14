@@ -137,7 +137,7 @@ let spaces =  [
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardposition: 'south'},
-    {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardposition: 'south', rent:[2,4,10,30,90,160,250], owner: null},
+    {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardposition: 'south', rent:[25,50,100,200], owner: null},
     {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'south'},
     {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
@@ -148,7 +148,7 @@ let spaces =  [
     {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
-    {name: 'Marylebone Station',    type: 'station',            price: 200,     group: 'train-station',boardposition: 'west', rent:[2,4,10,30,90,160,250], owner: null},
+    {name: 'Marylebone Station',    type: 'station',            price: 200,     group: 'train-station',boardposition: 'west', rent:[25,50,100,200],        owner: null},
     {name: 'Bow Street',            type: 'property',           price: 180,     group: 'orange',       boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Marlborough Street',    type: 'property',           price: 180,     group: 'orange',       boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
@@ -159,7 +159,7 @@ let spaces =  [
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'north'},
     {name: 'Fleet Street',          type: 'property',           price: 220,     group: 'red',          boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
-    {name: 'Fenchurch St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'north', rent:[2,4,10,30,90,160,250], owner: null},
+    {name: 'Fenchurch St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'north', rent:[25,50,100,200],        owner: null},
     {name: 'Leicester Square',      type: 'property',           price: 220,     group: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Coventry Street',       type: 'property',           price: 260,     group: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
@@ -170,7 +170,7 @@ let spaces =  [
     {name: 'Oxford Street',         type: 'property',           price: 300,     group: 'green',        boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'east'},
     {name: 'Bond Street',           type: 'property',           price: 320,     group: 'green',        boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
-    {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
+    {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'east', rent:[25,50,100,200],        houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'east'},
     {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardposition: 'east', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardposition: 'east'},
@@ -452,10 +452,12 @@ function addTestingEvents(){
     })
     
     let fakeDiceRollInput = document.querySelector('#fake-dice-roll-total')
-
-    fakeDiceRollInput.addEventListener('change', function(){
+    let fakeDiceRollButton = document.querySelector('#fake-dice-roll-total-button')
+    fakeDiceRollButton.addEventListener('click', function(){
         fakeRollDice(fakeDiceRollInput.value)
     })
+
+    
 
     let availableHousesInput = document.querySelector('#available-houses-test')
     availableHousesInput.addEventListener('change', function(){
@@ -1576,24 +1578,24 @@ function landOnProperty(position){
     if (owner && owner.id !== currentPlayer.id){
         // Rent is due.
 
-        console.log(checkColourSet(spaces[position].group, owner))
         // Initialise a variable to store the amount of rent owed.
         let rentAmount = 0
 
         // Check whether the owner of the space owns the entire colour group.
         // If they do, we need to check for houses/hotels.
         // If not, just charge the base rent.
-        if (checkColourSet(spaces[position].group, owner)){
-            let numberOfHouses = spaces[position].houses
-        
-            // The second (index 1) entry in the rent array is the rent with
-            // a full colour set but no houses, hence the + 1 to get
-            // the correct index.
-            rentAmount = spaces[position].rent[numberOfHouses + 1]
-        } else{
-            rentAmount = spaces[position].rent[0]
-        }
 
+        switch (spaces[position].type){
+            case 'property':
+                standardPropertyRent()
+                break
+            case 'utility':
+                utilityRent()
+                break
+            case 'station':
+                stationRent()
+        }
+        
         // Give/take the money between players as appropriate.
         players[owner - 1].money += rentAmount
         currentPlayer.money -= rentAmount
@@ -1602,6 +1604,63 @@ function landOnProperty(position){
         updatePlayerDetails()
 
 
+        // Rent for standard properties which may have houses/hotels
+        function standardPropertyRent(){
+            if (checkColourSet(spaces[position].group, owner)){
+                let numberOfHouses = spaces[position].houses
+            
+                // The second (index 1) entry in the rent array is the rent with
+                // a full colour set but no houses, hence the + 1 to get
+                // the correct index.
+                rentAmount = spaces[position].rent[numberOfHouses + 1]
+            } else{
+                rentAmount = spaces[position].rent[0]
+            }
+        }
+
+        function utilityRent(){
+            let diceRoll = parseInt(document.querySelector('#dice-total').textContent)
+            console.log(diceRoll)
+
+            if ((checkColourSet(spaces[position].group, owner))){
+                rentAmount = diceRoll * 10
+            } else{
+                rentAmount = diceRoll * 4
+            }
+        }
+
+        function stationRent(){
+
+            let stationSet = []
+        
+            // Get an array of all of the properties in that colour set.
+            for (i = 0; i < spaces.length; i++){
+                let property = spaces[i]
+                if (property.type === 'station'){
+                    stationSet.push(property)
+                }
+            }
+        
+            // Go back through the array to get a list of the owners of all these properties
+            let owners = []
+            stationSet.forEach(function(property){
+                if (property.owner){
+                    owners.push(property.owner.id)
+                }
+            })
+        
+            // Check whether all of the owners are the same as the specified player
+            stationSet = owners.every(function(stationOwner){
+                //return (stationOwner === owner)
+            })
+
+            console.log(stationSet)
+
+            let rentIndex = owners.length - 1
+            console.log(rentIndex)
+            rentAmount = spaces[position].rent[rentIndex]
+            
+        }
 
 
     } else{
