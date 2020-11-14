@@ -726,11 +726,25 @@ body:not(.popup-open) #popup {
     background-repeat: no-repeat;
     grid-row: 1 / span 2;
     position: relative;
-    border-radius: 50%;
     height: 50px;
     background-size: 40px;
     top: 50%;
-    margin-top: -25px; }
+    margin-top: -25px;
+    position: relative; }
+    .player-summary-header .player-token-icon:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: url("images/player-summary-jail-overlay.svg") center no-repeat;
+      background-size: contain;
+      background-position: 0 -50px;
+      transition: 0.4s; }
+
+#player-summary > div[inJail="true"] .player-token-icon:after {
+  background-position: 0 0; }
 
 .player-token-icon[token="dog"] {
   background-image: url("images/tokens/dog.svg"); }

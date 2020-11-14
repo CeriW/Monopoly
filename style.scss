@@ -801,13 +801,29 @@ $jailAnimationLength: 1.5;
         grid-row: 1 / span 2;
         position: relative;
         //background-color: #fff;
-        border-radius: 50%;
         height: 50px;
         background-size: 40px;
         top: 50%;
         margin-top: -25px;
-    }
+        position: relative;
 
+        &:after{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: url('images/player-summary-jail-overlay.svg') center no-repeat;
+            background-size: contain;
+            background-position: 0 -50px;
+            transition: 0.4s;
+        }
+    }
+}
+
+#player-summary > div[inJail="true"] .player-token-icon:after{
+    background-position: 0 0;
 }
 
 @each $token in $tokens{

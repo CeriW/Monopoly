@@ -327,7 +327,13 @@ function updatePlayerDetails(){
 
         updateNode.innerHTML = currencySymbolSpan + player.money
 
-
+        // JAIL
+        updateNode = document.querySelector('#player' + player.id + 'summary')
+        if (player.inJail !== 0){
+            updateNode.setAttribute('inJail', true)
+        } else{
+            updateNode.setAttribute('inJail', false)
+        }
 
         // PROPERTIES       
         updateNode = document.querySelector('#player-' + player.id + '-properties')
