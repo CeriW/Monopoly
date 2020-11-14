@@ -402,7 +402,8 @@ button {
   background: #3e64ad; }
 
 .property-price {
-  font-size: 14px; }
+  font-size: 14px;
+  pointer-events: none; }
 
 /* Special property ----------------------------------------------------------*/
 .community-chest {
@@ -486,7 +487,8 @@ button {
   z-index: 2;
   background-size: 35px;
   background-repeat: no-repeat;
-  background-position: 7px -2px; }
+  background-position: 7px -2px;
+  pointer-events: none; }
   .token:before {
     content: '';
     width: 100%;

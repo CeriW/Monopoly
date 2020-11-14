@@ -260,6 +260,16 @@ function generateBoard(){
 
         board.querySelector('#' + space.boardposition).appendChild(newSpace)
     })
+
+    board.addEventListener('click', function(e){
+        let target = e.target
+        if (target.classList.contains('property') || target.classList.contains('utility') || target.classList.contains('station')){
+            displayPropertyDetails(e.target.getAttribute('position'))
+               
+        }
+    })
+
+
 }
 
 function addEvents(){
@@ -1391,14 +1401,18 @@ function fullPortfolioView(e){
 function displayPropertyOptions(number){
     let optionsPanel = document.createElement('div')
 
+
+    let propertyOwner = spaces[number].owner
     // If this property is unowned, display a button to buy it
-    if (spaces[number].owner === null){
-        let buyButton = document.createElement('button')
-        buyButton.innerText = 'Buy this property'
-        buyButton.addEventListener('click', function(){
-            buyProperty(number, players[turn - 1])
-        })
-        optionsPanel.appendChild(buyButton)
+    if (!propertyOwner){
+        if (players[turn - 1].position === number){
+            let buyButton = document.createElement('button')
+            buyButton.innerText = 'Buy this property'
+            buyButton.addEventListener('click', function(){
+                buyProperty(number, players[turn - 1])
+            })
+            optionsPanel.appendChild(buyButton)
+        }
     } 
 
     // If the player owns this property and it is their turn, display options to build/sell houses

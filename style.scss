@@ -447,6 +447,11 @@ $columnsize: 80px;
 
 .property-price{
     font-size: 14px;
+
+    // TODO - removing pointer events on this lets clicks get through to the
+    // space underneath which can then trigger a click event. There is
+    // probably a better way of doing this though.
+    pointer-events: none;
 }
 
 /* Special property ----------------------------------------------------------*/
@@ -547,6 +552,11 @@ $columnsize: 80px;
     background-repeat: no-repeat;
     //background-position: center bottom;
     background-position: 7px -2px;
+    
+    // TODO - removing pointer events on this lets clicks get through to the
+    // space underneath which can then trigger a click event. There is
+    // probably a better way of doing this though.
+    pointer-events: none;
 
     &:before{
         content: '';
