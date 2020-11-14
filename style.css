@@ -1033,6 +1033,9 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   top: 20px;
   right: 68px; }
 
+.rent-table tr:last-child .property-overview-house-icon {
+  color: transparent; }
+
 /* Building houses on property menu  -----------------------------------------*/
 .build-house-button.disabled-button,
 body[build-house="false"] .build-house-button {

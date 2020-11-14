@@ -28,13 +28,7 @@ An incomplete list of all the developments that need to be completed
 
 - Can't build houses/hotels if there aren't any in the bank.
 
-- Update utilities and stations so you can't build houses on them
-
 - Appropriate rent for utilities and stations
-
-- Display houses on the board for properties that have them
-
-- Remove the number 5 on the hotel rent in the property overview window
 
 - Make the tokens reposition when the window is resized.
 

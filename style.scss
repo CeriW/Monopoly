@@ -1108,6 +1108,11 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     right: 68px;
 }
 
+.rent-table tr:last-child .property-overview-house-icon{
+    color: transparent;
+}
+  
+
 /* Building houses on property menu  -----------------------------------------*/
 
 .build-house-button.disabled-button,

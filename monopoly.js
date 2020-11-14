@@ -1352,12 +1352,13 @@ function displayPropertyDetails(number){
         
     // Rent table
     htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
-    htmlOutput += '<table style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
+    htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
     htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
     htmlOutput += '<tr><td>Rent with group set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
     for (i = 2; i <=6; i++){
         htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
     }
+    
     htmlOutput += '</table>'
 
 
