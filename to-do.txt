@@ -38,8 +38,6 @@ An incomplete list of all the developments that need to be completed
 
 - Make the tokens reposition when the window is resized.
 
-- When you click a property on the board, bring up the window with its details.
-
 - Update spaces array with actual rent values
 
 - Check Chance/Community Chest cards - I'm sure some of them are wrong.
@@ -62,3 +60,7 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - Tooltips on appropriate items
 
 - More tokens https://monopoly.fandom.com/wiki/Tokens
+
+- Multiple international/theme boards
+
+- JSON parsing for space/cards

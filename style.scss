@@ -390,7 +390,7 @@ $columnsize: 80px;
 
 .row{
     display: flex;
-    overflow: hidden;
+    //overflow: hidden;
 }
 
 .row > div{
@@ -453,6 +453,47 @@ $columnsize: 80px;
     // probably a better way of doing this though.
     pointer-events: none;
 }
+
+.row > div:not(.property) .property-house-display{
+    display: none;
+}
+
+.property-house-display{
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    height: 25px;
+    z-index: 10;
+
+
+    & > div{
+        background: url('images/house-on-property.svg') center no-repeat;
+        background-size: contain;
+        height: 20px;
+        width: 20px;
+        transform: scale(0);
+        transition: 0.3s;
+    }
+
+    & > div:last-child{
+        position: absolute;
+        top: 0;
+        left: calc(50% - 10px);
+        background-image: url('images/hotel-on-property.svg');
+    }
+}
+
+
+.row > .property[houses="1"] .property-house-display > div:nth-child(-n+1){transform: scale(1);}
+.row > .property[houses="2"] .property-house-display > div:nth-child(-n+2){transform: scale(1);}
+.row > .property[houses="3"] .property-house-display > div:nth-child(-n+3){transform: scale(1);}
+.row > .property[houses="4"] .property-house-display > div:nth-child(-n+4){transform: scale(1);}
+
+.row > .property[houses="5"] .property-house-display > div:nth-child(-n+4){transform: scale(0);}
+.row > .property[houses="5"] .property-house-display > div:nth-child(n+5){transform: scale(1);}
+
 
 /* Special property ----------------------------------------------------------*/
 

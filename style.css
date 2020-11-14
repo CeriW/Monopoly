@@ -343,8 +343,7 @@ button {
   flex-shrink: unset; }
 
 .row {
-  display: flex;
-  overflow: hidden; }
+  display: flex; }
 
 .row > div {
   flex-grow: 1;
@@ -404,6 +403,48 @@ button {
 .property-price {
   font-size: 14px;
   pointer-events: none; }
+
+.row > div:not(.property) .property-house-display {
+  display: none; }
+
+.property-house-display {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 25px;
+  z-index: 10; }
+  .property-house-display > div {
+    background: url("images/house-on-property.svg") center no-repeat;
+    background-size: contain;
+    height: 20px;
+    width: 20px;
+    transform: scale(0);
+    transition: 0.3s; }
+  .property-house-display > div:last-child {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 10px);
+    background-image: url("images/hotel-on-property.svg"); }
+
+.row > .property[houses="1"] .property-house-display > div:nth-child(-n+1) {
+  transform: scale(1); }
+
+.row > .property[houses="2"] .property-house-display > div:nth-child(-n+2) {
+  transform: scale(1); }
+
+.row > .property[houses="3"] .property-house-display > div:nth-child(-n+3) {
+  transform: scale(1); }
+
+.row > .property[houses="4"] .property-house-display > div:nth-child(-n+4) {
+  transform: scale(1); }
+
+.row > .property[houses="5"] .property-house-display > div:nth-child(-n+4) {
+  transform: scale(0); }
+
+.row > .property[houses="5"] .property-house-display > div:nth-child(n+5) {
+  transform: scale(1); }
 
 /* Special property ----------------------------------------------------------*/
 .community-chest {
