@@ -1246,7 +1246,7 @@ function rollDoublesForJail(){
         moveToken(roll1 + roll2)
         // Note - feed is updated in the GetOutOfJail function
     } else{
-        diceContainer.className = "failed-jail-roll"
+        //diceContainer.className = "failed-jail-roll"
         diceDoubles.innerText = "Failure! You have " + (3 - players[turn - 1].inJail + ' attempts remaining')
         availableActions.rollDice = false
         availableActions.endTurn = true
