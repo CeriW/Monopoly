@@ -1251,8 +1251,8 @@ function rollDoublesForJail(){
         availableActions.rollDice = false
         availableActions.endTurn = true
         availableActions.getOutOfJail = false
+        addToFeed(players[turn-1].name + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + ' attempts remaining.'), 'failed-jail-roll')
         players[turn - 1].inJail++
-        addToFeed(players[turn-1].name + ' attempted to roll doubles to get out of jail but failed. They have ' + (3 - players[turn - 1].inJail + 'attempts remaining.'), 'failed-jail-roll')
     }
 
     setAvailableActions()
