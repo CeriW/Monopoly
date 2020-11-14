@@ -1117,7 +1117,9 @@ body[build-house = "false"] .build-house-button{
     color: #000;
     position: relative;
     border: $border;
-    min-height: calc(100% - 175px);
+    box-sizing: border-box;
+    
+    //min-height: calc(100% - 175px);
 }
 
 #feed-title{
@@ -1133,6 +1135,7 @@ body[build-house = "false"] .build-house-button{
 #feed-content{
     max-height: calc(100% - 38px);
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 #feed-content > div{

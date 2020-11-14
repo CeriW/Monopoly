@@ -21,6 +21,7 @@ let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 let playerSummary = document.querySelector('#player-summary')
 let feed = document.querySelector('#feed-content')
+let bankContainer = document.querySelector('#bank')
 let bank = document.querySelector('#bank-content')
 let playerCreator = document.querySelector('#player-creator')
 
@@ -290,6 +291,8 @@ function addEvents(){
 
 function resizeBoard(){
     board.style.height = board.offsetWidth + 'px'
+
+    feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 }
@@ -1517,18 +1520,38 @@ function checkColourSet(colour, player){
 
 function landOnProperty(position){
 
-    let owner = checkPropertyOwner(position)
+    let owner = checkPropertyOwner(position) // The id of the owner
     let currentPlayer = players[turn - 1]
 
     if (owner && owner.id !== currentPlayer.id){
-        // Rent is due
+        // Rent is due.
 
-        // TODO - this will need to adjust to group sets/houses/hotels
-        let rentAmount = spaces[position].rent[0]
-        players[owner.id - 1].money += rentAmount
+        console.log(checkColourSet(spaces[position].group, owner))
+        // Initialise a variable to store the amount of rent owed.
+        let rentAmount = 0
+
+        // Check whether the owner of the space owns the entire colour group.
+        // If they do, we need to check for houses/hotels.
+        // If not, just charge the base rent.
+        if (checkColourSet(spaces[position].group, owner)){
+            let numberOfHouses = spaces[position].houses
+        
+            // The second (index 1) entry in the rent array is the rent with
+            // a full colour set but no houses, hence the + 1 to get
+            // the correct index.
+            rentAmount = spaces[position].rent[numberOfHouses + 1]
+        } else{
+            rentAmount = spaces[position].rent[0]
+        }
+
+        // Give/take the money between players as appropriate.
+        players[owner - 1].money += rentAmount
         currentPlayer.money -= rentAmount
-        addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + owner.name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
+
+        addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
         updatePlayerDetails()
+
+
 
 
     } else{
@@ -1542,7 +1565,7 @@ function checkPropertyOwner(position){
     let owner = spaces[position].owner
 
     if (owner){
-        return owner
+        return owner.id
     } else{
         return null
     }
