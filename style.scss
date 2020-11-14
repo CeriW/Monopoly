@@ -834,6 +834,10 @@ $jailAnimationLength: 1.5;
     & > div{
         padding: 10px 20px;
     }
+
+    div{
+        overflow: hidden;
+    }
 }
 
 .player-summary-header{
@@ -1134,10 +1138,10 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     }
 }
 
-/* Building houses on property menu  -----------------------------------------*/
+/* Property overview OLD -----------------------------------------------------*/
 
-.build-house-button.disabled-button,
-body[build-house = "false"] .build-house-button{
+//body[build-house = "false"] .build-house-button,
+.build-house-button.disabled-button{
     @include disabledButton();
 }
 
@@ -1152,6 +1156,29 @@ body[build-house = "false"] .build-house-button{
         background-size: contain;
     }
   }
+
+
+/* Property overview NEW -----------------------------------------------------*/
+
+.colour-set-overview{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    
+
+    .property-overview-color{
+        min-width: 170px;
+        font-size: 14px;
+    }
+
+    .property-overview table tr td:first-child{
+        min-width: 100px;
+    }
+
+    table{
+        font-size: 80%;
+    }
+}
 
 /* Left panel  ---------------------------------------------------------------*/
 

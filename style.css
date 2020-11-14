@@ -754,6 +754,8 @@ body:not(.popup-open) #popup {
     text-transform: uppercase; }
   #player-summary > div {
     padding: 10px 20px; }
+  #player-summary div {
+    overflow: hidden; }
 
 .player-summary-header {
   display: grid;
@@ -1050,9 +1052,8 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   .card-icon.card-icon-station {
     background-image: url("images/station.svg"); }
 
-/* Building houses on property menu  -----------------------------------------*/
-.build-house-button.disabled-button,
-body[build-house="false"] .build-house-button {
+/* Property overview OLD -----------------------------------------------------*/
+.build-house-button.disabled-button {
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
@@ -1083,6 +1084,19 @@ body[build-house="false"] .build-house-button {
 .house-visual-display[houses="5"] {
   background: url("images/house-visual-display-5.svg") center no-repeat;
   background-size: contain; }
+
+/* Property overview NEW -----------------------------------------------------*/
+.colour-set-overview {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap; }
+  .colour-set-overview .property-overview-color {
+    min-width: 170px;
+    font-size: 14px; }
+  .colour-set-overview .property-overview table tr td:first-child {
+    min-width: 100px; }
+  .colour-set-overview table {
+    font-size: 80%; }
 
 /* Left panel  ---------------------------------------------------------------*/
 #left-panel {

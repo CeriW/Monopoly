@@ -239,6 +239,8 @@ function generateBoard(){
 
     spaces.forEach(function(space){
 
+        space.position = positionNumber
+
         let newSpace = document.createElement('div')
         newSpace.setAttribute('id', space.name.replace(/\s+/g, '-').toLowerCase())
         newSpace.classList.add(space.type)
@@ -1338,6 +1340,7 @@ function increasePlayerTurn(){
 
 // PROPERTY FUNCTIONS --------------------------------------------------------//
 
+
 function displayPropertyDetails(number){
 
     let htmlOutput = '<div class="property-overview"'
@@ -1352,25 +1355,8 @@ function displayPropertyDetails(number){
 
     switch (spaces[number].type){
         case 'property':
-            // Rent table
-            htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
-            htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
-            htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
-            htmlOutput += '<tr><td>Rent with group set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
-            for (i = 2; i <=6; i++){
-                htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
-            }
 
-            htmlOutput += '</table>'
-
-            // Houses table
-            htmlOutput += '<table>'
-            htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
-            htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
-            htmlOutput += '</table>'
-
-
-            htmlOutput += '</div>'
+            htmlOutput += generateRentTable(number)
         
             break
 
@@ -1415,6 +1401,34 @@ function displayPropertyDetails(number){
     openPopup(htmlOutput)
 
     displayPropertyOptions(number)
+}
+
+
+function generateRentTable(number){
+
+    let htmlOutput = ''
+
+    // Rent table
+    htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><div class="property-overview-title">' + spaces[number].name + '</div></div>'
+    htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
+    htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
+    htmlOutput += '<tr><td>Rent with colour set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
+    for (i = 2; i <=6; i++){
+        htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
+    }
+
+    htmlOutput += '</table>'
+
+    // Houses table
+    htmlOutput += '<table>'
+    htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '</table>'
+
+
+    htmlOutput += '</div>'
+
+    return htmlOutput
 }
 
 function portfolioItemPreview(e){
@@ -1481,12 +1495,29 @@ function displayPropertyOptions(number){
     // If the player owns this property and it is their turn, display options to build/sell houses
     else if (spaces[number].owner.id == turn){
         
-        optionsPanel.textContent = 'You own this property!'
+        optionsPanel.innerHTML = 'You own this property!<br>'
 
         // Display house building options if this is a standard property (not station or utility)
         if (spaces[number].type === 'property'){
-            availableActions.buildHouse = (availableHouses > 0) ? true : false
 
+            let colour = spaces[number].group
+
+            // If the owner of the property owns the full colour set, bring up the build house window.
+            if (checkColourSet(colour, players[turn -  1].id)){
+                availableActions.buildHouse = true
+                let colourSetButton = document.createElement('button')
+                colourSetButton.classList.add('colour-set-button')
+                colourSetButton.innerText = 'Manage colour set'
+                colourSetButton.addEventListener('click', function(){
+                    displayBuildHousePanel(colour)
+                })
+
+                optionsPanel.appendChild(colourSetButton)
+            }
+
+            //availableActions.buildHouse = (availableHouses > 0) ? true : false
+            
+            /*
             let housePanel = document.createElement('div')
             optionsPanel.appendChild(housePanel)
     
@@ -1514,9 +1545,8 @@ function displayPropertyOptions(number){
     
             // Add all this stuff to the options panel       
             optionsPanel.appendChild(housePanel)
+            */
         }
-        
-        
         
     }
     
@@ -1527,6 +1557,82 @@ function displayPropertyOptions(number){
     }
 
     popupMessage.appendChild(optionsPanel)
+}
+
+function displayBuildHousePanel(colour){
+    console.log('build house?')
+
+
+    // Get an array of all of the properties in that colour set.
+    let colourSet = []
+    for (i = 0; i < spaces.length; i++){
+        let property = spaces[i]
+        if (property.group === colour){
+            colourSet.push(property)
+        }
+    }
+
+    console.log(colourSet)
+
+    let houseBuildPanel = document.createElement('div')
+
+    // Create a div to show an overview of the properties in this colour set
+    let colourSetOverview = document.createElement('div')
+    colourSetOverview.classList.add('colour-set-overview')
+    houseBuildPanel.appendChild(colourSetOverview)
+
+    colourSet.forEach(function(property){
+
+        // Generate details of the property (rent etc) for reference
+        let setItemDetails = document.createElement('div')
+        setItemDetails.classList.add('property-overview')
+        setItemDetails.innerHTML += generateRentTable(property.position)
+        colourSetOverview.appendChild(setItemDetails)
+
+
+        // Generate house building buttons
+        let housePanel = document.createElement('div')
+        housePanel.classList.add('house-building-panel')
+        housePanel.setAttribute('position', property.position)
+        setItemDetails.appendChild(housePanel)
+
+        // Create a nice little display to show how many houses are on this property
+        let houseVisualDisplay = document.createElement('div')
+        houseVisualDisplay.classList.add('house-visual-display')
+        houseVisualDisplay.setAttribute('houses', spaces[property.position].houses)
+        housePanel.appendChild(houseVisualDisplay)
+
+        // Create a button to build houses
+        let buildHouseBtn = document.createElement('button')
+        buildHouseBtn.classList.add('build-house-button')
+        buildHouseBtn.innerText = 'Build house'
+        if (spaces[property.position].houses === 5){
+            buildHouseBtn.classList.add('disabled-button')
+        }
+        buildHouseBtn.addEventListener('click', function(){
+            buildHouse(property.position)
+        })
+
+        // If this property already has a hotel, or the bank doesn't have any
+        // houses, disable the build house button
+        if (spaces[property.position].houses > 4 || availableHouses < 1){
+            //availableActions.buildHouse = false
+        }
+
+        housePanel.appendChild(buildHouseBtn)
+
+        // Add all this stuff to the options panel       
+        setItemDetails.appendChild(housePanel)
+
+
+    })
+
+    // Because we're involving event listeners that can't just be copy and
+    // pasted from the HTML, we'll open a blank popup then append the nodes.
+    openPopup('')
+    popupMessage.appendChild(houseBuildPanel)
+
+
 }
 
 function buildHouse(number){
@@ -1540,13 +1646,14 @@ function buildHouse(number){
     } else if (currentHousesOnProperty === 4){
         availableHouses += 4
         availableHotels--
-        document.querySelector('.build-house-button').classList.add('disabled-button')
+        document.querySelector('.house-building-panel[position="' + number + '"] .build-house-button').classList.add('disabled-button')
     }
 
     players[turn - 1].money -= spaces[number].houseCost
     updatePlayerDetails()
 
-    document.querySelector('.house-visual-display').setAttribute('houses', spaces[number].houses)
+    
+    document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
 
     updateHouseDisplay(number)
 
@@ -1574,6 +1681,8 @@ function auctionProperty(){
 
 // COLOUR SET FUNCTIONS ------------------------------------------------------//
 
+// colour - the group of the property
+// player - id of the player you are checking ownership of
 function checkColourSet(colour, player){
 
     let fullSetOwned = false
