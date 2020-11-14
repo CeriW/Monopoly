@@ -1440,47 +1440,48 @@ function displayPropertyOptions(number){
     else if (spaces[number].owner.id == turn){
         
         optionsPanel.textContent = 'You own this property!'
-        
-        availableActions.buildHouse = (availableHouses > 0) ? true : false
 
-        let housePanel = document.createElement('div')
-        optionsPanel.appendChild(housePanel)
+        // Display house building options if this is a standard property (not station or utility)
+        if (spaces[number].type === 'property'){
+            availableActions.buildHouse = (availableHouses > 0) ? true : false
 
-        // Create a nice little display to show how many houses are on this property
-        let houseVisualDisplay = document.createElement('div')
-        houseVisualDisplay.classList.add('house-visual-display')
-        houseVisualDisplay.setAttribute('houses', spaces[number].houses)
-        housePanel.appendChild(houseVisualDisplay)
-
-        // Create a button to build houses
-        let buildHouseButton = document.createElement('button')
-        buildHouseButton.classList.add('build-house-button')
-        buildHouseButton.innerText = 'Build house'
-        buildHouseButton.addEventListener('click', function(){
-            buildHouse(number)
-        })
-
-        // If this property already has a hotel, or the bank doesn't have any
-        // houses, disable the build house button
-        if (spaces[number].houses > 4 || availableHouses < 1){
-            availableActions.buildHouse = false
+            let housePanel = document.createElement('div')
+            optionsPanel.appendChild(housePanel)
+    
+            // Create a nice little display to show how many houses are on this property
+            let houseVisualDisplay = document.createElement('div')
+            houseVisualDisplay.classList.add('house-visual-display')
+            houseVisualDisplay.setAttribute('houses', spaces[number].houses)
+            housePanel.appendChild(houseVisualDisplay)
+    
+            // Create a button to build houses
+            let buildHouseButton = document.createElement('button')
+            buildHouseButton.classList.add('build-house-button')
+            buildHouseButton.innerText = 'Build house'
+            buildHouseButton.addEventListener('click', function(){
+                buildHouse(number)
+            })
+    
+            // If this property already has a hotel, or the bank doesn't have any
+            // houses, disable the build house button
+            if (spaces[number].houses > 4 || availableHouses < 1){
+                availableActions.buildHouse = false
+            }
+    
+            housePanel.appendChild(buildHouseButton)
+    
+            // Add all this stuff to the options panel       
+            optionsPanel.appendChild(housePanel)
         }
-
         
-
-
-        housePanel.appendChild(buildHouseButton)
-
         
-        // Add all this stuff to the options panel       
-        optionsPanel.appendChild(housePanel)
         
     }
     
     // If this property is unowned, or it is not currently the owner's turn,
     // display a message
     else{
-        optionsPanel.innerHTML = 'This property is owned by ' + players[turn - 1].name
+        optionsPanel.innerHTML = 'This property is owned by ' + spaces[number].owner.name
     }
 
     popupMessage.appendChild(optionsPanel)
