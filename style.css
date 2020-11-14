@@ -1036,6 +1036,20 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 .rent-table tr:last-child .property-overview-house-icon {
   color: transparent; }
 
+/* Utility and station property overviews --------- */
+.card-icon {
+  height: 110px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 20px; }
+  .card-icon.card-icon-Electric-Company {
+    background-image: url("images/electric-company.svg"); }
+  .card-icon.card-icon-Water-Works {
+    background-image: url("images/water-works.svg"); }
+  .card-icon.card-icon-station {
+    background-image: url("images/station.svg"); }
+
 /* Building houses on property menu  -----------------------------------------*/
 .build-house-button.disabled-button,
 body[build-house="false"] .build-house-button {

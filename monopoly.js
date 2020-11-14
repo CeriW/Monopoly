@@ -145,7 +145,7 @@ let spaces =  [
 
     {name: 'Jail',                  type: 'special',            price: null,    group: 'corner',       boardposition: 'west'},
     {name: 'Pall Mall',             type: 'property',           price: 140,     group: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
-    {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
+    {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardposition: 'west', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null,},
     {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardposition: 'west', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Marylebone Station',    type: 'station',            price: 200,     group: 'train-station',boardposition: 'west', rent:[25,50,100,200],        owner: null},
@@ -161,7 +161,7 @@ let spaces =  [
     {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Fenchurch St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'north', rent:[25,50,100,200],        owner: null},
     {name: 'Leicester Square',      type: 'property',           price: 220,     group: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
-    {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
+    {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardposition: 'north', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null},
     {name: 'Coventry Street',       type: 'property',           price: 260,     group: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     {name: 'Piccadilly',            type: 'property',           price: 280,     group: 'yellow',       boardposition: 'north', rent:[2,4,10,30,90,160,250], houseCost: 50, hotelCost: 250, owner: null, houses: 0},
     
@@ -1350,28 +1350,67 @@ function displayPropertyDetails(number){
         htmlOutput += '>'
     }
 
+    switch (spaces[number].type){
+        case 'property':
+            // Rent table
+            htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
+            htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
+            htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
+            htmlOutput += '<tr><td>Rent with group set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
+            for (i = 2; i <=6; i++){
+                htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
+            }
 
+            htmlOutput += '</table>'
+
+            // Houses table
+            htmlOutput += '<table>'
+            htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+            htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+            htmlOutput += '</table>'
+
+
+            htmlOutput += '</div>'
         
-    // Rent table
-    htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><span class="property-overview-title">' + spaces[number].name + '</span></div>'
-    htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
-    htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
-    htmlOutput += '<tr><td>Rent with group set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
-    for (i = 2; i <=6; i++){
-        htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
-    }
+            break
+
+        case 'utility':
+            let className = spaces[number].name
+            className = className.replace(/\s/g, '-')
+            htmlOutput += '<div class="card-icon card-icon-' + className + '"></div>'
+            htmlOutput += '<div class="property-overview-title">' + spaces[number].name + '</div>'
+
+            spaces[number].rent.forEach(function(content){
+                htmlOutput += '<div style="max-width: 250px; float: none; margin: 0 auto;"><br>' + content + '</div>'
+            })
+
+            htmlOutput += '<br>'
+
+            break
+
+        case 'station':
+
+            htmlOutput += '<div class="card-icon card-icon-station"></div>'
+            htmlOutput += '<div class="property-overview-title">' + spaces[number].name + '</div>'
+            htmlOutput += '<br>'
+
+            // Rent table
+            htmlOutput += '<table class="property-overview-table">'
+            htmlOutput += '<tr><td>RENT</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td></tr>'
+
+            for (i = 2; i <=4; i++){
+                htmlOutput += '<tr><td>If ' + i + ' stations are owned</td><td>' + currencySymbolSpan + spaces[number].rent[i - 1] + '</td></tr>'
+            }
+
+            htmlOutput += '</table>'
+            htmlOutput += '<br>'
+
+
+            break
+        
+        }
+        
     
-    htmlOutput += '</table>'
-
-
-    // Houses table
-    htmlOutput += '<table>'
-    htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
-    htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
-    htmlOutput += '</table>'
-    
-
-    htmlOutput += '</div>'
 
     openPopup(htmlOutput)
 

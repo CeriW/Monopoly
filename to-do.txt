@@ -28,8 +28,6 @@ An incomplete list of all the developments that need to be completed
 
 - Can't build houses/hotels if there aren't any in the bank.
 
-- Appropriate rent for utilities and stations
-
 - Make the tokens reposition when the window is resized.
 
 - Update spaces array with actual rent values
