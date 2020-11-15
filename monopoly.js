@@ -470,13 +470,13 @@ function addTestingEvents(){
 
     let availableHousesInput = document.querySelector('#available-houses-test')
     availableHousesInput.addEventListener('change', function(){
-        availableHouses = availableHousesInput.value
+        availableHouses = parseInt(availableHousesInput.value)
         updateBank()
     })
 
     let availableHotelsInput = document.querySelector('#available-hotels-test')
     availableHotelsInput.addEventListener('change', function(){
-        availableHotels = availableHotelsInput.value
+        availableHotels = parseInt(availableHotelsInput.value)
         updateBank()
     })
 }
@@ -1669,6 +1669,10 @@ function displayBuildHousePanel(colour){
                 ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button, .house-visual-display:not([houses="0"]) + .button-panel .sell-house-button'), function(button){
                     button.classList.remove('disabled-button')
                 })
+
+                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button'), function(button){
+                    button.textContent = 'Build house'
+                })
             }
 
         // If all the properties DON'T have the same number of houses...
@@ -1749,7 +1753,54 @@ function displayBuildHousePanel(colour){
 
         // If there is a hotel
         if (currentHousesOnProperty === 5){
-            console.log('sell hotel')
+
+            // When hotels are sold, they are exchanged for 4 houses...
+            if (availableHouses >= 4){
+                availableHotels++
+                availableHouses -= 4
+                spaces[number].houses--
+                updateHouseDisplay(number)
+            }
+
+            // but if there aren't 4 houses left in the bank...
+            else{
+
+                // The player must sell their hotels wholesale and return all
+                // properties in that group to 0 houses. This is known as
+                // the hotel trap.
+                let wholeColourSet = getColourSet(spaces[number].group)
+                console.log(wholeColourSet)
+
+                wholeColourSet.forEach(function(property){
+                    let propertyNumber = property.position
+
+                    // Reset the number of houses to 0
+                    spaces[propertyNumber].houses = 0
+
+                    // Refund the player the cost of 5 houses, halved
+                    players[turn - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+
+                    // Return the hotel and houses to the bank
+                    availableHotels++
+                    availableHouses += 4
+
+                    updateHouseDisplay(propertyNumber)
+                    toggleHouseBuildButtons()
+                })
+
+
+                // TODO - While not in the official rulebook, Phil Orbanes,
+                // Chief Judge at US & World Championships allows ONLY IN
+                // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
+                // BANKRUPTCY that players may sell houses down to the stage
+                // where the bank has enough to cover it.
+                // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
+
+                
+
+            }
+
+
         } else{
             availableHouses++
             spaces[number].houses--
@@ -1759,7 +1810,6 @@ function displayBuildHousePanel(colour){
         players[turn - 1].money -= (spaces[number].houseCost / 2)
         updatePlayerDetails()
 
-        updateHouseDisplay(number)
         toggleHouseBuildButtons()
         
     }
@@ -1798,14 +1848,11 @@ function auctionProperty(){
 
 // COLOUR SET FUNCTIONS ------------------------------------------------------//
 
-// colour - the group of the property
-// player - id of the player you are checking ownership of
-function checkColourSet(colour, player){
+// Get an array of all of the properties in that colour set.
+function getColourSet(colour){
 
-    let fullSetOwned = false
     let colourSet = []
 
-    // Get an array of all of the properties in that colour set.
     for (i = 0; i < spaces.length; i++){
         let property = spaces[i]
         if (property.group === colour){
@@ -1813,7 +1860,18 @@ function checkColourSet(colour, player){
         }
     }
 
-    // Go back through the array to get a list of the owners of all these properties
+    return colourSet
+}
+
+// colour - the group of the property
+// player - id of the player you are checking ownership of
+function checkColourSet(colour, player){
+
+    let fullSetOwned = false
+    let colourSet = getColourSet(colour)
+
+
+    // Go through the colour set to get a list of the owners of all these properties
     let owners = []
     colourSet.forEach(function(property){
         if (property.owner){
@@ -1885,7 +1943,6 @@ function landOnProperty(position){
 
         function utilityRent(){
             let diceRoll = parseInt(document.querySelector('#dice-total').textContent)
-            console.log(diceRoll)
 
             if ((checkColourSet(spaces[position].group, owner))){
                 rentAmount = diceRoll * 10
@@ -1896,15 +1953,8 @@ function landOnProperty(position){
 
         function stationRent(){
 
-            let stationSet = []
+            let stationSet = getColourSet('train-station')
         
-            // Get an array of all of the properties in that colour set.
-            for (i = 0; i < spaces.length; i++){
-                let property = spaces[i]
-                if (property.type === 'station'){
-                    stationSet.push(property)
-                }
-            }
         
             // Go back through the array to get a list of the owners of all these properties
             let owners = []
@@ -1918,8 +1968,6 @@ function landOnProperty(position){
             stationSet = owners.every(function(stationOwner){
                 //return (stationOwner === owner)
             })
-
-            console.log(stationSet)
 
             let rentIndex = owners.length - 1
             console.log(rentIndex)

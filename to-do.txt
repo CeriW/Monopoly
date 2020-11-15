@@ -44,6 +44,12 @@ An incomplete list of all the developments that need to be completed
 
 - Tokens should start off displaying at position 0 on the board.
 
+- A thought to investigate - if you have 1 house on a property in the colour set and 0 houses on another, can you mortgage the property with 0?
+
+- Dice roll to see which player goes first
+
+- Don't have to wait until your turn to build houses/hotels
+
 STRETCH GOALS
 
 - Add a Monopoly rulebook
