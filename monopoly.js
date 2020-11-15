@@ -1632,6 +1632,7 @@ function displayBuildHousePanel(colour){
         
         // Get the highest number of houses in the set.
         let highestNumberOfHouses = Math.max(...colourSetHouses)
+        let lowestNumberOfHouses = Math.min(...colourSetHouses)
     
     
         // Functions to check whether all the properties have the same number of buildings
@@ -1648,24 +1649,37 @@ function displayBuildHousePanel(colour){
         // If all of the properties have the same number of houses...
         if (checkAllHousesSame()){
 
-            // If all the properties have hotels, disable all the buttons
+            
             if (highestNumberOfHouses === 5){
+
+                // If all the properties have hotels, disable all the build buttons
                 ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button'), function(button){
                     button.classList.add('disabled-button')
                 })
+
+                // If all the properties have hotels, enable all the sell buttons and update their text 
+                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .sell-house-button'), function(button){
+                    button.classList.remove('disabled-button')
+                    button.textContent = 'Sell hotel'
+                })
             }
             
-            // If all the properties have the same amount of houses but they're NOT hotels, enable all the buttons
+            // If all the properties have the same amount of houses but they're NOT hotels, enable all of the build and sell buttons
             else{
-                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button'), function(button){
+                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button, .house-visual-display:not([houses="0"]) + .button-panel .sell-house-button'), function(button){
                     button.classList.remove('disabled-button')
                 })
             }
 
-        // If all the properties DON'T have the same number of houses, we need
-        // to prevent building more houses on the properties that have the most.
+        // If all the properties DON'T have the same number of houses...
         } else{
+            // Prevent building on properties that have the most number of houses
             ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
+                button.classList.add('disabled-button')
+            })
+
+            // Prevent selling buildings on properties that have the least
+            ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button' ), function(button){
                 button.classList.add('disabled-button')
             })
         }
@@ -1743,9 +1757,11 @@ function displayBuildHousePanel(colour){
 
         // Players get half the value back for houses/hotels
         players[turn - 1].money -= (spaces[number].houseCost / 2)
+        updatePlayerDetails()
 
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
+        
     }
 
 }
