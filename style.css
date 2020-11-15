@@ -1052,7 +1052,10 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   .card-icon.card-icon-station {
     background-image: url("images/station.svg"); }
 
-/* Property overview OLD -----------------------------------------------------*/
+/* Property overview  --------------------------------------------------------*/
+.build-house-button {
+  max-width: 170px; }
+
 .build-house-button.disabled-button {
   background: #ccc;
   color: #8f8f8f;
@@ -1094,9 +1097,19 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
     min-width: 170px;
     font-size: 14px; }
   .colour-set-overview .property-overview table tr td:first-child {
-    min-width: 100px; }
+    min-width: 135px; }
   .colour-set-overview table {
     font-size: 80%; }
+
+body[build-house="false"] .house-visual-display:not([houses="4"]) + .build-house-button {
+  background: #ccc;
+  color: #8f8f8f;
+  pointer-events: none; }
+
+body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-button {
+  background: #ccc;
+  color: #8f8f8f;
+  pointer-events: none; }
 
 /* Left panel  ---------------------------------------------------------------*/
 #left-panel {

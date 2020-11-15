@@ -1138,7 +1138,11 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     }
 }
 
-/* Property overview OLD -----------------------------------------------------*/
+/* Property overview  --------------------------------------------------------*/
+
+.build-house-button{
+    max-width: 170px;
+}
 
 //body[build-house = "false"] .build-house-button,
 .build-house-button.disabled-button{
@@ -1169,13 +1173,27 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
         font-size: 14px;
     }
 
-    .property-overview table tr td:first-child{
-        min-width: 100px;
+    .property-overview table tr td:first-child,{
+        min-width: 135px;
     }
 
     table{
         font-size: 80%;
     }
+}
+
+// When there are no houses left in the bank, disable build house (but not build hotel) buttons
+body[build-house="false"] .house-visual-display:not([houses="4"]) + .build-house-button{
+    @include disabledButton()
+}
+
+// When there are no hotels left in the bank, disable build hotel (but not build house) buttons
+body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-button{
+    @include disabledButton()
+}
+
+.house-visual-display[houses="5"] + .build-house-button{
+    //display: none;
 }
 
 /* Left panel  ---------------------------------------------------------------*/

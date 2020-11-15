@@ -20,11 +20,9 @@ An incomplete list of all the developments that need to be completed
 
 - Refactor all the things with player specific IDs to have player attributes instead.
 
-- Sell houses/hotels
+- Sell houses/hotels (including selling evenly)
 
 - Selling hotel shenanigans if there aren't sufficient houses in the bank
-
-- Have to build houses evenly
 
 - Can't build houses/hotels if there aren't any in the bank.
 

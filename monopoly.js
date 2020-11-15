@@ -4,16 +4,15 @@
 
 let availableTokens = [
     {name: 'dog',           available: true},
-    {name: 'iron',          available: true},
     {name: 'thimble',       available: true},
+    {name: 'hat',           available: true},
     {name: 'car',           available: true},
     {name: 'battleship',    available: true},
-    {name: 'hat',           available: true},
+    {name: 'iron',          available: true},
     {name: 'penguin',       available: true},
     {name: 'dinosaur',      available: true},
     {name: 'cat',           available: true},
     {name: 'ducky',         available: true},
-    {name: 'thimble',       available: true},
 ]
 
 
@@ -188,7 +187,8 @@ let availableActions = {
     endTurn: false,
     getOutOfJail: false,
     rollDoublesForJail: false,
-    buildHouse: false
+    buildHouse: true,
+    buildHotel: true
 }
 
 let currencySymbol = '₩'
@@ -336,6 +336,7 @@ function setAvailableActions(){
     document.body.setAttribute('get-out-of-jail', availableActions.getOutOfJail)
     document.body.setAttribute('roll-doubles-for-jail', availableActions.rollDoublesForJail)
     document.body.setAttribute('build-house', availableActions.buildHouse)
+    document.body.setAttribute('build-hotel', availableActions.buildHotel)
 }
 
 
@@ -428,6 +429,12 @@ function updateBank(){
 
     if (availableHouses < 1){
         availableActions.buildHouse = false
+        document.body.setAttribute('build-house', false)
+    }
+
+    if (availableHotels < 1){
+        availableActions.buildHotel = false
+        document.body.setAttribute('build-hotel', false)
     }
 
     bank.appendChild(houseContainer)
@@ -1013,7 +1020,7 @@ function closePopup(){
     
     // Reset the build house available action. We'll recheck whether it's
     // appropriate when the window is next opened.
-    availableActions.buildHouse = false
+    //availableActions.buildHouse = false
 }
 
 function openPopup(message){
@@ -1420,7 +1427,7 @@ function generateRentTable(number){
     htmlOutput += '</table>'
 
     // Houses table
-    htmlOutput += '<table>'
+    htmlOutput += '<table class="house-price-table">'
     htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
     htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
     htmlOutput += '</table>'
@@ -1503,7 +1510,7 @@ function displayPropertyOptions(number){
 
             // If the owner of the property owns the full colour set, bring up the build house window.
             if (checkColourSet(colour, players[turn -  1].id)){
-                availableActions.buildHouse = true
+                //availableActions.buildHouse = true
                 let colourSetButton = document.createElement('button')
                 colourSetButton.classList.add('colour-set-button')
                 colourSetButton.innerText = 'Manage colour set'
@@ -1513,9 +1520,6 @@ function displayPropertyOptions(number){
 
                 optionsPanel.appendChild(colourSetButton)
             }
-
-
-            //availableActions.buildHouse = (availableHouses > 0) ? true : false
         }
         
     }
@@ -1530,8 +1534,6 @@ function displayPropertyOptions(number){
 }
 
 function displayBuildHousePanel(colour){
-    console.log('build house?')
-
 
     // Get an array of all of the properties in that colour set.
     let colourSet = []
@@ -1541,8 +1543,6 @@ function displayBuildHousePanel(colour){
             colourSet.push(property)
         }
     }
-
-    //console.log(colourSet)
 
     let houseBuildPanel = document.createElement('div')
 
@@ -1583,12 +1583,6 @@ function displayBuildHousePanel(colour){
             
         })
 
-        // If this property already has a hotel, or the bank doesn't have any
-        // houses, disable the build house button
-        if (spaces[property.position].houses > 4 || availableHouses < 1){
-            //availableActions.buildHouse = false
-        }
-
         housePanel.appendChild(buildHouseBtn)
 
         // Add all this stuff to the options panel       
@@ -1622,8 +1616,7 @@ function displayBuildHousePanel(colour){
             colourSetHouses.push(spaces[property.position].houses)
         })
 
-        console.log(colourSetHouses)
-    
+        
         // Get the highest number of houses in the set.
         let highestNumberOfHouses = Math.max(...colourSetHouses)
     
@@ -1638,7 +1631,7 @@ function displayBuildHousePanel(colour){
             return(colourSetHouses.every(checkHouseAmount))
         }
 
-    
+        
         // If all of the properties have the same number of houses...
         if (checkAllHousesSame()){
 
@@ -1664,14 +1657,42 @@ function displayBuildHousePanel(colour){
             })
         }
 
+        // For properties that have 4 houses, make the build house button say 'build hotel' instead
         ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .build-house-button'), function(node){
             node.textContent = 'Build hotel'
         })
 
+        // Display message on properties that have a hotel
         ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="5"] + .build-house-button'), function(node){
             node.textContent = 'Maximum number of buildings reached'
         })
+
+
+        
+        // Before we get into the maths of building evenly, check there are
+        // enough buildings in the bank. This will set an attribute on the
+        // body which is used in the CSS to disable the appropriate
+        //buttons regardless of what the other maths returns
+
+        if (!availableHouses){
+            document.body.setAttribute('build-house', false)
+            ;[].forEach.call(document.querySelectorAll('.house-visual-display:not([houses="4"]) + .build-house-button:not(.disabled-button)'), function(node){
+                node.textContent = 'No houses left in bank'
+            })
+        }
+        
+    
+        if (!availableHotels){
+            document.body.setAttribute('build-hotel', false)
+            ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .build-house-button:not(.disabled-button)'), function(node){
+                node.textContent = 'No hotels left in bank'
+            })
+        }
     }
+
+    
+
+
     
     
     function buildHouse(number){
