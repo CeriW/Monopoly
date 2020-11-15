@@ -1145,7 +1145,8 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
 }
 
 //body[build-house = "false"] .build-house-button,
-.build-house-button.disabled-button{
+.house-visual-display[houses="0"] + .button-panel .sell-house-button,
+.disabled-button{
     @include disabledButton();
 }
 

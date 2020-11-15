@@ -1056,7 +1056,8 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 .build-house-button {
   max-width: 170px; }
 
-.build-house-button.disabled-button {
+.house-visual-display[houses="0"] + .button-panel .sell-house-button,
+.disabled-button {
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
