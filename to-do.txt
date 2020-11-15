@@ -40,6 +40,11 @@ An incomplete list of all the developments that need to be completed
 
 - Exchange cards
 
+- Make it come up on the feed when players buy houses. If possible, have it come up with "Player 2 built 3 houses on Bond Street" rather than just coming up every time they hit build.
+
+- Make the prices on the board Monopoly dollars, not £
+
+- Tokens should start off displaying at position 0 on the board.
 
 STRETCH GOALS
 

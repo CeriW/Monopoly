@@ -1059,7 +1059,8 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   pointer-events: none; }
 
 .house-visual-display {
-  height: 35px; }
+  height: 35px;
+  margin: 10px 0; }
 
 .house-visual-display[houses="0"] {
   background: url("images/house-visual-display-0.svg") center no-repeat;
@@ -1085,7 +1086,6 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   background: url("images/house-visual-display-5.svg") center no-repeat;
   background-size: contain; }
 
-/* Property overview NEW -----------------------------------------------------*/
 .colour-set-overview {
   display: flex;
   justify-content: space-evenly;

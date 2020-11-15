@@ -1071,7 +1071,7 @@ function rollDice(){
         case 2:
             diceDoubles.innerText = "2nd double"
             diceContainer.className = "double2"
-            addToFeed('Player ' + players[turn-1].name + ' rolled their second double. Careful!', 'doubles-2nd')
+            addToFeed(players[turn-1].name + ' rolled their second double. Careful!', 'doubles-2nd')
             break
         case 3:
             diceDoubles.innerText = "3rd double! Go to jail."
@@ -1477,8 +1477,7 @@ function fullPortfolioView(e){
 
 function displayPropertyOptions(number){
     let optionsPanel = document.createElement('div')
-
-
+    
     let propertyOwner = spaces[number].owner
     // If this property is unowned, display a button to buy it
     if (!propertyOwner){
@@ -1515,37 +1514,8 @@ function displayPropertyOptions(number){
                 optionsPanel.appendChild(colourSetButton)
             }
 
+
             //availableActions.buildHouse = (availableHouses > 0) ? true : false
-            
-            /*
-            let housePanel = document.createElement('div')
-            optionsPanel.appendChild(housePanel)
-    
-            // Create a nice little display to show how many houses are on this property
-            let houseVisualDisplay = document.createElement('div')
-            houseVisualDisplay.classList.add('house-visual-display')
-            houseVisualDisplay.setAttribute('houses', spaces[number].houses)
-            housePanel.appendChild(houseVisualDisplay)
-    
-            // Create a button to build houses
-            let buildHouseButton = document.createElement('button')
-            buildHouseButton.classList.add('build-house-button')
-            buildHouseButton.innerText = 'Build house'
-            buildHouseButton.addEventListener('click', function(){
-                buildHouse(number)
-            })
-    
-            // If this property already has a hotel, or the bank doesn't have any
-            // houses, disable the build house button
-            if (spaces[number].houses > 4 || availableHouses < 1){
-                availableActions.buildHouse = false
-            }
-    
-            housePanel.appendChild(buildHouseButton)
-    
-            // Add all this stuff to the options panel       
-            optionsPanel.appendChild(housePanel)
-            */
         }
         
     }
@@ -1572,7 +1542,7 @@ function displayBuildHousePanel(colour){
         }
     }
 
-    console.log(colourSet)
+    //console.log(colourSet)
 
     let houseBuildPanel = document.createElement('div')
 
@@ -1588,7 +1558,6 @@ function displayBuildHousePanel(colour){
         setItemDetails.classList.add('property-overview')
         setItemDetails.innerHTML += generateRentTable(property.position)
         colourSetOverview.appendChild(setItemDetails)
-
 
         // Generate house building buttons
         let housePanel = document.createElement('div')
@@ -1606,11 +1575,12 @@ function displayBuildHousePanel(colour){
         let buildHouseBtn = document.createElement('button')
         buildHouseBtn.classList.add('build-house-button')
         buildHouseBtn.innerText = 'Build house'
-        if (spaces[property.position].houses === 5){
-            buildHouseBtn.classList.add('disabled-button')
-        }
+
+        buildHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Build hotel' : 'Build house'
+
         buildHouseBtn.addEventListener('click', function(){
             buildHouse(property.position)
+            
         })
 
         // If this property already has a hotel, or the bank doesn't have any
@@ -1624,6 +1594,9 @@ function displayBuildHousePanel(colour){
         // Add all this stuff to the options panel       
         setItemDetails.appendChild(housePanel)
 
+        //console.log('bottom of displayBuildHousePanel')
+        //toggleHouseBuildButtons()
+
 
     })
 
@@ -1632,32 +1605,103 @@ function displayBuildHousePanel(colour){
     openPopup('')
     popupMessage.appendChild(houseBuildPanel)
 
+    toggleHouseBuildButtons()
 
-}
+    // According to the rules, players must build houses evenly. For example,
+    // they can't have 4 houses on one property in the set and 1 on another.
+    // This function will toggle the buttons as appropriate to force
+    // this behaviour.
+    
+    function toggleHouseBuildButtons(){
+        
+        // Create an array of the number of houses on all the properties
+        // in the colour set.
+        let colourSetHouses = []
+        colourSet.forEach(function(property){
+            //colourSetHouses.push(property.houses)
+            colourSetHouses.push(spaces[property.position].houses)
+        })
 
-function buildHouse(number){
-    let currentHousesOnProperty = spaces[number].houses
-    spaces[number].houses += 1
-
-    // If there are 3 or less houses, let us build a house.
-    // If there are 4 houses, sell the houses and build a hotel.
-    if (currentHousesOnProperty < 4){
-        availableHouses--
-    } else if (currentHousesOnProperty === 4){
-        availableHouses += 4
-        availableHotels--
-        document.querySelector('.house-building-panel[position="' + number + '"] .build-house-button').classList.add('disabled-button')
-    }
-
-    players[turn - 1].money -= spaces[number].houseCost
-    updatePlayerDetails()
+        console.log(colourSetHouses)
+    
+        // Get the highest number of houses in the set.
+        let highestNumberOfHouses = Math.max(...colourSetHouses)
+    
+    
+        // Functions to check whether all the properties have the same number of buildings
+        function checkHouseAmount(houses){
+            return highestNumberOfHouses === houses
+        }
+          
+        function checkAllHousesSame(){
+            //console.log(colourSetHouses.every(checkHouseAmount))
+            return(colourSetHouses.every(checkHouseAmount))
+        }
 
     
-    document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
+        // If all of the properties have the same number of houses...
+        if (checkAllHousesSame()){
 
-    updateHouseDisplay(number)
+            // If all the properties have hotels, disable all the buttons
+            if (highestNumberOfHouses === 5){
+                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .build-house-button'), function(button){
+                    button.classList.add('disabled-button')
+                })
+            }
+            
+            // If all the properties have the same amount of houses but they're NOT hotels, enable all the buttons
+            else{
+                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .build-house-button'), function(button){
+                    button.classList.remove('disabled-button')
+                })
+            }
+
+        // If all the properties DON'T have the same number of houses, we need
+        // to prevent building more houses on the properties that have the most.
+        } else{
+            ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .build-house-button'), function(button){
+                button.classList.add('disabled-button')
+            })
+        }
+
+        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .build-house-button'), function(node){
+            node.textContent = 'Build hotel'
+        })
+
+        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="5"] + .build-house-button'), function(node){
+            node.textContent = 'Maximum number of buildings reached'
+        })
+    }
+    
+    
+    function buildHouse(number){
+        let currentHousesOnProperty = spaces[number].houses
+        spaces[number].houses += 1
+    
+        // If there are 3 or less houses, let us build a house.
+        // If there are 4 houses, sell the houses and build a hotel.
+        if (currentHousesOnProperty < 4){
+            availableHouses--
+        } else if (currentHousesOnProperty === 4){
+            availableHouses += 4
+            availableHotels--
+            document.querySelector('.house-building-panel[position="' + number + '"] .build-house-button').classList.add('disabled-button')
+        }
+    
+        players[turn - 1].money -= spaces[number].houseCost
+        updatePlayerDetails()
+    
+        
+        document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
+    
+        updateHouseDisplay(number)
+        toggleHouseBuildButtons()
+    
+    }
 
 }
+
+
 
 function updateHouseDisplay(number){
     let property = document.querySelector('.property[position="' + number + '"]')

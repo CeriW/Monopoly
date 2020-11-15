@@ -1147,6 +1147,7 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
 
 .house-visual-display{
     height: 35px;
+    margin: 10px 0;
 }
 
 @for $i from 0 through 5 {
@@ -1156,9 +1157,6 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
         background-size: contain;
     }
   }
-
-
-/* Property overview NEW -----------------------------------------------------*/
 
 .colour-set-overview{
     display: flex;
