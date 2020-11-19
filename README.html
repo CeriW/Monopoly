@@ -2,11 +2,1031 @@
       <head>
         <meta charset="UTF-8">
         <title>README.md</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+        <style>
+
+          body{
+            background: #d5e8d4;
+            color: #000;
+            font-family: 'Montserrat', sans-serif;
+          }
+
+          header, h2{
+            text-align: center;
+          }
+
+          header, main{
+            max-width: 1344px;
+            float: none;
+            margin: 0 auto;
+          }
+
+
+
+          .variable,
+          .function{
+            background: #fff;
+            padding: 10px;
+            margin-top: 10px;
+          }
+
+          .variable-name,
+          .function-name{
+            font-weight: bold;
+            margin: 0;
+          }
+
+          .variable-type{
+            font-style: italic;
+            margin-bottom: 0;
+          }
+
+          .variable-description,
+          .function-description{
+            margin-top: 10px;
+          }
+
+          h4{
+            margin: 0;
+          }
+
+          h5{
+            font-size: 1em;
+            margin: 0;
+          }
+
+          .private-function .function-name{
+            font-size: 1.17em;
+            margin-bottom: 10px;
+          }
+
+          .private-function{
+            padding: 10px;
+            background: #f0f0f0;
+            margin: 20px 0 0;
+          }
+
+          .private-variable{
+            margin-bottom: 20px;
+          }
+
+        </style>
+
+
       </head>
+
       <body>
-        <h1 id="monopoly">Monopoly</h1>
-<p> A (eventually) playable browser version of Monopoly using HTML, CSS and JS. I am a huge fan of Monopoly so this is the ideal pet project to learn with.</p>
-<p> While I have a huge amount of experience in HTML and CSS/SCSS, my knowledge of JS is limited and this is my first time using Git. Using this as a learning experience.</p>
+
+        <header>        
+          <h1 id="monopoly">Monopoly</h1>
+          <p> A (eventually) playable browser version of Monopoly using HTML, CSS and JS. I am a huge fan of Monopoly so this is the ideal pet project to learn with.</p>
+          <p> While I have a huge amount of experience in HTML and CSS/SCSS, my knowledge of JS is limited and this is my first time using Git. Using this as a learning experience.</p>
+        </header>
+
+        <main>
+
+<h2>VARIABLES</h2>
+
+
+
+<div id="variable-container">
+
+<div class="variable">
+  <h3 class="variable-name">availableTokens</h3>
+  <div class="variable-type">array of objects</div>
+  <div class="variable-description">
+    an array of objects representing the tokens a player may choose at the beginning of the game. Each object has two properties:
+    <ul>
+      <li>name - string - the name of the token. This is referenced in the CSS to show the correct icons for each.</li>
+      <li>available - boolean - whether the token is available for players to select.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">board</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The whole board<br>
+    #board
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">playerSummary</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The entire right panel, containing all of the player summaries<br>
+    #player-summary
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">feed</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The panel containing the feed content. NOT the whole container<br>
+    #feed-content
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">bankContainer</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The entire bank panel, containing the title and content<br>
+    #bank
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">bank</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The actual content of the bank. The panel that displays houses and hotels.<br>
+    #bank-content
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">playerCreator</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The panel inside the new player screen that lists the potential players<br>
+    #player-creator
+  </div>
+</div>
+
+
+<div class="variable">
+  <h3 class="variable-name">turn</h3>
+  <div class="variable-type">number</div>
+  <div class="variable-description">
+    Which player's turn it currently is. Initialised as 0 but is the number of the current player (as shown in their name, not their index in the players array i.e there is no player 0)
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">doublesCount</h3>
+  <div class="variable-type">number</div>
+  <div class="variable-description">
+    How many doubles in a row we've currently had. If this number is ever 3 then the player is sent to jail.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">diceContainer</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The container of all the other dice related elements.<br>
+    #dice-roll
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">diceContainer</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The container of all the other dice related elements. This receives classes later on which allow the dice inside to be coloured depending on how many consecutive doubles have been rolled.<br>
+    #dice-roll
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">dice1</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The left hand dice<br>
+    #dice-1
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">dice2</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The right hand dice<br>
+    #dice-2
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">diceTotal</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    The container for the total shown to the left of the dice. diceTotal.textContent is used to update this display.<br>
+    #dice-total
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">doubles</h3>
+  <div class="variable-type">element</div>
+  <div class="variable-description">
+    Most of the time this element is empty. It's a span to the right of the dice total to display how many consecutive doubles the player has rolled.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">diceSides</h3>
+  <div class="variable-type">number</div>
+  <div class="variable-description">
+    How many sides the dice has. While players can never adjust this, it is useful for testing purposes.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">availableHouses</h3>
+  <div class="variable-type">number</div>
+  <div class="variable-description">
+    How many houses are available in the bank. When this is 0, no more houses may be built.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">availableHotels</h3>
+  <div class="variable-type">number</div>
+  <div class="variable-description">
+    How many hotels are available in the bank. When this is 0, no more hotels may be built.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">communityChestCards / chanceCards</h3>
+  <div class="variable-type">array</div>
+  <div class="variable-description">
+    An array of objects containing all of the community chest/chance cards. These are shuffled at the beginning of the game so order is unimportant.<br>
+    Each card object has a number of properties:
+    <ul>
+      <li>description - <i>string</i> - What the card says on it.</li>
+      <li>
+        type - <i>string</i> - the classification of card. This can be:
+        <ul>
+          <li>'+' - a card which gains the player money from the bank. The <i>value</i> property is how much money the player gets.</li>
+          <li>'-' - a card for which the player has to surrender money to the bank. The <i>value</i> property is how much money the player forfeits.</li>
+          <li>'getout' - a get out of jail free card which is held onto by the player until used, sold or traded. The <i>value</i> property is null as it's not needed.</li>
+          <li>'calc' - a card where the amount of money involved has to be calculated. The <i>value</i> property is null as it requires some maths that are specific to that card.</li>
+          <li>'exchange' - A card where players have to exchange money.</li>
+          <li>'move' - A card which requires the player to move. When this is the case the <i>value</i> property is the position on the board the player moves to.</value></li>
+        </ul>
+      </li>
+      <li>value - <i>number</i> - A number associated with the card. See the description for the 'type' property to see what this number represents.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">spaces</h3>
+  <div class="variable-type">array</div>
+  <div class="variable-description">
+    An array of objects representing all of the spaces on the board. These objects will have a number of properties depending on what type of property they are:
+    <ul>
+      <li>name - <i>string</i> - The name of the space as it appears on the board/title deed cards</li>
+      <li>type - <i>string</i> - The type of space this is. May be 'special'(corners), 'property', 'community-chest', 'station', 'chance' or 'utility'</li>
+      <li>price - <i>number</i> - The price the space costs to buy (property, station and utlities only)</li>
+      <li>group - <i>string</i> - the group this property belongs to. Can be a colour, 'train-station' or 'utility'. Null for all others.</li>
+      <li>boardposition - <i>string</i> - The area of the board the space lies on. Can be 'north, 'south', 'east' or 'west'.</li>
+      <li>position - <i>number</i> - the position on the board. This correlates with the index of the array.</li>
+      <li>
+        Rent - <i>array</i>
+        <br>For properties, this is an array of 7 numbers:
+        <ul>
+          <li>0 - <i>number</i> - base rent</li>
+          <li>1 - <i>number</i> - rent with colour set</li>
+          <li>2 - <i>number</i> - rent with one house</li>
+          <li>3 - <i>number</i> - rent with two houses</li>
+          <li>4 - <i>number</i> - rent with three houses</li>
+          <li>5 - <i>number</i> - rent with four houses</li>
+          <li>6 - <i>number</i> - rent with hotel</li>
+        </ul>
+        <br> For stations, an array of 4 numbers:
+        <ul>
+          <li>0 - <i>number</i> - rent when the owner owns one station</li>
+          <li>1 - <i>number</i> - rent when the owner owns two stations</li>
+          <li>2 - <i>number</i> - rent when the owner owns three stations</li>
+          <li>3 - <i>number</i> - rent when the owner owns four stations</li>
+        </ul>
+        <br>For utilities, an array of 2 items:
+        <ul>
+          <li>0 - <i>string</i> - the description to show on the title deed card for when a single utility is owned</li>
+          <li>0 - <i>string</i> - the description to show on the title deed card for when both utilities are owned</li>
+        </ul>
+      </li>
+      <li>houseCost - <i>number</i> - how much it costs to build a house on this property. Only relevant for property spaces. The cost to sell houses is half this amount.</li>
+      <li>hotelCost - <i>number</i> - how much it costs to build a hotel on this property. Only relevant for property spaces. The cost to sell hotels is half this amount. I have never seen a Monopoly set where this is different to the house price, but I am including this in case I later discover that there is a board where this is different.</li>
+      <li>owner - <i>object</i> - initialised as null, but later is updated to be an object containing the player who owns the property. Note that this object is not kept up to date (the <i>players</i> variable should be used for up to date info) but is included as an object as various non-changing properties are used throughout the code, such as name and id.</li>
+      <li>houses - <i>number</i> - how many houses are on this property. Only relevant for property spaces. Note that a value of 5 indicates a hotel.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">players</h3>
+  <div class="variable-type">array</div>
+  <div class="variable-description">
+    Initialised empty, but later filled with objects for each player. Each object has a number of properties:
+    <ul>
+      <li>money - <i>number</i> - the amount of money the player has</li>
+      <li>id - <i>number</i> - an id number used for the player. This is sometimes used to keep things less confusing since player 1 is 0 in the players array.</li>
+      <li>properties - <i>array</i> - starts off empty, but will later be filled with objects representing the properties the player owns. See the <i>spaces</i> variable for details on what these objects look like. Note that this array is not kept up to date, and the <i>spaces</i> array should be used for reference. However it is included here as it is sometimes used for checks on basic info that doesn't change.</li>
+      <li>token - <i>string</i> - a string containing which token the player has selected in the new player window. This string will be one of the names from the availableTokens variable. This is used to display the correct token for each player.</li>
+      <li>name - <i>string</i> - the name the player chose for themselves in the new player window. If the player didn't pick a name it will default to 'Player 1', 'Player 2' etc.</li>
+      <li>position - <i>number</i> - the space on the board the player is on. This will correspond with the position properties of the objects in the <i>spaces</i> array</li>
+    </ul>
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">maxNumberOfPlayers</h3>
+  <div class="variable-type">number</div>
+  <div class="variable-description">
+    A number representing the maximum number of players the game will allow. While the official rules don't give a maximum number of players, there is only a certain amount that is practical, both in terms of the gameplay and displaying in the browser window. This variable makes it easier to adjust the various bits that generate based on the number of players.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">availableActions</h3>
+  <div class="variable-type">object</div>
+  <div class="variable-description">
+    Contains various properties that determine what can or can't currently be done. These are set as attributes on the body element, which both the JS and CSS use to make certain actions available to players (normally by showing/hiding or disabling buttons):
+    <ul>
+      <li>rollDice - <i>boolean</i> - whether the dice can currently be rolled.</li>
+      <li>endTurn - <i>boolean</i> - whether the current player is currently able to end their turn.</li>
+      <li>getOutOfJail - <i>boolean</i> - whether the current player is able to take actions to get themselves out of jail</li>
+      <li>rollDoublesForJail - <i>boolean</i> - whether the current player is able to attempt to roll doubles to get themselves out of jail. Players get three attempts at this before they are forced to pay 50 or use a get out of jail free card to get out.</li>
+      <li>buildHouse - <i>boolean</i> - whether houses can currently be built on properties, based on the number of houses available in the bank</li>
+      <li>buildHotel - <i>boolean</i> - whether hotels can currently be built on properties, based on the number of hotels available in the bank</li>
+    </ul>
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">currencySymbol</h3>
+  <div class="variable-type">string</div>
+  <div class="variable-description">
+    A string containing the desired currency symbol. 
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">currencySymbolSpan</h3>
+  <div class="variable-type">string</div>
+  <div class="variable-description">
+    a HTML string containing a span with the currency symbol in. This is necessary as the default 'Monopoly dollars' symbol isn't a standard character, but is almost exactly the same as the ₩ (Korean currency) symbol upside down. CSS is used to rotate this span. If changing this to a different symbol it would be necessary to update the CSS.
+  </div>
+</div>
+
+<!-- Variable item template 
+
+<div class="variable">
+  <h3 class="variable-name"></h3>
+  <div class="variable-type"></div>
+  <div class="variable-description">
+    
+  </div>
+</div>
+
+-->
+
+
+</div> <!-- end of variable container -->
+
+<h2>FUNCTIONS</h2>
+
+<div class="function">
+  <h3 class="function-name">initialisePage</h3>
+  <div class="function-description">
+    Runs a number of other functions that get the page ready for playing.
+    <ul>
+      <li>intialisePlayerCreator</li>
+      <li>generateBoard</li>
+      <li>shuffleCards x 2</li>
+      <li>cardCurrency</li>
+      <li>resizeBoard</li>
+      <li>addEvents</li>
+      <li>updateBank</li>
+    </ul>
+    Details on these functions can be found elsewhere in this document.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">cardCurrency</h3>
+  <div class="function-description">
+    Goes through all of the Community Chest and Chance cards and runs the private function <b>replaceSymbols</b>
+
+    <div class="private-function">
+      <h4 class="function-name">replaceSymbols</h4>
+      <h5>Function parameters:</h4>
+      <ul class="function-parameters">
+        <li>card - <i>object</i> - an object from the communityChestCards or chanceCards array</li>
+      </ul>
+      <div class="function-description">
+        Looks for any £ symbols in the card descriptions and updates them with the correct currency symbol. 
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">generateBoard</h3>
+  <div class="function-description">
+    <div class="private-variable">
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>positionNumber - <i>number</i> - initialised as 0, gets iterated in forEach loop</li>
+      </ul>
+    </div>
+    Creates all of the necessary HTML for the board by looping through the <i>spaces</i> array.
+    <ul>
+      <li>Set the space's position in the <i>spaces</i> array to <i>positionNumber</i></li>
+      <li>Create new div using private variable <b>newSpace</b></li>
+      <li>Add classes and attributes depending on what type of space this is.</li>
+      <li>Generate divs for the houses.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">addEvents</h3>
+  <div class="function-description">
+    Adds a series of necessary eventListeners to the page.
+    <ul>
+      <li>#popupClose runs closePopup() on click</li>
+      <li>closePopup() also runs when escape key is pressed</li>
+      <li>setAvailableActions() is run when clicking anywhere. There is such a huge amount of things that can be clicked which change the available actions, it seems much more efficient to use this inefficient method, rather than the huge amount of if statements necessary to figure out what's been clicked.</li>
+      <li>Window gets resize listener to run resizeBoard() which makes sure the board's width is the same as its height</li>
+      <li>addTestingEvents() is run.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">resizeBoard</h3>
+  <div class="function-description">
+    <ul>
+      <li><i>board</i>'s height is set to be the same as its height.</li>
+      <li><i>feed</i>'s height becomes the board's width minus the height of the bank, ensuring it all lines up.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">setAvailableActions</h3>
+  <div class="function-description">
+    Sets a series of attributes on the body element using the <i>availableActions</i> variable
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">updatePlayerDetails</h3>
+  <div class="function-description">
+    Updates the player summaries. Is run throughout the code every time something happens that changes players' money, properties etc.
+    <p> A forEach loop is run on the <i>players</i> variable which passes on the objects as <b><i>player</i></b></p>
+    <ul>
+      <li>Find the player's summary which needs updating</li>
+      <li>Replace the text, attributes etc.</li>
+      <li>If the money has changed, figure out whether it is more or less than the player had before, and run the <i>animateUpdate()</i> function, passing it the money node to be updated, and 'good' or 'bad' depending on whether it's a positive or negative change.</li>
+      <li>Run updateBank() - players may have just bought/sold houses which would require the bank to be updated.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">updateBank</h3>
+  <div class="function-description">
+    <ul>
+      <li>Clears the bank's HTML so we can start again.</li>
+      <li>Generates a number of divs based on the number of houses/hotels.</li>
+      <li>Checks whether there are still houses/hotels in the bank and sets the <i>availableActions</i> variable properties accordingly.</li>
+    </ul>
+  </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">animateUpdate</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>node - <i>element</i> - the element on the page the code run within works on.</li>
+    <li>type - <i>string</i> - usually 'good' or 'bad'</li>
+  </ul>
+  <div class="function-description">
+    Adds a class to the node of '<i>type</i>-change' for two seconds, which allows CSS animations to be run.</li>
+  </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">addTestingEvents</h3>
+  <h4>Function parameters:</h4>
+  <div class="function-description">
+    Adds a number of eventListeners to elements which make testing easier. These functions are not intended for use by players.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">fakeDiceRoll</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>fakeTotal - <i>number</i> - the dice roll you want to force</li>
+  </ul>
+  <div class="function-description">
+    Forces a dice roll with a certain amount. Much of this code is copied and repeated from the rollDice() function, but since this function is just for testing purposes and not intended for use in the final game it'll do.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">intialisePlayerCreator</h3>
+  <div class="function-description">
+    Creates the new players welcome screen, creating several divs and eventListeners on the way.
+
+    <div class="private-variable">
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>currentNumberOfPlayers - <i>number</i> - how many players are currently in the game. Gets incremented when new player buttons are clicked.</li>
+      </ul>
+    </div>
+
+    <div class="private-function">
+      <h4 class="function-name">createPlayerCreationPanel</h4>
+      <h5>Function parameters:</h4>
+      <ul class="function-parameters">
+        <li>playerID - <i>number</i> - the desired ID number of the new player to be created. This is usually <i>currentNumberOfPlayers</i></li>
+      </ul>
+      <div class="function-description">
+        Creates the mini window for each player where they can choose their name, token etc.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">createPlayers</h3>
+  <div class="function-description">
+    <ul>
+      <li>Populates the <i>players</i> array with objects based on the information found within the player creation window.</li>
+      <li>Loops through the newly populated <i>players</i> array, passing each object onto the generatePlayerSummary() function.</li>
+      <li>Loops again through the  <i>players</i> array (passing each object as <b><i>player</i></b>) to create the player tokens.</li>
+      <li>The new player window is then removed from the page and the increasePlayerTurn() function is run.</li>
+    </ul>
+
+  </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">generatePlayerSummary</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>player - <i>object</i> - an object from the <i>players</i> array</li>
+  </ul>
+  <div class="function-description">
+    Generates a number of divs, buttons etc for the player object passed in to it. 
+  </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">drawCard</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>type - <i>string</i> - generally 'chance' or 'community-chest'</li>
+  </ul>
+  <div class="function-description">
+    Makes the current player draw a card, and runs the various bits surrounding that, including displaying the card in the popup window, adding this information to the feed, returning the card to the bottom of the pile and running any necessary things as a result of this card (many of which will need to be passed on to other functions).
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">getReadableCardName</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>type - <i>string</i> - the type of card we're dealing with. Generally 'community-chest' or 'chance'</li>
+  </ul>
+  <div class="function-description">
+    Returns a nice player friendly card type string. For example, 'community-chest' returns 'Community Chest'. This is used in generating messages for the feed.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">cardBasedMovement</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>chosenCard - <i>object</i> - the card object from the communityChestCards or chanceCards variable</li>
+    <li>type - <i>string</i> - generally 'community-chest' or 'chance'. Usually passed from the drawCard() function</li>
+  </ul>
+  <div class="function-description">
+    Deals with the community chest and chance cards that require the player to move their token.
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">getCardMovementFeedMessage</h4>
+    <h5>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>position - <i>number</i> - the position on the board the feed message is generated for. This should correlate with the position of an object in the <i>spaces</i> array</li>
+    </ul>
+    <div class="function-description">
+      Returns a nice player-friendly message to be placed into the feed.
+    </div>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">calculateCardMovement</h4>
+    <h5>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>endPosition - <i>number</i> - the position on the board the token wants to end up on.</li>
+    </ul>
+    <div class="function-description">
+      Figures out how many times the token needs to move to reach the endPosition. This can then be passed on to the moveToken() function (which moves the token a set number of times, rather than to a specific end position)
+    </div>
+  </div>
+
+</div>
+
+<div class="function">
+  <h3 class="function-name">shuffleCards</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>array - <i>array</i> - the array to be shuffled.</li>
+  </ul>
+  <div class="function-description">
+    Takes an array and shuffles the order of whatever is in it. Used to shuffle <i>communityChestCards</i> and <i>chanceCards</i> at the beginning of the game.
+    <p>I can't take credit for this, it was taken from <a href="https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array">https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array</a> </p>
+  </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">closePopup</h3>
+  <div class="function-description">
+    Removes the class of 'popup-open' from the body element. The CSS then hides the popup.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">openPopup</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>message - <i>string</i> - a chunk of HTML to display in the popup.</li>
+  </ul>
+  <div class="function-description">
+    Sets the popup window's HTML to that which it has been given, then adds the class of 'popup-open' to the body element so the CSS can tell it to display.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">rollDice</h3>
+  <h4>Function parameters:</h4>
+  <div class="function-description">
+    Deals with all the actions involved in the player rolling the dice - generating a total for 2 dice, checking for doubles and sending the player to jail if they roll three consecutive doubles.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">moveToken</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>total - <i>number</i> - the number of spaces to move the token. This is usually a dice roll, but might also be received from calculateCardMovement() to get the token to move to a specific point.</li>
+  </ul>
+  <div class="function-description">
+    Animates the token of the current player going around the board, finally ending once the token has moved the specified number of spaces.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">specialEndPositions</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>endPosition - <i>number</i> - the position number of the space the token has ended up on.</li>
+  </ul>
+  <div class="function-description">
+    Deals with all of the things that happen when a player lands on a space - buying a property, taxes, drawing cards etc etc.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">positionToken</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>token - <i>element</i> - the token on the board we are going to move.</li>
+    <li>position - <i>number</i> - the position property of the space the token needs to be on.</li>
+  </ul>
+  <div class="function-description">
+    Uses CSS to place the token on the specified space. This does not have gameplay implications, it just makes the token appear on the right space on the board. The moveToken() function is the one that actually moves the token in the back end, and is the main function that calls this function.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">getOutOfJail</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>token - <i>element</i> - description</li>
+  </ul>
+  <div class="function-description">
+    Does the stuff involved in putting a player in jail, including both moving the token visually and the stuff in the back end.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">rollDoublesForJail</h3>
+  <div class="function-description">
+    All of the actions involved when a player attempts to roll doubles to get out of jail, including success, failure and running out of attempts.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">getOutOfJail</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>method - <i>string</i> - the method which the player has used to get out of jail. Usually 'doubles', 'pay' or 'card'</li>
+  </ul>
+  <div class="function-description">
+    The actions involved in getting the player out of jail, whether they have paid, used a get out of jail free card, or rolled doubles.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">checkJail</h3>
+  <div class="function-description">
+    Runs at the beginning of each player's turn to check whether they're in jail, and makes the appropriate actions available if they are.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">increasePlayerTurn</h3>
+  <div class="function-description">
+    Runs when the current player ends their turn. Incrememnts the <i>turn</i> variable (making sure to pass it back to player 1 if the final player has just ended their turn), updates the interface and makes the appropriate actions available for the player whose turn it is next.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">displayPropertyDetails</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number of the space you want to display</li>
+  </ul>
+  <div class="function-description">
+    Creates a popup window which displays the details of the specified property, including rent, house costs etc. Some of these are generated using other functions depending on what kind of space it is.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">generateRentTable</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number of the space we want to generate the rent table of</li>
+  </ul>
+  <div class="function-description">
+    For standard property spaces, this will generate a table containing all of the rent, house price and hotel price.
+    <br>This is returned as a HTML string.
+  </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">portfolioItemPreview</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>e - <i>event</i> - the node on the page that has been clicked which runs this. It should be a portfolio icon, either in a player's mini portfolio or full portfolio.</li>
+  </ul>
+  <div class="function-description">
+    Gets the icon which has been clicked, figures out what position it is, and pops up the property details. If the player has come to this from a full portfolio view, it will also generate a back button.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">displayPropertyOptions</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number for the property we are working with.</li>
+  </ul>
+  <div class="function-description">
+    Generates buttons related to actions that can be taken on the property, depending on whether the current player owns this property and what type of property it is.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">displayHouseBuildPanel</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>colour - <i>string</i> - the 'group' property from the <i>spaces</i> array we are working with.</li>
+  </ul>
+  <div class="function-description">
+    This function runs when the 'Manage colour set' button is clicked. This will then generate details of the colour set, including rent and current houses/hotels, and buttons to buy/sell hotels as appropriate. These buttons will have eventListeners on which prevent them from being clicked when they shouldn't be.
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">toggleHouseBuildButtons</h4>
+    <div class="function-description">
+      Makes build/sell buttons available or unavailable as appropriate. The main function of this code is to force players to build evenly - for example you have to build 1 house on each property in a colour set before you can build 2 on any of them. This function also checks there are enough houses/hotels in the bank before players are allowed to build.      
+    </div>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">buildHouse</h4>
+    <h5>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>number - <i>number</i> - the position number for the space we are working with.</li>
+    </ul>
+    <div class="function-description">
+      Puts a building on the specified space, whether that building be a house or hotel. As well as updating the property in the back end, it also updates the bank and interface.
+    </div>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">sellHouse</h4>
+    <h5>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>number - <i>number</i> - the position number for the space we are working with.</li>
+    </ul>
+    <div class="function-description">
+      Sells a building on the space specified. There is some disagreement in professional Monopoly circles over what is supposed to happen if you want to sell a hotel but there aren't enough houses in the bank, so at present it goes by the official, original rulebook. I would like to expand the game so it can be set to have different options for what players think should happen.
+    </div>
+  </div>
+
+</div>
+
+<div class="function">
+  <h3 class="function-name">updateHouseDisplay</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number for the space we are working with.</li>
+  </ul>
+  <div class="function-description">
+    Updates the board interface to show the number of houses on the property. This is done by setting an attribute on the element on the board - the CSS handles the actual visuals.
+    <br>If the 'Manage colour set' window is open, it will update the interface of this as well.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">buyProperty</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number for the space we are working with.</li>
+    <li>player - <i>object</i> - the object from the <i>players</i> array for the player buying the property.</li>
+  </ul>
+  <div class="function-description">
+    All of the bits required for a player to buy a property, including taking the money from the player, updating the player's properties array (although the <i>spaces</i> array should be used as the definitive guide to what is actually going on with a space), adds a message to the feed and closes the popup window (since this would happen after pressing a 'Buy property' button in the popup).
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">auctionProperty</h3>
+  <div class="function-description">
+    At present this doesn't do anything but log to the console. Eventually this will carry out all of the bits necessary to auction a property.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">getColourSet</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>colour - <i>string</i> - the 'group' we are looking for in the <i>spaces</i> array. Most of the time this will be a colour, but it does also work for stations and utilities.</li>
+  </ul>
+  <div class="function-description">
+    Returns an array of all the properties in the specified colour set/property type (e.g. stations, utlities)
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">checkColourSet</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>colour - <i>string</i> - the colour/group we are checking for</li>
+    <li>player - <i>object</i> - the player object from the <i>players</i> array for whom we want to check.</li>
+  </ul>
+  <div class="function-description">
+    Checks whether the specified player owns the entirety of the specified colour set, and returns true or false as appropriate.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">landOnProperty</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>position - <i>number</i> - the position number of the space we are working with</li>
+  </ul>
+
+  <div class="private-variable">
+    <h4>Private variables of note:</h4>
+    <ul>
+      <li>rentAmount - <i>number</i> - the amount of rent that is due. Initialised as 0, but will be updated by one of the various private functions depending on what kind of property has been landed on.</li>
+    </ul>
+  </div>
+
+  <div class="function-description">
+    When a player lands on a property, a number of things could happen depending on what that space is, whether it's owned etc.  In short:
+    <ul>
+      <li>If nobody owns it, the player may buy it.</li>
+      <li>If it is owned pay appropriate rent.
+      </li>
+    </ul>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">standardPropertyRent</h4>
+    <div class="function-description">
+      Figure out how much rent should be paid by the player according to how many houses/hotels are on the property.
+      <br>Since this is a private function, it just updates the variable in the parent function.
+    </div>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">utilityRent</h4>
+    <div class="function-description">
+      Figure out how much rent should be paid depending on whether the owner owns one or both utilities, and what the player has just rolled on the dice.
+      <br>Since this is a private function, it just updates the variable in the parent function.
+    </div>
+  </div>
+
+
+  <div class="private-function">
+    <h4 class="function-name">stationRent</h4>
+    <div class="function-description">
+      Figures out how much rent is due depending on how many stations the owner of the current station also owns.
+      <br>Since this is a private function, it just updates the variable in the parent function.
+    </div>
+  </div>
+
+</div>
+
+<div class="function">
+  <h3 class="function-name">checkPropertyOwner</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>position - <i>number</i> - the position number of the space we are asking about</li>
+  </ul>
+  <div class="function-description">
+    Returns the id property of the player object, if the space is owned. Returns null if unowned.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">addToFeed</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>message - <i>string</i> - the HTML for the message being added to the feed. While messages are normally just text, it is necessary to do this as HTML due to the complex default currency symbol.</li>
+    <li>type - <i>string</i> - a class to add to the feed message. This is used in the CSS to show icons to accompany the message. </li>
+  </ul>
+  <div class="function-description">
+    Inserts a new message at the top of the feed, intended to keep players updated on what is going on in the game.
+    <br>At present the <i>type</i> parameter can be:
+    <ul>
+      <li>money-plus</li>
+      <li>money-minus</li>
+      <li>get-out-card</li>
+      <li>go-to-jail</li>
+      <li>advance</li>
+      <li>failed-jail-roll</li>
+      <li>doubles</li>
+      <li>doubles-2nd</li>
+      <li>out-of-jail</li>
+      <li>rent</li>
+      <li>doubles-out-of-jail</li>
+      <li>buy-property</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- Function template 
+
+<div class="function">
+  <h3 class="function-name"></h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>name - <i>format</i> - description</li>
+  </ul>
+  <div class="function-description">
+    
+  </div>
+</div>
+
+
+
+    <div class="private-function">
+      <h4 class="function-name"></h4>
+      <h5>Function parameters:</h4>
+      <ul class="function-parameters">
+        <li>name - <i>format</i> - description</li>
+      </ul>
+      <div class="function-description"></div>
+    </div>
+
+    <div class="private-variable">
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>name - <i>format</i> - description</li>
+      </ul>
+    </div>
+
+-->
+
+</main>
 
       </body>
     </html>

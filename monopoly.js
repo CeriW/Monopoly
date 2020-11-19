@@ -36,7 +36,6 @@ let dice1 = document.querySelector('#dice-1')
 let dice2 = document.querySelector('#dice-2')
 let diceTotal = document.querySelector('#dice-total')
 let diceDoubles = document.querySelector('#doubles')
-let diceRollButton = document.querySelector('#dice-roll-button')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
@@ -234,7 +233,6 @@ function cardCurrency(){
 
 function generateBoard(){
 
-    let board = document.querySelector('#board')
     let positionNumber = 0
 
     spaces.forEach(function(space){
@@ -252,7 +250,7 @@ function generateBoard(){
         newSpace.innerHTML = space.name.toUpperCase()
 
         if (space.price){
-            newSpace.innerHTML += '<div class="property-price">£' + space.price + '</div>'
+            newSpace.innerHTML += '<div class="property-price">' + currencySymbolSpan + space.price + '</div>'
             newSpace.setAttribute('price', space.price)
         }
 
@@ -284,15 +282,6 @@ function generateBoard(){
         board.querySelector('#' + space.boardposition).appendChild(newSpace)
     })
 
-    board.addEventListener('click', function(e){
-        let target = e.target
-        if (target.classList.contains('property') || target.classList.contains('utility') || target.classList.contains('station')){
-            displayPropertyDetails(e.target.getAttribute('position'))
-
-        }
-    })
-
-
 }
 
 function addEvents(){
@@ -307,6 +296,13 @@ function addEvents(){
             closePopup()
         }
     }
+
+    board.addEventListener('click', function(e){
+        let target = e.target
+        if (target.classList.contains('property') || target.classList.contains('utility') || target.classList.contains('station')){
+            displayPropertyDetails(e.target.getAttribute('position'))
+        }
+    })
 
     // TODO - this may be better achieved using a listener on the
     // availableActions object, rather than every time someone clicks.
@@ -411,6 +407,8 @@ function updateBank(){
 
     bank.innerHTML = ''
 
+    // TODO - a lot of this could be done using CSS.
+
     let houseContainer = document.createElement('div')
     for (i = 1; i <= availableHouses; i++){
         let houseIcon = document.createElement('div')
@@ -429,13 +427,17 @@ function updateBank(){
 
     if (availableHouses < 1){
         availableActions.buildHouse = false
-        document.body.setAttribute('build-house', false)
+    } else{
+        availableActions.buildHouse = true
     }
 
     if (availableHotels < 1){
         availableActions.buildHotel = false
-        document.body.setAttribute('build-hotel', false)
+    } else{
+        availableActions.buildHotel = true
     }
+
+    setAvailableActions()
 
     bank.appendChild(houseContainer)
     bank.appendChild(hotelContainer)
@@ -481,17 +483,6 @@ function addTestingEvents(){
     })
 }
 
-
-
-// Makes a specified player own all the properties.
-function ownAllProperties(playerID){
-    let player = players[playerID]
-
-    spaces.forEach(function(space){
-        space.owner = player
-        
-    })
-}
 
 // Runs a dice roll where you specify the total.
 // Helpful when you need to land on a certain space to test.
@@ -587,9 +578,6 @@ function intialisePlayerCreator(){
         if (!condition && existingPanel){
             existingPanel.parentNode.removeChild(existingPanel)
         }
-
-        console.log(e.target)
-        console.log(e.target.classList.contains('token-option'))
     })
 
     createPlayerCreationPanel(1)
@@ -693,14 +681,11 @@ function intialisePlayerCreator(){
 
 function createPlayers(){
     let newPlayersOverlay = document.querySelector('#new-player-overlay')
-    //let numberOfPlayers = document.querySelector('#no-of-players').value
-    //let numberOfPlayers = playerCreator.childElementCount
 
-    //console.log(numberOfPlayers)
 
     // Generate an object for each player, and add it to the players array
     ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
-        let newPlayer = {money:1500, inJail: 0, properties: [], postition: 0}
+        let newPlayer = {money:1500, inJail: 0, properties: [], position: 0}
         newPlayer.id = playerCreationPanel.getAttribute('player')
         newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
 
@@ -769,11 +754,6 @@ function generatePlayerSummary(player){
     let title = document.createElement('h2')
     title.innerText = player.name
     playerSummaryHeader.appendChild(title)
-
-    // Player label
-    //let playerLabel = document.createElement('span')
-    //playerLabel.textContent = 'Player ' + player.id
-    //titleContainer.appendChild(playerLabel)
 
 
     let playerMoney = document.createElement('div')
@@ -897,6 +877,9 @@ function drawCard(type){
     // While not all cards will require this, a large majority will
     updatePlayerDetails()
 }
+
+// TODO - are there other Monopoly sets where the cards aren't called
+// Community Chest or 'Chance'? I could achieve the same thing with a regex.
 
 // Generates a player-friendly card type name.
 // Used in certain output messages
@@ -1023,6 +1006,9 @@ function closePopup(){
     //availableActions.buildHouse = false
 }
 
+// TODO - there's at least one instance in this project where I'd had to hack
+// this since I needed to attach nodes with event listeners; HTML alone isn't
+// always enough. This might be able to be improved.
 function openPopup(message){
     popupMessage.innerHTML = message
     document.body.classList.add('popup-open')
@@ -1039,8 +1025,6 @@ function rollDice(){
     // If the two numbers are the same, report that we rolled doubles.
     // Three doubles in a row sends you to jail.
     let doubles = (roll1 === roll2) ? true : false
-
-    //return [roll1, roll2, total, doubles]
 
     dice1.className = "dice dice-roll-" + roll1
     dice2.className = "dice dice-roll-" + roll2
@@ -1298,6 +1282,10 @@ function getOutOfJail(method){
   
   }
 
+// TODO - this runs at the beginning of each player's turn to check whether the
+// current player is in jail and run appropriate actions if they are. There is 
+// probably a much better way of doing this.
+
 function checkJail(){
 
     let jailTurn = players[turn - 1].inJail
@@ -1342,6 +1330,7 @@ function increasePlayerTurn(){
 
     document.querySelector('#player' + turn + 'summary').classList.add('current-player-summary')
     
+    // TODO - check whether this is being run twice?
     checkJail()
 }
 
@@ -1440,6 +1429,8 @@ function generateRentTable(number){
 
 function portfolioItemPreview(e){
     let target = e.target
+
+    // TODO - Why am I doing this with classes and not attributes?
 
     if (target.classList.contains('property-icon')){
         let targetProperty = target.classList.value
@@ -1641,7 +1632,6 @@ function displayBuildHousePanel(colour){
         }
           
         function checkAllHousesSame(){
-            //console.log(colourSetHouses.every(checkHouseAmount))
             return(colourSetHouses.every(checkHouseAmount))
         }
 

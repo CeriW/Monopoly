@@ -50,6 +50,10 @@ An incomplete list of all the developments that need to be completed
 
 - Don't have to wait until your turn to build houses/hotels
 
+- Reorder the readme so it's in alphabetical order
+
+- Check whether all the properties on the space array objects are really necessary.
+
 STRETCH GOALS
 
 - Add a Monopoly rulebook
