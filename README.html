@@ -890,8 +890,19 @@
 
 <div class="function">
   <h3 class="function-name">auctionProperty</h3>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number for the space we are working with.</li>
+  </ul>
+  <div class="private-variable">
+    <h4>Private variables of note:</h4>
+    <ul>
+      <li>currentBid - <i>number</i> - the current winning bid. Initialised as 0.</li>
+      <li>currentNumberOfBidders - <i>number</i> - the number of players currently available to bid. At present it is initialised as the length of the players array, but I know later when I code the functionality that allows players to lose that this isn't going to cut it.</li>
+    </ul>
+  </div>
+
   <div class="function-description">
-    At present this doesn't do anything but log to the console. Eventually this will carry out all of the bits necessary to auction a property.
+    Creates the interface which sends the specified property to auction.
   </div>
 </div>
 
@@ -1002,6 +1013,7 @@
       <li>rent</li>
       <li>doubles-out-of-jail</li>
       <li>buy-property</li>
+      <li>auction</li>
     </ul>
   </div>
 </div>

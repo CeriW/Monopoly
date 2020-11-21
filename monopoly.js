@@ -209,8 +209,8 @@ function initialisePage(){
     generateBoard()
 
     // Shuffle both decks of cards
-    shuffleCards(communityChestCards)
-    shuffleCards(chanceCards)
+    shuffleArray(communityChestCards)
+    shuffleArray(chanceCards)
     cardCurrency()
 
     // Make the board the same height as its width
@@ -551,6 +551,8 @@ function fakeRollDice(fakeTotal){
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
 
 function intialisePlayerCreator(){
+
+    shuffleArray(availableTokens)
     
     // Create the 'Add player' button
     let addPlayer = document.createElement('div')
@@ -988,7 +990,7 @@ function cardBasedMovement(chosenCard, type){
 
 // A function which does a Durstenfeld shuffle
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-function shuffleCards(array) {
+function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];

@@ -20,10 +20,6 @@ An incomplete list of all the developments that need to be completed
 
 - Refactor all the things with player specific IDs to have player attributes instead.
 
-- Sell houses/hotels (including selling evenly)
-
-- Selling hotel shenanigans if there aren't sufficient houses in the bank
-
 - Can't build houses/hotels if there aren't any in the bank.
 
 - Make the tokens reposition when the window is resized.
@@ -40,8 +36,6 @@ An incomplete list of all the developments that need to be completed
 
 - Make it come up on the feed when players buy houses. If possible, have it come up with "Player 2 built 3 houses on Bond Street" rather than just coming up every time they hit build.
 
-- Make the prices on the board Monopoly dollars, not £
-
 - Tokens should start off displaying at position 0 on the board.
 
 - A thought to investigate - if you have 1 house on a property in the colour set and 0 houses on another, can you mortgage the property with 0?
@@ -53,6 +47,10 @@ An incomplete list of all the developments that need to be completed
 - Reorder the readme so it's in alphabetical order
 
 - Check whether all the properties on the space array objects are really necessary.
+
+-Shuffle availableTokens so they are chosen randomly.
+
+- Ensure you can't close the popup by pressing escape when availableActions.closePopup is false
 
 STRETCH GOALS
 
