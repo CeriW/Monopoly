@@ -187,7 +187,8 @@ let availableActions = {
     getOutOfJail: false,
     rollDoublesForJail: false,
     buildHouse: true,
-    buildHotel: true
+    buildHotel: true,
+    closePopup: true
 }
 
 let currencySymbol = '₩'
@@ -333,6 +334,7 @@ function setAvailableActions(){
     document.body.setAttribute('roll-doubles-for-jail', availableActions.rollDoublesForJail)
     document.body.setAttribute('build-house', availableActions.buildHouse)
     document.body.setAttribute('build-hotel', availableActions.buildHotel)
+    document.body.setAttribute('close-popup', availableActions.closePopup)
 }
 
 
@@ -692,6 +694,7 @@ function createPlayers(){
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
         let newPlayerName = playerCreationPanel.querySelector('.player-name-input').value
+        newPlayerName = newPlayerName.charAt(0).toUpperCase() + newPlayerName.slice(1)
         newPlayer.name = newPlayerName ? newPlayerName : 'Player ' + playerCreationPanel.getAttribute('player')
 
         players.push(newPlayer)
@@ -1000,6 +1003,8 @@ function shuffleCards(array) {
 
 function closePopup(){
     document.body.classList.remove('popup-open')
+    availableActions.closePopup = true
+    setAvailableActions()
     
     // Reset the build house available action. We'll recheck whether it's
     // appropriate when the window is next opened.
@@ -1338,6 +1343,12 @@ function increasePlayerTurn(){
 
 
 function displayPropertyDetails(number){
+    htmlOutput = generatePropertyDetails(number)
+    openPopup(htmlOutput)
+    displayPropertyOptions(number)
+}
+
+function generatePropertyDetails(number){
 
     let htmlOutput = '<div class="property-overview"'
 
@@ -1349,9 +1360,10 @@ function displayPropertyDetails(number){
         htmlOutput += '>'
     }
 
+    
+
     switch (spaces[number].type){
         case 'property':
-
             htmlOutput += generateRentTable(number)
         
             break
@@ -1361,6 +1373,7 @@ function displayPropertyDetails(number){
             className = className.replace(/\s/g, '-')
             htmlOutput += '<div class="card-icon card-icon-' + className + '"></div>'
             htmlOutput += '<div class="property-overview-title">' + spaces[number].name + '</div>'
+            htmlOutput += '<div class="price">PRICE: ' + currencySymbolSpan + spaces[number].price + '</div>'
 
             spaces[number].rent.forEach(function(content){
                 htmlOutput += '<div style="max-width: 250px; float: none; margin: 0 auto;"><br>' + content + '</div>'
@@ -1374,6 +1387,7 @@ function displayPropertyDetails(number){
 
             htmlOutput += '<div class="card-icon card-icon-station"></div>'
             htmlOutput += '<div class="property-overview-title">' + spaces[number].name + '</div>'
+            htmlOutput += '<div class="price">PRICE: ' + currencySymbolSpan + spaces[number].price + '</div>'
             htmlOutput += '<br>'
 
             // Rent table
@@ -1391,12 +1405,8 @@ function displayPropertyDetails(number){
             break
         
         }
-        
-    
 
-    openPopup(htmlOutput)
-
-    displayPropertyOptions(number)
+    return htmlOutput
 }
 
 
@@ -1406,19 +1416,20 @@ function generateRentTable(number){
 
     // Rent table
     htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><div class="property-overview-title">' + spaces[number].name + '</div></div>'
+    htmlOutput += '<div class="price">PRICE: ' + currencySymbolSpan + spaces[number].price + '</div>'
     htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
-    htmlOutput += '<td>Rent</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
-    htmlOutput += '<tr><td>Rent with colour set</td><td>' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
+    htmlOutput += '<td style="text-align: left">Rent</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
+    htmlOutput += '<tr><td style="text-align: left">Rent with colour set</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
     for (i = 2; i <=6; i++){
-        htmlOutput += '<tr><td>Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td>' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
+        htmlOutput += '<tr><td style="text-align: left">Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td style="text-align: right">' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
     }
 
     htmlOutput += '</table>'
 
     // Houses table
     htmlOutput += '<table class="house-price-table">'
-    htmlOutput += '<tr><td>Houses cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
-    htmlOutput += '<tr><td>Hotels cost</td><td>' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td style="text-align: left">Houses cost</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td style="text-align: left">Hotels cost</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
     htmlOutput += '</table>'
 
 
@@ -1480,12 +1491,24 @@ function displayPropertyOptions(number){
     // If this property is unowned, display a button to buy it
     if (!propertyOwner){
         if (players[turn - 1].position === number){
+
+            // Buy property elements
             let buyButton = document.createElement('button')
             buyButton.innerText = 'Buy this property'
             buyButton.addEventListener('click', function(){
-                buyProperty(number, players[turn - 1])
+                buyProperty(number, players[turn - 1], 'purchase', null)
             })
             optionsPanel.appendChild(buyButton)
+
+
+            // Auction property elements
+            let auctionButton = document.createElement('button')
+            auctionButton.innerText = 'Go to auction'
+            auctionButton.addEventListener('click', function(){
+                auctionProperty(number)
+            })
+            optionsPanel.appendChild(auctionButton)
+
         }
     } 
 
@@ -1821,19 +1844,200 @@ function updateHouseDisplay(number){
     }
 }
 
-function buyProperty(number, player){
+function buyProperty(number, player, method, price){
     spaces[number].owner = player
     closePopup()
-    player.money -= spaces[number].price
-    player.properties[number] = spaces[number]
 
+    switch(method){
+        case 'purchase':
+            player.money -= spaces[number].price
+            addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
+            break
+        case 'auction':
+            player.money -= price
+            addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
+    }
+
+    
+    player.properties[number] = spaces[number]
     updatePlayerDetails()
 
-    addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
+    
 }
 
-function auctionProperty(){
-    console.log('auction!')
+function auctionProperty(number){
+
+    let currentBid = 0
+    let currentNumberOfBidders = players.length
+
+
+    let auctionScreen = document.createElement('div')
+    auctionScreen.classList.add('auction-screen')
+
+    // Generate the rent table so players can see what they're buying
+    let auctionRentTable = document.createElement('div')
+    auctionRentTable.classList.add('auction-rent-table')
+    auctionRentTable.innerHTML += generatePropertyDetails(number)
+    auctionScreen.appendChild(auctionRentTable)
+
+    // Generate the areas for players to bid on the property
+    let auctionBidArea = document.createElement('div')
+    auctionBidArea.classList.add('auction-bidding-area')
+
+    // Generate the auction heading
+    let auctionHeading = document.createElement('h2')
+    auctionHeading.classList.add('auction-heading')
+    auctionHeading.textContent = 'Auction'
+    auctionBidArea.appendChild(auctionHeading)
+
+    // Generate an area to show the current bid
+
+    let currentBidContainer = document.createElement('div')
+    currentBidContainer.classList.add('current-bid-container')
+
+    let currentBidHeading = document.createElement('h3')
+    currentBidHeading.textContent = 'Current bid:'
+    currentBidHeading.classList.add('current-bid-heading')
+    currentBidContainer.appendChild(currentBidHeading)
+
+    let currentBidAmount = document.createElement('div')
+    currentBidAmount.classList.add('current-bid-amount')
+    currentBidAmount.innerHTML = currencySymbolSpan + currentBid
+    currentBidContainer.appendChild(currentBidAmount)
+
+
+    auctionBidArea.appendChild(currentBidContainer)
+
+    let playerBidInterfacesContainer = document.createElement('div')
+    playerBidInterfacesContainer.classList.add('player-bid-interfaces-container')
+
+    for(i = 0; i < players.length; i++){
+        // The container for this player's interface
+        let playerBidInterface = document.createElement('div')
+        playerBidInterface.classList.add('player-bid-interface')
+        playerBidInterface.setAttribute('player', players[i].id)
+        
+        // Generate the player's token
+        let playerToken = document.createElement('div')
+        playerToken.classList.add('player-token-icon')
+        playerToken.setAttribute('player', players[i].id)
+        playerToken.setAttribute('token', players[i].token)
+        playerBidInterface.appendChild(playerToken)
+
+        // Generate the player's name
+        let playerHeading = document.createElement('h3')
+        playerHeading.classList.add('player-heading')
+        playerHeading.textContent = players[i].name
+        playerBidInterface.appendChild(playerHeading)
+
+        // Generate the player's money
+        let playerMoney = document.createElement('div')
+        playerMoney.classList.add('player-money')
+        playerMoney.innerHTML = currencySymbolSpan + players[i].money
+        playerBidInterface.appendChild(playerMoney)
+
+        // Generate the input field for the player's bid.
+        let bidInput = document.createElement('input')
+        bidInput.setAttribute('type', 'number')
+        bidInput.setAttribute('placeholder', 'Your bid')
+        bidInput.setAttribute('min', 10)
+        playerBidInterface.appendChild(bidInput)
+
+        // Generate the buttons for players to submit their bids.
+        let submitBidButton = document.createElement('button')
+        submitBidButton.textContent = 'Bid'
+        submitBidButton.classList.add('bid-button')
+        playerBidInterface.appendChild(submitBidButton)
+
+        // Generate the buttons for players to abstain from bidding
+        let abstainButton = document.createElement('button')
+        abstainButton.textContent = 'Withdraw'
+        abstainButton.classList.add('abstain-button')
+        playerBidInterface.appendChild(abstainButton)
+
+
+        // Add an event listener to the panel so we can run various events
+        playerBidInterface.addEventListener('click', bidOnProperty)
+
+        // Add all of this to the bid area
+        playerBidInterfacesContainer.appendChild(playerBidInterface)
+
+    }
+
+    auctionBidArea.appendChild(playerBidInterfacesContainer)
+    auctionScreen.appendChild(auctionBidArea)
+
+    // Attach this to the popup message
+    availableActions.closePopup = false
+    openPopup('')
+    popupMessage.appendChild(auctionScreen)
+
+
+
+    function bidOnProperty(e){
+
+        // If a bid button has been clicked...
+        if (e.target.classList.contains('bid-button')){
+            let bidBox = e.target.parentNode
+            let currentBidder = bidBox.getAttribute('player')
+
+            // Check the new bid is greater than the current bid, and if so
+            // display that info
+            let newBid = parseInt(bidBox.querySelector('input').value)
+            if (currentBid < newBid && newBid >= 10){
+
+                currentBid = newBid
+
+                // When nobody has bid yet, this class won't exist, hence the if statement.
+                let currentWinnerDisplay = auctionScreen.querySelector('.current-winner')
+                if (currentWinnerDisplay){
+                    currentWinnerDisplay.classList.remove('current-winner')
+                }
+
+                // Add a class to the current winner's display so we can style it nicely (or pass it on to the declareAuctionWinner() function)
+                auctionScreen.querySelector('.player-bid-interface[player="' + currentBidder + '"]').classList.add('current-winner')
+
+                if (currentNumberOfBidders === 1){
+                    // If we are down to our final bidder and an actual bid
+                    // has been made, they have won.
+                    declareAuctionWinner()
+                } else{
+                    currentBidAmount.innerHTML = currencySymbolSpan + currentBid
+                }
+
+            }
+
+            
+            // Make it so that other players cannot bid less or equal to this.
+            ;[].forEach.call(document.querySelectorAll('.auction-bidding-area input[type="number"]'), function(node){
+                node.setAttribute('min', (currentBid + 1))
+                node.value = ''
+            })
+        
+        // If an abstain button has been clicked...
+        } else if (e.target.classList.contains('abstain-button')){
+            
+            // Remove this player from the bidding interface
+            e.target.parentNode.classList.add('abstained-from-bidding')
+            currentNumberOfBidders--
+
+            // If there is now one bidder left and someone has actually bid on this.
+            if (currentNumberOfBidders === 1 && currentBid){
+                declareAuctionWinner()
+            } else if (currentNumberOfBidders === 0 && !currentBid){
+                addToFeed(spaces[number].name + ' was available for auction but nobody bid on it.', 'auction')
+                closePopup()
+            }
+
+        }
+    
+        function declareAuctionWinner(){
+            let winner = auctionScreen.querySelector('.current-winner').getAttribute('player')
+            buyProperty(number, players[winner - 1], 'auction', currentBid)
+        }
+    
+    }
+
 }
 
 // COLOUR SET FUNCTIONS ------------------------------------------------------//
@@ -1968,6 +2172,8 @@ function landOnProperty(position){
 
     } else{
         // Nobody owns this property
+        availableActions.closePopup = false
+        setAvailableActions()
         displayPropertyDetails(position)
     }
 }

@@ -358,6 +358,7 @@
       <li>rollDoublesForJail - <i>boolean</i> - whether the current player is able to attempt to roll doubles to get themselves out of jail. Players get three attempts at this before they are forced to pay 50 or use a get out of jail free card to get out.</li>
       <li>buildHouse - <i>boolean</i> - whether houses can currently be built on properties, based on the number of houses available in the bank</li>
       <li>buildHotel - <i>boolean</i> - whether hotels can currently be built on properties, based on the number of hotels available in the bank</li>
+      <li>closePopup - <i>boolean</i> - whether the popup can be closed. This is used in things like auctions where you don't want players to be able to close the popup until things have been concluded.</li>
     </ul>
   </div>
 </div>
@@ -770,7 +771,18 @@
     <li>number - <i>number</i> - the position number of the space you want to display</li>
   </ul>
   <div class="function-description">
-    Creates a popup window which displays the details of the specified property, including rent, house costs etc. Some of these are generated using other functions depending on what kind of space it is.
+    Gets the details of the property from generatePropertyDetails, then displays them in a popup window
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">generatePropertyDetails</h3>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number of the space you want to display</li>
+  </ul>
+  <div class="function-description">
+    Returns a complex HTML string containing full details of that property.
   </div>
 </div>
 
@@ -868,9 +880,11 @@
   <ul class="function-parameters">
     <li>number - <i>number</i> - the position number for the space we are working with.</li>
     <li>player - <i>object</i> - the object from the <i>players</i> array for the player buying the property.</li>
+    <li>method - <i>string</i> - generally 'purchase' or 'auction'. The method by which the player is obtaining the property. This is used to generate a suitable feed message.</li>
+    <li>price - <i>number</i> - the price the player is paying for this property. If this is a standard property it doesn't matter what you put for this as it'll look up the price in the <i>spaces</i> array. To avoid confusion I use null for this purpose.</li>
   </ul>
   <div class="function-description">
-    All of the bits required for a player to buy a property, including taking the money from the player, updating the player's properties array (although the <i>spaces</i> array should be used as the definitive guide to what is actually going on with a space), adds a message to the feed and closes the popup window (since this would happen after pressing a 'Buy property' button in the popup).
+    All of the bits required for a player to buy a property, including taking the money from the player, updating the player's properties array (although the <i>spaces</i> array should be used as the definitive guide to what is actually going on with a space), adds a message to the feed and closes the popup window (since this would happen after pressing a 'Buy property' button or winning an auction in the popup).
   </div>
 </div>
 
