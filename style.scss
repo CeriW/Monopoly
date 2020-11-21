@@ -1198,11 +1198,86 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
     max-width: 170px;
 }
 
-body[build-house = "false"] .build-house-button,
-.house-visual-display[houses="0"] + .button-panel .sell-house-button,
-.disabled-button{
+body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,    // Build house button on properties with 4 houses when build-hotels is false
+body[build-house = "false"] .build-house-button,                                                    // Build house button When build-house is false
+.house-visual-display[houses="0"] + .button-panel .sell-house-button,                               // Sell house button when property doesn't have houses
+.disabled-button{                                                                                   // General disabled buttons
     @include disabledButton();
 }
+
+// Properties with hotels
+.house-visual-display[houses="5"] + .button-panel{
+    
+    .build-house-button{
+        @include disabledButton()
+    }
+
+    .sell-house-button .sell-house{
+        display: none;
+    }
+
+    .build-house-button .maximum-number-of-buildings-reached{
+        display: block;
+    }
+
+    /* If we have the maximum number of buildings, this is the definitive rule.
+       we do not care whether there are still hotels in the bank */
+    .build-house-button span:not(.maximum-number-of-buildings-reached){
+        display: none !important;
+    }
+}
+
+// Properties without hotels
+.house-visual-display:not([houses="5"]) + .button-panel{
+
+    .build-house-button .build-hotel,
+    .sell-house-button .sell-hotel,
+    .build-house-button .maximum-number-of-buildings-reached{
+        display: none;
+    }
+}
+
+// Properties with 4 houses
+.house-visual-display[houses="4"] + .button-panel{
+    .build-house-button .build-hotel{
+        display: block;
+    }
+
+    .build-house-button .build-house{
+        display: none;
+    }
+}
+
+
+.no-more-houses-in-bank,
+.no-more-hotels-in-bank{
+    display: none;
+}
+
+
+// If there are no houses in the bank
+body[build-house="false"]{
+    .no-more-houses-in-bank{
+        display: block;
+    }
+
+    .build-house-button span:not(.no-more-houses-in-bank){
+        display: none !important;
+    }
+}
+
+// If there are no hotels in the bank
+body[build-hotel="false"]{
+    .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
+        display: block;
+    }
+
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank){
+        display: none;
+    }
+}
+
+
 
 .house-visual-display{
     height: 35px;

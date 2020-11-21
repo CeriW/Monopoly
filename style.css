@@ -1101,12 +1101,54 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 .build-house-button {
   max-width: 170px; }
 
+body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,
 body[build-house="false"] .build-house-button,
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,
 .disabled-button {
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
+
+.house-visual-display[houses="5"] + .button-panel {
+  /* If we have the maximum number of buildings, this is the definitive rule.
+       we do not care whether there are still hotels in the bank */ }
+  .house-visual-display[houses="5"] + .button-panel .build-house-button {
+    background: #ccc;
+    color: #8f8f8f;
+    pointer-events: none; }
+  .house-visual-display[houses="5"] + .button-panel .sell-house-button .sell-house {
+    display: none; }
+  .house-visual-display[houses="5"] + .button-panel .build-house-button .maximum-number-of-buildings-reached {
+    display: block; }
+  .house-visual-display[houses="5"] + .button-panel .build-house-button span:not(.maximum-number-of-buildings-reached) {
+    display: none !important; }
+
+.house-visual-display:not([houses="5"]) + .button-panel .build-house-button .build-hotel,
+.house-visual-display:not([houses="5"]) + .button-panel .sell-house-button .sell-hotel,
+.house-visual-display:not([houses="5"]) + .button-panel .build-house-button .maximum-number-of-buildings-reached {
+  display: none; }
+
+.house-visual-display[houses="4"] + .button-panel .build-house-button .build-hotel {
+  display: block; }
+
+.house-visual-display[houses="4"] + .button-panel .build-house-button .build-house {
+  display: none; }
+
+.no-more-houses-in-bank,
+.no-more-hotels-in-bank {
+  display: none; }
+
+body[build-house="false"] .no-more-houses-in-bank {
+  display: block; }
+
+body[build-house="false"] .build-house-button span:not(.no-more-houses-in-bank) {
+  display: none !important; }
+
+body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank {
+  display: block; }
+
+body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
+  display: none; }
 
 .house-visual-display {
   height: 35px;

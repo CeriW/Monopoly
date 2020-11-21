@@ -1602,8 +1602,17 @@ function displayBuildHousePanel(colour){
         // Create a button to build houses
         let buildHouseBtn = document.createElement('button')
         buildHouseBtn.classList.add('build-house-button')
-        buildHouseBtn.innerText = 'Build house'
-        buildHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Build hotel' : 'Build house'
+
+        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'maximum-number-of-buildings-reached'].forEach(function(message){
+            let innerSpan = document.createElement('span')
+            innerSpan.classList.add(message)
+            let readableMessage = message.replace(/-/g, ' ')
+            innerSpan.textContent = readableMessage
+            buildHouseBtn.appendChild(innerSpan)
+        })
+
+        //buildHouseBtn.innerText = 'Build house'
+        //buildHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Build hotel' : 'Build house'
         buildHouseBtn.addEventListener('click', function(){
             buildHouse(property.position) 
         })
@@ -1613,8 +1622,18 @@ function displayBuildHousePanel(colour){
         // Create a button to sell houses
         let sellHouseBtn = document.createElement('button')
         sellHouseBtn.classList.add('sell-house-button')
-        sellHouseBtn.innerText = 'Sell house'
-        sellHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Sell hotel' : 'Sell house'
+
+        ;['sell-house', 'sell-hotel'].forEach(function(message){
+            let innerSpan = document.createElement('span')
+            innerSpan.classList.add(message)
+            let readableMessage = message.replace(/-/g, ' ')
+            innerSpan.textContent = readableMessage
+            sellHouseBtn.appendChild(innerSpan)
+        })
+
+         
+        //sellHouseBtn.innerText = 'Sell house'
+        //sellHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Sell hotel' : 'Sell house'
         sellHouseBtn.addEventListener('click', function(){
             sellHouse(property.position) 
         })
@@ -1674,15 +1693,11 @@ function displayBuildHousePanel(colour){
             
             if (highestNumberOfHouses === 5){
 
-                // If all the properties have hotels, disable all the build buttons
-                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button'), function(button){
-                    button.classList.add('disabled-button')
-                })
 
-                // If all the properties have hotels, enable all the sell buttons and update their text 
+
+                // If all the properties have hotels, enable all the sell buttons
                 ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .sell-house-button'), function(button){
                     button.classList.remove('disabled-button')
-                    button.textContent = 'Sell hotel'
                 })
             }
             
@@ -1692,9 +1707,6 @@ function displayBuildHousePanel(colour){
                     button.classList.remove('disabled-button')
                 })
 
-                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button'), function(button){
-                    button.textContent = 'Build house'
-                })
             }
 
         // If all the properties DON'T have the same number of houses...
@@ -1710,23 +1722,6 @@ function displayBuildHousePanel(colour){
             })
         }
 
-        // For properties that have 4 houses, make the build house button say 'build hotel' instead
-        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .button-panel .build-house-button'), function(node){
-            node.textContent = 'Build hotel'
-        })
-
-        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .button-panel .sell-house-button'), function(node){
-            node.textContent = 'Sell house'
-        })
-
-        // Display message on properties that have a hotel
-        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="5"] + .button-panel .build-house-button'), function(node){
-            node.textContent = 'Maximum number of buildings reached'
-        })
-
-        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="5"] + .button-panel .sell-house-button'), function(node){
-            node.textContent = 'Sell hotel'
-        })
         
         // Despite the rule of  building evenly, check there are
         // enough buildings in the bank. This will set an attribute on the
@@ -1734,19 +1729,15 @@ function displayBuildHousePanel(colour){
         // buttons regardless of what the other maths returns
 
         if (!availableHouses){
-            document.body.setAttribute('build-house', false)
-            ;[].forEach.call(document.querySelectorAll('.house-visual-display:not([houses="4"]) + .button-panel .build-house-button:not(.disabled-button)'), function(node){
-                node.textContent = 'No houses left in bank'
-            })
+            availableActions.buildHouse = false
         }
         
     
         if (!availableHotels){
-            document.body.setAttribute('build-hotel', false)
-            ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .button-panel .build-house-button:not(.disabled-button)'), function(node){
-                node.textContent = 'No hotels left in bank'
-            })
+            availableActions.buildHotel = false
         }
+
+        setAvailableActions()
     }
     
     
