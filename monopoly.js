@@ -293,7 +293,7 @@ function addEvents(){
 
     document.onkeydown = function(e) {
         e = e || window.event
-        if (e.keyCode == 27) {
+        if (e.keyCode == 27 && document.getAttribute('close-popup') === true) {
             closePopup()
         }
     }
@@ -1641,7 +1641,6 @@ function displayBuildHousePanel(colour){
         // in the colour set.
         let colourSetHouses = []
         colourSet.forEach(function(property){
-            //colourSetHouses.push(property.houses)
             colourSetHouses.push(spaces[property.position].houses)
         })
 
