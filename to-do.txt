@@ -24,8 +24,6 @@ An incomplete list of all the developments that need to be completed
 
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
 
-- Full player portfolio to show house icons rather than just have it in writing.
-
 - Calc cards
 
 - Exchange cards

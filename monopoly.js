@@ -1474,7 +1474,15 @@ function fullPortfolioView(e){
         portfolioOutput += '<div class="full-portfolio-item">'
         portfolioOutput += '<div class="property-icon ' + property.group + ' ' + spaces.indexOf(property) + '"></div>' 
         portfolioOutput += '<div>' + property.name + '</div>'
-        portfolioOutput += '<div>' + property.houses + ' houses</div>'
+        
+        if (property.houses === 5){
+            portfolioOutput += '<span class="full-portfolio-hotel"></span>'
+        } else{
+            for (i = 1; i <= property.houses; i++){
+                portfolioOutput += '<span class="full-portfolio-house"></span>'
+            }
+        }
+
         portfolioOutput += '</div>'
 
         //portfolioOutput += '<div class="full-portfolio-item">' + property.name + '</div>'
@@ -1707,12 +1715,18 @@ function displayBuildHousePanel(colour){
             node.textContent = 'Build hotel'
         })
 
+        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="4"] + .button-panel .sell-house-button'), function(node){
+            node.textContent = 'Sell house'
+        })
+
         // Display message on properties that have a hotel
         ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="5"] + .button-panel .build-house-button'), function(node){
             node.textContent = 'Maximum number of buildings reached'
         })
 
-
+        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="5"] + .button-panel .sell-house-button'), function(node){
+            node.textContent = 'Sell hotel'
+        })
         
         // Despite the rule of  building evenly, check there are
         // enough buildings in the bank. This will set an attribute on the

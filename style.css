@@ -944,7 +944,20 @@ body[close-popup="false"] #popup-close {
   align-items: center;
   width: 380px; }
   .full-portfolio-item > div {
-    margin: 0 10px 10px 0; }
+    margin: 0 0 0 10px; }
+
+.full-portfolio-item .property-icon + div {
+  margin-right: 20px; }
+
+.full-portfolio-house,
+.full-portfolio-hotel {
+  width: 25px;
+  height: 25px;
+  background: url("images/house-icon.svg") center no-repeat;
+  background-size: contain; }
+
+.full-portfolio-hotel {
+  background-image: url("images/hotel-icon.svg"); }
 
 /* Player action buttons  ----------------------------------------------------*/
 .player-action-button {
