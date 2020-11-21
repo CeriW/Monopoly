@@ -2,8 +2,6 @@ An incomplete list of all the developments that need to be completed
 
 -------------------------------------------
 
-- If players choose not to buy properties, they must go to auction
-
 - Trading
 
 - Bankruptcy

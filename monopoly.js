@@ -1819,6 +1819,8 @@ function displayBuildHousePanel(colour){
         } else{
             availableHouses++
             spaces[number].houses--
+            updateHouseDisplay(number)
+            toggleHouseBuildButtons()
         }
 
         // Players get half the value back for houses/hotels
