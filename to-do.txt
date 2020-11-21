@@ -48,8 +48,6 @@ An incomplete list of all the developments that need to be completed
 
 - Check whether all the properties on the space array objects are really necessary.
 
--Shuffle availableTokens so they are chosen randomly.
-
 - Ensure you can't close the popup by pressing escape when availableActions.closePopup is false
 
 STRETCH GOALS

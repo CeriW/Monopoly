@@ -904,6 +904,26 @@
   <div class="function-description">
     Creates the interface which sends the specified property to auction.
   </div>
+
+  <div class="private-function">
+    <h4 class="function-name">bidOnProperty</h4>
+    <h5>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>e - <i>event</i> - the event passed on from the button which has been clicked.</li>
+    </ul>
+    <div class="function-description">
+      If the event target is the 'bid' button, it will submit a bid and restyle the auction window accordingly.
+      <br> If the event target is the 'withdraw' button, it will check whether there are still multiple remaining bidders. If there are, it will hide the bid panel for the withdrawn player. Otherwise declareAuctionWinner() will be run.
+    </div>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">declareAuctionWinner</h4>
+    <div class="function-description">
+      Finds the 'player' attribute on the .current-winner node, and declares that player the winner. Runs the buyProperty() function, passing in the appropriate details.
+    </div>
+  </div>
+
 </div>
 
 <div class="function">
