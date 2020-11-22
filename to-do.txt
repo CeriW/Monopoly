@@ -18,8 +18,6 @@ An incomplete list of all the developments that need to be completed
 
 - Refactor all the things with player specific IDs to have player attributes instead.
 
-- Make the tokens reposition when the window is resized.
-
 - Update spaces array with actual rent values
 
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
