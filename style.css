@@ -109,12 +109,6 @@ button {
   #player-creator > div:last-child.add-player-button {
     animation-delay: 0.4s; }
 
-@keyframes zoomIn {
-  from {
-    transform: scale(0); }
-  to {
-    transform: scale(1); } }
-
 .player-creation-panel {
   padding: 20px;
   background: #fff;
@@ -189,7 +183,8 @@ button {
   border-radius: 50%;
   background-size: 50px;
   background-position: center;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+  cursor: pointer; }
   .token-selector-chosen-indicator:after {
     content: '';
     width: 25px;
@@ -199,7 +194,10 @@ button {
     border-radius: 50%;
     position: absolute;
     right: -6px;
-    bottom: -6px; }
+    bottom: -6px;
+    transition: 0.2s; }
+  .token-selector-chosen-indicator:hover:after {
+    background-color: #b5b5b5; }
 
 .available-token-choices .token-option {
   width: 40px;
@@ -274,6 +272,8 @@ button {
   text-align: center;
   overflow: auto;
   transition: 0.5s; }
+  .new-game-dice-roll > * {
+    animation: fadeIn 0.5s linear both; }
   .new-game-dice-roll h2, .new-game-dice-roll h3 {
     text-transform: uppercase; }
   .new-game-dice-roll .winner-annoucement {
@@ -300,7 +300,7 @@ button {
   grid-template-columns: auto 50px 50px auto;
   text-align: center;
   margin: 10px;
-  border: 3px solid #000; }
+  transition: 0.3s; }
   .new-player-dice-roll img {
     max-width: 50px;
     grid-row: 1 / 1;
@@ -796,31 +796,19 @@ body[close-popup="false"] #popup-close {
 
 .bars:first-child {
   background: url("images/jail-bars-1.png");
-  animation: bars-1 0.6s both; }
+  animation: slideDown 0.6s both; }
 
 .bars:last-child {
   background: url("images/jail-bars-2.png");
-  animation: bars-2 0.6s both; }
+  animation: slideUp 0.6s both; }
 
 .jailAnimation #jail-overlay {
   display: block;
-  animation: jailFadeOut 0.7s;
+  animation: fadeOut 0.7s;
   animation-delay: 2.3s; }
 
 .jailAnimation #token {
   animation: jailTokenAnimation 1s; }
-
-@keyframes bars-1 {
-  from {
-    transform: translateY(-100%); }
-  to {
-    transform: translateY(0); } }
-
-@keyframes bars-2 {
-  from {
-    transform: translateY(100%); }
-  to {
-    transform: translateY(0); } }
 
 @keyframes jailAnimation {
   0% {
@@ -835,12 +823,6 @@ body[close-popup="false"] #popup-close {
     transform: scale(3); }
   to {
     transform: scale(1); } }
-
-@keyframes jailFadeOut {
-  from {
-    opacity: 1; }
-  to {
-    opacity: 0; } }
 
 /* Player summary  -----------------------------------------------------------*/
 #player-summary {
@@ -929,37 +911,13 @@ body[close-popup="false"] #popup-close {
   animation: goodChangeAnimation 1s ease-in-out;
   transform-origin: left center; }
 
-@keyframes goodChangeAnimation {
-  0% {
-    transform: scale(1); }
-  50% {
-    transform: scale(1.75);
-    color: #0aa959; }
-  100% {
-    transform: scale(1); } }
-
 .bad-change {
   animation: badChangeAnimation 1s ease-in-out;
   transform-origin: left center; }
 
-@keyframes badChangeAnimation {
-  0% {
-    transform: scale(1); }
-  50% {
-    transform: scale(1.75);
-    color: #db0926; }
-  100% {
-    transform: scale(1); } }
-
-.neutral-change {
-  animation: neutralChangeAnimation 0.7s ease-in-out;
+.spin-change {
+  animation: spinAnimation 0.7s ease-in-out;
   transform-origin: center center; }
-
-@keyframes neutralChangeAnimation {
-  0% {
-    transform: rotate(0deg); }
-  100% {
-    transform: rotate(360deg); } }
 
 .property-portfolio-title {
   background: #000;
@@ -1374,14 +1332,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   align-items: center; }
 
 #feed-content > div:first-child {
-  animation: feedSlideIn 0.3s linear;
+  animation: slideInFromLeft 0.3s linear;
   animation-iteration-count: 1; }
-
-@keyframes feedSlideIn {
-  from {
-    transform: translateX(-100%); }
-  to {
-    transform: translateX(0); } }
 
 /* Auction panel  ------------------------------------------------------------*/
 .auction-screen {
@@ -1539,3 +1491,169 @@ body:not(.testing-panel-enabled) #testing-panel {
   z-index: 1000;
   justify-content: space-around;
   display: flex; }
+
+/* CONFETTI ----------------------------------------------------------------- */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  pointer-events: none;
+  transition: 1s; }
+
+.confetti-container .particle {
+  animation-name: particleAnimation;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  position: absolute; }
+
+.particle > div {
+  background: #3e64ad;
+  width: 100%;
+  height: 100%; }
+
+.confetti-container .particle > div:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.2), transparent); }
+
+@keyframes particleAnimation {
+  0% {
+    top: -50px; }
+  100% {
+    top: 2500px; } }
+
+.particle > div {
+  animation-name: particleRotation;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: 5s; }
+
+@keyframes particleRotation {
+  from {
+    transform: rotate3d(1, 1, 1, 0deg); }
+  to {
+    transform: rotate3d(1, 1, 1, 360deg); } }
+
+.confetti-container .particle:nth-child(8n - 7) > div {
+  background: #824c26; }
+
+.confetti-container .particle:nth-child(8n - 6) > div {
+  background: #99d1f4; }
+
+.confetti-container .particle:nth-child(8n - 5) > div {
+  background: #d52788; }
+
+.confetti-container .particle:nth-child(8n - 4) > div {
+  background: #f1970b; }
+
+.confetti-container .particle:nth-child(8n - 3) > div {
+  background: #db0926; }
+
+.confetti-container .particle:nth-child(8n - 2) > div {
+  background: #e9ed38; }
+
+.confetti-container .particle:nth-child(8n - 1) > div {
+  background: #0aa959; }
+
+.confetti-container .particle:nth-child(8n) > div {
+  background: #f1970b; }
+
+/* Stars */
+.confetti-container .particle:nth-child(3n) {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+
+/* Pentagons */
+.confetti-container .particle:nth-child(7n) {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+
+/* Circles */
+.confetti-container .particle:nth-child(6n) {
+  clip-path: circle(50% at 50% 50%); }
+
+/* Rhombus */
+.confetti-container .particle:nth-child(9n) {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+
+.confetti-container .particle:nth-child(5n - 4) {
+  animation-duration: 40s; }
+
+.confetti-container .particle:nth-child(5n - 3) {
+  animation-duration: 35s; }
+
+.confetti-container .particle:nth-child(5n - 2) {
+  animation-duration: 30s; }
+
+.confetti-container .particle:nth-child(5n - 1) {
+  animation-duration: 25s; }
+
+.confetti-container .particle:nth-child(5n - 4) {
+  animation-duration: 20s; }
+
+/* General purpose animations ------------------------------------------------*/
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0); }
+  to {
+    transform: scale(1); } }
+
+@keyframes goodChangeAnimation {
+  0% {
+    transform: scale(1); }
+  50% {
+    transform: scale(1.75);
+    color: #0aa959; }
+  100% {
+    transform: scale(1); } }
+
+@keyframes badChangeAnimation {
+  0% {
+    transform: scale(1); }
+  50% {
+    transform: scale(1.75);
+    color: #db0926; }
+  100% {
+    transform: scale(1); } }
+
+@keyframes spinAnimation {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%); }
+  to {
+    transform: translateY(0); } }
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%); }
+  to {
+    transform: translateY(0); } }
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%); }
+  to {
+    transform: translateX(0); } }

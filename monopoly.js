@@ -179,7 +179,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let maxNumberOfPlayers = 8
+let maxNumberOfPlayers = 4
 
 let availableActions = {
     rollDice: true,
@@ -456,10 +456,11 @@ function updateBank(){
 
 // Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
 function animateUpdate(node, type){
+    node.classList.remove(type + '-change')
     node.classList.add(type + '-change')
     window.setTimeout(function(){
         node.classList.remove(type + '-change')
-    }, 2000)
+    }, 1000)
 }
 
 // TESTING FUNCTIONS ---------------------------------------------------------//
@@ -937,7 +938,7 @@ function newGameDiceRoll(){
     function newPlayerDiceRoll(){
 
         let diceRollElements = diceRollScreen.querySelectorAll('.new-player-dice-roll:not(.losing-dice-roll)')
-        console.log(diceRollElements)
+        let diceRollButton = diceRollScreen.querySelector('button')
 
         let i = 0
 
@@ -946,8 +947,10 @@ function newGameDiceRoll(){
             if(i === diceRollElements.length){
                 window.clearInterval(interval)
                 checkDiceRollWinner()
+                diceRollButton.style.pointerEvents = 'all'
             } else{
                 displayDiceRoll()
+                diceRollButton.style.pointerEvents = 'none'
             }
         }, 600)
 
@@ -964,9 +967,9 @@ function newGameDiceRoll(){
 
             // Update the interface to show the dice roll
             dice1.setAttribute('roll', roll1)
-            animateUpdate(dice1, 'neutral')
+            animateUpdate(dice1, 'spin')
             dice2.setAttribute('roll', roll2)
-            animateUpdate(dice2, 'neutral')
+            animateUpdate(dice2, 'spin')
 
             node.querySelector('.total').textContent = roll1 + roll2
 
@@ -975,31 +978,19 @@ function newGameDiceRoll(){
             let playerWhoIsRolling = parseInt(node.getAttribute('player'))
             diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
 
-            
-
             i++
         }
 
 
         function checkDiceRollWinner(){
-        // Check whether all the players have rolled.
-        // If so, compare totals.
-
-        let totalDiceRolls = diceRolls.filter(function(roll){
-            if (roll){
-                return roll
-            }
-        })
-
-        if (totalDiceRolls.length === numberOfPlayersToRoll){
 
             let max = 0
             let maxCount = 0
 
-            // What is the highest roll?
-            diceRolls.forEach(function(number){
-                if (number > max){
-                    max = number
+
+            diceRolls.forEach(function(roll){
+                if (roll > max){
+                    max = roll
                 }
             })
 
@@ -1017,11 +1008,19 @@ function newGameDiceRoll(){
                 winnerAnnouncement.textContent = players[winningPlayer].name + ' wins with a roll of ' + max
                 diceRollScreen.querySelector('.new-player-dice-roll[total="' + max + '"]').classList.add('winning-dice-roll')
                 diceRollButton.textContent = 'Begin game ⯈'
+                turn = winningPlayer // Set to one less because we're about to increase it
+                increasePlayerTurn()
+                createConfetti()
+
                 diceRollButton.removeEventListener('click', newPlayerDiceRoll)
                 diceRollButton.addEventListener('click', function(){
                     diceRollScreen.style.opacity = 0
+                    let confetti = document.querySelector('.confetti-container')
+
+                    confetti.style.opacity = 0
                     window.setTimeout(function(){
                         document.body.removeChild(diceRollScreen)
+                        document.body.removeChild(confetti)
                     }, 1000)
                 })
             
@@ -1073,7 +1072,6 @@ function newGameDiceRoll(){
 
             }
 
-        }
         }
 
         
@@ -2463,3 +2461,38 @@ function addToFeed(message,type){
     feed.insertBefore(newMessage, feed.firstChild)
 }
 
+
+
+
+// CONFETTI ------------------------------------------------------------------//
+
+function createConfetti(){
+    let confettiContainer = document.createElement('div')
+    confettiContainer.classList.add('confetti-container')
+    document.body.appendChild(confettiContainer)
+    
+    let confettiParticleCount = window.innerWidth / 10
+    
+    
+    for (i=0; i < confettiParticleCount; i++){
+      let particle = document.createElement('div')
+      particle.classList.add('particle')
+      let particleInner = document.createElement('div')
+      particle.appendChild(particleInner)
+      
+      confettiContainer.appendChild(particle)
+      
+  
+      
+      particle.style.left = (Math.random() * 100) + '%'
+      particle.style.animationDelay = ((Math.random() * 20) - 1) + 's'
+      
+      let size = ((Math.random() * 7) + 7) + 'px'
+      particle.style.width = size
+      particle.style.height = size
+      
+      particleInner.style.animationDuration = (Math.random() * 2 + 1) + 's'
+    }
+  }
+  
+  
