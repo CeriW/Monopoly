@@ -955,6 +955,10 @@ $jailAnimationLength: 1.5;
     div{
         overflow: hidden;
     }
+
+    button{
+        min-width: 50%;
+    }
 }
 
 .player-summary-header{
@@ -1779,25 +1783,11 @@ body:not(.testing-panel-enabled) #testing-panel{
   
   
   
-  .confetti-container .particle:nth-child(5n - 4){
-    animation-duration: 40s;
-  }
-  
-  .confetti-container .particle:nth-child(5n - 3){
-    animation-duration: 35s;
-  }
-  
-  .confetti-container .particle:nth-child(5n - 2){
-    animation-duration: 30s;
-  }
-  
-  .confetti-container .particle:nth-child(5n - 1){
-    animation-duration: 25s;
-  }
-  
-  .confetti-container .particle:nth-child(5n - 4){
-    animation-duration: 20s;
-  }
+.confetti-container .particle:nth-child(5n - 4){animation-duration: 40s;}
+.confetti-container .particle:nth-child(5n - 3){animation-duration: 35s;}
+.confetti-container .particle:nth-child(5n - 2){animation-duration: 30s;}
+.confetti-container .particle:nth-child(5n - 1){animation-duration: 25s;}
+.confetti-container .particle:nth-child(5n - 4){animation-duration: 20s;}
   
 
 /* General purpose animations ------------------------------------------------*/

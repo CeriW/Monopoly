@@ -839,6 +839,8 @@ body[close-popup="false"] #popup-close {
     padding: 10px 20px; }
   #player-summary div {
     overflow: hidden; }
+  #player-summary button {
+    min-width: 50%; }
 
 .player-summary-header {
   display: grid;
