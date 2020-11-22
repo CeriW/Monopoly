@@ -317,6 +317,15 @@ function addEvents(){
 
     addTestingEvents()
     
+
+    // When the window is resized, put the tokens back where they belong.
+    // While the game isn't really designed to be run in small windows, this is
+    // a small touch that makes it slightly better,
+    window.addEventListener('resize', function(){
+        ;[].forEach.call(document.querySelectorAll('.token'), function(token){
+            positionToken(token, token.getAttribute('position'))
+        })
+    })
 }
 
 function resizeBoard(){
