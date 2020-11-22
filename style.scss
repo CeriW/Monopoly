@@ -370,14 +370,32 @@ $tokens:
         grid-column: 1 / 5;
     }
 
-    .dice{
-        grid-row: 3 / 3;
-        grid-column: 2 / 2;
+    .dice-container{
+        grid-row: 3 / 4;
+        grid-column: 1 / 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        &.dice-2{
-            grid-column: 3 / 3;
+        span:not(.dice){
+            padding: 0 10px;
         }
     }
+
+    .dice{
+        display: inline-block
+    }
+
+    .total{
+        min-width: 40px;
+        font-size: 1.7em;
+        min-height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 !important;
+    }
+
 
     &.losing-dice-roll{
         opacity: 0.15;
@@ -1013,6 +1031,17 @@ $jailAnimationLength: 1.5;
     0%   {transform: scale(1);}
     50%  {transform: scale(1.75); color: $red;}
     100% {transform: scale(1);}
+}
+
+.neutral-change{
+    animation: neutralChangeAnimation 0.7s ease-in-out;
+    transform-origin: center center;
+}
+
+@keyframes neutralChangeAnimation{
+    0%   {transform: rotate(0deg);}
+    100%  {transform: rotate(360deg);}
+    //100% {transform: scale(1);}
 }
 
 .property-portfolio-title{

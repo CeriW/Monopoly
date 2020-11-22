@@ -894,24 +894,38 @@ function newGameDiceRoll(){
         diceRollBox.appendChild(playerName)
         //diceRollBox.textContent = player.name
 
-        for (i = 1; i <= 2; i++){
-            let dice = document.createElement('div')
-            dice.classList.add('dice', 'dice-' + i)
-            diceRollBox.appendChild(dice)
-        }
+        let diceContainer = document.createElement('div')
+        diceContainer.classList.add('dice-container')
 
-        //let diceRollButton = document.createElement('button')
-        //diceRollButton.textContent = 'Roll dice'
-                
-        //diceRollBox.appendChild(diceRollButton)
+
+            let dice1 = document.createElement('span')
+            dice1.classList.add('dice', 'dice-1')
+            diceContainer.appendChild(dice1)
+
+            let plus = document.createElement('span')
+            plus.textContent = ' + '
+            diceContainer.appendChild(plus)
+
+            let dice2 = document.createElement('span')
+            dice2.classList.add('dice', 'dice-2')
+            diceContainer.appendChild(dice2)
+
+            let equals = document.createElement('span')
+            equals.textContent = ' = '
+            diceContainer.appendChild(equals)
+
+            let total = document.createElement('span')
+            total.classList.add('total')
+            diceContainer.appendChild(total)
+
+
+        diceRollBox.appendChild(diceContainer)
 
         diceRollContainer.appendChild(diceRollBox)
     })
 
     let diceRollButton = document.createElement('button')
     diceRollButton.textContent = 'Roll dice'
-
-    let timeout = 0
 
     // Run the dice roll on all non-losing players
     diceRollButton.addEventListener('click', newPlayerDiceRoll)
@@ -945,17 +959,23 @@ function newGameDiceRoll(){
             let roll2 = Math.ceil(Math.random() * diceSides)
 
 
-            let dice1 = diceRollElements[i].querySelector('.dice-1')
-            let dice2 = diceRollElements[i].querySelector('.dice-2')
+            let dice1 = node.querySelector('.dice-1')
+            let dice2 = node.querySelector('.dice-2')
 
             // Update the interface to show the dice roll
             dice1.setAttribute('roll', roll1)
+            animateUpdate(dice1, 'neutral')
             dice2.setAttribute('roll', roll2)
+            animateUpdate(dice2, 'neutral')
+
+            node.querySelector('.total').textContent = roll1 + roll2
 
             // Store the current roll
-            diceRollElements[i].setAttribute('total', roll1 + roll2)
-            let playerWhoIsRolling = parseInt(diceRollElements[i].getAttribute('player'))
+            node.setAttribute('total', roll1 + roll2)
+            let playerWhoIsRolling = parseInt(node.getAttribute('player'))
             diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
+
+            
 
             i++
         }
