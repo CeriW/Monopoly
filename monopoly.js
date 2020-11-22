@@ -922,30 +922,46 @@ function newGameDiceRoll(){
 
     function newPlayerDiceRoll(){
 
-        ;[].forEach.call(diceRollScreen.querySelectorAll('.new-player-dice-roll:not(.losing-dice-roll)'), function(node){
-            // Perform the dice roll
+        let diceRollElements = diceRollScreen.querySelectorAll('.new-player-dice-roll:not(.losing-dice-roll)')
+        console.log(diceRollElements)
+
+        let i = 0
+
+        displayDiceRoll()
+        let interval = window.setInterval(function(){
+            if(i === diceRollElements.length){
+                window.clearInterval(interval)
+                checkDiceRollWinner()
+            } else{
+                displayDiceRoll()
+            }
+        }, 600)
+
+        function displayDiceRoll(){
+
+            let node = diceRollElements[i]
+
             let roll1 = Math.ceil(Math.random() * diceSides)
             let roll2 = Math.ceil(Math.random() * diceSides)
 
-            let dice1 = node.querySelector('.dice-1')
-            let dice2 = node.querySelector('.dice-2')
+
+            let dice1 = diceRollElements[i].querySelector('.dice-1')
+            let dice2 = diceRollElements[i].querySelector('.dice-2')
 
             // Update the interface to show the dice roll
             dice1.setAttribute('roll', roll1)
             dice2.setAttribute('roll', roll2)
 
             // Store the current roll
-            node.setAttribute('total', roll1 + roll2)
-            let playerWhoIsRolling = parseInt(node.getAttribute('player'))
+            diceRollElements[i].setAttribute('total', roll1 + roll2)
+            let playerWhoIsRolling = parseInt(diceRollElements[i].getAttribute('player'))
             diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
-        })
 
-        
-
-        // Disable the button from being clicked again
-        //e.target.classList.add('disabled-button')
+            i++
+        }
 
 
+        function checkDiceRollWinner(){
         // Check whether all the players have rolled.
         // If so, compare totals.
 
@@ -1038,6 +1054,9 @@ function newGameDiceRoll(){
             }
 
         }
+        }
+
+        
     }
             
     diceRollScreen.appendChild(diceRollButton)
