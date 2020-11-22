@@ -512,7 +512,7 @@
   <h4>Function parameters:</h4>
   <ul class="function-parameters">
     <li>node - <i>element</i> - the element on the page the code run within works on.</li>
-    <li>type - <i>string</i> - usually 'good' or 'bad'</li>
+    <li>type - <i>string</i> - can be 'good', 'bad' or 'spin'</li>
   </ul>
   <div class="function-description">
     Adds a class to the node of '<i>type</i>-change' for two seconds, which allows CSS animations to be run.</li>
@@ -1038,6 +1038,65 @@
   </div>
 </div>
 
+
+<div class="function">
+  <h3 class="function-name">newGameDiceRoll</h3>
+  <div class="function-description">
+
+    <div class="private-variable">
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>diceRolls - <i>array</i> - stores all of the dice rolls for that round of rolling, so they can be compared. Is wiped clean after each round of rolling.</li>
+        <li>numberOfPlayersToRoll - <i>number</i> - for the first round of rolling, this will be the length of the <i>players</i> array as all players have to roll. If there are subsequent rounds, this will be the number of players to re-roll. This is so the code knows to check for a winner after the correct number of dice rolls.</li>
+      </ul>
+    </div>
+
+    Creates the screen for after the players have been created, where all the players roll to see who goes first.
+
+    <div class="private-function">
+      <h4 class="function-name">newPlayerDiceRoll</h4>
+      <div class="function-description">
+        Runs when the roll dice button is clicked. Sequentially rolls two dice for all necessary players and displays that info. Once all those players have rolled the dice, it will either declare a winner or get the players to re-roll if there are joint highest rollers.
+      </div>
+    </div>
+
+    <div class="private-function">
+      <h4 class="function-name">displayDiceRoll</h4>
+      <div class="function-description">
+        Creates a visual display for the dice roll for that player.
+      </div>
+    </div>
+
+    <div class="private-function">
+      <h4 class="function-name">checkDiceRollWinner</h4>
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>max - <i>number</i> - the current highest roll. </li>
+        <li>maxCount - <i>number</i> - how many players have rolled the highest. If this is more than one, we'll require those players to roll again.</li>
+      </ul>
+      <div class="function-description">
+        Figures out what the highest roll is, and how many players have rolled that.
+        <ul>
+          <li>If there is only one, we have a winner. Update the winner announcment area to display this, change the winner's panel to green, display a nice confetti animation and update the button so that it can be clicked to start the game.</li>
+          <li>If there is more than one person with the same highest roll, create an array called <i>playerNames</i> to store the joint winners' names in, and create a string using this information to display in the winner's announcement area telling them to roll again. For all losing players, set a class of 'losing-dice-roll' so they can be styled and set their 'total' attribute to 0 so they won't be declared winner if the winners roll less in the next round. </li>
+        </ul>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">createConfetti</h3>
+  <div class="function-description">
+    Creates a div with a semi-random confetti animation. This function will generate an appropriate amount of confetti for the screen size and give them random animation-delay and animation-duration style rules. There are also style rules in the CSS to fix and cover the screen with this overlay, recolour certain pieces and animate it. 
+  </div>
+</div>
 
 <!-- Function template 
 

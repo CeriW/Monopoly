@@ -39,7 +39,7 @@ let diceDoubles = document.querySelector('#doubles')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 6
+let diceSides = 2
 
 
 // In a standard Monopoly set there are 32 houses and 12 hotels available.
@@ -456,10 +456,11 @@ function updateBank(){
 
 // Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
 function animateUpdate(node, type){
+    node.classList.remove(type + '-change')
     node.classList.add(type + '-change')
     window.setTimeout(function(){
         node.classList.remove(type + '-change')
-    }, 2000)
+    }, 1000)
 }
 
 // TESTING FUNCTIONS ---------------------------------------------------------//
@@ -755,8 +756,10 @@ function createPlayers(){
         players[i].position = 0
         i++
     })
-    
+
+    newGameDiceRoll()
 }
+
 
 function generatePlayerSummary(player){
     let newSummary = document.createElement('div')
@@ -847,6 +850,235 @@ function generatePlayerSummary(player){
 
 }
 
+function newGameDiceRoll(){
+
+    // An array to store the dice rolls so we can compare later.
+    let diceRolls = []
+
+    // The number of players to roll. This is originally all the players
+    // but will change if multiple players roll the joint highest roll
+    let numberOfPlayersToRoll = players.length
+
+    // Create a new screen to display all this info
+    let diceRollScreen = document.createElement('div')
+    diceRollScreen.classList.add('new-game-dice-roll')
+    document.body.appendChild(diceRollScreen)
+
+    // Create a heading
+    let heading = document.createElement('h2')
+    heading.textContent = "Roll to see which player goes first"
+    diceRollScreen.appendChild(heading)
+
+    let diceRollContainer = document.createElement('div')
+    diceRollContainer.classList.add('dice-roll-container')
+    diceRollScreen.appendChild(diceRollContainer)
+
+    // Create an area for the winner to be announced
+    let winnerAnnouncement = document.createElement('div')
+    winnerAnnouncement.classList.add('winner-annoucement')
+    diceRollScreen.appendChild(winnerAnnouncement)
+
+    // Generate the dice roll functionality for each player
+    players.forEach(function(player){
+        // Container
+        let diceRollBox = document.createElement('div')
+        diceRollBox.classList.add('new-player-dice-roll')
+        diceRollBox.setAttribute('player', player.id)
+        
+        // Token
+        let playerToken = document.createElement('img')
+        playerToken.src = 'images/tokens/' + player.token + '.svg'
+        diceRollBox.appendChild(playerToken)
+        
+        let playerName = document.createElement('h3')
+        playerName.textContent = player.name
+        diceRollBox.appendChild(playerName)
+        //diceRollBox.textContent = player.name
+
+        let diceContainer = document.createElement('div')
+        diceContainer.classList.add('dice-container')
+
+
+            let dice1 = document.createElement('span')
+            dice1.classList.add('dice', 'dice-1')
+            diceContainer.appendChild(dice1)
+
+            let plus = document.createElement('span')
+            plus.textContent = ' + '
+            diceContainer.appendChild(plus)
+
+            let dice2 = document.createElement('span')
+            dice2.classList.add('dice', 'dice-2')
+            diceContainer.appendChild(dice2)
+
+            let equals = document.createElement('span')
+            equals.textContent = ' = '
+            diceContainer.appendChild(equals)
+
+            let total = document.createElement('span')
+            total.classList.add('total')
+            diceContainer.appendChild(total)
+
+
+        diceRollBox.appendChild(diceContainer)
+
+        diceRollContainer.appendChild(diceRollBox)
+    })
+
+    let diceRollButton = document.createElement('button')
+    diceRollButton.textContent = 'Roll dice'
+
+    // Run the dice roll on all non-losing players
+    diceRollButton.addEventListener('click', newPlayerDiceRoll)
+
+
+
+
+
+    function newPlayerDiceRoll(){
+
+        let diceRollElements = diceRollScreen.querySelectorAll('.new-player-dice-roll:not(.losing-dice-roll)')
+        let diceRollButton = diceRollScreen.querySelector('button')
+
+        let i = 0
+
+        displayDiceRoll()
+        let interval = window.setInterval(function(){
+            if(i === diceRollElements.length){
+                window.clearInterval(interval)
+                checkDiceRollWinner()
+                diceRollButton.style.pointerEvents = 'all'
+            } else{
+                displayDiceRoll()
+                diceRollButton.style.pointerEvents = 'none'
+            }
+        }, 600)
+
+        function displayDiceRoll(){
+
+            let node = diceRollElements[i]
+
+            let roll1 = Math.ceil(Math.random() * diceSides)
+            let roll2 = Math.ceil(Math.random() * diceSides)
+
+
+            let dice1 = node.querySelector('.dice-1')
+            let dice2 = node.querySelector('.dice-2')
+
+            // Update the interface to show the dice roll
+            dice1.setAttribute('roll', roll1)
+            animateUpdate(dice1, 'spin')
+            dice2.setAttribute('roll', roll2)
+            animateUpdate(dice2, 'spin')
+
+            node.querySelector('.total').textContent = roll1 + roll2
+
+            // Store the current roll
+            node.setAttribute('total', roll1 + roll2)
+            let playerWhoIsRolling = parseInt(node.getAttribute('player'))
+            diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
+
+            i++
+        }
+
+
+        function checkDiceRollWinner(){
+
+            let max = 0
+            let maxCount = 0
+
+
+            diceRolls.forEach(function(roll){
+                if (roll > max){
+                    max = roll
+                }
+            })
+
+            // How many players have rolled the highest roll?
+            diceRolls.forEach(function(roll){
+                if (roll === max){
+                    maxCount++
+                }
+            })
+            
+            // If only one player has rolled the highest roll,
+            // we can begin the game
+            if(maxCount === 1){
+                let winningPlayer = diceRolls.indexOf(max)
+                winnerAnnouncement.textContent = players[winningPlayer].name + ' wins with a roll of ' + max
+                diceRollScreen.querySelector('.new-player-dice-roll[total="' + max + '"]').classList.add('winning-dice-roll')
+                diceRollButton.textContent = 'Begin game ⯈'
+                turn = winningPlayer // Set to one less because we're about to increase it
+                increasePlayerTurn()
+                createConfetti()
+
+                diceRollButton.removeEventListener('click', newPlayerDiceRoll)
+                diceRollButton.addEventListener('click', function(){
+                    diceRollScreen.style.opacity = 0
+                    let confetti = document.querySelector('.confetti-container')
+
+                    confetti.style.opacity = 0
+                    window.setTimeout(function(){
+                        document.body.removeChild(diceRollScreen)
+                        document.body.removeChild(confetti)
+                    }, 1000)
+                })
+            
+            
+            // If multiple players have rolled joint highest rolls, they
+            // need to roll again.
+            } else{
+
+                let playerNames = []
+                
+                ;[].forEach.call(document.querySelectorAll('.new-player-dice-roll'), function(node){
+
+                    // Loose comparison since we're comparing a string to a number
+                    if(node.getAttribute('total') == max){
+                        let player = parseInt(node.getAttribute('player'))
+                        player--
+                        playerNames.push(players[player].name)
+                    } else{
+                        node.setAttribute('total', 0)
+                        node.classList.add('losing-dice-roll')
+                    }
+
+                })
+
+                // Generate a player-readable message for the screen
+                let message = ''
+
+                // Check how many players we are announcing about.
+                // This affects the grammar of the message.
+                if(playerNames.length === 2){
+                    message += playerNames[0] + ' and ' + playerNames[1] + ' have both rolled ' + max + '. Please roll again.'
+                } else{
+                    for (i=0; i < playerNames.length - 1; i++){
+                        message += playerNames[i]
+
+                        // If we're not on the last one, add a comma
+                        if (i < playerNames.length - 1){
+                            message += ', '
+                        }
+                    }
+
+                    message += ' and ' + playerNames[playerNames.length - 1] + ' have all rolled ' + max + '. Please roll again'
+
+                }
+
+                winnerAnnouncement.textContent = message
+                numberOfPlayersToRoll = maxCount
+                diceRolls = []
+
+            }
+
+        }
+
+        
+    }
+            
+    diceRollScreen.appendChild(diceRollButton)
+}
 
 
 // COMMUNITY CHEST AND CHANCE FUNCTIONS --------------------------------------//
@@ -2229,3 +2461,38 @@ function addToFeed(message,type){
     feed.insertBefore(newMessage, feed.firstChild)
 }
 
+
+
+
+// CONFETTI ------------------------------------------------------------------//
+
+function createConfetti(){
+    let confettiContainer = document.createElement('div')
+    confettiContainer.classList.add('confetti-container')
+    document.body.appendChild(confettiContainer)
+    
+    let confettiParticleCount = window.innerWidth / 10
+    
+    
+    for (i=0; i < confettiParticleCount; i++){
+      let particle = document.createElement('div')
+      particle.classList.add('particle')
+      let particleInner = document.createElement('div')
+      particle.appendChild(particleInner)
+      
+      confettiContainer.appendChild(particle)
+      
+  
+      
+      particle.style.left = (Math.random() * 100) + '%'
+      particle.style.animationDelay = ((Math.random() * 20) - 1) + 's'
+      
+      let size = ((Math.random() * 7) + 7) + 'px'
+      particle.style.width = size
+      particle.style.height = size
+      
+      particleInner.style.animationDuration = (Math.random() * 2 + 1) + 's'
+    }
+  }
+  
+  
