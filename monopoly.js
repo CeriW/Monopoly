@@ -689,7 +689,7 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
-        let newPlayer = {money:1500, inJail: 0, properties: [], position: 0}
+        let newPlayer = {money:1500, inJail: 0, properties: []}
         newPlayer.id = playerCreationPanel.getAttribute('player')
         newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
 
@@ -721,10 +721,7 @@ function createPlayers(){
         newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
-        board.appendChild(newToken)
-
-        
-
+        board.appendChild(newToken)   
     })
 
 
@@ -738,6 +735,17 @@ function createPlayers(){
     // TODO - at the beginning of the game, players should all roll the dice.
     // The highest roll wins. If it is a tie, the tying players should roll again.
     increasePlayerTurn()
+
+    // Position the tokens where they need to be on the board.
+    // Due to the way the positionToken function works when there are multiple
+    // tokens on the same space, it was necessary to move them all to 0, THEN
+    // set the player's position attribute.
+    let i = 0
+    ;[].forEach.call(document.querySelectorAll('.token'), function(token){
+        positionToken(token, 0)
+        players[i].position = 0
+        i++
+    })
     
 }
 
