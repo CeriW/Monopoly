@@ -980,6 +980,14 @@ function newGameDiceRoll(){
                 let winningPlayer = diceRolls.indexOf(max)
                 winnerAnnouncement.textContent = players[winningPlayer].name + ' wins with a roll of ' + max
                 diceRollScreen.querySelector('.new-player-dice-roll[total="' + max + '"]').classList.add('winning-dice-roll')
+                diceRollButton.textContent = 'Begin game ⯈'
+                diceRollButton.removeEventListener('click', newPlayerDiceRoll)
+                diceRollButton.addEventListener('click', function(){
+                    diceRollScreen.style.opacity = 0
+                    window.setTimeout(function(){
+                        document.body.removeChild(diceRollScreen)
+                    }, 1000)
+                })
             
             
             // If multiple players have rolled joint highest rolls, they
@@ -992,7 +1000,6 @@ function newGameDiceRoll(){
 
                     // Loose comparison since we're comparing a string to a number
                     if(node.getAttribute('total') == max){
-                        console.log(node)
                         let player = parseInt(node.getAttribute('player'))
                         player--
                         playerNames.push(players[player].name)
@@ -1025,11 +1032,7 @@ function newGameDiceRoll(){
                 }
 
                 winnerAnnouncement.textContent = message
-
-                console.log(playerNames)
-
                 numberOfPlayersToRoll = maxCount
-
                 diceRolls = []
 
             }

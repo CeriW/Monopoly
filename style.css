@@ -272,7 +272,8 @@ button {
   color: #000;
   padding: 30px;
   text-align: center;
-  overflow: auto; }
+  overflow: auto;
+  transition: 0.5s; }
   .new-game-dice-roll h2, .new-game-dice-roll h3 {
     text-transform: uppercase; }
   .new-game-dice-roll .winner-annoucement {
