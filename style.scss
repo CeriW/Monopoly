@@ -87,7 +87,7 @@ button{
     background: darken($lightgreen, 10%);
   }
 
-/* PLAYER CREATOR ------------------------------------------------------------ */
+/* PLAYER CREATOR ----------------------------------------------------------- */
 
 #new-player-overlay{
     background: $lightgreen url('images/city.svg') center bottom no-repeat;
@@ -296,6 +296,40 @@ $tokens:
     .token-option-#{$token},
     .token-selector-chosen-indicator[chosentoken="#{$token}"]{
         background-image: url('images/tokens/#{$token}.svg');
+    }
+}
+
+/* NEW GAME DICE ROLL ------------------------------------------------------- */
+
+.new-game-dice-roll{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    background: $lightgreen;
+    color: #000;
+    padding: 30px;
+    text-align: center;
+}
+
+.new-player-dice-roll{
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    float: left;
+
+    img{
+        max-width: 50px;
+    }
+
+    h3{
+        margin: 0;
+    }
+
+    &.losing-dice-roll{
+        opacity: 0.15;
     }
 }
 
@@ -538,7 +572,8 @@ $columnsize: 80px;
 }
 
 @for $i from 1 through 6 {
-    .dice-roll-#{$i}{
+    .dice-roll-#{$i},
+    .dice[roll="#{$i}"]{
         background-image: url('images/dice-#{$i}.svg')
     }
   }

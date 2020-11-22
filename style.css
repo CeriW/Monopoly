@@ -55,7 +55,7 @@ button {
 ::-webkit-scrollbar-thumb:hover {
   background: #b5d6b3; }
 
-/* PLAYER CREATOR ------------------------------------------------------------ */
+/* PLAYER CREATOR ----------------------------------------------------------- */
 #new-player-overlay {
   background: #d5e8d4 url("images/city.svg") center bottom no-repeat;
   position: fixed;
@@ -252,6 +252,31 @@ button {
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
+
+/* NEW GAME DICE ROLL ------------------------------------------------------- */
+.new-game-dice-roll {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background: #d5e8d4;
+  color: #000;
+  padding: 30px;
+  text-align: center; }
+
+.new-player-dice-roll {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  float: left; }
+  .new-player-dice-roll img {
+    max-width: 50px; }
+  .new-player-dice-roll h3 {
+    margin: 0; }
+  .new-player-dice-roll.losing-dice-roll {
+    opacity: 0.15; }
 
 /* BOARD --------------------------------------------------------------------- */
 #board {
@@ -480,22 +505,28 @@ button {
   border-radius: 5px;
   background-size: contain; }
 
-.dice-roll-1 {
+.dice-roll-1,
+.dice[roll="1"] {
   background-image: url("images/dice-1.svg"); }
 
-.dice-roll-2 {
+.dice-roll-2,
+.dice[roll="2"] {
   background-image: url("images/dice-2.svg"); }
 
-.dice-roll-3 {
+.dice-roll-3,
+.dice[roll="3"] {
   background-image: url("images/dice-3.svg"); }
 
-.dice-roll-4 {
+.dice-roll-4,
+.dice[roll="4"] {
   background-image: url("images/dice-4.svg"); }
 
-.dice-roll-5 {
+.dice-roll-5,
+.dice[roll="5"] {
   background-image: url("images/dice-5.svg"); }
 
-.dice-roll-6 {
+.dice-roll-6,
+.dice[roll="6"] {
   background-image: url("images/dice-6.svg"); }
 
 #doubles {

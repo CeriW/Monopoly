@@ -39,7 +39,7 @@ let diceDoubles = document.querySelector('#doubles')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 6
+let diceSides = 2
 
 
 // In a standard Monopoly set there are 32 houses and 12 hotels available.
@@ -179,7 +179,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let maxNumberOfPlayers = 4
+let maxNumberOfPlayers = 8
 
 let availableActions = {
     rollDice: true,
@@ -755,8 +755,10 @@ function createPlayers(){
         players[i].position = 0
         i++
     })
-    
+
+    newGameDiceRoll()
 }
+
 
 function generatePlayerSummary(player){
     let newSummary = document.createElement('div')
@@ -847,6 +849,182 @@ function generatePlayerSummary(player){
 
 }
 
+function newGameDiceRoll(){
+
+    // An array to store the dice rolls so we can compare later.
+    let diceRolls = []
+
+    // The number of players to roll. This is originally all the players
+    // but will change if multiple players roll the joint highest roll
+    let numberOfPlayersToRoll = players.length
+
+    // Create a new screen to display all this info
+    let diceRollScreen = document.createElement('div')
+    diceRollScreen.classList.add('new-game-dice-roll')
+    document.body.appendChild(diceRollScreen)
+
+    // Create a heading
+    let heading = document.createElement('h2')
+    heading.textContent = "Roll to see which player goes first"
+    diceRollScreen.appendChild(heading)
+
+    // Create an area for the winner to be announced
+    let winnerAnnouncement = document.createElement('div')
+    diceRollScreen.appendChild(winnerAnnouncement)
+
+    // Generate the dice roll functionality for each player
+    players.forEach(function(player){
+        // Container
+        let diceRollBox = document.createElement('div')
+        diceRollBox.classList.add('new-player-dice-roll')
+        diceRollBox.setAttribute('player', player.id)
+        
+        // Token
+        let playerToken = document.createElement('img')
+        playerToken.src = 'images/tokens/' + player.token + '.svg'
+        diceRollBox.appendChild(playerToken)
+        
+        let playerName = document.createElement('h3')
+        playerName.textContent = player.name
+        diceRollBox.appendChild(playerName)
+        //diceRollBox.textContent = player.name
+
+        for (i = 1; i <= 2; i++){
+            let dice = document.createElement('div')
+            dice.classList.add('dice', 'dice-' + i)
+            diceRollBox.appendChild(dice)
+        }
+
+        let diceRollButton = document.createElement('button')
+        diceRollButton.textContent = 'Roll dice'
+                
+        diceRollBox.appendChild(diceRollButton)
+
+        diceRollScreen.appendChild(diceRollBox)
+        
+
+        diceRollBox.addEventListener('click', newPlayerDiceRoll)
+        })
+    
+
+
+    function newPlayerDiceRoll(e){
+        if (e.target.tagName === 'BUTTON'){
+            // Perform the dice roll
+            let roll1 = Math.ceil(Math.random() * diceSides)
+            let roll2 = Math.ceil(Math.random() * diceSides)
+
+            // Update the interface to show the dice roll
+            e.currentTarget.querySelector('.dice-1').setAttribute('roll', roll1)
+            e.currentTarget.querySelector('.dice-2').setAttribute('roll', roll2)
+
+            // Store the current roll
+            e.currentTarget.setAttribute('total', roll1 + roll2)
+            let playerWhoIsRolling = parseInt(e.currentTarget.getAttribute('player'))
+            console.log(playerWhoIsRolling)
+            diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
+            console.log(diceRolls)
+
+            // Disable the button from being clicked again
+            e.target.classList.add('disabled-button')
+
+
+            // Check whether all the players have rolled.
+            // If so, compare totals.
+
+
+            let totalDiceRolls = diceRolls.filter(function(roll){
+                if (roll){
+                    return roll
+                }
+            })
+
+            if (totalDiceRolls.length === numberOfPlayersToRoll){
+
+                let max = 0
+                let maxCount = 0
+
+                // What is the highest roll?
+                diceRolls.forEach(function(number){
+                    if (number > max){
+                        max = number
+                    }
+                })
+
+                // How many players have rolled the highest roll?
+                diceRolls.forEach(function(roll){
+                    if (roll === max){
+                        maxCount++
+                    }
+                })
+                
+                // If only one player has rolled the highest roll,
+                // we can begin the game
+                if(maxCount === 1){
+                    let winningPlayer = diceRolls.indexOf(max)
+                    winnerAnnouncement.textContent = players[winningPlayer].name + ' wins with a roll of ' + max
+                
+                
+                // If multiple players have rolled joint highest rolls, they
+                // need to roll again.
+                } else{
+
+                    let playerNames = []
+                    
+                    ;[].forEach.call(document.querySelectorAll('.new-player-dice-roll'), function(node){
+
+                        // Loose comparison since we're comparing a string to a number
+                        if(node.getAttribute('total') == max){
+                            console.log(node)
+                            let player = parseInt(node.getAttribute('player'))
+                            player--
+                            playerNames.push(players[player].name)
+                        } else{
+                            node.setAttribute('total', 0)
+                            node.classList.add('losing-dice-roll')
+                        }
+
+                    })
+
+                    // Generate a player-readable message for the screen
+                    let message = ''
+
+                    // Check how many players we are announcing about.
+                    // This affects the grammar of the message.
+                    if(playerNames.length === 2){
+                        message += playerNames[0] + ' and ' + playerNames[1] + ' have both rolled ' + max + '. Please roll again.'
+                    } else{
+                        for (i=0; i < playerNames.length - 1; i++){
+                            message += playerNames[i]
+
+                            // If we're not on the last one, add a comma
+                            if (i < playerNames.length - 1){
+                                message += ', '
+                            }
+                        }
+
+                        message += ' and ' + playerNames[playerNames.length - 1] + ' have all rolled ' + max + '. Please roll again'
+
+                    }
+
+                    winnerAnnouncement.textContent = message
+
+                    console.log(playerNames)
+
+                    numberOfPlayersToRoll = maxCount
+
+                    ;[].forEach.call(document.querySelectorAll('.new-player-dice-roll[total="' + max + '"]'), function(node){
+                        node.querySelector('button').classList.remove('disabled-button')
+                    })
+
+                    diceRolls = []
+
+                }
+
+            }
+        }
+    }
+}
 
 
 // COMMUNITY CHEST AND CHANCE FUNCTIONS --------------------------------------//
