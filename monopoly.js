@@ -895,135 +895,134 @@ function newGameDiceRoll(){
             diceRollBox.appendChild(dice)
         }
 
-        let diceRollButton = document.createElement('button')
-        diceRollButton.textContent = 'Roll dice'
+        //let diceRollButton = document.createElement('button')
+        //diceRollButton.textContent = 'Roll dice'
                 
-        diceRollBox.appendChild(diceRollButton)
+        //diceRollBox.appendChild(diceRollButton)
 
         diceRollScreen.appendChild(diceRollBox)
-        
+    })
 
-        diceRollBox.addEventListener('click', newPlayerDiceRoll)
+    let diceRollButton = document.createElement('button')
+    diceRollButton.textContent = 'Roll dice'
+
+    // Run the dice roll on all non-losing players
+    diceRollButton.addEventListener('click', function(){
+        ;[].forEach.call(diceRollScreen.querySelectorAll('.new-player-dice-roll:not(.losing-dice-roll)'), function(node){
+            newPlayerDiceRoll(node)
         })
-    
+    })
+
+    function newPlayerDiceRoll(node){
+        // Perform the dice roll
+        let roll1 = Math.ceil(Math.random() * diceSides)
+        let roll2 = Math.ceil(Math.random() * diceSides)
+
+        // Update the interface to show the dice roll
+        node.querySelector('.dice-1').setAttribute('roll', roll1)
+        node.querySelector('.dice-2').setAttribute('roll', roll2)
+
+        // Store the current roll
+        node.setAttribute('total', roll1 + roll2)
+        let playerWhoIsRolling = parseInt(node.getAttribute('player'))
+        diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
+
+        // Disable the button from being clicked again
+        //e.target.classList.add('disabled-button')
 
 
-    function newPlayerDiceRoll(e){
-        if (e.target.tagName === 'BUTTON'){
-            // Perform the dice roll
-            let roll1 = Math.ceil(Math.random() * diceSides)
-            let roll2 = Math.ceil(Math.random() * diceSides)
+        // Check whether all the players have rolled.
+        // If so, compare totals.
 
-            // Update the interface to show the dice roll
-            e.currentTarget.querySelector('.dice-1').setAttribute('roll', roll1)
-            e.currentTarget.querySelector('.dice-2').setAttribute('roll', roll2)
+        let totalDiceRolls = diceRolls.filter(function(roll){
+            if (roll){
+                return roll
+            }
+        })
 
-            // Store the current roll
-            e.currentTarget.setAttribute('total', roll1 + roll2)
-            let playerWhoIsRolling = parseInt(e.currentTarget.getAttribute('player'))
-            console.log(playerWhoIsRolling)
-            diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
-            console.log(diceRolls)
+        if (totalDiceRolls.length === numberOfPlayersToRoll){
 
-            // Disable the button from being clicked again
-            e.target.classList.add('disabled-button')
+            let max = 0
+            let maxCount = 0
 
-
-            // Check whether all the players have rolled.
-            // If so, compare totals.
-
-
-            let totalDiceRolls = diceRolls.filter(function(roll){
-                if (roll){
-                    return roll
+            // What is the highest roll?
+            diceRolls.forEach(function(number){
+                if (number > max){
+                    max = number
                 }
             })
 
-            if (totalDiceRolls.length === numberOfPlayersToRoll){
+            // How many players have rolled the highest roll?
+            diceRolls.forEach(function(roll){
+                if (roll === max){
+                    maxCount++
+                }
+            })
+            
+            // If only one player has rolled the highest roll,
+            // we can begin the game
+            if(maxCount === 1){
+                let winningPlayer = diceRolls.indexOf(max)
+                winnerAnnouncement.textContent = players[winningPlayer].name + ' wins with a roll of ' + max
+                diceRollScreen.querySelector('.new-player-dice-roll[total="' + max + '"]').classList.add('winning-dice-roll')
+            
+            
+            // If multiple players have rolled joint highest rolls, they
+            // need to roll again.
+            } else{
 
-                let max = 0
-                let maxCount = 0
-
-                // What is the highest roll?
-                diceRolls.forEach(function(number){
-                    if (number > max){
-                        max = number
-                    }
-                })
-
-                // How many players have rolled the highest roll?
-                diceRolls.forEach(function(roll){
-                    if (roll === max){
-                        maxCount++
-                    }
-                })
+                let playerNames = []
                 
-                // If only one player has rolled the highest roll,
-                // we can begin the game
-                if(maxCount === 1){
-                    let winningPlayer = diceRolls.indexOf(max)
-                    winnerAnnouncement.textContent = players[winningPlayer].name + ' wins with a roll of ' + max
-                
-                
-                // If multiple players have rolled joint highest rolls, they
-                // need to roll again.
-                } else{
+                ;[].forEach.call(document.querySelectorAll('.new-player-dice-roll'), function(node){
 
-                    let playerNames = []
-                    
-                    ;[].forEach.call(document.querySelectorAll('.new-player-dice-roll'), function(node){
-
-                        // Loose comparison since we're comparing a string to a number
-                        if(node.getAttribute('total') == max){
-                            console.log(node)
-                            let player = parseInt(node.getAttribute('player'))
-                            player--
-                            playerNames.push(players[player].name)
-                        } else{
-                            node.setAttribute('total', 0)
-                            node.classList.add('losing-dice-roll')
-                        }
-
-                    })
-
-                    // Generate a player-readable message for the screen
-                    let message = ''
-
-                    // Check how many players we are announcing about.
-                    // This affects the grammar of the message.
-                    if(playerNames.length === 2){
-                        message += playerNames[0] + ' and ' + playerNames[1] + ' have both rolled ' + max + '. Please roll again.'
+                    // Loose comparison since we're comparing a string to a number
+                    if(node.getAttribute('total') == max){
+                        console.log(node)
+                        let player = parseInt(node.getAttribute('player'))
+                        player--
+                        playerNames.push(players[player].name)
                     } else{
-                        for (i=0; i < playerNames.length - 1; i++){
-                            message += playerNames[i]
-
-                            // If we're not on the last one, add a comma
-                            if (i < playerNames.length - 1){
-                                message += ', '
-                            }
-                        }
-
-                        message += ' and ' + playerNames[playerNames.length - 1] + ' have all rolled ' + max + '. Please roll again'
-
+                        node.setAttribute('total', 0)
+                        node.classList.add('losing-dice-roll')
                     }
 
-                    winnerAnnouncement.textContent = message
+                })
 
-                    console.log(playerNames)
+                // Generate a player-readable message for the screen
+                let message = ''
 
-                    numberOfPlayersToRoll = maxCount
+                // Check how many players we are announcing about.
+                // This affects the grammar of the message.
+                if(playerNames.length === 2){
+                    message += playerNames[0] + ' and ' + playerNames[1] + ' have both rolled ' + max + '. Please roll again.'
+                } else{
+                    for (i=0; i < playerNames.length - 1; i++){
+                        message += playerNames[i]
 
-                    ;[].forEach.call(document.querySelectorAll('.new-player-dice-roll[total="' + max + '"]'), function(node){
-                        node.querySelector('button').classList.remove('disabled-button')
-                    })
+                        // If we're not on the last one, add a comma
+                        if (i < playerNames.length - 1){
+                            message += ', '
+                        }
+                    }
 
-                    diceRolls = []
+                    message += ' and ' + playerNames[playerNames.length - 1] + ' have all rolled ' + max + '. Please roll again'
 
                 }
 
+                winnerAnnouncement.textContent = message
+
+                console.log(playerNames)
+
+                numberOfPlayersToRoll = maxCount
+
+                diceRolls = []
+
             }
+
         }
     }
+            
+    diceRollScreen.appendChild(diceRollButton)
 }
 
 

@@ -265,6 +265,8 @@ button {
   color: #000;
   padding: 30px;
   text-align: center; }
+  .new-game-dice-roll h2, .new-game-dice-roll h3 {
+    text-transform: uppercase; }
 
 .new-player-dice-roll {
   background: #fff;
@@ -274,9 +276,16 @@ button {
   .new-player-dice-roll img {
     max-width: 50px; }
   .new-player-dice-roll h3 {
-    margin: 0; }
+    margin: 0 0 20px;
+    font-size: 1em; }
   .new-player-dice-roll.losing-dice-roll {
     opacity: 0.15; }
+  .new-player-dice-roll.winning-dice-roll {
+    background: #0aa959;
+    color: #fff; }
+
+.winning-dice-roll ~ .new-game-dice-roll {
+  opacity: 0.15; }
 
 /* BOARD --------------------------------------------------------------------- */
 #board {
