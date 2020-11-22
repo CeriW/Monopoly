@@ -38,6 +38,8 @@ An incomplete list of all the developments that need to be completed
 
 - Check whether all the properties on the space array objects are really necessary.
 
+- Animate the welcome screen with planes, birds etc.
+
 
 STRETCH GOALS
 

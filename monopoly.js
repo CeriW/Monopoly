@@ -868,8 +868,13 @@ function newGameDiceRoll(){
     heading.textContent = "Roll to see which player goes first"
     diceRollScreen.appendChild(heading)
 
+    let diceRollContainer = document.createElement('div')
+    diceRollContainer.classList.add('dice-roll-container')
+    diceRollScreen.appendChild(diceRollContainer)
+
     // Create an area for the winner to be announced
     let winnerAnnouncement = document.createElement('div')
+    winnerAnnouncement.classList.add('winner-annoucement')
     diceRollScreen.appendChild(winnerAnnouncement)
 
     // Generate the dice roll functionality for each player
@@ -900,32 +905,42 @@ function newGameDiceRoll(){
                 
         //diceRollBox.appendChild(diceRollButton)
 
-        diceRollScreen.appendChild(diceRollBox)
+        diceRollContainer.appendChild(diceRollBox)
     })
 
     let diceRollButton = document.createElement('button')
     diceRollButton.textContent = 'Roll dice'
 
+    let timeout = 0
+
     // Run the dice roll on all non-losing players
-    diceRollButton.addEventListener('click', function(){
+    diceRollButton.addEventListener('click', newPlayerDiceRoll)
+
+
+
+
+
+    function newPlayerDiceRoll(){
+
         ;[].forEach.call(diceRollScreen.querySelectorAll('.new-player-dice-roll:not(.losing-dice-roll)'), function(node){
-            newPlayerDiceRoll(node)
+            // Perform the dice roll
+            let roll1 = Math.ceil(Math.random() * diceSides)
+            let roll2 = Math.ceil(Math.random() * diceSides)
+
+            let dice1 = node.querySelector('.dice-1')
+            let dice2 = node.querySelector('.dice-2')
+
+            // Update the interface to show the dice roll
+            dice1.setAttribute('roll', roll1)
+            dice2.setAttribute('roll', roll2)
+
+            // Store the current roll
+            node.setAttribute('total', roll1 + roll2)
+            let playerWhoIsRolling = parseInt(node.getAttribute('player'))
+            diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
         })
-    })
 
-    function newPlayerDiceRoll(node){
-        // Perform the dice roll
-        let roll1 = Math.ceil(Math.random() * diceSides)
-        let roll2 = Math.ceil(Math.random() * diceSides)
-
-        // Update the interface to show the dice roll
-        node.querySelector('.dice-1').setAttribute('roll', roll1)
-        node.querySelector('.dice-2').setAttribute('roll', roll2)
-
-        // Store the current roll
-        node.setAttribute('total', roll1 + roll2)
-        let playerWhoIsRolling = parseInt(node.getAttribute('player'))
-        diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
+        
 
         // Disable the button from being clicked again
         //e.target.classList.add('disabled-button')
