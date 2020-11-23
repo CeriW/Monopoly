@@ -1116,7 +1116,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   margin: auto; }
   .property-overview table tr td:last-child {
     text-align: right;
-    width: 60px; }
+    width: 80px; }
   .property-overview table tr td:first-child {
     text-align: left;
     min-width: 200px; }
