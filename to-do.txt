@@ -18,8 +18,6 @@ An incomplete list of all the developments that need to be completed
 
 - Refactor all the things with player specific IDs to have player attributes instead.
 
-- Update spaces array with actual rent values
-
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
 
 - Calc cards
@@ -33,8 +31,6 @@ An incomplete list of all the developments that need to be completed
 - Don't have to wait until your turn to build houses/hotels
 
 - Reorder the readme so it's in alphabetical order
-
-- Check whether all the properties on the space array objects are really necessary.
 
 - Animate the welcome screen with planes, birds etc.
 
