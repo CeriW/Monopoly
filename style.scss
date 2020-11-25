@@ -685,7 +685,8 @@ $columnsize: 80px;
 
 .community-chest{
     background: url('images/community-chest.svg') center no-repeat;
-    background-size: contain;
+    background-position: center bottom;
+    background-size: 50px;
 }
 
 .station{

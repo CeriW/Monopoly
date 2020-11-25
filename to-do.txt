@@ -32,8 +32,6 @@ An incomplete list of all the developments that need to be completed
 
 - Reorder the readme so it's in alphabetical order
 
-- Animate the welcome screen with planes, birds etc.
-
 - Be able to click backspace on the keyboard to go back to the full portfolio view.
 
 - Consider what other keyboard shortcuts might be available.

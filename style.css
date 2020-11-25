@@ -596,7 +596,8 @@ button {
 /* Special property ----------------------------------------------------------*/
 .community-chest {
   background: url("images/community-chest.svg") center no-repeat;
-  background-size: contain; }
+  background-position: center bottom;
+  background-size: 50px; }
 
 .station {
   background: url("images/station.svg") center calc(100% - 2px) no-repeat;
