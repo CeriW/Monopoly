@@ -2,6 +2,10 @@
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
+// If quick start is enabled, we'll skip over the player creation screen and
+// start the game immediately with 2 default players. Ideal for testing.
+let quickStartGame = true;
+
 let availableTokens = [
     {name: 'dog',           available: true},
     {name: 'thimble',       available: true},
@@ -221,6 +225,12 @@ function initialisePage(){
 
     // Initialise the bank
     updateBank()
+
+    // If quick start is enabled, skip over the player creation and dice
+    // rolling functionality.
+    if(quickStartGame){
+        quickStart()
+    }
 }
 
 function cardCurrency(){
@@ -556,6 +566,12 @@ function fakeRollDice(fakeTotal){
     }
 }
 
+
+function quickStart(){
+    createPlayers()
+    let newPlayerDiceRoll = document.querySelector('.new-game-dice-roll')
+    newPlayerDiceRoll.parentNode.removeChild(newPlayerDiceRoll)
+}
 
 
 // PLAYER CREATION FUNCTIONS -------------------------------------------------//
