@@ -199,6 +199,73 @@ button{
     }
 }
 
+.flyover{
+    width: 55px;
+    height: 55px;
+    background: url('images/plane.svg') center no-repeat;
+    background-size: contain;
+    animation-name: flyoverAnimationLeftToRight;
+    animation-duration: 45s;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+    position: absolute;
+    bottom: 25vh;
+}
+
+@keyframes flyoverAnimationLeftToRight{
+    from{left: -100px;}
+    to{left: 5000px;}
+}
+
+@keyframes flyoverAnimationRightToLeft{
+    from{right: -100px;}
+    to{right: 5000px;}
+}
+
+
+#new-player-overlay .flyover:nth-child(6n-5){
+    background-image: url('images/plane-2.svg');
+    animation-name: flyoverAnimationRightToLeft;
+    animation-duration: 60s;
+    animation-delay: 2s;
+    width: 50px;
+    bottom: 30vh;
+}
+
+#new-player-overlay .flyover:nth-child(6n-4){
+    background-image: url('images/helicopter.svg');
+    animation-duration: 75s;
+    animation-delay: 4s;
+    width: 30px;
+    bottom: 33vh;
+}
+
+#new-player-overlay .flyover:nth-child(6n-3){
+    background-image: url('images/plane-2.svg');
+    width: 30px;
+    bottom: 40vh;
+    animation-name: flyoverAnimationRightToLeft;
+    animation-delay: 20s;
+    animation-duration: 50s;
+}
+
+#new-player-overlay .flyover:nth-child(6n-2){
+    animation-delay: 30s;
+}
+
+#new-player-overlay .flyover:nth-child(6n){
+    background-image: url('images/plane-2.svg');
+    animation-name: flyoverAnimationRightToLeft;
+    animation-delay: 30s;
+    animation-duration: 60s;
+    width: 40px;
+    bottom: 45vh;
+}
+
+
+
+
 /* TOKEN SELECTOR ----------------------------------------------------------- */
 
 $token-selector-grey:  #dbdbdb;

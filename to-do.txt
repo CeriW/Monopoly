@@ -65,3 +65,5 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - Multiple international/theme boards
 
 - JSON parsing for space/cards
+
+- Use a weather API to display appropriate weather over the welcome screen.
