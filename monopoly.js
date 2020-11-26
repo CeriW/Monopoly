@@ -66,6 +66,7 @@ let availableHotels = 12
        - for exchange cards, positive numbers are the amount the player RECEIVES
          from the other players. Negative numbers are the amount the player
          PAYS the other players.
+        
 
 
  
@@ -86,7 +87,7 @@ let availableHotels = 12
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
@@ -99,15 +100,15 @@ let communityChestCards =
     {description: "Life insurance matures – Collect £100",                                      type: '+',        value: 100 },
     {description: "Pay hospital fees of £100",                                                  type: '-',        value: 100 },
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
-    {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'calc',     value: null },
-    {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },*/
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    /*{description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
 
 let chanceCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
@@ -115,17 +116,17 @@ let chanceCards =
     {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
-    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
-    {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100", type: 'calc',   value: null },
-    {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
+    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },*/
+    {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
+    /*{description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
     {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
-    {description: "You have been elected Chairman of the Board – Pay each player £50",            type: 'exchange',   value: -50 },
+    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
-//TODO - the rent values are placeholders and need to be updated to the actual values.
+
 
 /* Rent values are set up as follows:
    0 : the base rent without any houses
@@ -133,8 +134,6 @@ let chanceCards =
    2-5 : the amount of rent with 1-4 houses
    6 : the amount of rent with a hotel.
 */
-
-
 
 let spaces =  [
     {name: 'Go',                    type: 'special',            price: null,    group: 'corner',       boardposition: 'south'},
@@ -1160,21 +1159,50 @@ function drawCard(type){
                 }
             })
 
-            let message = currentPlayer.name + ' drew a ' + chosenCard.type + ' card and '
+            let exchangeMessage = currentPlayer.name + ' drew a ' + getReadableCardName(type) + ' card and '
             if (chosenCard.value > 0){
-                message += ' received ' + currencySymbolSpan + chosenCard.value + ' from the other players'
+                exchangeMessage += ' received ' + currencySymbolSpan + chosenCard.value + ' from all of the other players'
             } else{
                 let amount = chosenCard.value.toString()
                 amount = amount.replace(/\D/g, '')
-                message += ' paid ' + currencySymbolSpan + amount + ' to all the other players'
+                exchangeMessage += ' paid ' + currencySymbolSpan + amount + ' to all of the other players'
             }
 
-            addToFeed(message, 'exchange')
+            addToFeed(exchangeMessage, 'exchange')
             break
-        case 'calc':
-            // TODO
-            console.log('calc: a card where the value has to be calculated.')
-            addToFeed('Calc card')
+        case 'repairs':
+
+            let numberOfHouses = 0
+            let numberOfHotels = 0
+
+            spaces.forEach(function(space){
+
+                // This is the current player's property. Let's figure out how many houses/hotels we have.
+                if(space.owner && space.owner.id == turn){
+                    if (space.houses === 5){
+                        numberOfHotels += 1
+                    } else if (space.houses > 0){
+                        numberOfHouses += space.houses
+                    }
+                }
+            })
+
+            let houseRepairCost = chosenCard.value[0]
+            let hotelRepairCost = chosenCard.value[1]
+
+            totalRepairCost = (houseRepairCost * numberOfHouses) + (hotelRepairCost * numberOfHotels)
+            players[turn - 1].money -= totalRepairCost
+            updatePlayerDetails()
+
+            let repairMessage = players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card'
+
+            if (totalRepairCost > 0){
+                repairMessage += ' and spent ' + currencySymbolSpan + totalRepairCost + ' repairing their properties'
+            } else{
+                repairMessage += ' requiring them to make general repairs to their properties, but they don\'t have any buildings'
+            }
+
+            addToFeed(repairMessage, 'repairs')
             break
         case 'move':
             // TODO
@@ -2408,7 +2436,7 @@ function landOnProperty(position){
     let owner = checkPropertyOwner(position) // The id of the owner
     let currentPlayer = players[turn - 1]
 
-    if (owner && owner.id !== currentPlayer.id){
+    if (owner && owner !== currentPlayer.id){
         // Rent is due.
 
         // Initialise a variable to store the amount of rent owed.
@@ -2486,6 +2514,8 @@ function landOnProperty(position){
         }
 
 
+    } else if (owner && owner === currentPlayer.id){
+        // The property is owned by the current player. Do nothing.
     } else{
         // Nobody owns this property
         availableActions.closePopup = false

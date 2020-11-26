@@ -1537,6 +1537,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .exchange {
   background-image: url("images/feed-icons/exchange.svg"), url("images/feed-icons/feed-circle.svg"); }
 
+.repairs {
+  background-image: url("images/feed-icons/repairs.svg"), url("images/feed-icons/feed-circle.svg"); }
+
 /* Testing panel -------------------------------------------------------------*/
 #testing-panel,
 #testing-toggle-panel {

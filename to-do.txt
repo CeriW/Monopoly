@@ -20,10 +20,6 @@ An incomplete list of all the developments that need to be completed
 
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
 
-- Calc cards
-
-- Exchange cards
-
 - Make it come up on the feed when players buy houses. If possible, have it come up with "Player 2 built 3 houses on Bond Street" rather than just coming up every time they hit build.
 
 - A thought to investigate - if you have 1 house on a property in the colour set and 0 houses on another, can you mortgage the property with 0?
