@@ -2164,7 +2164,7 @@ function displayBuildHousePanel(colour){
         }
 
         // Players get half the value back for houses/hotels
-        players[turn - 1].money -= (spaces[number].houseCost / 2)
+        players[turn - 1].money += (spaces[number].houseCost / 2)
         updatePlayerDetails()
 
         toggleHouseBuildButtons()
