@@ -268,7 +268,7 @@
           <li>'-' - a card for which the player has to surrender money to the bank. The <i>value</i> property is how much money the player forfeits.</li>
           <li>'getout' - a get out of jail free card which is held onto by the player until used, sold or traded. The <i>value</i> property is null as it's not needed.</li>
           <li>'calc' - a card where the amount of money involved has to be calculated. The <i>value</i> property is null as it requires some maths that are specific to that card.</li>
-          <li>'exchange' - A card where players have to exchange money.</li>
+          <li>'exchange' - A card where players have to exchange money. Positive numbers represent how much the player receives from the other players. Negative numbers represent how much the player pays the other players.</li>
           <li>'move' - A card which requires the player to move. When this is the case the <i>value</i> property is the position on the board the player moves to.</value></li>
         </ul>
       </li>
@@ -1034,6 +1034,7 @@
       <li>doubles-out-of-jail</li>
       <li>buy-property</li>
       <li>auction</li>
+      <li>exchange</li>
     </ul>
   </div>
 </div>

@@ -602,6 +602,18 @@ $columnsize: 80px;
 }
 
 
+#board[size="mini"]{
+    .property-price{
+        display: none;
+    }
+}
+
+#board[size="super-mini"]{
+    .property-price,
+    .property-name{
+        display: none;
+    }
+}
 
 
 /* Normal property -----------------------------------------------------------*/
@@ -1724,6 +1736,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .doubles-out-of-jail{background-image: url('images/feed-icons/doubles-out-of-jail.svg'), url('images/feed-icons/feed-circle.svg');}
 .buy-property       {background-image: url('images/feed-icons/buy-property.svg'), url('images/feed-icons/feed-circle.svg');}
 .auction            {background-image: url('images/feed-icons/auction.svg'), url('images/feed-icons/feed-circle.svg');}
+.exchange           {background-image: url('images/feed-icons/exchange.svg'), url('images/feed-icons/feed-circle.svg');}
 
 /* Testing panel -------------------------------------------------------------*/
 

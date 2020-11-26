@@ -509,6 +509,13 @@ button {
   font-size: 10px;
   min-height: 50px; }
 
+#board[size="mini"] .property-price {
+  display: none; }
+
+#board[size="super-mini"] .property-price,
+#board[size="super-mini"] .property-name {
+  display: none; }
+
 /* Normal property -----------------------------------------------------------*/
 .property {
   position: relative;
@@ -1526,6 +1533,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 .auction {
   background-image: url("images/feed-icons/auction.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.exchange {
+  background-image: url("images/feed-icons/exchange.svg"), url("images/feed-icons/feed-circle.svg"); }
 
 /* Testing panel -------------------------------------------------------------*/
 #testing-panel,

@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = true;
+let quickStartGame = false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -43,7 +43,7 @@ let diceDoubles = document.querySelector('#doubles')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
-let diceSides = 2
+let diceSides = 6
 
 
 // In a standard Monopoly set there are 32 houses and 12 hotels available.
@@ -57,12 +57,15 @@ let availableHotels = 12
     + : a card which gains the player money from the bank.
     - : a card which the player has to surrender money to the bank.
     getout : a get out of jail free card which is held onto by the player until used, sold or traded.
-    exchange : a card where the players have to exchange money.
+    exchange : a card where the players have to exchange money. 
     calc : a card where the value has to be calculated.
     move: a card which requires the player to move to a specified spot.
 
  value - for +  and - cards, this will be the amount to give/take.
        - for move cards, this will be which position to move to.
+       - for exchange cards, positive numbers are the amount the player RECEIVES
+         from the other players. Negative numbers are the amount the player
+         PAYS the other players.
 
 
  
@@ -117,7 +120,7 @@ let chanceCards =
     {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
     {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
-    {description: "You have been elected Chairman of the Board–Pay each player £50",            type: 'exchange',   value: 50 },
+    {description: "You have been elected Chairman of the Board – Pay each player £50",            type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
     {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
@@ -258,7 +261,7 @@ function generateBoard(){
             newSpace.classList.add(space.group)
         }
         
-        newSpace.innerHTML = space.name.toUpperCase()
+        newSpace.innerHTML = '<div class="property-name">' + space.name.toUpperCase() + '</div>'
 
         if (space.price){
             newSpace.innerHTML += '<div class="property-price">' + currencySymbolSpan + space.price + '</div>'
@@ -303,7 +306,7 @@ function addEvents(){
 
     document.onkeydown = function(e) {
         e = e || window.event
-        if (e.keyCode == 27 && document.getAttribute('close-popup') === true) {
+        if (e.keyCode == 27 && document.body.getAttribute('close-popup') === true) {
             closePopup()
         }
     }
@@ -339,9 +342,24 @@ function addEvents(){
 }
 
 function resizeBoard(){
-    board.style.height = board.offsetWidth + 'px'
+
+    board.setAttribute('size', 'normal')
+    
+    let boardWidth = board.offsetWidth
+
+    board.style.height = boardWidth + 'px'
 
     feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
+
+    
+    if (boardWidth < 800 && boardWidth > 700){
+        board.setAttribute('size', 'mini')
+    } else if (boardWidth <= 700){
+        board.setAttribute('size', 'super-mini')
+    } else{
+        board.setAttribute('size', 'normal')
+    }
+
 
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 }
@@ -1130,8 +1148,28 @@ function drawCard(type){
             break
         case 'exchange':
             // TODO
-            console.log('exhange: a card where the value has to be calculated.')
-            addToFeed('Exchange card')
+
+            let currentPlayer = players[turn - 1]
+
+            players.forEach(function(player){
+
+                if(player.id != turn){
+                    player.money -= chosenCard.value
+                    currentPlayer.money += chosenCard.value
+                    console.log('not the current player')
+                }
+            })
+
+            let message = currentPlayer.name + ' drew a ' + chosenCard.type + ' card and '
+            if (chosenCard.value > 0){
+                message += ' received ' + currencySymbolSpan + chosenCard.value + ' from the other players'
+            } else{
+                let amount = chosenCard.value.toString()
+                amount = amount.replace(/\D/g, '')
+                message += ' paid ' + currencySymbolSpan + amount + ' to all the other players'
+            }
+
+            addToFeed(message, 'exchange')
             break
         case 'calc':
             // TODO
@@ -1750,6 +1788,7 @@ function fullPortfolioView(e){
 
         portfolioOutput += '</div>'
 
+
         //portfolioOutput += '<div class="full-portfolio-item">' + property.name + '</div>'
     })
 
@@ -2009,6 +2048,7 @@ function displayBuildHousePanel(colour){
     function buildHouse(number){
         let currentHousesOnProperty = spaces[number].houses
         spaces[number].houses += 1
+
     
         // If there are 3 or less houses, let us build a house.
         // If there are 4 houses, sell the houses and build a hotel.
@@ -2026,8 +2066,11 @@ function displayBuildHousePanel(colour){
         // Update visual display to show new higher number of houses
         document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
     
+
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
+
+
     
     }
 
