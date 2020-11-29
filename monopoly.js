@@ -1945,13 +1945,10 @@ function displayPropertyOptions(number){
                     availableActions.unmortgageProperty = false
                 }
 
-                console.log('2')
-
             // Otherwise we can mortgage this.    
             } else{
                 availableActions.mortgageProperty = true
                 availableActions.unmortgageProperty = false
-                console.log('3')
             }
 
             setAvailableActions()
