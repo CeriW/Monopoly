@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = false;
+let quickStartGame = true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -87,7 +87,7 @@ let availableHotels = 12
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
@@ -100,15 +100,15 @@ let communityChestCards =
     {description: "Life insurance matures – Collect £100",                                      type: '+',        value: 100 },
     {description: "Pay hospital fees of £100",                                                  type: '-',        value: 100 },
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
-    {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },*/
+    {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
-    /*{description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
+    {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
@@ -116,14 +116,14 @@ let chanceCards =
     {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
-    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },*/
+    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
     {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
-    /*{description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
+    {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
     {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
@@ -137,48 +137,48 @@ let chanceCards =
 
 let spaces =  [
     {name: 'Go',                    type: 'special',            price: null,    group: 'corner',       boardposition: 'south'},
-    {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50, owner: null, houses: 0},
+    {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'south'},
-    {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50, owner: null, houses: 0},
+    {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
     {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardposition: 'south'},
     {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardposition: 'south', rent:[25,50,100,200],                owner: null},
-    {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0},
+    {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'south'},
-    {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0},
-    {name: 'Pentonville Road',      type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[8,16,40,100,300,450,600],      houseCost: 50, hotelCost: 50, owner: null, houses: 0},
+    {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
+    {name: 'Pentonville Road',      type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[8,16,40,100,300,450,600],      houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
 
     {name: 'Jail',                  type: 'special',            price: null,    group: 'corner',       boardposition: 'west'},
     {name: 'Pall Mall',             type: 'property',           price: 140,     group: 'pink',         boardposition: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100, owner: null, houses: 0},
-    {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardposition: 'west', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null,},
-    {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardposition: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100, owner: null, houses: 0},
-    {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardposition: 'west', rent:[12,24,60,180,500,700,900],      houseCost: 100, hotelCost: 100, owner: null, houses: 0},
+    {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardposition: 'west', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null, mortgaged: false},
+    {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardposition: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
+    {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardposition: 'west', rent:[12,24,60,180,500,700,900],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
     {name: 'Marylebone Station',    type: 'station',            price: 200,     group: 'train-station',boardposition: 'west', rent:[25,50,100,200],                 owner: null},
-    {name: 'Bow Street',            type: 'property',           price: 180,     group: 'orange',       boardposition: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100, owner: null, houses: 0},
+    {name: 'Bow Street',            type: 'property',           price: 180,     group: 'orange',       boardposition: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'west'},
-    {name: 'Marlborough Street',    type: 'property',           price: 180,     group: 'orange',       boardposition: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100, owner: null, houses: 0},
-    {name: 'Vine Street',           type: 'property',           price: 200,     group: 'orange',       boardposition: 'west', rent:[16,32,80,220,600,800,1000],     houseCost: 100, hotelCost: 100, owner: null, houses: 0},
+    {name: 'Marlborough Street',    type: 'property',           price: 180,     group: 'orange',       boardposition: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
+    {name: 'Vine Street',           type: 'property',           price: 200,     group: 'orange',       boardposition: 'west', rent:[16,32,80,220,600,800,1000],     houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
 
     {name: 'Free Parking',          type: 'special',            price: null,    group: 'corner',       boardposition: 'north'},
-    {name: 'Strand',                type: 'property',           price: 220,     group: 'red',          boardposition: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150, owner: null, houses: 0},
+    {name: 'Strand',                type: 'property',           price: 220,     group: 'red',          boardposition: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'north'},
-    {name: 'Fleet Street',          type: 'property',           price: 220,     group: 'red',          boardposition: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150, owner: null, houses: 0},
-    {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardposition: 'north', rent:[20,40,100,300,750,925,1100],   houseCost: 150, hotelCost: 150, owner: null, houses: 0},
+    {name: 'Fleet Street',          type: 'property',           price: 220,     group: 'red',          boardposition: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
+    {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardposition: 'north', rent:[20,40,100,300,750,925,1100],   houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
     {name: 'Fenchurch St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'north', rent:[25,50,100,200],                owner: null},
-    {name: 'Leicester Square',      type: 'property',           price: 220,     group: 'yellow',       boardposition: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150, owner: null, houses: 0},
-    {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardposition: 'north', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null},
-    {name: 'Coventry Street',       type: 'property',           price: 260,     group: 'yellow',       boardposition: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150, owner: null, houses: 0},
-    {name: 'Piccadilly',            type: 'property',           price: 280,     group: 'yellow',       boardposition: 'north', rent:[24,48,120,360,850,1025,1200],  houseCost: 150, hotelCost: 150, owner: null, houses: 0},
+    {name: 'Leicester Square',      type: 'property',           price: 220,     group: 'yellow',       boardposition: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
+    {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardposition: 'north', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null, mortgaged: false},
+    {name: 'Coventry Street',       type: 'property',           price: 260,     group: 'yellow',       boardposition: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
+    {name: 'Piccadilly',            type: 'property',           price: 280,     group: 'yellow',       boardposition: 'north', rent:[24,48,120,360,850,1025,1200],  houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
     
     {name: 'Go To Jail',            type: 'special',            price: null,    group: 'corner',       boardposition: 'east'},
-    {name: 'Regent Street',         type: 'property',           price: 300,     group: 'green',        boardposition: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200, owner: null, houses: 0},
-    {name: 'Oxford Street',         type: 'property',           price: 300,     group: 'green',        boardposition: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200, owner: null, houses: 0},
+    {name: 'Regent Street',         type: 'property',           price: 300,     group: 'green',        boardposition: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
+    {name: 'Oxford Street',         type: 'property',           price: 300,     group: 'green',        boardposition: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'east'},
-    {name: 'Bond Street',           type: 'property',           price: 320,     group: 'green',        boardposition: 'east', rent:[28,56,150,450,1000,1200,1400],  houseCost: 200, hotelCost: 200, owner: null, houses: 0},
-    {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250, owner: null, houses: 0},
+    {name: 'Bond Street',           type: 'property',           price: 320,     group: 'green',        boardposition: 'east', rent:[28,56,150,450,1000,1200,1400],  houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
+    {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250, owner: null, houses: 0, mortgaged: false},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'east'},
-    {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardposition: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200, owner: null, houses: 0},
+    {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardposition: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
     {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardposition: 'east'},
-    {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardposition: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200, owner: null, houses: 0},
+    {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardposition: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
 ]
 
 // An empty array for now. Will be filled with player info later.
@@ -194,6 +194,7 @@ let availableActions = {
     rollDoublesForJail: false,
     buildHouse: true,
     buildHotel: true,
+    mortgageProperty: false,
     closePopup: true
 }
 
@@ -370,6 +371,7 @@ function setAvailableActions(){
     document.body.setAttribute('roll-doubles-for-jail', availableActions.rollDoublesForJail)
     document.body.setAttribute('build-house', availableActions.buildHouse)
     document.body.setAttribute('build-hotel', availableActions.buildHotel)
+    document.body.setAttribute('mortgage-property', availableActions.mortgageProperty)
     document.body.setAttribute('close-popup', availableActions.closePopup)
 }
 
@@ -1859,14 +1861,16 @@ function displayPropertyOptions(number){
         
         optionsPanel.innerHTML = 'You own this property!<br>'
 
+        let propertyType = spaces[number].type
+        let colour = spaces[number].group
+
         // Display house building options if this is a standard property (not station or utility)
-        if (spaces[number].type === 'property'){
-
-            let colour = spaces[number].group
-
-            // If the owner of the property owns the full colour set, bring up the build house window.
+        if (propertyType === 'property'){
+            // If the owner of the property owns the full colour set...
             if (checkColourSet(colour, players[turn -  1].id)){
                 //availableActions.buildHouse = true
+
+                // Player may build houses/hotels.
                 let colourSetButton = document.createElement('button')
                 colourSetButton.classList.add('colour-set-button')
                 colourSetButton.innerText = 'Manage colour set'
@@ -1876,6 +1880,68 @@ function displayPropertyOptions(number){
 
                 optionsPanel.appendChild(colourSetButton)
             }
+        }
+
+        // If this space has a truthy group, it must be a property, station or
+        // utility, and therefore may be mortgaged.
+        if (spaces[number].group){
+
+            // Create the mortgage button. We'll disable this and change its 
+            // text even if we determine mortgaging isn't allowed on
+            // this property
+            let mortgageButton = document.createElement('button')
+            mortgageButton.classList.add('mortgage-button')
+            mortgageButton.innerText = 'Mortgage property'
+            mortgageButton.addEventListener('click', function(){
+                mortgageProperty(spaces[number])
+            })
+            optionsPanel.appendChild(mortgageButton)
+
+            let mortgageWarning = document.createElement('div')
+            mortgageWarning.textContent = ''
+            optionsPanel.appendChild(mortgageWarning)
+            
+            // If the current player owns all of the properties in this set,
+            // we need to check that they don't have houses/hotels before
+            // they are able to mortgage.
+
+            availableActions.mortgageProperty = true
+
+            if (checkColourSet(colour, players[turn -  1].id)){
+                let colourSet = getColourSet(colour, players[turn -  1])
+                colourSet.forEach(function(property){
+                    if(property.houses > 0){
+                        availableActions.mortgageProperty = false
+                        mortgageWarning.innerText = 'You may not mortgage this while any properties in this colour set have houses or hotels.'
+                    }
+                })
+            }
+
+
+
+            setAvailableActions()
+
+        }
+
+        // Property - object
+        function mortgageProperty(property){
+
+            let mortgageValue = property.price / 2
+
+            // Set the property as mortgaged and add this info to the feed.
+            property.mortgaged = true
+            addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
+            
+            // Prevent the player from being able to mortgage it again
+            availableActions.mortgageProperty = false
+            setAvailableActions()
+
+            // Give the player the mortgage money
+            players[turn - 1].money += mortgageValue
+            updatePlayerDetails()
+
+            // Show the property as mortgaged on the board.
+            document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
         }
         
     }
@@ -2427,6 +2493,7 @@ function checkColourSet(colour, player){
     return fullSetOwned
 
 }
+
 
 
 // RENT FUNCTIONS ------------------------------------------------------------//

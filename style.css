@@ -600,6 +600,19 @@ button {
 .row > .property[houses="5"] .property-house-display > div:nth-child(n+5) {
   transform: scale(1); }
 
+/* Mortgaged property --------------------------------------------------------*/
+div[mortgaged="true"] {
+  position: relative; }
+  div[mortgaged="true"]:after {
+    content: '';
+    width: 25px;
+    height: 25px;
+    background: url("images/mortgaged.svg") center no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: -19px;
+    left: calc(50% - 10px); }
+
 /* Special property ----------------------------------------------------------*/
 .community-chest {
   background: url("images/community-chest.svg") center no-repeat;
@@ -1228,6 +1241,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,
 body[build-house="false"] .build-house-button,
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,
+body[mortgage-property="false"] .mortgage-button,
 .disabled-button {
   background: #ccc;
   color: #8f8f8f;
@@ -1402,6 +1416,55 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   animation: slideInFromLeft 0.3s linear;
   animation-iteration-count: 1; }
 
+/* Feed icons ----------------------------------------------------------------*/
+.money-plus {
+  background-image: url("images/feed-icons/money-plus.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.money-minus {
+  background-image: url("images/feed-icons/money-minus.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.get-out-card {
+  background-image: url("images/feed-icons/get-out-card.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.go-to-jail {
+  background-image: url("images/feed-icons/go-to-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.advance {
+  background-image: url("images/feed-icons/advance.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.failed-jail-roll {
+  background-image: url("images/feed-icons/failed-jail-roll.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.doubles {
+  background-image: url("images/feed-icons/doubles.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.doubles-2nd {
+  background-image: url("images/feed-icons/doubles-2nd.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.out-of-jail {
+  background-image: url("images/feed-icons/out-of-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.rent {
+  background-image: url("images/feed-icons/rent.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.doubles-out-of-jail {
+  background-image: url("images/feed-icons/doubles-out-of-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.buy-property {
+  background-image: url("images/feed-icons/buy-property.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.auction {
+  background-image: url("images/feed-icons/auction.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.exchange {
+  background-image: url("images/feed-icons/exchange.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.repairs {
+  background-image: url("images/feed-icons/repairs.svg"), url("images/feed-icons/feed-circle.svg"); }
+
+.mortgage {
+  background-image: url("images/feed-icons/mortgage.svg"), url("images/feed-icons/feed-circle.svg"); }
+
 /* Auction panel  ------------------------------------------------------------*/
 .auction-screen {
   display: flex;
@@ -1493,52 +1556,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .player-bid-interface.current-winner {
   background: #0aa959;
   color: #fff; }
-
-/* Feed icons ----------------------------------------------------------------*/
-.money-plus {
-  background-image: url("images/feed-icons/money-plus.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.money-minus {
-  background-image: url("images/feed-icons/money-minus.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.get-out-card {
-  background-image: url("images/feed-icons/get-out-card.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.go-to-jail {
-  background-image: url("images/feed-icons/go-to-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.advance {
-  background-image: url("images/feed-icons/advance.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.failed-jail-roll {
-  background-image: url("images/feed-icons/failed-jail-roll.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.doubles {
-  background-image: url("images/feed-icons/doubles.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.doubles-2nd {
-  background-image: url("images/feed-icons/doubles-2nd.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.out-of-jail {
-  background-image: url("images/feed-icons/out-of-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.rent {
-  background-image: url("images/feed-icons/rent.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.doubles-out-of-jail {
-  background-image: url("images/feed-icons/doubles-out-of-jail.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.buy-property {
-  background-image: url("images/feed-icons/buy-property.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.auction {
-  background-image: url("images/feed-icons/auction.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.exchange {
-  background-image: url("images/feed-icons/exchange.svg"), url("images/feed-icons/feed-circle.svg"); }
-
-.repairs {
-  background-image: url("images/feed-icons/repairs.svg"), url("images/feed-icons/feed-circle.svg"); }
 
 /* Testing panel -------------------------------------------------------------*/
 #testing-panel,
