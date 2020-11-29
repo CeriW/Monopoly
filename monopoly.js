@@ -305,6 +305,8 @@ function addEvents(){
     // or the escape key is pressed.
     document.querySelector('#popup-close').addEventListener('click', closePopup)
 
+
+    // TODO - I don't know what I've done but this doesn't seem to work any more.
     document.onkeydown = function(e) {
         e = e || window.event
         if (e.keyCode == 27 && document.body.getAttribute('close-popup') === true) {
@@ -1886,37 +1888,33 @@ function displayPropertyOptions(number){
 
         // If this space has a truthy group, it must be a property, station or
         // utility, and therefore may be mortgaged.
-        if (spaces[number].group){
+        if (colour){
 
             // Create the mortgage button. We'll disable this and change its 
             // text even if we determine mortgaging isn't allowed on
             // this property
-            let mortgageButton = document.createElement('button')
-            mortgageButton.classList.add('mortgage-button')
-            mortgageButton.innerHTML = 'Mortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' + (spaces[number].price / 2) + '</span>'
+
+            let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' + (spaces[number].price / 2) + '</span>', null, null)
             mortgageButton.addEventListener('click', function(){
                 mortgageProperty(spaces[number])
             })
             optionsPanel.appendChild(mortgageButton)
 
             // Create the unmortgage button
-            let unmortgageButton = document.createElement('button')
-            unmortgageButton.classList.add('unmortgage-button')
-            unmortgageButton.innerHTML = 'Unmortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' +  (Math.round((spaces[number].price / 2) * 1.1)) + '</span>'
+
+            let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' +  (Math.round((spaces[number].price / 2) * 1.1)) + '</span>', null, null)
             unmortgageButton.addEventListener('click', function(){
                 unmortgageProperty(spaces[number])
             })
             optionsPanel.appendChild(unmortgageButton)
 
-            let mortgageMessage = document.createElement('div')
-            mortgageMessage.classList.add('mortgage-message')
-            mortgageMessage.textContent = ''
+
+            mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
             optionsPanel.appendChild(mortgageMessage)
             
             // If the current player owns all of the properties in this set,
             // we need to check that they don't have houses/hotels before
             // they are able to mortgage.
-
 
             // If this property is already mortgaged...
             if(spaces[number].mortgaged === true){
@@ -1926,7 +1924,8 @@ function displayPropertyOptions(number){
 
             // If the player owns the full colour set...
             } else if(checkColourSet(colour, players[turn -  1].id)){
-                let colourSet = getColourSet(colour, players[turn -  1])
+
+                let colourSet = getColourSet(colour)
 
                 // Check whether there are houses anywhere on this colour set.
                 let housesPresent = false
@@ -1937,16 +1936,33 @@ function displayPropertyOptions(number){
                 })
 
                 if (housesPresent){
+                    // There are houses present on this colour set. Disable
+                    // mortgaging and enable buildng.
                     availableActions.mortgageProperty = false
                     availableActions.unmortgageProperty = false    // This property shouldn't be able to be mortgaged in the first place, but this will hide the button.
+                    availableActions.buildHouse = true
+                    availableActions.buildHotel = true
                     mortgageMessage.innerText = 'You may not mortgage this while any properties in the colour set have houses or hotels.'
                 } else{
+                    // There are no houses on this colour set. Enable both
+                    // mortgaging and building.
                     availableActions.mortgageProperty = true
                     availableActions.unmortgageProperty = false
+                    availableActions.buildHouse = true
+                    availableActions.buildHotel = true
                 }
 
-            // Otherwise we can mortgage this.    
+                // If there are properties mortgaged in this group, disable building.
+                if (checkMortgagesInColourSet(colour)){
+                    availableActions.buildHouse = false
+                    availableActions.buildHotel = false
+                    mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
+                }
+
+   
             } else{
+                // The space is not mortgaged, and the player does not own
+                // the full colour set. Allow mortgaging.
                 availableActions.mortgageProperty = true
                 availableActions.unmortgageProperty = false
             }
@@ -1962,11 +1978,6 @@ function displayPropertyOptions(number){
             // Set the property as mortgaged and add this info to the feed.
             property.mortgaged = true
             addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
-            
-            // Change what actions are appropriate
-            availableActions.mortgageProperty = false
-            availableActions.unmortgageProperty = true
-            setAvailableActions()
 
             // Give the player the mortgage money
             players[turn - 1].money += mortgageValue
@@ -1974,6 +1985,12 @@ function displayPropertyOptions(number){
 
             // Show the property as mortgaged on the board.
             document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
+
+            // Change what actions are appropriate
+            availableActions.mortgageProperty = false
+            availableActions.unmortgageProperty = true
+            availableActions.buildHouse = false
+            availableActions.buildHotel = false
 
             setAvailableActions()
         }
@@ -1986,19 +2003,30 @@ function displayPropertyOptions(number){
             property.mortgaged = false
             addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
 
-            // Change what actions are appropriate
-            availableActions.mortgageProperty = true
-            availableActions.unmortgageProperty = false
-            setAvailableActions()
-
             // Take the mortgage money from the player
             players[turn - 1].money -= mortgageValue
             updatePlayerDetails()
 
+            // Change what actions are appropriate
+            availableActions.mortgageProperty = true
+            availableActions.unmortgageProperty = false
+
+            // Clear the message
+            mortgageMessage.innerText = ''
+            
+            // If there are still other mortgaged properties in this set,
+            // prevent the player from building.
+            if (checkMortgagesInColourSet(colour)){
+                mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
+            } else{
+                availableActions.buildHouse = true
+                availableActions.buildHotel = true
+            }
+
             // Show the property as unmortgaged on the board.
             document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
 
-            document.querySelector('.mortgage-message').innerText = ''
+
 
             setAvailableActions()
 
@@ -2555,6 +2583,25 @@ function checkColourSet(colour, player){
 }
 
 
+function checkMortgagesInColourSet(colour){
+    // Check whether any properties in this set are mortgaged.
+    colourSet = getColourSet(colour)
+    let mortgaged = false
+    colourSet.forEach(function(property){
+        if(property.mortgaged){
+            mortgaged = true
+        }
+    })
+
+    if (mortgaged){
+        availableActions.buildHouse = false
+        availableActions.buildHotel = false
+    }
+
+    return mortgaged
+}
+
+
 
 // RENT FUNCTIONS ------------------------------------------------------------//
 
@@ -2717,4 +2764,24 @@ function createConfetti(){
     }
   }
   
+
+// ELEMENT CREATION  ---------------------------------------------------------//
+
+function createElement(elementType, elementClass, elementHTML, elementAttribute, elementAttributeValue){
+    let element = document.createElement(elementType)
+    
+    if(elementClass){
+        element.classList.add(elementClass)
+    }
+
+    if(elementHTML){
+        element.innerHTML = elementHTML
+    }
+
+    if(elementAttribute){
+        element.setAttribute(elementAttribute, elementAttributeValue)
+    }
+
+    return element
+}
   

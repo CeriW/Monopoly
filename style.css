@@ -601,9 +601,9 @@ button {
   transform: scale(1); }
 
 /* Mortgaged property --------------------------------------------------------*/
-div[mortgaged="true"] {
+.row > div {
   position: relative; }
-  div[mortgaged="true"]:after {
+  .row > div:after {
     content: '';
     width: 25px;
     height: 25px;
@@ -611,7 +611,12 @@ div[mortgaged="true"] {
     background-size: contain;
     position: absolute;
     top: -7px;
-    left: calc(50% - 10px); }
+    left: calc(50% - 10px);
+    transition: 0.3s;
+    transform: scale(0); }
+
+div[mortgaged="true"]:after {
+  transform: scale(1); }
 
 /* Special property ----------------------------------------------------------*/
 .community-chest {
@@ -1241,6 +1246,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,
 body[build-house="false"] .build-house-button,
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,
+body[build-house="false"] .colour-set-button,
 .disabled-button {
   background: #ccc;
   color: #8f8f8f;

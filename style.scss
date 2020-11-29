@@ -695,7 +695,7 @@ $columnsize: 80px;
 
 /* Mortgaged property --------------------------------------------------------*/
 
-div[mortgaged="true"]{
+.row > div{
     position: relative;
 
     &:after{
@@ -707,6 +707,14 @@ div[mortgaged="true"]{
         position: absolute;
         top: -7px;
         left: calc(50% - 10px);
+        transition: 0.3s;
+        transform: scale(0);
+    }
+}
+
+div[mortgaged="true"]{
+    &:after{
+        transform: scale(1);
     }
 }
 
@@ -1402,6 +1410,7 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
 body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,    // Build house button on properties with 4 houses when build-hotels is false
 body[build-house = "false"] .build-house-button,                                                    // Build house button When build-house is false
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,                               // Sell house button when property doesn't have houses
+body[build-house="false"] .colour-set-button,
 .disabled-button{                                                                                   // General disabled buttons
     @include disabledButton();
 }

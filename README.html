@@ -968,7 +968,7 @@
   <h4>Function parameters:</h4>
   <ul class="function-parameters">
     <li>colour - <i>string</i> - the colour/group we are checking for</li>
-    <li>player - <i>object</i> - the player object from the <i>players</i> array for whom we want to check.</li>
+    <li>player - <i>number</i> - the id of the player for whom we want to check.</li>
   </ul>
   <div class="function-description">
     Checks whether the specified player owns the entirety of the specified colour set, and returns true or false as appropriate.
@@ -1127,18 +1127,27 @@
   </div>
 </div>
 
-<!-- Function template 
 
 <div class="function">
-  <h3 class="function-name"></h3>
+  <h3 class="function-name">createElement</h3>
   <h4>Function parameters:</h4>
   <ul class="function-parameters">
-    <li>name - <i>format</i> - description</li>
+    <li>elementType - <i>string</i> - the type of element to be created. e.g. div, button.</li>
+    <li>elementClass - <i>string</i> - the class to give to the element. May be null.</li>
+    <li>elementHTML - <i>string</i> - the innerHTML property of the element. May be null.</li>
+    <li>elementAttribute - <i>string</i> - an attribite to set on the element. May be null.</li>
+    <li>elementAttributeValue - <i>string</i> - the value to give to the attribute. May be null, but should have something in it if elementAttribute is set.</li>
   </ul>
   <div class="function-description">
-    
+    Creates an element using the parameters provided. Saves a lot of code throughout the project. If any of the parameters are null, it will ignore them.
   </div>
 </div>
+
+
+elementType, elementClass, elementHTML, elementAttribute, elementAttributeValue
+<!-- Function template 
+
+
 
 
 
@@ -1164,3 +1173,4 @@
 
       </body>
     </html>
+
