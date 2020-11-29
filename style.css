@@ -1241,11 +1241,14 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,
 body[build-house="false"] .build-house-button,
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,
-body[mortgage-property="false"] .mortgage-button,
 .disabled-button {
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
+
+body[mortgage-property="false"] .mortgage-button,
+body[unmortgage-property="false"] .unmortgage-button {
+  display: none; }
 
 .house-visual-display[houses="5"] + .button-panel {
   /* If we have the maximum number of buildings, this is the definitive rule.

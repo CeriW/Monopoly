@@ -195,6 +195,7 @@ let availableActions = {
     buildHouse: true,
     buildHotel: true,
     mortgageProperty: false,
+    unmortgageProperty: false,
     closePopup: true
 }
 
@@ -372,6 +373,7 @@ function setAvailableActions(){
     document.body.setAttribute('build-house', availableActions.buildHouse)
     document.body.setAttribute('build-hotel', availableActions.buildHotel)
     document.body.setAttribute('mortgage-property', availableActions.mortgageProperty)
+    document.body.setAttribute('unmortgage-property', availableActions.unmortgageProperty)
     document.body.setAttribute('close-popup', availableActions.closePopup)
 }
 
@@ -1891,43 +1893,71 @@ function displayPropertyOptions(number){
             // this property
             let mortgageButton = document.createElement('button')
             mortgageButton.classList.add('mortgage-button')
-            mortgageButton.innerText = 'Mortgage property'
+            mortgageButton.innerHTML = 'Mortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' + (spaces[number].price / 2) + '</span>'
             mortgageButton.addEventListener('click', function(){
                 mortgageProperty(spaces[number])
             })
             optionsPanel.appendChild(mortgageButton)
 
-            let mortgageWarning = document.createElement('div')
-            mortgageWarning.textContent = ''
-            optionsPanel.appendChild(mortgageWarning)
+            // Create the unmortgage button
+            let unmortgageButton = document.createElement('button')
+            unmortgageButton.classList.add('unmortgage-button')
+            unmortgageButton.innerHTML = 'Unmortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' +  (Math.round((spaces[number].price / 2) * 1.1)) + '</span>'
+            unmortgageButton.addEventListener('click', function(){
+                unmortgageProperty(spaces[number])
+            })
+            optionsPanel.appendChild(unmortgageButton)
+
+            let mortgageMessage = document.createElement('div')
+            mortgageMessage.classList.add('mortgage-message')
+            mortgageMessage.textContent = ''
+            optionsPanel.appendChild(mortgageMessage)
             
             // If the current player owns all of the properties in this set,
             // we need to check that they don't have houses/hotels before
             // they are able to mortgage.
 
-            availableActions.mortgageProperty = true
 
+            // If this property is already mortgaged...
             if(spaces[number].mortgaged === true){
                 availableActions.mortgageProperty = false
-                mortgageWarning.innerText = 'This property is already mortgaged.'
+                availableActions.unmortgageProperty = true
+                mortgageMessage.innerText = 'This property is already mortgaged.'
+
+            // If the player owns the full colour set...
             } else if(checkColourSet(colour, players[turn -  1].id)){
                 let colourSet = getColourSet(colour, players[turn -  1])
+
+                // Check whether there are houses anywhere on this colour set.
+                let housesPresent = false
                 colourSet.forEach(function(property){
                     if(property.houses > 0){
-                        availableActions.mortgageProperty = false
-                        mortgageWarning.innerText = 'You may not mortgage this while any properties in this colour set have houses or hotels.'
+                        housesPresent = true
                     }
                 })
+
+                if (housesPresent){
+                    availableActions.mortgageProperty = false
+                    availableActions.unmortgageProperty = false    // This property shouldn't be able to be mortgaged in the first place, but this will hide the button.
+                    mortgageMessage.innerText = 'You may not mortgage this while any properties in the colour set have houses or hotels.'
+                } else{
+                    availableActions.mortgageProperty = true
+                    availableActions.unmortgageProperty = false
+                }
+
+                console.log('2')
+
+            // Otherwise we can mortgage this.    
+            } else{
+                availableActions.mortgageProperty = true
+                availableActions.unmortgageProperty = false
+                console.log('3')
             }
-
-
-
 
             setAvailableActions()
 
         }
 
-        // Property - object
         function mortgageProperty(property){
 
             let mortgageValue = property.price / 2
@@ -1936,8 +1966,9 @@ function displayPropertyOptions(number){
             property.mortgaged = true
             addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
             
-            // Prevent the player from being able to mortgage it again
+            // Change what actions are appropriate
             availableActions.mortgageProperty = false
+            availableActions.unmortgageProperty = true
             setAvailableActions()
 
             // Give the player the mortgage money
@@ -1946,6 +1977,34 @@ function displayPropertyOptions(number){
 
             // Show the property as mortgaged on the board.
             document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
+
+            setAvailableActions()
+        }
+
+        function unmortgageProperty(property){
+
+            // Half the property price, plus 10%
+            let mortgageValue = Math.round((property.price / 2) * 1.1)
+
+            property.mortgaged = false
+            addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
+
+            // Change what actions are appropriate
+            availableActions.mortgageProperty = true
+            availableActions.unmortgageProperty = false
+            setAvailableActions()
+
+            // Take the mortgage money from the player
+            players[turn - 1].money -= mortgageValue
+            updatePlayerDetails()
+
+            // Show the property as unmortgaged on the board.
+            document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
+
+            document.querySelector('.mortgage-message').innerText = ''
+
+            setAvailableActions()
+
         }
         
     }
