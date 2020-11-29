@@ -705,7 +705,7 @@ div[mortgaged="true"]{
         background: url('images/mortgaged.svg') center no-repeat;
         background-size: contain;
         position: absolute;
-        top: -19px;
+        top: -7px;
         left: calc(50% - 10px);
     }
 }
@@ -1609,7 +1609,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 #feed-content > div{
     padding: 10px 10px 10px 60px;
     font-size: 0.8em;
-    background-position: 18px center, 10px center;
+    background-position: 17px center, 10px center;
     background-size: 28px, 42px;
     background-repeat: no-repeat;
     text-align: left;
@@ -1642,6 +1642,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .exchange           {background-image: url('images/feed-icons/exchange.svg'), url('images/feed-icons/feed-circle.svg');}
 .repairs            {background-image: url('images/feed-icons/repairs.svg'), url('images/feed-icons/feed-circle.svg');}
 .mortgage           {background-image: url('images/feed-icons/mortgage.svg'), url('images/feed-icons/feed-circle.svg');}
+.land-on-mortgaged  {background-image: url('images/feed-icons/land-on-mortgaged.svg'), url('images/feed-icons/feed-circle.svg');}
+
 
 /* Auction panel  ------------------------------------------------------------*/
 

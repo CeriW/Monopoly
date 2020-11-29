@@ -2504,80 +2504,86 @@ function landOnProperty(position){
     let currentPlayer = players[turn - 1]
 
     if (owner && owner !== currentPlayer.id){
-        // Rent is due.
 
-        // Initialise a variable to store the amount of rent owed.
-        let rentAmount = 0
+        // If the property is mortgaged, the player does not need to pay rent.
+        if(spaces[position].mortgaged){
+            addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' but it is mortgaged. No rent is due.', 'land-on-mortgaged')
+        } else{
+            // Rent is due.
 
-        // Check whether the owner of the space owns the entire colour group.
-        // If they do, we need to check for houses/hotels.
-        // If not, just charge the base rent.
+            // Initialise a variable to store the amount of rent owed.
+            let rentAmount = 0
 
-        switch (spaces[position].type){
-            case 'property':
-                standardPropertyRent()
-                break
-            case 'utility':
-                utilityRent()
-                break
-            case 'station':
-                stationRent()
-        }
-        
-        // Give/take the money between players as appropriate.
-        players[owner - 1].money += rentAmount
-        currentPlayer.money -= rentAmount
+            // Check whether the owner of the space owns the entire colour group.
+            // If they do, we need to check for houses/hotels.
+            // If not, just charge the base rent.
 
-        addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
-        updatePlayerDetails()
-
-
-        // Rent for standard properties which may have houses/hotels
-        function standardPropertyRent(){
-            if (checkColourSet(spaces[position].group, owner)){
-                let numberOfHouses = spaces[position].houses
+            switch (spaces[position].type){
+                case 'property':
+                    standardPropertyRent()
+                    break
+                case 'utility':
+                    utilityRent()
+                    break
+                case 'station':
+                    stationRent()
+            }
             
-                // The second (index 1) entry in the rent array is the rent with
-                // a full colour set but no houses, hence the + 1 to get
-                // the correct index.
-                rentAmount = spaces[position].rent[numberOfHouses + 1]
-            } else{
-                rentAmount = spaces[position].rent[0]
-            }
-        }
+            // Give/take the money between players as appropriate.
+            players[owner - 1].money += rentAmount
+            currentPlayer.money -= rentAmount
 
-        function utilityRent(){
-            let diceRoll = parseInt(document.querySelector('#dice-total').textContent)
+            addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
+            updatePlayerDetails()
 
-            if ((checkColourSet(spaces[position].group, owner))){
-                rentAmount = diceRoll * 10
-            } else{
-                rentAmount = diceRoll * 4
-            }
-        }
 
-        function stationRent(){
-
-            let stationSet = getColourSet('train-station')
-        
-        
-            // Go back through the array to get a list of the owners of all these properties
-            let owners = []
-            stationSet.forEach(function(property){
-                if (property.owner){
-                    owners.push(property.owner.id)
+            // Rent for standard properties which may have houses/hotels
+            function standardPropertyRent(){
+                if (checkColourSet(spaces[position].group, owner)){
+                    let numberOfHouses = spaces[position].houses
+                
+                    // The second (index 1) entry in the rent array is the rent with
+                    // a full colour set but no houses, hence the + 1 to get
+                    // the correct index.
+                    rentAmount = spaces[position].rent[numberOfHouses + 1]
+                } else{
+                    rentAmount = spaces[position].rent[0]
                 }
-            })
-        
-            // Check whether all of the owners are the same as the specified player
-            stationSet = owners.every(function(stationOwner){
-                //return (stationOwner === owner)
-            })
+            }
 
-            let rentIndex = owners.length - 1
-            console.log(rentIndex)
-            rentAmount = spaces[position].rent[rentIndex]
+            function utilityRent(){
+                let diceRoll = parseInt(document.querySelector('#dice-total').textContent)
+
+                if ((checkColourSet(spaces[position].group, owner))){
+                    rentAmount = diceRoll * 10
+                } else{
+                    rentAmount = diceRoll * 4
+                }
+            }
+
+            function stationRent(){
+
+                let stationSet = getColourSet('train-station')
             
+            
+                // Go back through the array to get a list of the owners of all these properties
+                let owners = []
+                stationSet.forEach(function(property){
+                    if (property.owner){
+                        owners.push(property.owner.id)
+                    }
+                })
+            
+                // Check whether all of the owners are the same as the specified player
+                stationSet = owners.every(function(stationOwner){
+                    //return (stationOwner === owner)
+                })
+
+                let rentIndex = owners.length - 1
+                console.log(rentIndex)
+                rentAmount = spaces[position].rent[rentIndex]
+                
+            }
         }
 
 
