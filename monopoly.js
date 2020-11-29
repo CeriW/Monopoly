@@ -1907,7 +1907,10 @@ function displayPropertyOptions(number){
 
             availableActions.mortgageProperty = true
 
-            if (checkColourSet(colour, players[turn -  1].id)){
+            if(spaces[number].mortgaged === true){
+                availableActions.mortgageProperty = false
+                mortgageWarning.innerText = 'This property is already mortgaged.'
+            } else if(checkColourSet(colour, players[turn -  1].id)){
                 let colourSet = getColourSet(colour, players[turn -  1])
                 colourSet.forEach(function(property){
                     if(property.houses > 0){
@@ -1916,6 +1919,7 @@ function displayPropertyOptions(number){
                     }
                 })
             }
+
 
 
 

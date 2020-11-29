@@ -860,6 +860,17 @@
     </div>
   </div>
 
+  <div class="private-function">
+    <h4 class="function-name">mortgageProperty</h4>
+    <h5>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to mortgage.</li>
+    </ul>
+    <div class="function-description">
+      Mortgages a property by setting its mortgaged property in the <i>spaces</i> array to true, gives the owner the mortgage money amount, sets an attribute on its space on the board so it can be styled, and adds a message to the feed.
+    </div>
+  </div>
+
 </div>
 
 <div class="function">
@@ -967,8 +978,8 @@
     When a player lands on a property, a number of things could happen depending on what that space is, whether it's owned etc.  In short:
     <ul>
       <li>If nobody owns it, the player may buy it.</li>
-      <li>If it is owned pay appropriate rent.
-      </li>
+      <li>If it is owned and unmortgaged, pay appropriate rent.</li>
+      <li>If it is mortgaged, display a message on the feed but do nothing else.</li>
     </ul>
   </div>
 
