@@ -2136,6 +2136,8 @@ function displayBuildHousePanel(colour){
 
     })
 
+    updateBank()
+
     // Because we're involving event listeners that can't just be copy and
     // pasted from the HTML, we'll open a blank popup then append the nodes.
     openPopup('')

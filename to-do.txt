@@ -6,8 +6,6 @@ An incomplete list of all the developments that need to be completed
 
 - Bankruptcy
 
-- Mortgaging
-
 - Make it so players can do the following with 'Get out of jail free' cards
     - Own
     - Use
