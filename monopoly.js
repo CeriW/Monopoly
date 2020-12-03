@@ -192,6 +192,7 @@ let availableActions = {
     endTurn: false,
     getOutOfJail: false,
     rollDoublesForJail: false,
+    cardOutOfJail: false,
     buildHouse: true,
     buildHotel: true,
     mortgageProperty: false,
@@ -371,6 +372,7 @@ function setAvailableActions(){
     document.body.setAttribute('dice-roll-available', availableActions.rollDice)
     document.body.setAttribute('end-turn-available', availableActions.endTurn)
     document.body.setAttribute('get-out-of-jail', availableActions.getOutOfJail)
+    document.body.setAttribute('card-out-of-jail', availableActions.cardOutOfJail)
     document.body.setAttribute('roll-doubles-for-jail', availableActions.rollDoublesForJail)
     document.body.setAttribute('build-house', availableActions.buildHouse)
     document.body.setAttribute('build-hotel', availableActions.buildHotel)
@@ -425,7 +427,6 @@ function updatePlayerDetails(){
                 let propertyName = property.name
                 propertyName = propertyName.replace(/\s/g, '-')
                 propertyIcon.classList.add(propertyName.toLowerCase())
-                console.log('utility')
             }
 
             updateNode.appendChild(propertyIcon)
@@ -884,9 +885,16 @@ function generatePlayerSummary(player){
     newRollDoublesForJailButton.classList.add('roll-doubles-for-jail', 'player-action-button')
     newRollDoublesForJailButton.addEventListener('click', rollDoublesForJail)
 
+    let newCardOutOfJailButton = createElement('button', 'card-out-of-jail-button', 'Use a get out of jail free card', null, null)
+    newCardOutOfJailButton.classList.add('player-action-button')
+    newCardOutOfJailButton.addEventListener('click', function(){
+        getOutOfJail('card')
+    })
+
     // Append all these new elements to the relevant player summary
     newSummary.appendChild(newGetOut50Button)
     newSummary.appendChild(newRollDoublesForJailButton)
+    newSummary.appendChild(newCardOutOfJailButton)
     newSummary.appendChild(newRollDiceButton)
     newSummary.appendChild(newEndTurnButton)
     playerSummary.appendChild(newSummary)
@@ -1152,14 +1160,14 @@ function drawCard(type){
             break
         case 'getout':
             // TODO
-            addToFeed('Get out of jail free card', 'get-out-card')
+            addToFeed(players[turn - 1].name + ' drew a \'get out of jail free\' card. It may be kept until needed, traded or sold.', 'get-out-card')
 
             // Keep a record of what card type this is, so we can return it
             // to the correct deck once used.
-            chosenCard.type = type
+            chosenCard.deck = type
 
             // Store this card on the player's object.
-            players[turn-1].getoutCards.push(chosenCard)
+            players[turn - 1].getoutCards.push(chosenCard)
 
             // Remove this card from its list so it can't be drawn
             // again until it is used.
@@ -1618,7 +1626,6 @@ function rollDoublesForJail(){
 }
 
 function getOutOfJail(method){
-    // TODO
     let player = players[turn - 1]
   
     switch (method){
@@ -1630,7 +1637,27 @@ function getOutOfJail(method){
         case 'card':
             //TODO
             availableActions.rollDice = true
-            addToFeed(players[turn-1].name + ' used a Get Out Of Jail Free card to get out of jail', 'get-out-card')
+            addToFeed(players[turn-1].name + ' used a \'get out of jail free\' card', 'get-out-card')
+
+            // Remove the card from the player, and return it to the deck it came from.
+            let usedCard = player.getoutCards.pop()
+            let cardList = usedCard.deck = 'community-chest' ? communityChestCards : chanceCards
+            cardList.push(usedCard)
+
+            // Remove the icon from the player's summary
+            let cardIcon = document.querySelector('.current-player-summary .player-cards .player-card-icon')
+            cardIcon.classList.add('zoomOut')
+
+            window.setTimeout(function(){
+                cardIcon.parentNode.removeChild(cardIcon)
+            }, 1000)
+
+            // Remove the attribute so the CSS can transition the card
+            // container to disappear if this is their last get out card.
+            if (player.getoutCards.length === 0){
+                document.querySelector('.current-player-summary .player-cards').setAttribute('cards', false)
+            }
+
             break
         case 'doubles':
             // Note - you do not get to roll again after rolling doubles to get out of jail
@@ -1664,7 +1691,9 @@ function checkJail(){
         // to pay/use a card to get out of jail.
         availableActions.rollDoublesForJail = jailTurn > 3 ? false : true
 
-
+        // Check whether the player has any get out of jail free cards,
+        // and allow their use if so.
+        availableActions.cardOutOfJail = players[turn - 1].getoutCards.length > 0 ? true : false
         
         setAvailableActions()
         

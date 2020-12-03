@@ -1086,7 +1086,10 @@ body[close-popup="false"] #popup-close {
   background: url("images/feed-icons/get-out-card.svg") center no-repeat;
   background-size: contain;
   margin: 10px 5px;
-  animation: zoomIn 1s; }
+  animation: zoomIn 1s both; }
+
+.player-card-icon.zoomOut {
+  animation: zoomOut 1s both; }
 
 /* Full portfolio view  ------------------------------------------------------*/
 .full-portfolio {
@@ -1138,18 +1141,22 @@ body[end-turn-available="false"] .end-turn-button {
   pointer-events: none; }
 
 body[get-out-of-jail="false"] .get-out-50-button,
-body[get-out-of-jail="false"] .roll-doubles-for-jail {
+body[get-out-of-jail="false"] .roll-doubles-for-jail,
+body[get-out-of-jail="false"] .card-out-of-jail-button {
   display: none !important; }
 
 body[get-out-of-jail="true"] .current-player-summary .get-out-50-button,
-body[get-out-of-jail="true"] .current-player-summary .roll-doubles-for-jail {
+body[get-out-of-jail="true"] .current-player-summary .roll-doubles-for-jail,
+body[get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button {
   display: initial !important; }
 
 body[get-out-of-jail="true"] .current-player-summary .roll-dice-button {
   display: none; }
 
+body[card-out-of-jail="false"][get-out-of-jail="true"] .card-out-of-jail-button,
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail {
   pointer-events: none;
+  display: initial;
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
@@ -1739,6 +1746,12 @@ body:not(.testing-panel-enabled) #testing-panel {
     transform: scale(0); }
   to {
     transform: scale(1); } }
+
+@keyframes zoomOut {
+  from {
+    transform: scale(1); }
+  to {
+    transform: scale(0); } }
 
 @keyframes goodChangeAnimation {
   0% {

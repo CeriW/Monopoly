@@ -1201,7 +1201,11 @@ $jailAnimationLength: 1.5;
     background: url('images/feed-icons/get-out-card.svg') center no-repeat;
     background-size: contain;
     margin: 10px 5px;
-    animation: zoomIn 1s;
+    animation: zoomIn 1s both;
+}
+
+.player-card-icon.zoomOut{
+    animation: zoomOut 1s both;
 }
 
 
@@ -1271,14 +1275,16 @@ body[end-turn-available="false"] .end-turn-button{
 // TODO - maybe revisit this
 body[get-out-of-jail="false"]{
     .get-out-50-button,
-    .roll-doubles-for-jail{
+    .roll-doubles-for-jail,
+    .card-out-of-jail-button{
         display: none !important;
     }
 }
 
 body[get-out-of-jail="true"] .current-player-summary{
     .get-out-50-button,
-    .roll-doubles-for-jail{
+    .roll-doubles-for-jail,
+    .card-out-of-jail-button{
         display: initial !important;
     }
 
@@ -1287,8 +1293,10 @@ body[get-out-of-jail="true"] .current-player-summary{
     }
 }
 
+body[card-out-of-jail="false"][get-out-of-jail="true"] .card-out-of-jail-button,
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail{
     pointer-events: none;
+    display: initial;
     @include disabledButton()
 }
 
@@ -1956,6 +1964,11 @@ body:not(.testing-panel-enabled) #testing-panel{
 @keyframes zoomIn{
     from{transform: scale(0);}
     to{transform: scale(1);}
+}
+
+@keyframes zoomOut{
+    from{transform: scale(1);}
+    to{transform: scale(0);}
 }
 
 @keyframes goodChangeAnimation{
