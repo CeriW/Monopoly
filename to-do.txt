@@ -20,8 +20,6 @@ An incomplete list of all the developments that need to be completed
 
 - Make it come up on the feed when players buy houses. If possible, have it come up with "Player 2 built 3 houses on Bond Street" rather than just coming up every time they hit build.
 
-- A thought to investigate - if you have 1 house on a property in the colour set and 0 houses on another, can you mortgage the property with 0? UPDATE - No, you can only mortgage in colour sets with no buildings on any of the properties.
-
 - Don't have to wait until your turn to build houses/hotels
 
 - Reorder the readme so it's in alphabetical order
@@ -37,6 +35,14 @@ An incomplete list of all the developments that need to be completed
     - Do some overflow:hidden stuff to make it look somewhat better.
     - Hide the property names and background on small screens.
     - Rearrange the page for smaller screens, even if it requires wrapping. Grid will probably help with this.
+
+- Warning on auction screen if you're bidding more money than you have.
+
+- Style Chance/CC cards more nicely.
+
+- Go back 3 spaces fix
+
+- update the code throughout to use the createElement function
 
 STRETCH GOALS
 

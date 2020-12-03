@@ -1179,7 +1179,30 @@ $jailAnimationLength: 1.5;
 .property-icon.electric-company{background: url('images/electric-company.svg') center no-repeat;}
 .property-icon.water-works{background: url('images/water-works.svg') center no-repeat;}
 
+.player-cards{
+    background: #fff;
+    border: $border;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    transition: height 0.4s;
+}
 
+.player-cards[cards="false"]{
+    border: none;
+    height: 0;
+}
+
+.player-card-icon{
+    width: 25px;
+    height: 25px;
+    background: url('images/feed-icons/get-out-card.svg') center no-repeat;
+    background-size: contain;
+    margin: 10px 5px;
+    animation: zoomIn 1s;
+}
 
 
 /* Full portfolio view  ------------------------------------------------------*/

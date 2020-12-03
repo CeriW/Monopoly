@@ -87,12 +87,12 @@ let availableHotels = 12
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
-    {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
+    {description: "From sale of stock you get £50",                                             type: '+',        value: 50},*/
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
-    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
+    /*{description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
     {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
     {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
@@ -103,19 +103,19 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
 
 let chanceCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
     {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   value: 'nearest-station' },
-    {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
+    {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },*/
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    /*{description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
     {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
     {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
@@ -123,7 +123,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
 
@@ -738,7 +738,7 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
-        let newPlayer = {money:1500, inJail: 0, properties: []}
+        let newPlayer = {money:1500, inJail: 0, properties: [], getoutCards: []}
         newPlayer.id = playerCreationPanel.getAttribute('player')
         newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
 
@@ -819,7 +819,7 @@ function generatePlayerSummary(player){
     title.innerText = player.name
     playerSummaryHeader.appendChild(title)
 
-
+    // Player's money
     let playerMoney = document.createElement('div')
     playerMoney.setAttribute('id', 'player-' + player.id + '-money')
     playerMoney.innerHTML = currencySymbolSpan + player.money
@@ -850,7 +850,11 @@ function generatePlayerSummary(player){
 
     newSummary.appendChild(playerPortfolio)
 
-    
+
+    // GET OUT CARDS    
+    let playerCards = createElement('div', 'player-cards', null, 'cards', false)
+    newSummary.appendChild(playerCards)
+
     // TODO - much of this could probably be achieved much more simply with a loop
 
     // Create the buttons that allow players to end their turns.
@@ -1148,8 +1152,26 @@ function drawCard(type){
             break
         case 'getout':
             // TODO
-            console.log('getout: a get out of jail free card which is held onto by the player until used, sold or traded.')
             addToFeed('Get out of jail free card', 'get-out-card')
+
+            // Keep a record of what card type this is, so we can return it
+            // to the correct deck once used.
+            chosenCard.type = type
+
+            // Store this card on the player's object.
+            players[turn-1].getoutCards.push(chosenCard)
+
+            // Remove this card from its list so it can't be drawn
+            // again until it is used.
+            cardList.pop()
+
+            let cardIcon = createElement('div', 'player-card-icon', null, null, null)
+
+            let cardSummary = document.querySelector('.current-player-summary .player-cards')
+            cardSummary.appendChild(cardIcon)
+            cardSummary.setAttribute('cards', true)
+
+
             break
         case 'exchange':
             // TODO
@@ -1920,7 +1942,7 @@ function displayPropertyOptions(number){
             if(spaces[number].mortgaged === true){
                 availableActions.mortgageProperty = false
                 availableActions.unmortgageProperty = true
-                mortgageMessage.innerText = 'This property is already mortgaged.'
+                mortgageMessage.innerText = 'This property is mortgaged.'
 
             // If the player owns the full colour set...
             } else if(checkColourSet(colour, players[turn -  1].id)){
