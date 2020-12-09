@@ -1179,6 +1179,12 @@ $jailAnimationLength: 1.5;
 .property-icon.electric-company{background: url('images/electric-company.svg') center no-repeat;}
 .property-icon.water-works{background: url('images/water-works.svg') center no-repeat;}
 
+#jail{
+    background: $lightgreen url('images/jail.svg') right top no-repeat;
+    background-size: contain;
+    color: transparent;
+}
+
 .player-cards{
     background: #fff;
     border: $border;

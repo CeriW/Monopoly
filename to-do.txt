@@ -7,8 +7,6 @@ An incomplete list of all the developments that need to be completed
 - Bankruptcy
 
 - Make it so players can do the following with 'Get out of jail free' cards
-    - Own
-    - Use
     - Trade
     - Sell
 

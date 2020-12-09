@@ -1552,15 +1552,32 @@ function positionToken(token, position){
     let desiredRight = matchingProperty.offsetRight
     let desiredBottom = matchingProperty.offsetBottom
 
-    let desiredZindex = 1
 
+    if (matchingProperty.getAttribute('id') === 'jail'){
+        desiredLeft = 0
+        desiredBottom = 0
+        desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
+    }
+
+    let desiredZindex = 1
+    
     // If there are already tokens on the property, move ours
     for (i = 0; i < players.length; i++){
         if (players[i].position === position){
-            desiredTop += 10
+
+            // If we are just visiting jail, stack horizontally,
+            // otherwise stack vertically.
+            if(position === 10){
+                desiredLeft += 10
+            } else{
+                desiredTop += 10
+            }
+
             desiredZindex++
         }
     }
+
+
 
     token.style.top = desiredTop + 'px'
     token.style.left = desiredLeft + 'px'

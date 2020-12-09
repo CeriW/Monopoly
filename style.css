@@ -1066,6 +1066,11 @@ body[close-popup="false"] #popup-close {
 .property-icon.water-works {
   background: url("images/water-works.svg") center no-repeat; }
 
+#jail {
+  background: #d5e8d4 url("images/jail.svg") right top no-repeat;
+  background-size: contain;
+  color: transparent; }
+
 .player-cards {
   background: #fff;
   border: 3px solid #000;
