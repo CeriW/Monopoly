@@ -1299,7 +1299,7 @@ body[get-out-of-jail="true"] .current-player-summary{
     }
 }
 
-body[card-out-of-jail="false"][get-out-of-jail="true"] .card-out-of-jail-button,
+body[card-out-of-jail="false"][get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button,
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail{
     pointer-events: none;
     display: initial;

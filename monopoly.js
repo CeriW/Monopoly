@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = true;
+let quickStartGame = false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -87,12 +87,12 @@ let availableHotels = 12
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
-    {description: "From sale of stock you get £50",                                             type: '+',        value: 50},*/
+    {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
-    /*{description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
+    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
     {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
     {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
@@ -103,19 +103,19 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
     {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   value: 'nearest-station' },
-    {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },*/
+    {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
-    /*{description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
     {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
     {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
@@ -123,7 +123,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
@@ -1466,6 +1466,9 @@ function moveToken(total){
         goToJail(token)
     } else{
         let i = startPosition
+
+        positionToken(token, i)
+
         let myInterval = setInterval(function(){
             if (i <= endPosition){
                 positionToken(token, i)
@@ -1554,13 +1557,33 @@ function positionToken(token, position){
 
 
     if (matchingProperty.getAttribute('id') === 'jail'){
-        desiredLeft = 0
-        desiredBottom = 0
-        desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
+
+        // If the player is in jail
+        if (players[turn - 1].inJail !== 0){
+            desiredLeft = matchingProperty.offsetLeft + (matchingProperty.offsetWidth - token.offsetWidth) - 5
+            desiredTop -= 30
+
+        // If the player is just visiting
+        } else{
+            desiredLeft = 0
+            desiredBottom = 0
+            desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
+        }
+
+
     }
 
+    // If there are already tokens on the property, reshuffle them so they don't
+    // sit on top of each other.
     let desiredZindex = 1
     
+    ;[].forEach.call(document.querySelectorAll('.token[position="' + position + '"]'), function(node){
+        node.style.transform = 'translateY(' + ((desiredZindex - 1) * 8) + 'px)'
+        node.style.Zindex = desiredZindex
+        desiredZindex++
+    })
+
+    /*
     // If there are already tokens on the property, move ours
     for (i = 0; i < players.length; i++){
         if (players[i].position === position){
@@ -1568,14 +1591,21 @@ function positionToken(token, position){
             // If we are just visiting jail, stack horizontally,
             // otherwise stack vertically.
             if(position === 10){
-                desiredLeft += 10
+                
+               if (players[i].inJail && players[turn - 1].inJail){
+                    desiredTop += 10
+               } else{
+                   desiredLeft += 10
+               }
+
+            // Any position other than jail, move the token down.
             } else{
                 desiredTop += 10
             }
 
             desiredZindex++
         }
-    }
+    }*/
 
 
 
@@ -1593,12 +1623,14 @@ function positionToken(token, position){
 function goToJail(token){
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
-    positionToken(token,10)
+    
     availableActions.rollDice = false
     availableActions.endTurn = true
     players[turn - 1].inJail++
     players[turn-1].position = 10
+    positionToken(token,10)
     updatePlayerDetails()
+    
 
 
     // Add a class which allows a police animation to play.
