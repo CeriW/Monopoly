@@ -1599,37 +1599,13 @@ function positionToken(token, position){
             let transform = 1/2 * distance * (2 * i - jailTokens.length + 1)
 
             jailTokens[i].style.transform = 'translateY(' + transform + 'px'
-
-          
-
         }
 
+        let visitingTokens = document.querySelectorAll('.token[position="10"][jail="false"]')
+        for (i = 0; i < visitingTokens.length; i++){
+            visitingTokens[i].style.transform = 'translateX(' + (i * 8) + 'px'
+        }
     }
-
-
-    /*
-    // If there are already tokens on the property, move ours
-    for (i = 0; i < players.length; i++){
-        if (players[i].position === position){
-
-            // If we are just visiting jail, stack horizontally,
-            // otherwise stack vertically.
-            if(position === 10){
-                
-               if (players[i].inJail && players[turn - 1].inJail){
-                    desiredTop += 10
-               } else{
-                   desiredLeft += 10
-               }
-
-            // Any position other than jail, move the token down.
-            } else{
-                desiredTop += 10
-            }
-
-            desiredZindex++
-        }
-    }*/
 
 
 
