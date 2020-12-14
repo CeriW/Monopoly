@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = false;
+let quickStartGame = true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -636,7 +636,9 @@ function intialisePlayerCreator(){
 
     createPlayerCreationPanel(1)
     createPlayerCreationPanel(2)
-    let currentNumberOfPlayers = 2
+    createPlayerCreationPanel(3)
+    createPlayerCreationPanel(4)
+    let currentNumberOfPlayers = 4
 
     function createPlayerCreationPanel(playerID){
         let newPanel = document.createElement('div')
@@ -771,6 +773,7 @@ function createPlayers(){
         newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
+        //newToken.setAttribute('jail', false)
         board.appendChild(newToken)   
     })
 
@@ -1539,6 +1542,8 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
+    console.log(matchingProperty)
+
     let row = matchingProperty.parentNode.getAttribute('id')
 
     //token.style.top = matchingProperty.offsetTop + 'px'
@@ -1561,13 +1566,15 @@ function positionToken(token, position){
         // If the player is in jail
         if (players[turn - 1].inJail !== 0){
             desiredLeft = matchingProperty.offsetLeft + (matchingProperty.offsetWidth - token.offsetWidth) - 5
-            desiredTop -= 30
+            desiredTop -= 10
+            token.setAttribute('jail', true)
 
         // If the player is just visiting
         } else{
             desiredLeft = 0
             desiredBottom = 0
             desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
+            token.setAttribute('jail', false)
         }
 
 
@@ -1576,12 +1583,29 @@ function positionToken(token, position){
     // If there are already tokens on the property, reshuffle them so they don't
     // sit on top of each other.
     let desiredZindex = 1
-    
-    ;[].forEach.call(document.querySelectorAll('.token[position="' + position + '"]'), function(node){
-        node.style.transform = 'translateY(' + ((desiredZindex - 1) * 8) + 'px)'
-        node.style.Zindex = desiredZindex
-        desiredZindex++
-    })
+
+    if (matchingProperty.getAttribute('id') !== 'jail'){
+        ;[].forEach.call(document.querySelectorAll('.token[position="' + position + '"]'), function(node){
+            node.style.transform = 'translateY(' + ((desiredZindex - 1) * 8) + 'px)'
+            node.style.Zindex = desiredZindex
+            desiredZindex++
+        })
+    } else{
+
+        let jailTokens = document.querySelectorAll('.token[position="10"][jail="true"]')
+        let distance = 8
+        
+        for (i = 0; i < jailTokens.length; i++){
+            let transform = 1/2 * distance * (2 * i - jailTokens.length + 1)
+
+            jailTokens[i].style.transform = 'translateY(' + transform + 'px'
+
+          
+
+        }
+
+    }
+
 
     /*
     // If there are already tokens on the property, move ours
@@ -1623,6 +1647,7 @@ function positionToken(token, position){
 function goToJail(token){
     token.setAttribute('position', 10)
     token.setAttribute('area', 'west')
+    //token.setAttribute('jail', true)
     
     availableActions.rollDice = false
     availableActions.endTurn = true
@@ -1631,7 +1656,6 @@ function goToJail(token){
     positionToken(token,10)
     updatePlayerDetails()
     
-
 
     // Add a class which allows a police animation to play.
     // After 3 seconds, remove it.
@@ -1718,6 +1742,9 @@ function getOutOfJail(method){
 
     
     availableActions.getOutOfJail = false
+
+    document.querySelector('#player' + turn + 'token').setAttribute('jail', false)
+
     player.inJail = 0
     setAvailableActions()
     updatePlayerDetails()
