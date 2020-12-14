@@ -185,7 +185,8 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let maxNumberOfPlayers = 4
+let minNumberOfPlayers = 4
+let maxNumberOfPlayers = 15
 
 let availableActions = {
     rollDice: true,
@@ -634,11 +635,11 @@ function intialisePlayerCreator(){
         }
     })
 
-    createPlayerCreationPanel(1)
-    createPlayerCreationPanel(2)
-    createPlayerCreationPanel(3)
-    createPlayerCreationPanel(4)
-    let currentNumberOfPlayers = 4
+    for (i = 1; i <= minNumberOfPlayers; i++){
+        createPlayerCreationPanel(i)
+        let currentNumberOfPlayers = 4
+    }
+
 
     function createPlayerCreationPanel(playerID){
         let newPanel = document.createElement('div')
@@ -1469,7 +1470,6 @@ function moveToken(total){
         goToJail(token)
     } else{
         let i = startPosition
-
         positionToken(token, i)
 
         let myInterval = setInterval(function(){
@@ -1542,14 +1542,8 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
-    console.log(matchingProperty)
 
     let row = matchingProperty.parentNode.getAttribute('id')
-
-    //token.style.top = matchingProperty.offsetTop + 'px'
-    //token.style.left = matchingProperty.offsetLeft + 'px'
-    //token.style.right = matchingProperty.offsetRight + 'px'
-    //token.style.bottom = matchingProperty.offsetBottom + 'px'  
     
     // The token should sit half way from the top of the property, minus half the token's height.
     let desiredTop = matchingProperty.offsetTop += ((matchingProperty.offsetHeight / 2) - (token.offsetHeight / 2))
