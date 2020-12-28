@@ -2884,6 +2884,8 @@ function initiateTrade(){
             let summary = createElement('div', 'other-player-summary', '' , '', '')
             summary.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
             summary.appendChild(createElement('h3', '', player.name, '', ''))
+            summary.appendChild(createElement('div', '', currencySymbolSpan + player.money + '<br><br>', '', ''))
+
 
             let portfolio = generateFullPortfolioView(player.id)
             if (portfolio.length === 34){
@@ -2915,10 +2917,12 @@ function initiateTrade(){
     tradeWindow.appendChild(otherSummaries)
 
 
-
-
     openPopup('')
     popupMessage.appendChild(tradeWindow)
+
+}
+
+function negotiateTrade(){
 
 }
 

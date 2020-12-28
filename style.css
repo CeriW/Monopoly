@@ -1493,7 +1493,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       background-repeat: no-repeat;
       background-position: center; }
     .trade-window .other-player-summaries h3 {
-      margin-top: 0; }
+      margin: 0; }
     .trade-window .other-player-summaries :before {
       display: none; }
 
