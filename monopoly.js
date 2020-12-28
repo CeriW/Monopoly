@@ -1,4 +1,4 @@
-  // monopoly.js by Ceri Woolway - cxv712@gmail.com
+// monopoly.js by Ceri Woolway - cxv712@gmail.com
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
@@ -87,11 +87,11 @@ let availableHotels = 12
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
     {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
@@ -103,18 +103,18 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
 
 let chanceCards = 
   [
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
+    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
     {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   value: 'nearest-station' },
     {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
-    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
     {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
@@ -123,7 +123,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
 
@@ -742,7 +742,7 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
-        let newPlayer = {money:1500, inJail: 0, properties: [], getoutCards: []}
+        let newPlayer = {money:1500, inJail: 0, properties: [], getOutCards: []}
         newPlayer.id = playerCreationPanel.getAttribute('player')
         newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
 
@@ -895,11 +895,15 @@ function generatePlayerSummary(player){
         getOutOfJail('card')
     })
 
+    let newTradeButton = createElement('button', 'player-action-button', 'Initiate trade', '', '')
+    newTradeButton.addEventListener('click', initiateTrade)
+
     // Append all these new elements to the relevant player summary
     newSummary.appendChild(newGetOut50Button)
     newSummary.appendChild(newRollDoublesForJailButton)
     newSummary.appendChild(newCardOutOfJailButton)
     newSummary.appendChild(newRollDiceButton)
+    newSummary.appendChild(newTradeButton)
     newSummary.appendChild(newEndTurnButton)
     playerSummary.appendChild(newSummary)
 
@@ -1171,7 +1175,7 @@ function drawCard(type){
             chosenCard.deck = type
 
             // Store this card on the player's object.
-            players[turn - 1].getoutCards.push(chosenCard)
+            players[turn - 1].getOutCards.push(chosenCard)
 
             // Remove this card from its list so it can't be drawn
             // again until it is used.
@@ -1683,7 +1687,7 @@ function getOutOfJail(method){
             addToFeed(players[turn-1].name + ' used a \'get out of jail free\' card', 'get-out-card')
 
             // Remove the card from the player, and return it to the deck it came from.
-            let usedCard = player.getoutCards.pop()
+            let usedCard = player.getOutCards.pop()
             let cardList = usedCard.deck = 'community-chest' ? communityChestCards : chanceCards
             cardList.push(usedCard)
 
@@ -1697,7 +1701,7 @@ function getOutOfJail(method){
 
             // Remove the attribute so the CSS can transition the card
             // container to disappear if this is their last get out card.
-            if (player.getoutCards.length === 0){
+            if (player.getOutCards.length === 0){
                 document.querySelector('.current-player-summary .player-cards').setAttribute('cards', false)
             }
 
@@ -1739,7 +1743,7 @@ function checkJail(){
 
         // Check whether the player has any get out of jail free cards,
         // and allow their use if so.
-        availableActions.cardOutOfJail = players[turn - 1].getoutCards.length > 0 ? true : false
+        availableActions.cardOutOfJail = players[turn - 1].getOutCards.length > 0 ? true : false
         
         setAvailableActions()
         
@@ -1899,8 +1903,12 @@ function portfolioItemPreview(e){
 function fullPortfolioView(e){
     
     let player = e.target.getAttribute('player')
+    let portfolioOutput = generateFullPortfolioView(player)
+    openPopup(portfolioOutput)
+    document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
+}
 
-
+function generateFullPortfolioView(player){
     let portfolioOutput = '<div class="full-portfolio">'
 
     players[player - 1].properties.forEach(function(property){
@@ -1925,8 +1933,7 @@ function fullPortfolioView(e){
 
     portfolioOutput += '</div>'
 
-    openPopup(portfolioOutput)
-    document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
+    return portfolioOutput;
 }
 
 function displayPropertyOptions(number){
@@ -2815,6 +2822,105 @@ function checkPropertyOwner(position){
 
 }
 
+// TRADING FUNCTIONS ---------------------------------------------------------//
+
+function initiateTrade(){
+
+    let tradeWindow = document.createElement('div')
+    tradeWindow.classList.add('trade-window')
+
+    
+    tradeWindow.appendChild(createElement('h2', 'trade-title', 'TRADE', '', ''))
+
+
+    // Summary for the player initiating the trade
+
+    let currentPlayerSummary = document.createElement('div')
+
+    // Token
+    currentPlayerSummary.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn-1].token))
+
+    // Name
+    currentPlayerSummary.appendChild(createElement('h2', '', players[turn-1].name, '', ''))
+
+    // Money
+    currentPlayerSummary.appendChild(createElement('div', 'money', currencySymbolSpan +  players[turn-1].money, '', ''))
+
+    // Portfolio
+    currentPlayerSummary.appendChild(createElement('h3', '', 'YOU HAVE:', '', ''))
+    
+    let currentPlayerPortfolio = createElement('div', 'current-player-portfolio', generateFullPortfolioView(turn), '', '')
+    if (!currentPlayerPortfolio.querySelector('.full-portfolio').innerHTML){
+        currentPlayerPortfolio.querySelector('.full-portfolio').innerHTML = 'You do not have any properties to trade.'
+    }
+    currentPlayerSummary.appendChild(currentPlayerPortfolio)
+    
+    // Get out cards
+
+    if (players[turn-1].getOutCards.length > 0){
+        let playerCards = createElement('div', 'player-cards', '', '', '')
+        currentPlayerPortfolio.appendChild(playerCards)
+
+        players[turn-1].getOutCards.forEach(function(){
+            playerCards.appendChild(createElement('div', 'player-card-icon', '', '', ''))
+        })
+    }
+
+
+    tradeWindow.appendChild(currentPlayerSummary)
+
+
+
+
+
+    // Summaries for other players
+
+    tradeWindow.appendChild(createElement('h2', '', 'OTHER PLAYERS', '', ''))
+
+    let otherSummaries = createElement('div', 'other-player-summaries', '', '', '')
+
+    players.forEach(function(player){
+        if (player !== players[turn - 1]){
+            let summary = createElement('div', 'other-player-summary', '' , '', '')
+            summary.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
+            summary.appendChild(createElement('h3', '', player.name, '', ''))
+
+            let portfolio = generateFullPortfolioView(player.id)
+            if (portfolio.length === 34){
+                portfolio = 'This player does not have any properties to trade.'
+            }
+            summary.appendChild(createElement('div', 'summary', portfolio, '', ''))
+
+            let cardDisplay = createElement('div', 'player-cards', '', '', '')
+
+
+            if (player.getOutCards){
+                player.getOutCards.forEach(function(card){
+                    cardDisplay.appendChild(createElement('div', 'player-card-icon', '', '', ''))
+                })
+            }
+            summary.appendChild(cardDisplay)
+
+            let tradeButton = createElement('button', '', 'Trade', '', '')
+            summary.appendChild(tradeButton)
+
+
+            otherSummaries.appendChild(summary)
+
+        }
+
+    })
+    
+    
+    tradeWindow.appendChild(otherSummaries)
+
+
+
+
+    openPopup('')
+    popupMessage.appendChild(tradeWindow)
+
+}
 
 
 // FEED FUNCTIONS ------------------------------------------------------------//

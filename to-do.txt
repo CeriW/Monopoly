@@ -10,8 +10,6 @@ An incomplete list of all the developments that need to be completed
     - Trade
     - Sell
 
-- Jail just visiting
-
 - Refactor all the things with player specific IDs to have player attributes instead.
 
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
@@ -41,6 +39,8 @@ An incomplete list of all the developments that need to be completed
 - Go back 3 spaces fix
 
 - update the code throughout to use the createElement function
+
+- Better testing options
 
 STRETCH GOALS
 
