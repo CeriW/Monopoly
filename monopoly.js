@@ -1914,7 +1914,7 @@ function generateFullPortfolioView(player){
 
     players[player - 1].properties.forEach(function(property){
 
-        portfolioOutput += '<div class="full-portfolio-item">'
+        portfolioOutput += '<div class="full-portfolio-item" property="' + property.position + '">'
         portfolioOutput += '<div class="property-icon ' + property.group + ' ' + spaces.indexOf(property) + '"></div>' 
         portfolioOutput += '<div>' + property.name + '</div>'
         
@@ -2881,7 +2881,7 @@ function initiateTrade(){
 
     players.forEach(function(player){
         if (player !== players[turn - 1]){
-            let summary = createElement('div', 'other-player-summary', '' , '', '')
+            let summary = createElement('div', 'other-player-summary', '' , 'player', player.id)
             summary.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
             summary.appendChild(createElement('h3', '', player.name, '', ''))
             summary.appendChild(createElement('div', '', currencySymbolSpan + player.money, '', ''))
@@ -2891,7 +2891,7 @@ function initiateTrade(){
             if (portfolio.length === 34){
                 portfolio = 'This player does not have any properties to trade.'
             }
-            summary.appendChild(createElement('div', 'summary', portfolio, '', ''))
+            summary.appendChild(createElement('div', 'full-portfolio', portfolio, '', ''))
 
             let cardDisplay = createElement('div', 'player-cards', '', '', '')
 
@@ -2925,6 +2925,8 @@ function initiateTrade(){
 
 function negotiateTrade(e){
 
+    let receiver = e.target.parentNode.getAttribute('player')
+
     let tradeNegotiationsWindow = createElement('div', 'trade-negotiations-window', '', 'trade-proposed', false)
     let playerSummaries = createElement('div', 'trade-negotiation-summaries', '', '', '')
 
@@ -2953,6 +2955,55 @@ function negotiateTrade(e){
 
     openPopup('')
     popupMessage.appendChild(tradeNegotiationsWindow)
+
+
+
+    // An empty array that the proposed trade items will be stored in.
+    let tradeProposal = [[], []]
+
+    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.full-portfolio'), function(node){
+        node.addEventListener('click', addToProposal)
+    })
+
+    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.player-cards'), function(node){
+        node.addEventListener('click', addToProposal)
+    })
+
+    function addToProposal(e){
+
+        // If we're adding a property to the proposal
+        if (e.target.parentNode.classList.contains('full-portfolio-item')){
+
+            let property = e.target.parentNode.getAttribute('property')
+            e.target.parentNode.setAttribute('proposed', true)
+
+            // Current player
+            if (e.target.parentNode.parentNode.parentNode.classList.contains('current-player-portfolio')){
+                tradeProposal[0][property] = spaces[property]
+            }
+            // Receiving player
+            else{
+                tradeProposal[1][property] = spaces[property]
+            }
+
+
+        // If we're adding a 'get out of jail' card to the proposal
+        } else if (e.target.parentNode.classList.contains('player-cards')){
+            e.target.setAttribute('proposed', true)
+
+            if (e.target.parentNode.parentNode.classList.contains('current-player-portfolio')){
+                tradeProposal[0][40] = players[turn-1].getOutCards[0]
+                tradeProposal[0][41] = players[turn-1].getOutCards[1]
+            } else{
+                tradeProposal[1][40] = players[receiver - 1].getOutCards[0]
+                tradeProposal[1][41] = players[receiver - 1].getOutCards[1]
+            }
+        }
+
+        console.log(tradeProposal)
+
+    }
+
 
 }
 

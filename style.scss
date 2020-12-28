@@ -1219,6 +1219,7 @@ $jailAnimationLength: 1.5;
     background-size: contain;
     margin: 10px 5px;
     animation: zoomIn 1s both;
+    transition: 0.2s;
 }
 
 .player-card-icon.zoomOut{
@@ -1249,6 +1250,7 @@ $jailAnimationLength: 1.5;
     display: flex;
     align-items: center;
     width: 380px;
+    transition: 0.2s;
 
     & > div{
         margin: 0 0 0 10px;
@@ -1740,7 +1742,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 
     }
-
 }
 
 
@@ -1799,6 +1800,26 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     &[trade-proposed="false"] button:not(.propose-trade),
     &[trade-proposed="true"] button.propose-trade{
         display: none;
+    }
+
+    .full-portfolio-item:hover,
+    .player-card-icon:hover{
+        background-color: $lightgreen;
+    }
+
+    [proposed="true"]{
+        position: relative;
+    }
+
+    [proposed="true"]:before{
+        content: '';
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: url('images/tick.svg') center no-repeat;
+        background-size: contain;
     }
 
 }

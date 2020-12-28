@@ -1099,7 +1099,8 @@ body[close-popup="false"] #popup-close {
   background: url("images/feed-icons/get-out-card.svg") center no-repeat;
   background-size: contain;
   margin: 10px 5px;
-  animation: zoomIn 1s both; }
+  animation: zoomIn 1s both;
+  transition: 0.2s; }
 
 .player-card-icon.zoomOut {
   animation: zoomOut 1s both; }
@@ -1122,7 +1123,8 @@ body[close-popup="false"] #popup-close {
 .full-portfolio-item {
   display: flex;
   align-items: center;
-  width: 380px; }
+  width: 380px;
+  transition: 0.2s; }
   .full-portfolio-item > div {
     margin: 0 0 0 10px; }
 
@@ -1533,6 +1535,23 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window[trade-proposed="false"] button:not(.propose-trade),
 .trade-negotiations-window[trade-proposed="true"] button.propose-trade {
   display: none; }
+
+.trade-negotiations-window .full-portfolio-item:hover,
+.trade-negotiations-window .player-card-icon:hover {
+  background-color: #d5e8d4; }
+
+.trade-negotiations-window [proposed="true"] {
+  position: relative; }
+
+.trade-negotiations-window [proposed="true"]:before {
+  content: '';
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: url("images/tick.svg") center no-repeat;
+  background-size: contain; }
 
 /* Feed  ---------------------------------------------------------------------*/
 #feed {
