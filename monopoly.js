@@ -22,6 +22,7 @@ let availableTokens = [
 
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
+let popupTitle = document.querySelector('#popup-title')
 let playerSummary = document.querySelector('#player-summary')
 let feed = document.querySelector('#feed-content')
 let bankContainer = document.querySelector('#bank')
@@ -2826,16 +2827,15 @@ function checkPropertyOwner(position){
 
 function initiateTrade(){
 
-    let tradeWindow = document.createElement('div')
-    tradeWindow.classList.add('trade-window')
+    popupTitle.textContent = 'Trade'
 
-    
-    tradeWindow.appendChild(createElement('h2', 'trade-title', 'TRADE', '', ''))
+    let tradeWindow = document.createElement('div')
+    tradeWindow.classList.add('trade-summary-window')
 
 
     // Summary for the player initiating the trade
 
-    let currentPlayerSummary = document.createElement('div')
+    let currentPlayerSummary = createElement('div', 'current-player-summary', '', '', '')
 
     // Token
     currentPlayerSummary.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn-1].token))
@@ -2884,7 +2884,7 @@ function initiateTrade(){
             let summary = createElement('div', 'other-player-summary', '' , '', '')
             summary.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
             summary.appendChild(createElement('h3', '', player.name, '', ''))
-            summary.appendChild(createElement('div', '', currencySymbolSpan + player.money + '<br><br>', '', ''))
+            summary.appendChild(createElement('div', '', currencySymbolSpan + player.money, '', ''))
 
 
             let portfolio = generateFullPortfolioView(player.id)
@@ -2903,7 +2903,8 @@ function initiateTrade(){
             }
             summary.appendChild(cardDisplay)
 
-            let tradeButton = createElement('button', '', 'Trade', '', '')
+            let tradeButton = createElement('button', 'trade-button', 'Trade', '', '')
+            tradeButton.addEventListener('click', negotiateTrade)
             summary.appendChild(tradeButton)
 
 
@@ -2922,7 +2923,36 @@ function initiateTrade(){
 
 }
 
-function negotiateTrade(){
+function negotiateTrade(e){
+
+    let tradeNegotiationsWindow = createElement('div', 'trade-negotiations-window', '', 'trade-proposed', false)
+    let playerSummaries = createElement('div', 'trade-negotiation-summaries', '', '', '')
+
+    // Place the full details for both players on the trade negotiations window
+    let currentPlayerSummary = document.querySelector('.trade-summary-window .current-player-summary')
+    let otherPlayerSummary = e.target.parentNode
+    playerSummaries.appendChild(currentPlayerSummary)
+    playerSummaries.appendChild(otherPlayerSummary)
+    tradeNegotiationsWindow.appendChild(playerSummaries)
+
+
+    let proposeTradeButton = createElement('button', 'propose-trade', 'Propose trade', '', '')
+    proposeTradeButton.addEventListener('click', function(){
+        tradeNegotiationsWindow.setAttribute('trade-proposed', true)
+    })
+    tradeNegotiationsWindow.appendChild(proposeTradeButton)
+
+    let acceptTradeButton = createElement('button', '', 'Accept trade', '', '')
+    tradeNegotiationsWindow.appendChild(acceptTradeButton)
+    
+    let counterOfferButton = createElement('button', '', 'Make a counter offer', '', '')
+    tradeNegotiationsWindow.appendChild(counterOfferButton)
+
+    let rejectTradeButton = createElement('button', '', 'Reject trade', '', '')
+    tradeNegotiationsWindow.appendChild(rejectTradeButton)
+
+    openPopup('')
+    popupMessage.appendChild(tradeNegotiationsWindow)
 
 }
 

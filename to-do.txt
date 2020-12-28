@@ -42,6 +42,8 @@ An incomplete list of all the developments that need to be completed
 
 - Better testing options
 
+- Refactor all the popup window titles to use #popup-title.textContent rather than generated content in the CSS
+
 STRETCH GOALS
 
 - Add a Monopoly rulebook

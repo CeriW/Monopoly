@@ -923,7 +923,7 @@ div[mortgaged="true"]{
 #popup-inner{
     background: #fff;
     border: $border;
-    padding: 20px;
+
     width: 800px;
     max-width: 100%;
     position: relative;
@@ -932,10 +932,14 @@ div[mortgaged="true"]{
 
 }
 
+#popup-message{
+    padding: 20px;
+}
+
 #popup-close{
     width: 35px;
     position: absolute;
-    top: 20px;
+    top: 55px;
     right: 20px;
     z-index: 2;
 }
@@ -950,6 +954,13 @@ body:not(.popup-open) #popup{
 
 body[close-popup="false"] #popup-close{
     display: none;
+}
+
+#popup-title{
+    background: #000;
+    color: #fff;
+    font-size: 30px;
+    text-transform: uppercase;
 }
 
 /* Jail  ---------------------------------------------------------------------*/
@@ -1627,21 +1638,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     background-image: url('images/hotel-icon.svg');
 }
 
-/* Trade window  -------------------------------------------------------------*/
+/* Trade summary window  -----------------------------------------------------*/
 
-.trade-window{
-
-    .trade-title{
-        position: absolute;
-        bottom: 100%;
-        background: #000;
-        color: #fff;
-        left: -3px;
-        right: -3px;
-        margin: 0;
-        font-size: 1em;
-        padding: 10px;
-    }
+.trade-summary-window{
 
     .player-token-icon{
         background-size: contain;
@@ -1657,11 +1656,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         justify-content: flex-start;
     }
 
-
-
     /* Current player */
 
-    & > div:nth-child(2){
+    & > div:first-child{
         display: grid;
         grid-template-columns: 50px auto;
         grid-template-rows: auto auto auto auto;
@@ -1691,7 +1688,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
             grid-row: 3 / 3;
             font-size: 22px;
             margin-bottom: 5px;
-            font-weight: bold;
         }
 
         .current-player-portfolio{
@@ -1722,8 +1718,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         & > div{
             border: $border;
             padding: 10px;
-            max-width: 235px;
-            flex-basis: 235px;
+            max-width: 220px;
+            flex-basis: 220px;
         }
 
         .player-token-icon{
@@ -1743,6 +1739,66 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         }
 
 
+    }
+
+}
+
+
+
+/* Trade negotiations window -------------------------------------------------*/
+
+.trade-negotiations-window{
+
+    .trade-negotiation-summaries{
+        display: flex;
+
+        & > div{
+            flex-basis: 50%;
+        }
+    }
+
+    h2, h3{
+        margin: 0;
+    }
+
+    .current-player-summary h3{
+        display: none;
+    }
+
+    h3{
+        font-size: 1.5em;
+    }
+
+    .player-token-icon{
+        height: 50px;
+        float: none;
+        margin: 0 auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+
+    .full-portfolio:before{
+        display: none;
+    }
+
+    .current-player-portfolio,
+    .summary{
+        margin-top: 20px;
+    }
+
+    .player-cards{
+        border: none;
+    }
+
+    .trade-button{
+        display: none;
+    }
+
+    
+    &[trade-proposed="false"] button:not(.propose-trade),
+    &[trade-proposed="true"] button.propose-trade{
+        display: none;
     }
 
 }
