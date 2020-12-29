@@ -2962,13 +2962,22 @@ function negotiateTrade(e){
     let tradeProposal = [[], []]
 
     ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.current-player-portfolio .full-portfolio, .other-player-summary > .full-portfolio'), function(node){
-        node.addEventListener('click', updateProposal)
+        node.addEventListener('click', function(e){
+            updateProposal(e)
+        })
     })
 
-    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.player-cards'), function(node){
-        node.addEventListener('click', updateProposal)
+    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.player-card-icon'), function(node){
+        node.addEventListener('click', function(e){
+            updateProposal(e)
+        })
     })
 
+
+
+
+
+    // Event, type,
     function updateProposal(e){
 
         let item = e.target.parentNode
@@ -2978,8 +2987,6 @@ function negotiateTrade(e){
 
             // Check which property we're dealing with
             let property = item.getAttribute('property')
-
-            console.log(!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')
 
 
             if (item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
@@ -2991,9 +2998,8 @@ function negotiateTrade(e){
                 // If the item belongs to the current player and it HAS already been proposed, remove it from the proposal
                 tradeProposal[0][property] = null
                 item.setAttribute('proposed', false)
-            }
-
-            else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
+            
+            } else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
                 // If the item belongs to the other player and has NOT already been proposed, add it to the proposal
                 tradeProposal[1][property] = spaces[property]
                 item.setAttribute('proposed', true)
@@ -3008,19 +3014,31 @@ function negotiateTrade(e){
         // If we're adding a 'get out of jail' card to the proposal
         } else if (item.classList.contains('player-cards')){
 
-            item = e.target
-            let currentStatus = item.getAttribute('proposed')
-            item.setAttribute('proposed', !currentStatus)
+            // Determine whether we're dealing with the current player or the receiver, and how many cards they have
+            let trader = item.parentNode.classList.contains('current-player-portfolio') ? 0 : 1
+            let cardIndex = e.target.nextElementSibling ? 0 : 1
 
-            e.target.setAttribute('proposed', true)
+            // If not already proposed, add it to the proposal
+            if (!e.target.getAttribute('proposed') || e.target.getAttribute('proposed') === 'false'){
+                if (trader === 0){
+                    tradeProposal[0][40 + cardIndex] = players[turn - 1].getOutCards[cardIndex]
+                } else{
+                    tradeProposal[1][40 + cardIndex] = players[receiver - 1].getOutCards[cardIndex]
+                }
 
-            if (item.parentNode.parentNode.classList.contains('current-player-portfolio')){
-                tradeProposal[0][40] = players[turn-1].getOutCards[0]
-                tradeProposal[0][41] = players[turn-1].getOutCards[1]
+                e.target.setAttribute('proposed', true)
+
+            // If already proposed, remove it from the proposal
             } else{
-                tradeProposal[1][40] = players[receiver - 1].getOutCards[0]
-                tradeProposal[1][41] = players[receiver - 1].getOutCards[1]
+                e.target.setAttribute('proposed', false)
+
+                if (trader === 0){
+                    tradeProposal[0][40 + cardIndex] = null
+                } else{
+                    tradeProposal[1][40 + cardIndex] = null
+                }
             }
+
         }
 
         console.log(tradeProposal)
