@@ -2927,7 +2927,7 @@ function negotiateTrade(e){
 
     let receiver = e.target.parentNode.getAttribute('player')
 
-    let tradeNegotiationsWindow = createElement('div', 'trade-negotiations-window', '', 'trade-proposed', false)
+    let tradeNegotiationsWindow = createElement('div', 'trade-negotiations-window', '', 'trade-status', 'unproposed')
     let playerSummaries = createElement('div', 'trade-negotiation-summaries', '', '', '')
 
     // Place the full details for both players on the trade negotiations window
@@ -2961,37 +2961,60 @@ function negotiateTrade(e){
     // An empty array that the proposed trade items will be stored in.
     let tradeProposal = [[], []]
 
-    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.full-portfolio'), function(node){
-        node.addEventListener('click', addToProposal)
+    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.current-player-portfolio .full-portfolio, .other-player-summary > .full-portfolio'), function(node){
+        node.addEventListener('click', updateProposal)
     })
 
     ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.player-cards'), function(node){
-        node.addEventListener('click', addToProposal)
+        node.addEventListener('click', updateProposal)
     })
 
-    function addToProposal(e){
+    function updateProposal(e){
 
-        // If we're adding a property to the proposal
-        if (e.target.parentNode.classList.contains('full-portfolio-item')){
+        let item = e.target.parentNode
 
-            let property = e.target.parentNode.getAttribute('property')
-            e.target.parentNode.setAttribute('proposed', true)
+        // If we're adding/removing a property to the proposal
+        if (item.classList.contains('full-portfolio-item')){
 
-            // Current player
-            if (e.target.parentNode.parentNode.parentNode.classList.contains('current-player-portfolio')){
+            // Check which property we're dealing with
+            let property = item.getAttribute('property')
+
+            console.log(!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')
+
+
+            if (item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
+                // If the item belongs to the current player, and has NOT already been proposed, add it to the proposal
                 tradeProposal[0][property] = spaces[property]
+                item.setAttribute('proposed', true)
+
+            } else if (item.parentNode.parentNode.classList.contains('current-player-portfolio') && item.getAttribute('proposed')){
+                // If the item belongs to the current player and it HAS already been proposed, remove it from the proposal
+                tradeProposal[0][property] = null
+                item.setAttribute('proposed', false)
             }
-            // Receiving player
-            else{
+
+            else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
+                // If the item belongs to the other player and has NOT already been proposed, add it to the proposal
                 tradeProposal[1][property] = spaces[property]
+                item.setAttribute('proposed', true)
+
+            } else{
+                // If it fails all the previous tests, it must belong to the other player and already been proposed. Therefore remove it from the proposal.
+                tradeProposal[1][property] = null
+                item.setAttribute('proposed', false)
             }
 
 
         // If we're adding a 'get out of jail' card to the proposal
-        } else if (e.target.parentNode.classList.contains('player-cards')){
+        } else if (item.classList.contains('player-cards')){
+
+            item = e.target
+            let currentStatus = item.getAttribute('proposed')
+            item.setAttribute('proposed', !currentStatus)
+
             e.target.setAttribute('proposed', true)
 
-            if (e.target.parentNode.parentNode.classList.contains('current-player-portfolio')){
+            if (item.parentNode.parentNode.classList.contains('current-player-portfolio')){
                 tradeProposal[0][40] = players[turn-1].getOutCards[0]
                 tradeProposal[0][41] = players[turn-1].getOutCards[1]
             } else{

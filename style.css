@@ -1532,8 +1532,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window .trade-button {
   display: none; }
 
-.trade-negotiations-window[trade-proposed="false"] button:not(.propose-trade),
-.trade-negotiations-window[trade-proposed="true"] button.propose-trade {
+.trade-negotiations-window[trade-status="unproposed"] button:not(.propose-trade),
+.trade-negotiations-window[trade-status="proposed"] button.propose-trade {
   display: none; }
 
 .trade-negotiations-window .full-portfolio-item:hover,
