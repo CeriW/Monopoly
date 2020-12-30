@@ -1802,6 +1802,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
+    
+
     .full-portfolio-item:hover,
     .player-card-icon:hover{
         background-color: $lightgreen;
@@ -1820,6 +1822,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         top: 0;
         background: url('images/tick.svg') center no-repeat;
         background-size: contain;
+        pointer-events: none;
     }
 
 }

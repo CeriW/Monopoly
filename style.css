@@ -1551,7 +1551,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   left: 0;
   top: 0;
   background: url("images/tick.svg") center no-repeat;
-  background-size: contain; }
+  background-size: contain;
+  pointer-events: none; }
 
 /* Feed  ---------------------------------------------------------------------*/
 #feed {

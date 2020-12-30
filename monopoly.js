@@ -2939,6 +2939,7 @@ function negotiateTrade(e){
 
 
     let proposeTradeButton = createElement('button', 'propose-trade', 'Propose trade', '', '')
+    proposeTradeButton.classList.add('disabled-button')
     proposeTradeButton.addEventListener('click', function(){
         tradeNegotiationsWindow.setAttribute('trade-proposed', true)
     })
@@ -2996,7 +2997,7 @@ function negotiateTrade(e){
 
             } else if (item.parentNode.parentNode.classList.contains('current-player-portfolio') && item.getAttribute('proposed')){
                 // If the item belongs to the current player and it HAS already been proposed, remove it from the proposal
-                tradeProposal[0][property] = null
+                delete tradeProposal[0][property]
                 item.setAttribute('proposed', false)
             
             } else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
@@ -3006,7 +3007,7 @@ function negotiateTrade(e){
 
             } else{
                 // If it fails all the previous tests, it must belong to the other player and already been proposed. Therefore remove it from the proposal.
-                tradeProposal[1][property] = null
+                delete tradeProposal[1][property]
                 item.setAttribute('proposed', false)
             }
 
@@ -3033,14 +3034,23 @@ function negotiateTrade(e){
                 e.target.setAttribute('proposed', false)
 
                 if (trader === 0){
-                    tradeProposal[0][40 + cardIndex] = null
+                    delete tradeProposal[0][40 + cardIndex]
                 } else{
-                    tradeProposal[1][40 + cardIndex] = null
+                    delete tradeProposal[1][40 + cardIndex]
                 }
             }
 
         }
 
+
+        // Check if the proposal has items in it on both sides. If so, 
+        // enable the 'propose trade' button
+
+        if(document.querySelector('.current-player-portfolio [proposed="true"]') && document.querySelector('.other-player-summary [proposed="true"]')){
+            proposeTradeButton.classList.remove('disabled-button')
+        } else{
+            proposeTradeButton.classList.add('disabled-button')
+        }
         console.log(tradeProposal)
 
     }
