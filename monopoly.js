@@ -2884,7 +2884,7 @@ function initiateTrade(){
             let summary = createElement('div', 'other-player-summary', '' , 'player', player.id)
             summary.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
             summary.appendChild(createElement('h3', '', player.name, '', ''))
-            summary.appendChild(createElement('div', '', currencySymbolSpan + player.money, '', ''))
+            summary.appendChild(createElement('div', 'money', currencySymbolSpan + player.money, '', ''))
 
 
             let portfolio = generateFullPortfolioView(player.id)
@@ -2938,6 +2938,8 @@ function negotiateTrade(e){
     tradeNegotiationsWindow.appendChild(playerSummaries)
 
 
+
+    //  Create the relevant buttons for the trade window
     let proposeTradeButton = createElement('button', 'propose-trade', 'Propose trade', '', '')
     proposeTradeButton.classList.add('disabled-button')
     proposeTradeButton.addEventListener('click', function(){
@@ -2954,12 +2956,49 @@ function negotiateTrade(e){
     let rejectTradeButton = createElement('button', '', 'Reject trade', '', '')
     tradeNegotiationsWindow.appendChild(rejectTradeButton)
 
+
+    // Create inputs to propose money
+    let proposalHTML = 'Money to trade: ' + currencySymbolSpan
+
+    let currentPlayerMoneyProposal = document.createElement('div')
+    currentPlayerMoneyProposal.innerHTML = proposalHTML
+    let input = document.createElement('input')
+    input.setAttribute('class', 'money-proposal')
+    input.setAttribute('placeholder', 'money')
+    input.setAttribute('type', 'number')
+    input.setAttribute('min', '1')
+    input.setAttribute('max', players[turn-1].money)
+    currentPlayerMoneyProposal.appendChild(input)
+    currentPlayerSummary.insertBefore(currentPlayerMoneyProposal, currentPlayerSummary.querySelector('.money').nextElementSibling)
+
+    let otherPlayerMoneyProposal = document.createElement('div')
+    otherPlayerMoneyProposal.innerHTML = proposalHTML
+    input = document.createElement('input')
+    input.setAttribute('class', 'money-proposal')
+    input.setAttribute('placeholder', 'money')
+    input.setAttribute('type', 'number')
+    input.setAttribute('min', '1')
+    input.setAttribute('max', players[receiver-1].money)
+    otherPlayerMoneyProposal.appendChild(input)
+
+
+    otherPlayerSummary.insertBefore(otherPlayerMoneyProposal, otherPlayerSummary.querySelector('.money').nextElementSibling)
+
+
+
+
+
+
     openPopup('')
     popupMessage.appendChild(tradeNegotiationsWindow)
 
 
 
     // An empty array that the proposed trade items will be stored in.
+    // The setup will be as follows:
+    // 0 - 39: properties
+    // 40, 41: get out of jail cards
+    // 42: money
     let tradeProposal = [[], []]
 
     ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.current-player-portfolio .full-portfolio, .other-player-summary > .full-portfolio'), function(node){
@@ -3126,3 +3165,4 @@ function createElement(elementType, elementClass, elementHTML, elementAttribute,
     return element
 }
   
+

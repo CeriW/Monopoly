@@ -1825,6 +1825,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         pointer-events: none;
     }
 
+
+    input.money-proposal{
+        max-width: 80px;
+    }
 }
 
 

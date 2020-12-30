@@ -1554,6 +1554,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   background-size: contain;
   pointer-events: none; }
 
+.trade-negotiations-window input.money-proposal {
+  max-width: 80px; }
+
 /* Feed  ---------------------------------------------------------------------*/
 #feed {
   background: #fff;
