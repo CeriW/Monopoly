@@ -2942,9 +2942,7 @@ function negotiateTrade(e){
     //  Create the relevant buttons for the trade window
     let proposeTradeButton = createElement('button', 'propose-trade', 'Propose trade', '', '')
     proposeTradeButton.classList.add('disabled-button')
-    proposeTradeButton.addEventListener('click', function(){
-        tradeNegotiationsWindow.setAttribute('trade-proposed', true)
-    })
+    proposeTradeButton.addEventListener('click', makeProposal)
     tradeNegotiationsWindow.appendChild(proposeTradeButton)
 
     let acceptTradeButton = createElement('button', '', 'Accept trade', '', '')
@@ -2968,8 +2966,10 @@ function negotiateTrade(e){
     input.setAttribute('type', 'number')
     input.setAttribute('min', '1')
     input.setAttribute('max', players[turn-1].money)
+    input.addEventListener('input', updateProposal)
     currentPlayerMoneyProposal.appendChild(input)
     currentPlayerSummary.insertBefore(currentPlayerMoneyProposal, currentPlayerSummary.querySelector('.money').nextElementSibling)
+
 
     let otherPlayerMoneyProposal = document.createElement('div')
     otherPlayerMoneyProposal.innerHTML = proposalHTML
@@ -2979,6 +2979,7 @@ function negotiateTrade(e){
     input.setAttribute('type', 'number')
     input.setAttribute('min', '1')
     input.setAttribute('max', players[receiver-1].money)
+    input.addEventListener('input', updateProposal)
     otherPlayerMoneyProposal.appendChild(input)
 
 
@@ -3020,10 +3021,34 @@ function negotiateTrade(e){
     // Event, type,
     function updateProposal(e){
 
-        let item = e.target.parentNode
 
+        let item = e.target.parentNode
+        
+
+        // Check whether this is the money being updated
+        if (e.target.nodeName === 'INPUT'){
+
+            let parent = e.target.parentNode.parentNode
+
+            if (parent.classList.contains('current-player-summary')){
+                tradeProposal[0][42] = e.target.value
+            } else{
+                tradeProposal[1][42] = e.target.value
+            }
+
+            // Mark the money as being proposed/unproposed according to whether it has a valid value in it.
+            // This will allow the propose button to be updated as applicable.
+            if (e.target.value){
+                e.target.parentNode.setAttribute('proposed', true)
+            } else{
+                e.target.parentNode.setAttribute('proposed', false)
+            }
+
+            console.log(tradeProposal)
+        } 
+        
         // If we're adding/removing a property to the proposal
-        if (item.classList.contains('full-portfolio-item')){
+        else if (item.classList.contains('full-portfolio-item')){
 
             // Check which property we're dealing with
             let property = item.getAttribute('property')
@@ -3085,13 +3110,18 @@ function negotiateTrade(e){
         // Check if the proposal has items in it on both sides. If so, 
         // enable the 'propose trade' button
 
-        if(document.querySelector('.current-player-portfolio [proposed="true"]') && document.querySelector('.other-player-summary [proposed="true"]')){
+        if(document.querySelector('.current-player-summary [proposed="true"]') && document.querySelector('.other-player-summary [proposed="true"]')){
             proposeTradeButton.classList.remove('disabled-button')
+            console.log('enable trade')
         } else{
             proposeTradeButton.classList.add('disabled-button')
+            console.log('disable trade')
         }
-        console.log(tradeProposal)
+    }
 
+
+    function makeProposal(){
+        tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
     }
 
 
