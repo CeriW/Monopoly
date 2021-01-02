@@ -1829,6 +1829,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     input.money-proposal{
         max-width: 80px;
     }
+
+    input.money-proposal:invalid{
+        color: $red;
+    }
 }
 
 

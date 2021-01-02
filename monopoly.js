@@ -3028,23 +3028,28 @@ function negotiateTrade(e){
         // Check whether this is the money being updated
         if (e.target.nodeName === 'INPUT'){
 
+            // Check whether the input is valid before we go any further
+            let min = parseInt(e.target.getAttribute('min'))
+            let max = parseInt(e.target.getAttribute('max'))
+            let valid = (e.target.value >= min && e.target.value <= max) ? true : false
+
+            
             let parent = e.target.parentNode.parentNode
 
             if (parent.classList.contains('current-player-summary')){
-                tradeProposal[0][42] = e.target.value
+                tradeProposal[0][42] = valid ? parseInt(e.target.value) : null
             } else{
-                tradeProposal[1][42] = e.target.value
+                tradeProposal[1][42] = valid ? parseInt(e.target.value) : null
             }
 
+                
             // Mark the money as being proposed/unproposed according to whether it has a valid value in it.
             // This will allow the propose button to be updated as applicable.
-            if (e.target.value){
+            if (e.target.value && valid){
                 e.target.parentNode.setAttribute('proposed', true)
             } else{
                 e.target.parentNode.setAttribute('proposed', false)
             }
-
-            console.log(tradeProposal)
         } 
         
         // If we're adding/removing a property to the proposal
@@ -3112,10 +3117,8 @@ function negotiateTrade(e){
 
         if(document.querySelector('.current-player-summary [proposed="true"]') && document.querySelector('.other-player-summary [proposed="true"]')){
             proposeTradeButton.classList.remove('disabled-button')
-            console.log('enable trade')
         } else{
             proposeTradeButton.classList.add('disabled-button')
-            console.log('disable trade')
         }
     }
 
