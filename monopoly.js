@@ -2963,7 +2963,9 @@ function negotiateTrade(e){
     //  Create the relevant buttons for the trade window
     let proposeTradeButton = createElement('button', 'propose-trade', 'Propose trade', '', '')
     proposeTradeButton.classList.add('disabled-button')
-    proposeTradeButton.addEventListener('click', makeProposal)
+    proposeTradeButton.addEventListener('click', function(){
+        tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
+    })
     tradeNegotiationsWindow.appendChild(proposeTradeButton)
 
     let acceptTradeButton = createElement('button', '', 'Accept trade', '', '')
@@ -3126,6 +3128,8 @@ function negotiateTrade(e){
         // Check if the proposal has items in it on both sides. If so, 
         // enable the 'propose trade' button
 
+        // TODO - make sure players can't trade money for money
+
         if(document.querySelector('.current-player-summary [proposed="true"]') && document.querySelector('.other-player-summary [proposed="true"]')){
             proposeTradeButton.classList.remove('disabled-button')
         } else{
@@ -3133,15 +3137,7 @@ function negotiateTrade(e){
         }
     }
 
-
-    function makeProposal(){
-        tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
-    }
-
     function acceptTrade(){
-
-        let currentPlayer = players[turn - 1]
-        let otherPlayer = players[tradeNegotiationsWindow.querySelector('.other-player-summary').getAttribute('player') - 1]
 
         // Properties the current player has traded away.
         // Will be used in the generation of the feed message.
@@ -3158,16 +3154,16 @@ function negotiateTrade(e){
             let property = tradeProposal[0][i]
 
             if (property){
-                otherPlayer.properties[i] = property
-                delete currentPlayer.properties[i]
+                players[receiver - 1].properties[i] = property
+                delete players[turn - 1].properties[i]
                 nameList0.push(property.name)
             }
 
             property = tradeProposal[1][i]
 
             if (property){
-                currentPlayer.properties[i] = property
-                delete otherPlayer.properties[i]
+                players[turn - 1].properties[i] = property
+                delete players[receiver - 1].properties[i]
                 nameList1.push(property.name)
             }
         }
@@ -3259,14 +3255,9 @@ function negotiateTrade(e){
 
 
 
-
-
-
-
-        feedMessage += ' for ' + otherPlayer.name + '\'s '
+        feedMessage += ' for ' + players[receiver - 1].name + '\'s '
 
         for (i = 0; i < nameList1.length; i++){
-            console.log(nameList1[i])
             feedMessage += nameList1[i]
 
 
