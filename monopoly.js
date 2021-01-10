@@ -52,6 +52,14 @@ let diceSides = 6
 let availableHouses = 32
 let availableHotels = 12
 
+// An empty array that the proposed trade items will be stored in.
+// Since this is used in a number of functions, it needs to be a global variable.
+// The setup will be as follows:
+// 0 - 39: properties
+// 40, 41: get out of jail cards
+// 42: money
+let tradeProposal = [[], []]
+
 /*
  Community chest and chance cards have a number of properties:
  type - the classification of card as follows:
@@ -2946,7 +2954,9 @@ function negotiateTrade(e){
     tradeNegotiationsWindow.appendChild(proposeTradeButton)
 
     let acceptTradeButton = createElement('button', '', 'Accept trade', '', '')
+    acceptTradeButton.addEventListener('click', acceptTrade)
     tradeNegotiationsWindow.appendChild(acceptTradeButton)
+    
     
     let counterOfferButton = createElement('button', '', 'Make a counter offer', '', '')
     tradeNegotiationsWindow.appendChild(counterOfferButton)
@@ -2986,21 +2996,9 @@ function negotiateTrade(e){
     otherPlayerSummary.insertBefore(otherPlayerMoneyProposal, otherPlayerSummary.querySelector('.money').nextElementSibling)
 
 
-
-
-
-
     openPopup('')
     popupMessage.appendChild(tradeNegotiationsWindow)
 
-
-
-    // An empty array that the proposed trade items will be stored in.
-    // The setup will be as follows:
-    // 0 - 39: properties
-    // 40, 41: get out of jail cards
-    // 42: money
-    let tradeProposal = [[], []]
 
     ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.current-player-portfolio .full-portfolio, .other-player-summary > .full-portfolio'), function(node){
         node.addEventListener('click', function(e){
@@ -3127,6 +3125,71 @@ function negotiateTrade(e){
         tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
     }
 
+    function acceptTrade(){
+
+        let currentPlayer = players[turn - 1]
+        let otherPlayer = players[tradeNegotiationsWindow.querySelector('.other-player-summary').getAttribute('player') - 1]
+
+        // Properties the current player has traded away.
+        // Will be used in the generation of the feed message.
+        let nameList0 = []
+
+        // Properties the other player has traded away.
+        // Will be used in the generation of the feed message.
+        let nameList1 = []
+
+
+        // Properties
+        for (i = 0; i <= 39; i++){
+
+            let property = tradeProposal[0][i]
+
+            if (property){
+                otherPlayer.properties[i] = property
+                delete currentPlayer.properties[i]
+                nameList0.push(property.name)
+            }
+
+            property = tradeProposal[1][i]
+
+            if (property){
+                currentPlayer.properties[i] = property
+                delete otherPlayer.properties[i]
+                nameList1.push(property.name)
+            }
+        }
+
+
+        // Generate a nice, readable message for the feed.
+
+        let feedMessage = players[turn - 1].name + ' traded '
+
+        for (i = 0; i < nameList0.length; i++){
+
+            feedMessage += nameList0[i]
+
+            if (nameList0.length > 1 && i !== nameList0.length){
+                feedMessage += ', '
+            }
+        }
+
+        feedMessage += ' for ' + otherPlayer.name + '\'s '
+
+        for (i = 0; i < nameList1.length; i++){
+            console.log(nameList1[i])
+            feedMessage += nameList1[i]
+
+
+            if (nameList1.length > 1 && i !== nameList1.length){
+                feedMessage += ', '
+            }
+        }
+
+        addToFeed(feedMessage, 'trade-accepted')
+        updatePlayerDetails()
+        closePopup()
+        tradeProposal = []
+    }
 
 }
 

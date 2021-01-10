@@ -1650,6 +1650,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .land-on-mortgaged {
   background-image: url("images/feed-icons/land-on-mortgaged.svg"), url("images/feed-icons/feed-circle.svg"); }
 
+.trade-accepted {
+  background-image: url("images/feed-icons/trade-accepted.svg"), url("images/feed-icons/feed-circle.svg"); }
+
 /* Auction panel  ------------------------------------------------------------*/
 .auction-screen {
   display: flex;
