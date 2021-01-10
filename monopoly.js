@@ -3174,8 +3174,6 @@ function negotiateTrade(e){
 
         // Get out of jail cards
 
-        console.log(tradeProposal)
-
         for (i = 0; i <= 1; i++){
 
             
@@ -3183,7 +3181,6 @@ function negotiateTrade(e){
             
     
             if (card){
-                console.log('theres a card in this trade from current player. It is from ' + card.deck)
                 players[receiver - 1].getOutCards.push(card)
                 players[turn - 1].getOutCards.splice(0,1)
             }
@@ -3191,7 +3188,6 @@ function negotiateTrade(e){
             card  = tradeProposal[1][i + 40]
     
             if (card){
-                console.log('theres a card in this trade from other player. It is from ' + card.deck)
                 players[turn - 1].getOutCards.push(card)
                 players[receiver - 1].getOutCards.splice(0,1)
             }
@@ -3200,6 +3196,38 @@ function negotiateTrade(e){
 
 
         // Generate a nice, readable message for the feed.
+
+
+        // Count how many cards the trade proposal has, and create a
+        // user-friendly string to be added to the feed
+        function countCardsInTrade(index, list){
+
+            let cardCount = 0
+
+            for (i = 0; i <= 1; i++){
+                let card = tradeProposal[index][i + 40]
+
+                if (card){
+                    cardCount++
+                }
+            }
+
+            switch (cardCount){
+                case 0:
+                    // Do nothing
+                    break
+                case 1:
+                    list.push('1 Get Out Of Jail Free card')
+                    break
+                case 2:
+                    list.push('2 Get Out Of Jail Free cards')
+            }
+        }
+
+        countCardsInTrade(0, nameList0)
+        countCardsInTrade(1, nameList1)
+
+
 
         let feedMessage = players[turn - 1].name + ' traded '
 
@@ -3212,6 +3240,11 @@ function negotiateTrade(e){
             }
         }
 
+
+
+
+
+
         feedMessage += ' for ' + otherPlayer.name + '\'s '
 
         for (i = 0; i < nameList1.length; i++){
@@ -3223,6 +3256,7 @@ function negotiateTrade(e){
                 feedMessage += ', '
             }
         }
+
 
         addToFeed(feedMessage, 'trade-accepted')
         updatePlayerDetails()
