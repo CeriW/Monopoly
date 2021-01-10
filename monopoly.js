@@ -447,11 +447,26 @@ function updatePlayerDetails(){
             updateNode.appendChild(node)
         })
 
-        // Re-append the utilirt icons so they end up together at the end
+        // Re-append the utility icons so they end up together at the end
         // and with appropriate classes
         ;[].forEach.call(updateNode.querySelectorAll('.utility'), function(node){
             updateNode.appendChild(node)
         })
+
+        // GET OUT OF JAIL CARDS
+        updateNode = document.querySelector('#player' + player.id + 'summary .player-cards')
+        updateNode.innerHTML = ''
+
+        if (player.getOutCards.length === 0){
+            updateNode.setAttribute('cards', false)
+        } else{
+            player.getOutCards.forEach(function(card){
+                let cardIcon = createElement('div', 'player-card-icon', null, 'card-number', player.getOutCards.indexOf(card))
+                updateNode.appendChild(cardIcon)
+            })
+
+            updateNode.setAttribute('cards', true)
+        }
 
     })
 
@@ -1190,11 +1205,6 @@ function drawCard(type){
             // again until it is used.
             cardList.pop()
 
-            let cardIcon = createElement('div', 'player-card-icon', null, null, null)
-
-            let cardSummary = document.querySelector('.current-player-summary .player-cards')
-            cardSummary.appendChild(cardIcon)
-            cardSummary.setAttribute('cards', true)
 
 
             break
@@ -1701,12 +1711,12 @@ function getOutOfJail(method){
             cardList.push(usedCard)
 
             // Remove the icon from the player's summary
-            let cardIcon = document.querySelector('.current-player-summary .player-cards .player-card-icon')
-            cardIcon.classList.add('zoomOut')
+            //let cardIcon = document.querySelector('.current-player-summary .player-cards .player-card-icon')
+            //cardIcon.classList.add('zoomOut')
 
-            window.setTimeout(function(){
-                cardIcon.parentNode.removeChild(cardIcon)
-            }, 1000)
+            //window.setTimeout(function(){
+                //cardIcon.parentNode.removeChild(cardIcon)
+            //}, 1000)
 
             // Remove the attribute so the CSS can transition the card
             // container to disappear if this is their last get out card.
@@ -2869,8 +2879,8 @@ function initiateTrade(){
         let playerCards = createElement('div', 'player-cards', '', '', '')
         currentPlayerPortfolio.appendChild(playerCards)
 
-        players[turn-1].getOutCards.forEach(function(){
-            playerCards.appendChild(createElement('div', 'player-card-icon', '', '', ''))
+        players[turn-1].getOutCards.forEach(function(card){
+            playerCards.appendChild(createElement('div', 'player-card-icon', '', 'card-number', players[turn - 1].getOutCards.indexOf(card)))
         })
     }
 
@@ -2887,6 +2897,7 @@ function initiateTrade(){
 
     let otherSummaries = createElement('div', 'other-player-summaries', '', '', '')
 
+    i = 0
     players.forEach(function(player){
         if (player !== players[turn - 1]){
             let summary = createElement('div', 'other-player-summary', '' , 'player', player.id)
@@ -2906,9 +2917,11 @@ function initiateTrade(){
 
             if (player.getOutCards){
                 player.getOutCards.forEach(function(card){
-                    cardDisplay.appendChild(createElement('div', 'player-card-icon', '', '', ''))
+                    cardDisplay.appendChild(createElement('div', 'player-card-icon', '', 'card-number', player.getOutCards.indexOf(card)))
                 })
             }
+
+
             summary.appendChild(cardDisplay)
 
             let tradeButton = createElement('button', 'trade-button', 'Trade', '', '')
@@ -3067,7 +3080,7 @@ function negotiateTrade(e){
                 delete tradeProposal[0][property]
                 item.setAttribute('proposed', false)
             
-            } else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
+            } else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false') && !item.parentNode.classList.contains('player-cards')){
                 // If the item belongs to the other player and has NOT already been proposed, add it to the proposal
                 tradeProposal[1][property] = spaces[property]
                 item.setAttribute('proposed', true)
@@ -3084,7 +3097,7 @@ function negotiateTrade(e){
 
             // Determine whether we're dealing with the current player or the receiver, and how many cards they have
             let trader = item.parentNode.classList.contains('current-player-portfolio') ? 0 : 1
-            let cardIndex = e.target.nextElementSibling ? 0 : 1
+            let cardIndex = parseInt(e.target.getAttribute('card-number'))
 
             // If not already proposed, add it to the proposal
             if (!e.target.getAttribute('proposed') || e.target.getAttribute('proposed') === 'false'){
@@ -3159,6 +3172,32 @@ function negotiateTrade(e){
             }
         }
 
+        // Get out of jail cards
+
+        console.log(tradeProposal)
+
+        for (i = 0; i <= 1; i++){
+
+            
+            let card  = tradeProposal[0][i + 40]
+            
+    
+            if (card){
+                console.log('theres a card in this trade from current player. It is from ' + card.deck)
+                players[receiver - 1].getOutCards.push(card)
+                players[turn - 1].getOutCards.splice(0,1)
+            }
+    
+            card  = tradeProposal[1][i + 40]
+    
+            if (card){
+                console.log('theres a card in this trade from other player. It is from ' + card.deck)
+                players[turn - 1].getOutCards.push(card)
+                players[receiver - 1].getOutCards.splice(0,1)
+            }
+        }
+          
+
 
         // Generate a nice, readable message for the feed.
 
@@ -3188,7 +3227,7 @@ function negotiateTrade(e){
         addToFeed(feedMessage, 'trade-accepted')
         updatePlayerDetails()
         closePopup()
-        tradeProposal = []
+        tradeProposal = [[], []]
     }
 
 }
