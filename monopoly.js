@@ -3192,6 +3192,22 @@ function negotiateTrade(e){
                 players[receiver - 1].getOutCards.splice(0,1)
             }
         }
+
+        // Money
+
+        let money = tradeProposal[0][42]
+        if (money){
+            nameList0.push(currencySymbolSpan + money)
+            players[turn - 1].money -= money
+            players[receiver - 1].money += money
+        }
+
+        money = tradeProposal[1][42]
+        if (money){
+            nameList1.push(currencySymbolSpan + money)
+            players[receiver - 1].money -= money
+            players[turn - 1].money += money
+        }
           
 
 
@@ -3229,6 +3245,7 @@ function negotiateTrade(e){
 
 
 
+
         let feedMessage = players[turn - 1].name + ' traded '
 
         for (i = 0; i < nameList0.length; i++){
@@ -3239,6 +3256,7 @@ function negotiateTrade(e){
                 feedMessage += ', '
             }
         }
+
 
 
 
