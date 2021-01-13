@@ -695,7 +695,8 @@ $columnsize: 80px;
 
 /* Mortgaged property --------------------------------------------------------*/
 
-.row > div{
+.row > div,
+.full-portfolio-item{
     position: relative;
 
     &:after{
@@ -709,13 +710,19 @@ $columnsize: 80px;
         left: calc(50% - 10px);
         transition: 0.3s;
         transform: scale(0);
+        pointer-events: none;
     }
 }
 
+.full-portfolio-item[mortgaged="true"],
 div[mortgaged="true"]{
     &:after{
         transform: scale(1);
     }
+}
+
+.full-portfolio-item[mortgaged="true"]:after{
+    left: 0;
 }
 
 
@@ -1823,6 +1830,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         background: url('images/tick.svg') center no-repeat;
         background-size: contain;
         pointer-events: none;
+        z-index: 2;
     }
 
 

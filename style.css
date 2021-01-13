@@ -601,9 +601,11 @@ button {
   transform: scale(1); }
 
 /* Mortgaged property --------------------------------------------------------*/
-.row > div {
+.row > div,
+.full-portfolio-item {
   position: relative; }
-  .row > div:after {
+  .row > div:after,
+  .full-portfolio-item:after {
     content: '';
     width: 25px;
     height: 25px;
@@ -613,10 +615,15 @@ button {
     top: -7px;
     left: calc(50% - 10px);
     transition: 0.3s;
-    transform: scale(0); }
+    transform: scale(0);
+    pointer-events: none; }
 
+.full-portfolio-item[mortgaged="true"]:after,
 div[mortgaged="true"]:after {
   transform: scale(1); }
+
+.full-portfolio-item[mortgaged="true"]:after {
+  left: 0; }
 
 /* Special property ----------------------------------------------------------*/
 .community-chest {
@@ -1551,7 +1558,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   top: 0;
   background: url("images/tick.svg") center no-repeat;
   background-size: contain;
-  pointer-events: none; }
+  pointer-events: none;
+  z-index: 2; }
 
 .trade-negotiations-window input.money-proposal {
   max-width: 80px; }

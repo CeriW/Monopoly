@@ -44,6 +44,10 @@ An incomplete list of all the developments that need to be completed
 
 - Refactor all the popup window titles to use #popup-title.textContent rather than generated content in the CSS
 
+- In the full portfolio, you need to click the icon to learn more, you can't just click the name. You should be able to click anywhere.
+
+- Back button on full portfolio details is in the wrong place.
+
 STRETCH GOALS
 
 - Add a Monopoly rulebook

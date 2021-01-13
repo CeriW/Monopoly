@@ -1925,6 +1925,7 @@ function fullPortfolioView(e){
     let portfolioOutput = generateFullPortfolioView(player)
     openPopup(portfolioOutput)
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
+    document.querySelector('.full-portfolio').addEventListener('dblclick', portfolioItemPreview)
 }
 
 function generateFullPortfolioView(player){
@@ -1932,7 +1933,7 @@ function generateFullPortfolioView(player){
 
     players[player - 1].properties.forEach(function(property){
 
-        portfolioOutput += '<div class="full-portfolio-item" property="' + property.position + '">'
+        portfolioOutput += '<div class="full-portfolio-item" property="' + property.position + '" mortgaged="' + property.mortgaged + '">'
         portfolioOutput += '<div class="property-icon ' + property.group + ' ' + spaces.indexOf(property) + '"></div>' 
         portfolioOutput += '<div>' + property.name + '</div>'
         
