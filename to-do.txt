@@ -48,9 +48,13 @@ An incomplete list of all the developments that need to be completed
 
 - Back button on full portfolio details is in the wrong place.
 
+
 STRETCH GOALS
 
 - Add a Monopoly rulebook
+
+- Question mark in popup for user help and more info on rules.
+	- Revisit the trade with mortgages window. There's a wall of text with rules in it.
 
 - House rules? (e.g. free parking)
 

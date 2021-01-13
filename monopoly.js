@@ -3312,9 +3312,12 @@ function negotiateTrade(e){
 
         function tradeMortgageWarning(){
 
+            availableActions.closePopup = false
+            setAvailableActions()
+
             let tradeMortgageWarning = createElement('div', 'trade-mortage-warning', '', '', '')
 
-            tradeMortgageWarning.appendChild(createElement('div', '', 'This trade contains properties which are mortgaged. You must decide whether you wish to unmortage them at 110% of the mortgage value, or keep them mortgaged. If you choose to keep them mortgaged, you must pay the bank 10% of the mortgage value now. If you later choose to unmortgage them you must still pay the bank 110% of the mortgage value (meaning it will save you money to unmortgage now, if you can afford to do so).'))
+            tradeMortgageWarning.appendChild(createElement('div', '', 'This trade contains properties which are mortgaged. You must decide whether you wish to unmortgage them at 110% of the mortgage value, or keep them mortgaged. If you choose to keep them mortgaged you must pay the bank 10% of the mortgage value now. If you later choose to unmortgage them you must still pay the bank 110% of the mortgage value (meaning it will save you money to unmortgage now, if you can afford to do so).'))
 
 
             if (mortgageList0.length){
@@ -3325,7 +3328,7 @@ function negotiateTrade(e){
                 playerName.appendChild(createElement('div', '', players[turn-1].name))
                 column.appendChild(playerName)
 
-                column.appendChild(setupMortgageTable(mortgageList0))
+                column.appendChild(setupMortgageTable(mortgageList0, turn))
                 tradeMortgageWarning.appendChild(column)
             }
 
@@ -3337,16 +3340,24 @@ function negotiateTrade(e){
                 playerName.appendChild(createElement('div', '', players[receiver-1].name))
                 column.appendChild(playerName)
 
-                column.appendChild(setupMortgageTable(mortgageList1))
+                column.appendChild(setupMortgageTable(mortgageList1, receiver))
                 tradeMortgageWarning.appendChild(column)
             }
             
+            ;[].forEach.call(tradeMortgageWarning.querySelectorAll('button'), function(button){
+                button.addEventListener('click', function(){
+                    if (!tradeMortgageWarning.querySelector('button:not(.disabled-button)')){
+                        closePopup()
+                    }
+                })
+            })
 
             openPopup('')
             popupMessage.appendChild(tradeMortgageWarning)
 
 
-            function setupMortgageTable(array){
+            // player should be 'current' for the current player, and 'receiver' for the receiver
+            function setupMortgageTable(array, playerID){
 
                 let list = createElement('div', '', '', '', '')
 
@@ -3374,7 +3385,15 @@ function negotiateTrade(e){
                     entry.appendChild(unmortgageButton)
                     
                     let keepMortgageCost = Math.floor(property.price / 10)
-                    let keepMortgageButton = createElement('button', '', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost )
+                    let keepMortgageButton = createElement('button', '', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost)
+                    keepMortgageButton.addEventListener('click', function(){
+                        keepMortgageButton.innerHTML = 'Mortgage kept for ' + currencySymbolSpan + keepMortgageCost
+                        keepMortgageButton.classList.add('disabled-button')
+                        entry.removeChild(unmortgageButton)
+                        players[playerID - 1].money -= keepMortgageCost
+                        updatePlayerDetails()
+                        addToFeed(players[playerID - 1].name + ' received ' + property.name + ' in a trade. They chose to keep the mortgage on it and have paid the bank ' + currencySymbolSpan + keepMortgageCost, 'money-minus')
+                    })
     
                     entry.appendChild(keepMortgageButton)
                 })
