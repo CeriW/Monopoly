@@ -2978,6 +2978,11 @@ function negotiateTrade(e){
     tradeNegotiationsWindow.appendChild(counterOfferButton)
 
     let rejectTradeButton = createElement('button', '', 'Reject trade', '', '')
+    rejectTradeButton.addEventListener('click', function(){
+        // REJECT TRADE
+        closePopup()
+        addToFeed(players[turn - 1].name + ' proposed a trade with ' + players[receiver - 1].name + ' but it was rejected.', 'trade-rejected')
+    })
     tradeNegotiationsWindow.appendChild(rejectTradeButton)
 
 
