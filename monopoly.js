@@ -2965,6 +2965,7 @@ function negotiateTrade(e){
     proposeTradeButton.classList.add('disabled-button')
     proposeTradeButton.addEventListener('click', function(){
         tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
+        availableActions.closePopup = false
     })
     tradeNegotiationsWindow.appendChild(proposeTradeButton)
 
