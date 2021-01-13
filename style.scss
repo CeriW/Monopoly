@@ -970,6 +970,51 @@ body[close-popup="false"] #popup-close{
     text-transform: uppercase;
 }
 
+/* Warning -------------------------------------------------------------------*/
+
+#warning{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#warning-inner{
+    width: 500px;
+    border: 3px solid $red;
+    background: #fff;
+    position: relative;
+}
+
+#warning-close{
+    width: 35px;
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    z-index: 2;
+}
+
+#warning-title{
+    background: $red;
+    color: #fff;
+    padding: 5px;
+    text-align: center;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+#warning-message{
+    padding: 20px;
+}
+
+body:not(.warning-open) #warning{
+    display: none;
+}
+
 /* Jail  ---------------------------------------------------------------------*/
 
 $jailAnimationLength: 1.5;
@@ -1840,6 +1885,53 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
     input.money-proposal:invalid{
         color: $red;
+    }
+}
+
+
+/* Trade mortgage warning ----------------------------------------------------*/
+
+.trade-mortgage-entry{
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .property-name{
+        flex-grow: 1;
+        text-align: left;
+    }
+
+    .property-icon{
+        margin-right: 10px;
+    }
+
+    button{
+        min-width: 200px;
+        margin-left: 5px;
+    }
+}
+
+.trade-mortage-warning{
+
+    .player-name{
+        text-align: left;
+        display: flex;
+        align-items: center;
+        font-size: 1.5em;
+        border-bottom: $border;
+        padding: 20px 0 10px;
+        margin-bottom: 15px;
+    }
+
+    .player-token-icon{
+        width: 50px;
+        height: 40px;
+        background-size: contain;
+        border: $border;
+        border-radius: 30px;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-right: 20px;
     }
 }
 

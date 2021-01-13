@@ -858,6 +858,44 @@ body[close-popup="false"] #popup-close {
   font-size: 30px;
   text-transform: uppercase; }
 
+/* Warning -------------------------------------------------------------------*/
+#warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+#warning-inner {
+  width: 500px;
+  border: 3px solid #db0926;
+  background: #fff;
+  position: relative; }
+
+#warning-close {
+  width: 35px;
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  z-index: 2; }
+
+#warning-title {
+  background: #db0926;
+  color: #fff;
+  padding: 5px;
+  text-align: center;
+  font-size: 30px;
+  text-transform: uppercase; }
+
+#warning-message {
+  padding: 20px; }
+
+body:not(.warning-open) #warning {
+  display: none; }
+
 /* Jail  ---------------------------------------------------------------------*/
 #jail-overlay {
   pointer-events: none;
@@ -1566,6 +1604,39 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 .trade-negotiations-window input.money-proposal:invalid {
   color: #db0926; }
+
+/* Trade mortgage warning ----------------------------------------------------*/
+.trade-mortgage-entry {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; }
+  .trade-mortgage-entry .property-name {
+    flex-grow: 1;
+    text-align: left; }
+  .trade-mortgage-entry .property-icon {
+    margin-right: 10px; }
+  .trade-mortgage-entry button {
+    min-width: 200px;
+    margin-left: 5px; }
+
+.trade-mortage-warning .player-name {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  border-bottom: 3px solid #000;
+  padding: 20px 0 10px;
+  margin-bottom: 15px; }
+
+.trade-mortage-warning .player-token-icon {
+  width: 50px;
+  height: 40px;
+  background-size: contain;
+  border: 3px solid #000;
+  border-radius: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-right: 20px; }
 
 /* Feed  ---------------------------------------------------------------------*/
 #feed {

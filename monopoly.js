@@ -23,6 +23,7 @@ let availableTokens = [
 let board = document.querySelector('#board')
 let popupMessage = document.querySelector('#popup-message')
 let popupTitle = document.querySelector('#popup-title')
+let warningMessage = document.querySelector('#warning-message')
 let playerSummary = document.querySelector('#player-summary')
 let feed = document.querySelector('#feed-content')
 let bankContainer = document.querySelector('#bank')
@@ -1415,6 +1416,20 @@ function openPopup(message){
     document.body.classList.add('popup-open')
 }
 
+
+// WARNING FUNCTIONS ---------------------------------------------------------//
+
+function openWarning(message){
+    document.body.classList.add('warning-open')
+    warningMessage.innerHTML = message
+}
+
+function closeWarning(){
+    document.body.classList.remove('warning-open')
+}
+
+
+
 // DICE FUNCTIONS ------------------------------------------------------------//
 
 
@@ -2117,45 +2132,7 @@ function displayPropertyOptions(number){
             availableActions.buildHotel = false
 
             setAvailableActions()
-        }
-
-        function unmortgageProperty(property){
-
-            // Half the property price, plus 10%
-            let mortgageValue = Math.round((property.price / 2) * 1.1)
-
-            property.mortgaged = false
-            addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
-
-            // Take the mortgage money from the player
-            players[turn - 1].money -= mortgageValue
-            updatePlayerDetails()
-
-            // Change what actions are appropriate
-            availableActions.mortgageProperty = true
-            availableActions.unmortgageProperty = false
-
-            // Clear the message
-            mortgageMessage.innerText = ''
-            
-            // If there are still other mortgaged properties in this set,
-            // prevent the player from building.
-            if (checkMortgagesInColourSet(colour)){
-                mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
-            } else{
-                availableActions.buildHouse = true
-                availableActions.buildHotel = true
-            }
-
-            // Show the property as unmortgaged on the board.
-            document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
-
-
-
-            setAvailableActions()
-
-        }
-        
+        }       
     }
     
     // If this property is unowned, or it is not currently the owner's turn,
@@ -2450,6 +2427,50 @@ function displayBuildHousePanel(colour){
         toggleHouseBuildButtons()
         
     }
+
+}
+
+
+function unmortgageProperty(property, player){
+
+    // Half the property price, plus 10%
+    let mortgageValue = Math.round((property.price / 2) * 1.1)
+
+    property.mortgaged = false
+    addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
+
+    // Take the mortgage money from the player
+
+    if (player){
+        player.money -= mortgageValue
+    } else{
+        players[turn - 1].money -= mortgageValue
+    }
+    
+    updatePlayerDetails()
+
+    // Change what actions are appropriate
+    availableActions.mortgageProperty = true
+    availableActions.unmortgageProperty = false
+
+    // Clear the message
+    mortgageMessage.innerText = ''
+    
+    // If there are still other mortgaged properties in this set,
+    // prevent the player from building.
+    if (checkMortgagesInColourSet(property.colour)){
+        mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
+    } else{
+        availableActions.buildHouse = true
+        availableActions.buildHotel = true
+    }
+
+    // Show the property as unmortgaged on the board.
+    document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
+
+
+
+    setAvailableActions()
 
 }
 
@@ -3155,15 +3176,26 @@ function negotiateTrade(e){
         let nameList1 = []
 
 
+        // Keeps a list of any properties in the trade that are mortgaged. Each
+        // player will need to decide whether to unmortgage or pay the bank
+        // 10% after accepting the trade.
+        let mortgageList0 = []
+        let mortgageList1 = []
+
         // Properties
         for (i = 0; i <= 39; i++){
 
             let property = tradeProposal[0][i]
 
+            
             if (property){
                 players[receiver - 1].properties[i] = property
                 delete players[turn - 1].properties[i]
                 nameList0.push(property.name)
+
+                if (property.mortgaged){
+                    mortgageList0.push(property)
+                }
             }
 
             property = tradeProposal[1][i]
@@ -3172,7 +3204,11 @@ function negotiateTrade(e){
                 players[turn - 1].properties[i] = property
                 delete players[receiver - 1].properties[i]
                 nameList1.push(property.name)
-            }
+
+                if (property.mortgaged){
+                    mortgageList1.push(property)
+                }
+            } 
         }
 
         // Get out of jail cards
@@ -3274,9 +3310,85 @@ function negotiateTrade(e){
         }
 
 
+        function tradeMortgageWarning(){
+
+            let tradeMortgageWarning = createElement('div', 'trade-mortage-warning', '', '', '')
+
+            tradeMortgageWarning.appendChild(createElement('div', '', 'This trade contains properties which are mortgaged. You must decide whether you wish to unmortage them at 110% of the mortgage value, or keep them mortgaged. If you choose to keep them mortgaged, you must pay the bank 10% of the mortgage value now. If you later choose to unmortgage them you must still pay the bank 110% of the mortgage value (meaning it will save you money to unmortgage now, if you can afford to do so).'))
+
+
+            if (mortgageList0.length){
+                let column = createElement('div', 'trade-mortgage-list')
+
+                let playerName = createElement('div', 'player-name')
+                playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn - 1].token))
+                playerName.appendChild(createElement('div', '', players[turn-1].name))
+                column.appendChild(playerName)
+
+                column.appendChild(setupMortgageTable(mortgageList0))
+                tradeMortgageWarning.appendChild(column)
+            }
+
+            if (mortgageList1.length){
+                let column = createElement('div', 'trade-mortgage-list')
+
+                let playerName = createElement('div', 'player-name')
+                playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[receiver - 1].token))
+                playerName.appendChild(createElement('div', '', players[receiver-1].name))
+                column.appendChild(playerName)
+
+                column.appendChild(setupMortgageTable(mortgageList1))
+                tradeMortgageWarning.appendChild(column)
+            }
+            
+
+            openPopup('')
+            popupMessage.appendChild(tradeMortgageWarning)
+
+
+            function setupMortgageTable(array){
+
+                let list = createElement('div', '', '', '', '')
+
+                array.forEach(function(property){
+                    let entry = createElement('div', 'trade-mortgage-entry', '', '', '')
+                    list.appendChild(entry)      
+                    
+                    let icon = createElement('div', 'property-icon')
+                    icon.classList.add(property.group)
+                    entry.appendChild(icon)
+    
+                    let name  = createElement('div', 'property-name', property.name, '', '')
+                    entry.appendChild(name)
+    
+                    let unmortgageCost = Math.floor(property.price * 1.1)
+                    let unmortgageButton = createElement('button', '', 'Unmortgage for ' + currencySymbolSpan +  unmortgageCost, '', '')
+                    
+                    unmortgageButton.addEventListener('click', function(){
+                        unmortgageProperty(property, players[property.owner.id - 1])
+                        unmortgageButton.classList.add('disabled-button')
+                        unmortgageButton.innerHTML = 'Unmortgaged for ' + currencySymbolSpan + unmortgageCost
+                        entry.removeChild(keepMortgageButton)
+                    })
+    
+                    entry.appendChild(unmortgageButton)
+                    
+                    let keepMortgageCost = Math.floor(property.price / 10)
+                    let keepMortgageButton = createElement('button', '', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost )
+    
+                    entry.appendChild(keepMortgageButton)
+                })
+
+                return list
+            }
+        }
+
+
+
         addToFeed(feedMessage, 'trade-accepted')
         updatePlayerDetails()
         closePopup()
+        tradeMortgageWarning()
         tradeProposal = [[], []]
     }
 
