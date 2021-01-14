@@ -52,6 +52,7 @@ An incomplete list of all the developments that need to be completed
 STRETCH GOALS
 
 - Add a Monopoly rulebook
+	- The Monopoly wiki is really good. Include links and/or snippets from here.
 
 - Question mark in popup for user help and more info on rules.
 	- Revisit the trade with mortgages window. There's a wall of text with rules in it.
@@ -59,10 +60,10 @@ STRETCH GOALS
 - House rules? (e.g. free parking)
 
 - Players to be able to pick their own colour
+<input name="Color Picker" type="color"/>
+https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-html/40253949
 
 - Quick game modes (see original rulebook)
-  <input name="Color Picker" type="color"/>
-https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-html/40253949
 
 - Tooltips on appropriate items
 

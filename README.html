@@ -891,18 +891,18 @@
       Mortgages a property by setting its mortgaged property in the <i>spaces</i> array to true, gives the owner the mortgage money amount, sets an attribute on its space on the board so it can be styled, and adds a message to the feed.
     </div>
   </div>
+</div>
 
-  <div class="private-function">
-    <h4 class="function-name">unmortgageProperty</h4>
-    <h5>Function parameters:</h4>
-    <ul class="function-parameters">
-      <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to unmortgage.</li>
-    </ul>
-    <div class="function-description">
-      Unmortgages the property, basically by doing all the same things the mortgageProperty function does but in reverse.
-    </div>
+<div class="function">
+  <h4 class="function-name">unmortgageProperty</h4>
+  <h5>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to unmortgage.</li>
+    <li>player (optional) - object - the player object to take the money from. If not specified, this will be the current player (which is what you want most of the time, but after trading mortgaged properties it needs to be the correct property owner, despite it not being their turn)</li>
+  </ul>
+  <div class="function-description">
+    Unmortgages the property, basically by doing all the same things the mortgageProperty function does but in reverse.
   </div>
-
 </div>
 
 <div class="function">

@@ -2437,7 +2437,7 @@ function unmortgageProperty(property, player){
     let mortgageValue = Math.round((property.price / 2) * 1.1)
 
     property.mortgaged = false
-    addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
+    //addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
 
     // Take the mortgage money from the player
 
@@ -2446,6 +2446,9 @@ function unmortgageProperty(property, player){
     } else{
         players[turn - 1].money -= mortgageValue
     }
+
+    let playerName = player ? player.name : players[turn-1].name 
+    addToFeed(playerName + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
     
     updatePlayerDetails()
 
@@ -3189,7 +3192,21 @@ function negotiateTrade(e){
 
             
             if (property){
-                players[receiver - 1].properties[i] = property
+
+                // Reset the property, so we're using the most up to date version
+                // from the spaces array (rather than the one from the players
+                // array which might be out of date and should only be used for
+                // constants like the name etc)
+                property = spaces[property.position]
+
+                // Swap the owner property to its new owner
+                property.owner = players[receiver - 1]
+
+                // Add the most recent version of the property from the spaces
+                // array, rather than the possibly out of date array from the player object.
+                players[receiver - 1].properties[i] = spaces[i]
+
+                
                 delete players[turn - 1].properties[i]
                 nameList0.push(property.name)
 
@@ -3201,7 +3218,20 @@ function negotiateTrade(e){
             property = tradeProposal[1][i]
 
             if (property){
-                players[turn - 1].properties[i] = property
+
+                // Reset the property, so we're using the most up to date version
+                // from the spaces array (rather than the one from the players
+                // array which might be out of date and should only be used for
+                // constants like the name etc)
+                property = spaces[property.position]
+
+                // Swap the owner property to its new owner
+                property.owner = players[turn - 1]
+
+                // Add the most recent version of the property from the spaces
+                // array, rather than the possibly out of date array from the player object.
+                players[turn - 1].properties[i] = spaces[property.position]
+
                 delete players[receiver - 1].properties[i]
                 nameList1.push(property.name)
 
@@ -3317,10 +3347,11 @@ function negotiateTrade(e){
 
             let tradeMortgageWarning = createElement('div', 'trade-mortage-warning', '', '', '')
 
-            tradeMortgageWarning.appendChild(createElement('div', '', 'This trade contains properties which are mortgaged. You must decide whether you wish to unmortgage them at 110% of the mortgage value, or keep them mortgaged. If you choose to keep them mortgaged you must pay the bank 10% of the mortgage value now. If you later choose to unmortgage them you must still pay the bank 110% of the mortgage value (meaning it will save you money to unmortgage now, if you can afford to do so).'))
+            tradeMortgageWarning.appendChild(createElement('div', '', 'This trade contains properties which are mortgaged. You must decide whether to unmortgage them at 110% of the mortgage value, or keep them mortgaged and pay the bank 10%.'))
 
 
-            if (mortgageList0.length){
+            // Properties the current player is receiving (and so needs to make mortgage decisions on)
+            if (mortgageList1.length > 0){
                 let column = createElement('div', 'trade-mortgage-list')
 
                 let playerName = createElement('div', 'player-name')
@@ -3328,22 +3359,25 @@ function negotiateTrade(e){
                 playerName.appendChild(createElement('div', '', players[turn-1].name))
                 column.appendChild(playerName)
 
-                column.appendChild(setupMortgageTable(mortgageList0, turn))
+                column.appendChild(setupMortgageTable(mortgageList1, turn))
                 tradeMortgageWarning.appendChild(column)
             }
 
-            if (mortgageList1.length){
+            // Properties the receiver is receiving (and so needs to make mortgage decisions on)
+            if (mortgageList0.length > 0){
                 let column = createElement('div', 'trade-mortgage-list')
 
                 let playerName = createElement('div', 'player-name')
                 playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[receiver - 1].token))
-                playerName.appendChild(createElement('div', '', players[receiver-1].name))
+                playerName.appendChild(createElement('div', '', players[receiver - 1].name))
                 column.appendChild(playerName)
 
-                column.appendChild(setupMortgageTable(mortgageList1, receiver))
+                column.appendChild(setupMortgageTable(mortgageList0, receiver))
                 tradeMortgageWarning.appendChild(column)
             }
             
+            // Check whether there are still mortgages that need to be decided.
+            // If they are all sorted, close the window.
             ;[].forEach.call(tradeMortgageWarning.querySelectorAll('button'), function(button){
                 button.addEventListener('click', function(){
                     if (!tradeMortgageWarning.querySelector('button:not(.disabled-button)')){
@@ -3356,7 +3390,6 @@ function negotiateTrade(e){
             popupMessage.appendChild(tradeMortgageWarning)
 
 
-            // player should be 'current' for the current player, and 'receiver' for the receiver
             function setupMortgageTable(array, playerID){
 
                 let list = createElement('div', '', '', '', '')
@@ -3372,7 +3405,7 @@ function negotiateTrade(e){
                     let name  = createElement('div', 'property-name', property.name, '', '')
                     entry.appendChild(name)
     
-                    let unmortgageCost = Math.floor(property.price * 1.1)
+                    let unmortgageCost = Math.floor((property.price / 2) * 1.1)
                     let unmortgageButton = createElement('button', '', 'Unmortgage for ' + currencySymbolSpan +  unmortgageCost, '', '')
                     
                     unmortgageButton.addEventListener('click', function(){
@@ -3384,7 +3417,7 @@ function negotiateTrade(e){
     
                     entry.appendChild(unmortgageButton)
                     
-                    let keepMortgageCost = Math.floor(property.price / 10)
+                    let keepMortgageCost = Math.floor((property.price / 2) / 10)
                     let keepMortgageButton = createElement('button', '', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost)
                     keepMortgageButton.addEventListener('click', function(){
                         keepMortgageButton.innerHTML = 'Mortgage kept for ' + currencySymbolSpan + keepMortgageCost
