@@ -3015,6 +3015,7 @@ function negotiateTrade(e){
     let proposalHTML = 'Money to trade: ' + currencySymbolSpan
 
     let currentPlayerMoneyProposal = document.createElement('div')
+    currentPlayerMoneyProposal.classList.add('money-proposal-container')
     currentPlayerMoneyProposal.innerHTML = proposalHTML
     let input = document.createElement('input')
     input.setAttribute('class', 'money-proposal')
@@ -3081,9 +3082,9 @@ function negotiateTrade(e){
             let parent = e.target.parentNode.parentNode
 
             if (parent.classList.contains('current-player-summary')){
-                tradeProposal[0][42] = valid ? parseInt(e.target.value) : null
+                tradeProposal[0][42] = valid ? e.target.value : undefined
             } else{
-                tradeProposal[1][42] = valid ? parseInt(e.target.value) : null
+                tradeProposal[1][42] = valid ? e.target.value : undefined
             }
 
                 
@@ -3159,9 +3160,28 @@ function negotiateTrade(e){
         // Check if the proposal has items in it on both sides. If so, 
         // enable the 'propose trade' button
 
-        // TODO - make sure players can't trade money for money
 
-        if(document.querySelector('.current-player-summary [proposed="true"]') && document.querySelector('.other-player-summary [proposed="true"]')){
+        // Get an array of all the non-undefined entries in the array
+        let entries0 = tradeProposal[0].filter(checkEntryExists)
+        let entries1 = tradeProposal[1].filter(checkEntryExists)
+        function checkEntryExists(entry){
+            if (entry){
+                return entry
+            }
+        }
+
+        // Whether the players are trading money for money
+        let onlyMoney = false
+
+        // Check there's more than money on both sides of the trade
+        if (tradeProposal[0].length === 43 && tradeProposal[1].length === 43 && tradeProposal[0][42] && tradeProposal[1][42]){
+            onlyMoney = true
+        }
+
+        // Check if the proposal has items in it on both sides. If so, 
+        // enable the 'propose trade' button
+
+        if (entries0.length > 0 && entries1.length > 0 && !onlyMoney){
             proposeTradeButton.classList.remove('disabled-button')
         } else{
             proposeTradeButton.classList.add('disabled-button')

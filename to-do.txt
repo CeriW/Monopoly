@@ -7,7 +7,6 @@ An incomplete list of all the developments that need to be completed
 - Bankruptcy
 
 - Make it so players can do the following with 'Get out of jail free' cards
-    - Trade
     - Sell
 
 - Refactor all the things with player specific IDs to have player attributes instead.
@@ -48,6 +47,7 @@ An incomplete list of all the developments that need to be completed
 
 - Back button on full portfolio details is in the wrong place.
 
+- There are a lot of lets that should be consts
 
 STRETCH GOALS
 
@@ -70,6 +70,8 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - More tokens https://monopoly.fandom.com/wiki/Tokens
 
 - Multiple international/theme boards
+
+- Use geolocation to determine where players are based, and offer the most closest version of the game (eg. UK, US etc)
 
 - JSON parsing for space/cards
 
