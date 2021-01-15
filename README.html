@@ -1250,6 +1250,11 @@
               </ul>
             </li>
 
+            <li>Create arrays <i>entries0</i> and <i>entries1</i> to contain all of the non-undefined entries from <i>tradeProposal</i>[0] and <i>tradeProposal</i>[1]</li>
+            <li>Create variable <i>bothSidesMoney</i> as a boolean to check whether both sides of the trade have money in them (since this is not allowed)
+            <li>If entries0 has items in it, entries1 has items in it, and bothSidesMoney isn't true, enable the propose trade button.</li>
+
+
             <li>
               Check whether, as a result of this update, both sides of the proposal have something in them (i.e. you can't trade something for nothing). Enable/disable the 'Propose trade' button appropriately.
             </li>
@@ -1265,18 +1270,19 @@
           <ul>
             <li>nameList0 - <i>array</i> - an array of user-friendly names and values of the items being traded from the current player (e.g. 'Old Kent Road', '2 Get Out Of Jail Free cards') to be passed to the addToFeed function later.</li>
             <li>nameList1 - <i>array</i> - an array of user-friendly names and values of the items being traded from the other player (e.g. 'Old Kent Road', '2 Get Out Of Jail Free cards') to be passed to the addToFeed function later.</li>
+            <li>mortgageList0 & mortgageList1 - <i>arrays</i> - initialised as an empty array, this will be added to if any of the properties in the trade are mortgaged.</li>
             <li>feedMessage - <i>string</i> - the user-friendly string which we will keep adding to, to eventually be output to the addToFeed function</li>
-
           </ul>
         </div>
 
         <div class="function-description">
           <ul>
-            <li>Loop through indices 0 to 39 of <i>tradeProposal</i>[0] (items being traded away from the current player) and <i>tradeProposal</i>[1] (items being traded away from the other player). If they exist, add them to the receiving player's properties property in the <i>players</i> array, remove them from the forfeiting player's properties property in the <i>players</i> array and add the property names to the <i>nameList0</i> and <i>nameList1</i> arrays respectively.</li>
+            <li>Loop through indices 0 to 39 of <i>tradeProposal</i>[0] (items being traded away from the current player) and <i>tradeProposal</i>[1] (items being traded away from the other player). If they exist, add them to the receiving player's properties property in the <i>players</i> array, remove them from the forfeiting player's properties property in the <i>players</i> array and add the property names to the <i>nameList0</i> and <i>nameList1</i> arrays respectively. If a property is mortgaged, it will be added to mortgageList0 or mortgageList1 as appropriate.</li>
             <li>Loop through indices 40 and 41 of <i>tradeProposal</i>[0] and <i>tradeProposal</i>[1]. These will be where the 'Get Out Of Jail Free' cards will be, if included in the trade. If they exist, swap them over between the players getOutCards properties in the <i>players</i> array in the add a plurally correct description of how many cards there are to <i>nameList0</i> or <i>nameList1</i> as appropriate.</li>
             <li>Check index 42 of <i>tradeProposal</i>[0] and <i>tradeProposal</i>[1]. If not null, this means money is involved in the trade. Add/deduct to the appropriate players' money property in the <i>players</i> array, and add the currency symbol and values to <i>nameList0</i> or <i>nameList1</i> as appropriate.</li>
             <li>Loop through <i>namesList0</i> and <i>namesList1</i> to create the user-readable <i>feedMessage</i> variable, adding words and punctuation where needed.</li>
             <li>Add <i>feedMessage</i> to the feed with a 'trade-accepted' icon, run the <i>updatePlayerDetails()</i> function to update the player summaries to reflect the newly traded items, close the popup and reset <i>tradeProposal</i> to [[][]] so it's ready for next time.</li>
+            <li>If <i>mortgageList0</i> or <i>mortgageList1</i> have items in, run <i>tradeMortgageWarning</i></li>
           </ul>
         </div>
 
@@ -1287,11 +1293,36 @@
             <li>index - <i>number</i> - the index of <i>tradeProposal</i> we're dealing with (0 for the current player, 1 for the player on the other end of the trade)</li>
             <li>list - <i>array</i> - the nameList variable we want to add this message to. Should be namesList0 if <i>index</i> is 0, and nameList1 if <i>index</i> is 1</li>
           </ul>
-          <div class="function-description"></div>
+          <div class="function-description">
+            Loops through the given array and checks indices 40 and 41 of the specified array. If it has 1 item, it adds '1 Get out of jail free card' to the array. If it has 2 it adds '2 Get out of jail free cards' to the array, and if there are none it does nothing. 
+          </div>
         </div>
       </div>
 
-
+      <div class="private-function">
+        <h4 class="function-name">tradeMortgageWarning</h4>
+        <div class="function-description">
+          Once a trade has been accepted, this function will bring up a window if one or both sides of the trade contain mortgaged properties. In detail:
+          <ul>
+            <li>Checks the length of mortgageList0 and mortgageList1. If either of these is greater than 0, it means there are mortgaged properties on that side of the trade. Create a heading for the player's name, and call <i>setupMortgageTable()</i> to generate a list of names and buttons.</li> 
+            <li>Add event listeners to all of the buttons generated for this window. When clicked, the event listener will check whether there are still un-disabled buttons in the window. If there are, that means there are still decisions to be made. If not, all decisions have been made and the window is closed.</li>
+          </ul>
+        </div>
+      
+        <div class="private-function">
+          <h5 class="function-name">setupMortgageTable</h4>
+          <ul class="function-parameters">
+            <li>array - <i>array</i> - should be either <i>mortgageList0</i> or <i>mortgageList1</i> i.e. the list of mortgaged properties we're generating for</li>
+            <li>playerID - <i>string/number</i> - the ID number (not index) of the owning player, which may be either a string or number thanks to Javascript's loose typing. This is used to get the correct player's name to add to the feed message. Generally this will be <i>turn</i> for the trade initiator, and <i>receiver</i> for the receiving player.</li>
+          </ul>
+          <div class="function-description">
+            Creates a list from the array passed to it, containing the property name, group icon and buttons to unmortgage (at half the mortgage value plus 10%) or keep the mortgage (and pay the bank 10% of the mortgage value to do so).
+            <br>When the buttons are clicked, the other button for its property is disabled, money is taken from the correct player (using <i>playerID</i>) and a message is added to the feed (using <i>playerID</i> to get the correct name from <i>players</i>).
+            <br>Returns a div node containing all of the elements described.
+          </div>
+      
+      </div>
+    </div>
 
     </div>
 </div>

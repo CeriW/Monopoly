@@ -3157,8 +3157,7 @@ function negotiateTrade(e){
         }
 
 
-        // Check if the proposal has items in it on both sides. If so, 
-        // enable the 'propose trade' button
+
 
 
         // Get an array of all the non-undefined entries in the array
@@ -3170,18 +3169,14 @@ function negotiateTrade(e){
             }
         }
 
-        // Whether the players are trading money for money
-        let onlyMoney = false
+        // Check that both sides of the trade isn't just money.
+        // Note - if you add money and then remove money, the length remains 43. This is why it 
+        let bothSidesMoney = tradeProposal[0][42] && tradeProposal[1][42] ? true : false
 
-        // Check there's more than money on both sides of the trade
-        if (tradeProposal[0].length === 43 && tradeProposal[1].length === 43 && tradeProposal[0][42] && tradeProposal[1][42]){
-            onlyMoney = true
-        }
 
         // Check if the proposal has items in it on both sides. If so, 
         // enable the 'propose trade' button
-
-        if (entries0.length > 0 && entries1.length > 0 && !onlyMoney){
+        if (entries0.length > 0 && entries1.length > 0 && !bothSidesMoney){
             proposeTradeButton.classList.remove('disabled-button')
         } else{
             proposeTradeButton.classList.add('disabled-button')
