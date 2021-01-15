@@ -3173,6 +3173,9 @@ function negotiateTrade(e){
         // Note - if you add money and then remove money, the length remains 43. This is why it 
         let bothSidesMoney = tradeProposal[0][42] && tradeProposal[1][42] ? true : false
 
+        // TODO - this simply checks whether both sides have money in their proposal and disables the trade if so.
+        // I could be extra and make it so that if you add money on one side when the other side already has money, deduct it.
+
 
         // Check if the proposal has items in it on both sides. If so, 
         // enable the 'propose trade' button

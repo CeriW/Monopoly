@@ -7,21 +7,60 @@
 
         <style>
 
+          html{
+            scroll-behavior: smooth;
+          }
+
           body{
             background: #d5e8d4;
             color: #000;
             font-family: 'Montserrat', sans-serif;
           }
 
-          header, h2{
+          header, main h2{
             text-align: center;
           }
 
-          header, main{
+          header, nav, main{
             max-width: 1344px;
             float: none;
             margin: 0 auto;
           }
+
+          nav{
+            display: flex;
+            flex-wrap: wrap;
+          }
+
+          nav > div{
+            background:  #ecffe9;
+            padding: 10px 20px 20px;
+            text-align: left;
+            flex-grow: 1;
+          }
+
+          nav a{
+            color: #000;
+            text-decoration: none;
+          }
+
+          nav a:hover{
+            color: #d52788;
+          }
+
+          nav > div > ul > li{
+            list-style: url('images/readme-bullet.png');
+            margin-bottom: 7px;
+          }
+
+          nav ul ul{
+            margin-top: 7px;
+          }
+
+          nav ul ul li{
+            list-style: initial;
+          }
+
 
 
 
@@ -72,6 +111,19 @@
             margin-bottom: 20px;
           }
 
+          #backToTop{
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 2;
+            opacity: 0;
+            transition: 0.5s;
+          }
+
+          .scrolled #backToTop{
+            opacity: 1;
+          }
+
         </style>
 
 
@@ -79,17 +131,34 @@
 
       <body>
 
+
+
         <header>        
           <h1 id="monopoly">Monopoly</h1>
           <p> A (eventually) playable browser version of Monopoly using HTML, CSS and JS. I am a huge fan of Monopoly so this is the ideal pet project to learn with.</p>
           <p> While I have a huge amount of experience in HTML and CSS/SCSS, my knowledge of JS is limited and this is my first time using Git. Using this as a learning experience.</p>
         </header>
 
+        <nav>
+
+          <div id="variable-list">
+            <h2>Variables</h2>
+            <ul></ul>
+          </div>
+
+          <div id="function-list">
+            <h2>Functions</h2>
+            <ul></ul>
+          </div>
+
+        </nav>
+
         <main>
 
+
+
+
 <h2>VARIABLES</h2>
-
-
 
 <div id="variable-container">
 
@@ -894,7 +963,7 @@
 </div>
 
 <div class="function">
-  <h4 class="function-name">unmortgageProperty</h4>
+  <h3 class="function-name">unmortgageProperty</h4>
   <h5>Function parameters:</h4>
   <ul class="function-parameters">
     <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to unmortgage.</li>
@@ -1360,8 +1429,119 @@
 
 -->
 
+  <div id="backToTop" width="50px">
+    <a href="#top"><img src="images/readme-back-to-top.png"></a>
+  </div>
+
 </main>
+
+
+<script>
+
+  // Generates the nav at the top
+  const variableList = document.querySelector('#variable-list')
+  const variableListUL = variableList.querySelector('ul')
+
+  const functionList = document.querySelector('#function-list')
+  const functionListUL = functionList.querySelector('ul')
+
+
+  ;[].forEach.call(document.querySelectorAll('.variable'), function(node){
+    listGenerator(node, variableListUL)
+  })
+
+  ;[].forEach.call(document.querySelectorAll('.function'), function(node){
+    listGenerator(node, functionListUL)
+  })
+
+
+
+  let lis = []
+  ;[].forEach.call(document.querySelectorAll('#variable-list > ul > li'), function(node){
+    lis.push(node)
+  })
+
+  sortListitems(lis, variableListUL)
+
+  lis = []
+  ;[].forEach.call(document.querySelectorAll('#function-list > ul > li'), function(node){
+    lis.push(node)
+  })
+
+  sortListitems(lis, functionListUL)
+
+  function sortListitems(list, node){
+
+    let lis = []
+    ;[].forEach.call(node.querySelectorAll('ul > li'), function(node){
+      lis.push(node)
+    })
+
+    let newList = list.sort(function(a,b) {
+    a = a.querySelector('a').getAttribute('href')
+    b = b.querySelector('a').getAttribute('href')
+    return a < b ? -1 : b < a ? 1 : 0; })
+
+    newList.forEach(function(innerNode){
+      node.appendChild(innerNode)
+    })
+    
+  }
+
+
+  
+
+
+
+
+  function listGenerator(node, list){
+    let name = node.querySelector('h3').textContent
+    node.setAttribute('id', name)
+    let listItem = document.createElement('li')
+    
+    let link = document.createElement('a')
+    link.href = '#' + name
+    link.textContent = name
+    listItem.appendChild(link)
+    list.append(listItem)
+
+
+    if (node.querySelector('.private-function')){
+
+      let sublist = document.createElement('ul')
+      ;[].forEach.call(node.querySelectorAll('.private-function'), function(node){
+
+        name = node.querySelector('.function-name').textContent
+        link = document.createElement('a')
+        link.href = '#' + name
+        link.textContent = name
+        node.setAttribute('id', name)
+
+        let newListItem = document.createElement('li')
+        newListItem.appendChild(link)
+        sublist.appendChild(newListItem)
+      })
+
+      listItem.appendChild(sublist)
+    }
+  }
+
+
+  let header = document.querySelector('header')
+  let nav = document.querySelector('nav')
+
+  window.addEventListener('scroll', function(){
+    if (scrollY > header.offsetHeight + nav.offsetHeight){
+      document.body.classList.add('scrolled')
+    } else{
+      document.body.classList.remove('scrolled')
+    }
+  })
+
+</script>
 
       </body>
     </html>
+
+
 
