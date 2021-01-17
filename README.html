@@ -1379,10 +1379,26 @@
             <li>Loop through indices 0 to 39 of <i>tradeProposal</i>[0] (items being traded away from the current player) and <i>tradeProposal</i>[1] (items being traded away from the other player). If they exist, add them to the receiving player's properties property in the <i>players</i> array, remove them from the forfeiting player's properties property in the <i>players</i> array and add the property names to the <i>nameList0</i> and <i>nameList1</i> arrays respectively. If a property is mortgaged, it will be added to mortgageList0 or mortgageList1 as appropriate.</li>
             <li>Loop through indices 40 and 41 of <i>tradeProposal</i>[0] and <i>tradeProposal</i>[1]. These will be where the 'Get Out Of Jail Free' cards will be, if included in the trade. If they exist, swap them over between the players getOutCards properties in the <i>players</i> array in the add a plurally correct description of how many cards there are to <i>nameList0</i> or <i>nameList1</i> as appropriate.</li>
             <li>Check index 42 of <i>tradeProposal</i>[0] and <i>tradeProposal</i>[1]. If not null, this means money is involved in the trade. Add/deduct to the appropriate players' money property in the <i>players</i> array, and add the currency symbol and values to <i>nameList0</i> or <i>nameList1</i> as appropriate.</li>
-            <li>Loop through <i>namesList0</i> and <i>namesList1</i> to create the user-readable <i>feedMessage</i> variable, adding words and punctuation where needed.</li>
+            <li>Create the user-friendly <i>feedMessage</i> string by generating player names and getting user-friendly property lists from <i>generateTradeFeedMessage()</i></li>
             <li>Add <i>feedMessage</i> to the feed with a 'trade-accepted' icon, run the <i>updatePlayerDetails()</i> function to update the player summaries to reflect the newly traded items, close the popup and reset <i>tradeProposal</i> to [[][]] so it's ready for next time.</li>
             <li>If <i>mortgageList0</i> or <i>mortgageList1</i> have items in, run <i>tradeMortgageWarning</i></li>
           </ul>
+        </div>
+
+        <div class="private-function">
+          <h4 class="function-name">generateTradeFeedMessage</h4>
+          <h5>Function parameters:</h5>
+          <ul class="function-parameters">
+            <li>array - <i>array</i> - should be <i>nameList0</i> or <i>nameList1</i> - i.e. an array of strings of property names that we'll loop through.</li>
+          </ul>
+          <div class="function-description">
+            Takes the provided array of property name strings and returns a nice, user readable string with commas and 'and' in the correct place according to the length of the array. For example:
+            <ul>
+              <li>['Old Kent Road'] returns 'Old Kent Road'</li>
+              <li>['Old Kent Road', 'Whitechapel Road'] returns 'Old Kent Road and Whitechapel Road'</li>
+              <li>['Old Kent Road', 'Whitechapel Road', 'Euston Road'] returns 'Old Kent Road, Whitechapel Road and Euston Road'</li>
+            </ul>
+          </div>
         </div>
 
         <div class="private-function">
