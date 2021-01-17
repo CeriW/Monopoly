@@ -3387,14 +3387,14 @@ function negotiateTrade(e){
 
         // Money
 
-        let money = tradeProposal[0][42]
+        let money = parseInt(tradeProposal[0][42])
         if (money){
             nameList0.push(currencySymbolSpan + money)
             players[turn - 1].money -= money
             players[receiver - 1].money += money
         }
 
-        money = tradeProposal[1][42]
+        money = parseInt(tradeProposal[1][42])
         if (money){
             nameList1.push(currencySymbolSpan + money)
             players[receiver - 1].money -= money
@@ -3563,7 +3563,9 @@ function negotiateTrade(e){
         addToFeed(feedMessage, 'trade-accepted')
         updatePlayerDetails()
         closePopup()
-        tradeMortgageWarning()
+        if (mortgageList0.length > 0 || mortgageList1.length > 0){
+            tradeMortgageWarning()
+        }
         tradeProposal = [[], []]
     }
 
