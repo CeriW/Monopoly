@@ -3436,30 +3436,31 @@ function negotiateTrade(e){
         countCardsInTrade(1, nameList1)
 
 
+        let feedMessage = players[turn - 1].name + ' traded ' + generateTradeFeedMessage(nameList0) + ' for ' + players[receiver - 1].name + '\'s ' + generateTradeFeedMessage(nameList1)
 
+        function generateTradeFeedMessage(array){
 
-        let feedMessage = players[turn - 1].name + ' traded '
+            let output = ''
 
-        for (i = 0; i < nameList0.length; i++){
-
-            feedMessage += nameList0[i]
-
-            if (nameList0.length > 1 && i !== nameList0.length){
-                feedMessage += ', '
+            switch (array.length){
+                case 1:
+                    output += array[0]
+                    break
+                case 2:
+                    output += array[0] + ' and ' + array[1]
+                    break
+                default:
+                    for (i = 0; i < (array.length - 1); i++){
+                        output += array[i]
+    
+                        if (i < (array.length - 2)){
+                            output += ', '
+                        }
+                    }
+                    output += ' and ' + array[array.length - 1]
             }
-        }
 
-
-
-        feedMessage += ' for ' + players[receiver - 1].name + '\'s '
-
-        for (i = 0; i < nameList1.length; i++){
-            feedMessage += nameList1[i]
-
-
-            if (nameList1.length > 1 && i !== nameList1.length){
-                feedMessage += ', '
-            }
+            return output
         }
 
 
