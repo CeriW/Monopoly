@@ -17,11 +17,29 @@
 
     <div id="testing-toggle-panel" style="font-size: 18px;">Testing options: <input id="testing-toggle" type="checkbox"></input></div>
     <div id="testing-panel">
-      <div id="fake-dice-roll">
-        Fake dice roll
-        <input id="fake-dice-roll-total" placeholder="Fake dice roll total"></input>
-        <button id="fake-dice-roll-total-button">Fake dice roll</button>
-        <!--<button id="fake-dice-roll-button">Fake dice</button>-->
+
+      <div id="fake-dice-panel">
+        <div class="testing-panel-title"><img src="images/testing-panel/dice.svg" width="30" height="30">Dice functions</div>
+        <form id="fake-dice-roll-form">
+          <input id="fake-dice-roll-total" placeholder="Custom fake dice roll" size="17"></input>
+          <button id="fake-dice-roll-total-button" type="submit">Fake dice roll</button>
+          <!--<button id="fake-dice-roll-button">Fake dice</button>-->
+        </form>
+
+        <div id="fake-dice-roll-dice-panel">
+          <div onclick="fakeRollDice(1)">1</div>
+          <div onclick="fakeRollDice(2)">2</div>
+          <div onclick="fakeRollDice(3)">3</div>
+          <div onclick="fakeRollDice(4)">4</div>
+          <div onclick="fakeRollDice(5)">5</div>
+          <div onclick="fakeRollDice(6)">6</div>
+          <div onclick="fakeRollDice(7)">7</div>
+          <div onclick="fakeRollDice(8)">8</div>
+          <div onclick="fakeRollDice(9)">9</div>
+          <div onclick="fakeRollDice(10)">10</div>
+          <div onclick="fakeRollDice(11)">11</div>
+          <div onclick="fakeRollDice(12)">12</div>
+        </div>
       </div>
 
       <div>

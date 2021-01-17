@@ -1907,7 +1907,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   top: 0;
   right: 0;
   left: 0;
-  z-index: 999; }
+  z-index: 999;
+  padding: 20px; }
 
 body:not(.testing-panel-enabled) #testing-panel {
   display: none; }
@@ -1919,6 +1920,48 @@ body:not(.testing-panel-enabled) #testing-panel {
   z-index: 1000;
   justify-content: space-around;
   display: flex; }
+
+#testing-panel > div {
+  margin-right: 20px;
+  text-align: center;
+  float: left; }
+
+#testing-panel button {
+  background: #db0926;
+  border: 2px solid #fff;
+  padding: 3px 7px; }
+
+#testing-panel input {
+  line-height: 21px; }
+
+.testing-panel-title {
+  text-transform: uppercase;
+  background: #db0926;
+  padding: 5px 10px;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.4); }
+  .testing-panel-title img {
+    margin-right: 15px; }
+
+/* Dice -----------------------------------*/
+#fake-dice-panel {
+  max-width: 280px; }
+
+#fake-dice-roll-dice-panel > div {
+  padding: 5px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  width: 27px;
+  height: 27px;
+  text-align: center;
+  transition: 0.2s;
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px 0 0; }
+  #fake-dice-roll-dice-panel > div:hover {
+    background: rgba(255, 255, 255, 0.2); }
 
 /* CONFETTI ----------------------------------------------------------------- */
 .confetti-container {

@@ -534,12 +534,11 @@ function addTestingEvents(){
         document.body.classList.toggle('testing-panel-enabled')
     })
     
-    let fakeDiceRollInput = document.querySelector('#fake-dice-roll-total')
-    let fakeDiceRollButton = document.querySelector('#fake-dice-roll-total-button')
-    fakeDiceRollButton.addEventListener('click', function(){
-        fakeRollDice(fakeDiceRollInput.value)
+    let fakeDiceRollForm = document.querySelector('form#fake-dice-roll-form')
+    fakeDiceRollForm.addEventListener('submit', function(e){
+        e.preventDefault()
+        fakeRollDice(e.target.querySelector('input').value)
     })
-
     
 
     let availableHousesInput = document.querySelector('#available-houses-test')
