@@ -1541,6 +1541,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       display: none; }
 
 /* Trade negotiations window -------------------------------------------------*/
+.trade-negotiations-window.too-short-for-rent-tables .rent-table-window {
+  display: none; }
+
 .trade-negotiations-window .trade-negotiation-summaries {
   display: flex; }
   .trade-negotiations-window .trade-negotiation-summaries > div {
@@ -1580,9 +1583,40 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window[trade-status="proposed"] button.propose-trade {
   display: none; }
 
+.trade-negotiations-window .full-portfolio-item {
+  position: relative; }
+
+.trade-negotiations-window .full-portfolio-item .rent-table-window {
+  position: absolute;
+  transform: scale(0.7);
+  transform-origin: center top;
+  top: calc(100% + 15px);
+  left: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  opacity: 0;
+  transition: 0.3s;
+  pointer-events: none;
+  z-index: 2; }
+  .trade-negotiations-window .full-portfolio-item .rent-table-window:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 20px 15px 20px;
+    border-color: transparent transparent #cccccc transparent;
+    bottom: 100%;
+    left: calc(50% - 20px);
+    z-index: 2; }
+
 .trade-negotiations-window .full-portfolio-item:hover,
 .trade-negotiations-window .player-card-icon:hover {
   background-color: #d5e8d4; }
+  .trade-negotiations-window .full-portfolio-item:hover .rent-table-window,
+  .trade-negotiations-window .player-card-icon:hover .rent-table-window {
+    opacity: 1; }
 
 .trade-negotiations-window [proposed="true"] {
   position: relative; }

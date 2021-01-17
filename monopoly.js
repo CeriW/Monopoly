@@ -1940,7 +1940,6 @@ function fullPortfolioView(e){
     let portfolioOutput = generateFullPortfolioView(player)
     openPopup(portfolioOutput)
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
-    document.querySelector('.full-portfolio').addEventListener('dblclick', portfolioItemPreview)
 }
 
 function generateFullPortfolioView(player){
@@ -3043,9 +3042,27 @@ function negotiateTrade(e){
 
     otherPlayerSummary.insertBefore(otherPlayerMoneyProposal, otherPlayerSummary.querySelector('.money').nextElementSibling)
 
-
     openPopup('')
     popupMessage.appendChild(tradeNegotiationsWindow)
+
+
+    // Generate more info windows for each property
+    ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.full-portfolio-item'), function(node){
+        let propertyNumber = node.getAttribute('property')
+        let rentTable = createElement('div', 'rent-table-window', generatePropertyDetails(propertyNumber), '', '')
+        node.appendChild(rentTable)
+
+        // Since the windows are displayed using absolute positioning, they may
+        // disappear off the edge of the screen. Check whether the window is
+        // tall enough to accommodate them, and if not add a class to the trade
+        // popup so we can disable them. It is necessary to do this as part of 
+        // the foreach loop as it's possible that the top of the list will fit
+        // but the bottom of the list won't.
+        if (rentTable.getBoundingClientRect().bottom > window.innerHeight){
+            tradeNegotiationsWindow.classList.add('too-short-for-rent-tables')
+        }
+    })
+
 
 
     ;[].forEach.call(tradeNegotiationsWindow.querySelectorAll('.current-player-portfolio .full-portfolio, .other-player-summary > .full-portfolio'), function(node){
@@ -3059,6 +3076,7 @@ function negotiateTrade(e){
             updateProposal(e)
         })
     })
+
 
 
 

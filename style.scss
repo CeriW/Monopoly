@@ -4,6 +4,7 @@
 // General colours
 $lightgreen  : #d5e8d4;
 $black       : #000;
+$lightgrey   : #ccc;
 
 
 // Property colours
@@ -22,7 +23,7 @@ $border: 3px solid $black;
 
 // TODO - do something more stylised with this.
 @mixin disabledButton{
-    background: #ccc;
+    background: $lightgrey;
     color: rgb(143, 143, 143);
     pointer-events: none;
 }
@@ -1802,6 +1803,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 .trade-negotiations-window{
 
+    &.too-short-for-rent-tables .rent-table-window{
+        display: none;
+    }
+
     .trade-negotiation-summaries{
         display: flex;
 
@@ -1813,6 +1818,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     h2, h3{
         margin: 0;
     }
+    
 
     .current-player-summary h3{
         display: none;
@@ -1854,11 +1860,46 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
+    .full-portfolio-item{
+        position: relative;
+    }
+
+    .full-portfolio-item .rent-table-window{
+        position: absolute;
+        transform: scale(0.7);
+        transform-origin: center top;
+        top: calc(100% + 15px);
+        left: 0;
+        background: #fff;
+        border: 1px solid $lightgrey;
+        padding: 5px;
+        opacity: 0;
+        transition: 0.3s;
+        pointer-events: none;
+        z-index: 2;
+        
+        &:before{
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 20px 15px 20px;
+            border-color: transparent transparent #cccccc transparent;
+            bottom: 100%;
+            left: calc(50% - 20px);
+            z-index: 2;
+        }
+    }
     
 
     .full-portfolio-item:hover,
     .player-card-icon:hover{
         background-color: $lightgreen;
+
+        .rent-table-window{
+            opacity: 1;
+        }
     }
 
     [proposed="true"]{
@@ -1889,7 +1930,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         font-weight: bold;
         font-size: 0.7em;
         border: none;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid $lightgrey;
 
         &::placeholder{
             font-weight: normal;
