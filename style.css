@@ -1154,17 +1154,7 @@ body:not(.warning-open) #warning {
 /* Full portfolio view  ------------------------------------------------------*/
 .full-portfolio {
   display: flex;
-  flex-wrap: wrap;
-  position: relative; }
-  .full-portfolio:before {
-    content: 'PLAYER PORTFOLIO';
-    color: #fff;
-    background: #000;
-    position: absolute;
-    bottom: calc(100% + 20px);
-    left: -23px;
-    right: -23px;
-    padding: 10px; }
+  flex-wrap: wrap; }
 
 .full-portfolio-item {
   display: flex;
@@ -1566,6 +1556,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window.too-short-for-rent-tables .rent-table-window {
   display: none; }
 
+.trade-negotiations-window[trade-status="proposed"] .trade-negotiation-summaries {
+  pointer-events: none; }
+
 .trade-negotiations-window .trade-negotiation-summaries {
   display: flex; }
   .trade-negotiations-window .trade-negotiation-summaries > div {
@@ -1601,6 +1594,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window .trade-button {
   display: none; }
 
+.trade-negotiations-window[trade-status="counter-in-progress"] .accept-trade,
+.trade-negotiations-window[trade-status="counter-in-progress"] .make-counter-offer,
 .trade-negotiations-window[trade-status="unproposed"] button:not(.propose-trade),
 .trade-negotiations-window[trade-status="proposed"] button.propose-trade {
   display: none; }

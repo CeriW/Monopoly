@@ -1287,18 +1287,6 @@ $jailAnimationLength: 1.5;
 .full-portfolio{
     display: flex;
     flex-wrap: wrap;
-    position: relative;
-
-    &:before{
-        content: 'PLAYER PORTFOLIO';
-        color: #fff;
-        background: #000;
-        position: absolute;
-        bottom: calc(100% + 20px);
-        left: -23px;
-        right: -23px;
-        padding: 10px;
-    }
 }
 
 .full-portfolio-item{
@@ -1839,6 +1827,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
+    &[trade-status="proposed"] .trade-negotiation-summaries{
+        pointer-events: none;
+    }
+
     .trade-negotiation-summaries{
         display: flex;
 
@@ -1886,7 +1878,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
-    
+    &[trade-status="counter-in-progress"] .accept-trade,
+    &[trade-status="counter-in-progress"] .make-counter-offer,
     &[trade-status="unproposed"] button:not(.propose-trade),
     &[trade-status="proposed"] button.propose-trade{
         display: none;

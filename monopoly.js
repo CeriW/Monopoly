@@ -1176,7 +1176,7 @@ function drawCard(type){
 
     let cardList = (type === "community-chest") ? communityChestCards : chanceCards
     let chosenCard = cardList.shift()
-    openPopup(chosenCard.description)
+    openPopup(chosenCard.description, (type === "community-chest") ? 'Community Chest' : 'Chance')
     cardList.push(chosenCard)
     
     switch (chosenCard.type){
@@ -1411,8 +1411,13 @@ function closePopup(){
 // TODO - there's at least one instance in this project where I'd had to hack
 // this since I needed to attach nodes with event listeners; HTML alone isn't
 // always enough. This might be able to be improved.
-function openPopup(message){
+function openPopup(message, title){
     popupMessage.innerHTML = message
+    if (title){
+        popupTitle.innerHTML = title
+    } else{
+        popupTitle.innerHTML = ''
+    }
     document.body.classList.add('popup-open')
 }
 
@@ -1818,7 +1823,7 @@ function increasePlayerTurn(){
 
 function displayPropertyDetails(number){
     htmlOutput = generatePropertyDetails(number)
-    openPopup(htmlOutput)
+    openPopup(htmlOutput, 'Property details')
     displayPropertyOptions(number)
 }
 
@@ -1938,7 +1943,7 @@ function fullPortfolioView(e){
     
     let player = e.target.getAttribute('player')
     let portfolioOutput = generateFullPortfolioView(player)
-    openPopup(portfolioOutput)
+    openPopup(portfolioOutput, players[player - 1].name + '\'s property portfolio')
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
 }
 
@@ -2260,7 +2265,7 @@ function displayBuildHousePanel(colour){
 
     // Because we're involving event listeners that can't just be copy and
     // pasted from the HTML, we'll open a blank popup then append the nodes.
-    openPopup('')
+    openPopup('', 'Manage colour group')
     popupMessage.appendChild(houseBuildPanel)
 
     toggleHouseBuildButtons()
@@ -2636,7 +2641,7 @@ function auctionProperty(number){
 
     // Attach this to the popup message
     availableActions.closePopup = false
-    openPopup('')
+    openPopup('', 'Auction')
     popupMessage.appendChild(auctionScreen)
 
 
@@ -2889,8 +2894,6 @@ function checkPropertyOwner(position){
 
 function initiateTrade(){
 
-    popupTitle.textContent = 'Trade'
-
     let tradeWindow = document.createElement('div')
     tradeWindow.classList.add('trade-summary-window')
 
@@ -2983,7 +2986,7 @@ function initiateTrade(){
     tradeWindow.appendChild(otherSummaries)
 
 
-    openPopup('')
+    openPopup('', 'Trade')
     popupMessage.appendChild(tradeWindow)
 
 }
@@ -2991,6 +2994,7 @@ function initiateTrade(){
 function negotiateTrade(e){
 
     let receiver = e.target.parentNode.getAttribute('player')
+    let currentPlayerInControl = true
 
     let tradeNegotiationsWindow = createElement('div', 'trade-negotiations-window', '', 'trade-status', 'unproposed')
     let playerSummaries = createElement('div', 'trade-negotiation-summaries', '', '', '')
@@ -3005,20 +3009,46 @@ function negotiateTrade(e){
 
 
     //  Create the relevant buttons for the trade window
+
+    // Propose trade button
     let proposeTradeButton = createElement('button', 'propose-trade', 'Propose trade', '', '')
     proposeTradeButton.classList.add('disabled-button')
     proposeTradeButton.addEventListener('click', function(){
+
+        if (currentPlayerInControl){
+            popupTitle.innerHTML = players[receiver - 1].name + ' is considering ' + players[turn - 1].name + '\'s offer'
+        } else{
+            popupTitle.innerHTML = players[turn - 1].name + ' is considering ' + players[receiver - 1].name + '\'s offer'
+        }
+
+        currentPlayerInControl = !currentPlayerInControl
         tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
         availableActions.closePopup = false
     })
+
     tradeNegotiationsWindow.appendChild(proposeTradeButton)
 
-    let acceptTradeButton = createElement('button', '', 'Accept trade', '', '')
+    // Accept trade button
+    let acceptTradeButton = createElement('button', 'accept-trade', 'Accept trade', '', '')
     acceptTradeButton.addEventListener('click', acceptTrade)
     tradeNegotiationsWindow.appendChild(acceptTradeButton)
     
     
-    let counterOfferButton = createElement('button', '', 'Make a counter offer', '', '')
+    // Counter offer button
+    let counterOfferButton = createElement('button', 'make-counter-offer', 'Make a counter offer', '', '')
+    counterOfferButton.addEventListener('click', function(){
+        tradeNegotiationsWindow.setAttribute('trade-status', 'counter-in-progress')
+
+        //currentPlayerInControl = !currentPlayerInControl
+
+        if (currentPlayerInControl){
+            popupTitle.innerHTML = players[turn - 1].name + ' is making a counter offer'
+        } else{
+            popupTitle.innerHTML = players[receiver - 1].name + ' is making a counter offer'
+        }
+
+
+    })
     tradeNegotiationsWindow.appendChild(counterOfferButton)
 
     let rejectTradeButton = createElement('button', '', 'Reject trade', '', '')
@@ -3062,7 +3092,7 @@ function negotiateTrade(e){
 
     otherPlayerSummary.insertBefore(otherPlayerMoneyProposal, otherPlayerSummary.querySelector('.money').nextElementSibling)
 
-    openPopup('')
+    openPopup('', 'Negotiate trade')
     popupMessage.appendChild(tradeNegotiationsWindow)
 
 
