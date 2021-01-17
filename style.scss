@@ -1330,7 +1330,7 @@ $jailAnimationLength: 1.5;
 }
 
 .full-portfolio-item .property-icon + div{
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 .full-portfolio-house,
@@ -1726,8 +1726,16 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         background: none;
     }
 
+    .current-player-summary .full-portfolio{
+        justify-content: space-between;
+    }
+
     .current-player-portfolio .player-cards{
         justify-content: flex-start;
+    }
+
+    .portfolio-item-value{
+        display: none;
     }
 
     /* Current player */
@@ -1773,6 +1781,11 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
             .full-portfolio:before{
                 display: none;
+            }
+
+            .full-portfolio-item{
+                width: calc(50% - 20px);
+                min-width: 360px;
             }
         }
 

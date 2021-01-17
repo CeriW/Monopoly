@@ -1188,7 +1188,7 @@ body:not(.warning-open) #warning {
     white-space: nowrap; }
 
 .full-portfolio-item .property-icon + div {
-  margin-right: 20px; }
+  margin-right: 10px; }
 
 .full-portfolio-house,
 .full-portfolio-hotel {
@@ -1500,8 +1500,12 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     padding: 0;
     border: none;
     background: none; }
+  .trade-summary-window .current-player-summary .full-portfolio {
+    justify-content: space-between; }
   .trade-summary-window .current-player-portfolio .player-cards {
     justify-content: flex-start; }
+  .trade-summary-window .portfolio-item-value {
+    display: none; }
   .trade-summary-window > div:first-child {
     display: grid;
     grid-template-columns: 50px auto;
@@ -1533,6 +1537,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       border: 3px solid #000; }
       .trade-summary-window > div:first-child .current-player-portfolio .full-portfolio:before {
         display: none; }
+      .trade-summary-window > div:first-child .current-player-portfolio .full-portfolio-item {
+        width: calc(50% - 20px);
+        min-width: 360px; }
     .trade-summary-window > div:first-child .full-portfolio-item {
       width: 258px; }
   .trade-summary-window .other-player-summaries {
