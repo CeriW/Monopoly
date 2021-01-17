@@ -1078,7 +1078,9 @@ body:not(.warning-open) #warning {
   border-radius: 50%;
   border: 2px solid #000;
   display: inline-block;
-  margin: 2px; }
+  margin: 2px;
+  flex-basis: 15px;
+  flex-shrink: 0; }
 
 .property-icon.brown {
   background: #824c26; }
@@ -1168,9 +1170,22 @@ body:not(.warning-open) #warning {
   display: flex;
   align-items: center;
   width: 380px;
-  transition: 0.2s; }
+  transition: 0.2s;
+  flex-wrap: wrap;
+  margin-bottom: 5px; }
   .full-portfolio-item > div {
     margin: 0 0 0 10px; }
+  .full-portfolio-item .portfolio-item-value {
+    color: #999;
+    white-space: nowrap;
+    font-size: 0.8em;
+    text-align: left;
+    width: 100%;
+    margin-left: 40px; }
+  .full-portfolio-item .property-name {
+    flex-grow: 1;
+    text-align: left;
+    white-space: nowrap; }
 
 .full-portfolio-item .property-icon + div {
   margin-right: 20px; }

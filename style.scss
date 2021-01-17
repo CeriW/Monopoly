@@ -1220,7 +1220,9 @@ $jailAnimationLength: 1.5;
     border-radius: 50%;
     border: 2px solid $black;
     display: inline-block;
-    margin: 2px;;
+    margin: 2px;
+    flex-basis: 15px;
+    flex-shrink: 0;
 }
 
 .property-icon.brown{background: $brown;}
@@ -1304,9 +1306,26 @@ $jailAnimationLength: 1.5;
     align-items: center;
     width: 380px;
     transition: 0.2s;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
 
     & > div{
         margin: 0 0 0 10px;
+    }
+
+    .portfolio-item-value{
+        color: #999;
+        white-space: nowrap;
+        font-size: 0.8em;
+        text-align: left;
+        width: 100%;
+        margin-left: 40px;
+    }
+
+    .property-name{
+        flex-grow: 1;
+        text-align: left;
+        white-space: nowrap;
     }
 }
 

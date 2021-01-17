@@ -49,6 +49,8 @@ An incomplete list of all the developments that need to be completed
 
 - There are a lot of lets that should be consts
 
+- Cookies/local storage so you can come back to a game later.
+
 STRETCH GOALS
 
 - Add a Monopoly rulebook

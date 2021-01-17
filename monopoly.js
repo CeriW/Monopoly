@@ -1949,7 +1949,7 @@ function generateFullPortfolioView(player){
 
         portfolioOutput += '<div class="full-portfolio-item" property="' + property.position + '" mortgaged="' + property.mortgaged + '">'
         portfolioOutput += '<div class="property-icon ' + property.group + ' ' + spaces.indexOf(property) + '"></div>' 
-        portfolioOutput += '<div>' + property.name + '</div>'
+        portfolioOutput += '<div class="property-name">' + property.name + '</div>'
         
         if (property.houses === 5){
             portfolioOutput += '<span class="full-portfolio-hotel"></span>'
@@ -1959,9 +1959,29 @@ function generateFullPortfolioView(player){
             }
         }
 
+        portfolioOutput += '<div class="portfolio-item-value">value: ' + currencySymbolSpan
+
+        if (property.mortgaged){
+            portfolioOutput += property.price / 2
+        } else{
+
+            let value = property.price
+
+            // Note - in every Monopoly game I have played, the hotel cost is
+            // the same as the house cost. However, I have coded this bit this 
+            // way just in case in the future I add a different type of board
+            // where they actually are different.
+            if (property.houses === 5){
+                value += property.hotelCost + (property.houseCost * 4)
+            } else if (property.houses){
+                value += property.houses * property.houseCost
+            }
+
+            portfolioOutput += value + '</div>'
+            
+        }
+
         portfolioOutput += '</div>'
-
-
         //portfolioOutput += '<div class="full-portfolio-item">' + property.name + '</div>'
     })
 
@@ -3052,8 +3072,8 @@ function negotiateTrade(e){
         let rentTable = createElement('div', 'rent-table-window', generatePropertyDetails(propertyNumber), '', '')
         node.appendChild(rentTable)
 
-        // Since the windows are displayed using absolute positioning, they may
-        // disappear off the edge of the screen. Check whether the window is
+        // Since the windows are displayed using absolute positioning they may
+        // disappear off the edge of the screen. Check whether the screen is
         // tall enough to accommodate them, and if not add a class to the trade
         // popup so we can disable them. It is necessary to do this as part of 
         // the foreach loop as it's possible that the top of the list will fit
