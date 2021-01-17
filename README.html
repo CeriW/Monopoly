@@ -1285,6 +1285,8 @@
           <h4>Private variables of note:</h4>
           <ul>
             <li>item - <i>node</i> - the parent node of the event target. This is the one we're really examining in this function.</li>
+            <li>property - <i>number</i> - the position number of the property we're dealing with.</li>
+
           </ul>
         </div>
 
@@ -1303,10 +1305,11 @@
               If this function is running because we've clicked a property in the trade negotiations window:
               <ul>
                 <li>Set a 'property' variable with the position of the property being dealt with.</li>
-                <li>If the item belongs to the current player and hasn't already been proposed, add it to the <i>tradeProposal</i>[0] array, at the index from the <i>property</i> variable and set the 'proposed' attribute on the node to true to allow for CSS styling.</li>
-                <li>If the item belongs to the current player and has already been proposed, remove it from the <i>tradeProposal</i>[0] array and set the 'proposed' attribute on the node to false to remove CSS styling.</li>
-                <li>If the item belongs to the other player and hasn't already been proposed, add it to the <i>tradeProposal</i>[1] array, at the index from the <i>property</i> variable and set the 'proposed' attribute on the node to true to allow for CSS styling.</li>
-                <li>If the item belongs to the other player and has already been proposed, remove it from the <i>tradeProposal</i>[1] array and set the 'proposed' attribute on the node to false to remove CSS styling.</li>
+                <li>If the item belongs to the current player and hasn't already been proposed add it to the <i>tradeProposal</i>[0] array, at the index from the <i>property</i> variable and get <i>toggleProposalAttribute()</i> to set the 'proposed' attribute on the node to true to allow for CSS styling.</li>
+                <li>If the item belongs to the current player and has already been proposed, remove it from the <i>tradeProposal</i>[0] array and get <i>toggleProposalAttribute()</i> to set the 'proposed' attribute on the node to false to remove CSS styling.</li>
+                <li>If the item belongs to the other player and hasn't already been proposed, add it to the <i>tradeProposal</i>[1] array, at the index from the <i>property</i> variable and get <i>toggleProposalAttribute()</i> to set the 'proposed' attribute on the node to true to allow for CSS styling.</li>
+                <li>If the item belongs to the other player and has already been proposed, remove it from the <i>tradeProposal</i>[1] array and get <i>toggleProposalAttribute()</i> to set the 'proposed' attribute on the node to false to remove CSS styling.</li>
+                <li>Within each of the above, the code will run <i>checkHousesInGroup()</i> to determine whether there are houses/hotels anywhere in the group. If so, the owner must trade the complete colour set, and <i>toggleGroupInTrade()</i> will be run to enforce this.</li>
               </ul>
             </li>
 
@@ -1330,6 +1333,33 @@
 
           </ul>
         </div>
+
+        <div class="private-function">
+          <h4 class="function-name">toggleProposalAttribute</h4>
+          <h5>Function parameters:</h5>
+          <ul class="function-parameters">
+            <li>node - <i>node</i> - the node that is to have its 'proposed' attribute changed.</li>
+          </ul>
+          <div class="function-description">If the specified node has a 'proposed' attribute of 'true', it will become false. Otherwise it will become 'true' (which covers cases for which it's already false, and which just hasn't been clicked yet so doesn't have this attribute at all).</div>
+        </div>
+
+        <div class="private-function">
+          <h4 class="function-name">checkHousesInGroup</h4>
+          <div class="function-description">Passes the <i>property</i> variable to <i>getColourSet()</i>, then loops through the returned array to determine whether any of the properties in the colour set have houses/hotels on them. Returns true or false. </div>
+        </div>
+
+        <div class="private-function">
+          <h4 class="function-name">toggleGroupInTrade</h4>
+          <h5>Function parameters:</h5>
+          <ul class="function-parameters">
+            <li>index - <i>number</i> - which index of the <i>tradeProposal</i> array we should be updating. 0 if the items are coming from the current player, and 1 if they're coming from the other player.</li>
+            <li>action - <i>string</i> - which toggle action we're taking. 'add' to add items to the proposal. Technically it doesn't matter what you put for the alternative due to the if/else statement used, but 'remove' is used in the code to keep it readable.</li>
+          </ul>
+          <div class="function-description">
+            Players are not allowed to trade single properties while there are buildings anywhere on the group - they must trade the entire set.
+            <br>This function passes the <i>property</i> variable to the <i>getColourSet()</i> function to generate a list of all the properties in the set. It will then loop through this, adding/deleting from <i>tradeProposal</i>[index] as determined by the 'action' parameter.</div>
+        </div>
+
       </div>
 
       <div class="private-function">

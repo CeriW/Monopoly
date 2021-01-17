@@ -3228,9 +3228,6 @@ function negotiateTrade(e){
                         toggleProposalAttribute(document.querySelector('.full-portfolio-item[property="' + tradeProperty.position + '"]'))
                     })
                 }
-
-                console.log(tradeProposal)
-
             }
 
 
