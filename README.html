@@ -763,6 +763,7 @@
   <h4>Function parameters:</h4>
   <ul class="function-parameters">
     <li>message - <i>string</i> - a chunk of HTML to display in the popup.</li>
+    <li>title - <i>string</i> - the title to display at the top of the popup window. While this will generally be a simple string, it uses innerHTML for forwards compatibility as there may be occasions where additional styling is necessary.</li>
   </ul>
   <div class="function-description">
     Sets the popup window's HTML to that which it has been given, then adds the class of 'popup-open' to the body element so the CSS can tell it to display.
