@@ -1496,6 +1496,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     justify-content: flex-start; }
   .trade-summary-window .portfolio-item-value {
     display: none; }
+  .trade-summary-window .money {
+    margin-bottom: 15px; }
   .trade-summary-window > div:first-child {
     display: grid;
     grid-template-columns: 50px auto;
@@ -1584,7 +1586,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window .full-portfolio:before {
   display: none; }
 
-.trade-negotiations-window .full-portfolio,
 .trade-negotiations-window .summary {
   margin-top: 20px; }
 
@@ -1651,7 +1652,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   z-index: 2; }
 
 .trade-negotiations-window .money-proposal-container {
-  margin-top: 15px; }
+  margin-top: 15px;
+  margin-bottom: 20px; }
 
 .trade-negotiations-window input.money-proposal {
   max-width: 80px;

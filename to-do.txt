@@ -2,12 +2,7 @@ An incomplete list of all the developments that need to be completed
 
 -------------------------------------------
 
-- Trading
-
 - Bankruptcy
-
-- Make it so players can do the following with 'Get out of jail free' cards
-    - Sell
 
 - Refactor all the things with player specific IDs to have player attributes instead.
 

@@ -3540,7 +3540,7 @@ function negotiateTrade(e){
                 })
             })
 
-            openPopup('')
+            openPopup('','Mortgages')
             popupMessage.appendChild(tradeMortgageWarning)
 
 

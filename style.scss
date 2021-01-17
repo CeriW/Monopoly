@@ -1726,6 +1726,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
+    .money{
+        margin-bottom: 15px;
+    }
+
     /* Current player */
 
     & > div:first-child{
@@ -1865,7 +1869,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
-    .full-portfolio,
     .summary{
         margin-top: 20px;
     }
@@ -1947,6 +1950,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
     .money-proposal-container{
         margin-top: 15px;
+        margin-bottom: 20px;
     }
 
     input.money-proposal{
