@@ -1566,7 +1566,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window .full-portfolio:before {
   display: none; }
 
-.trade-negotiations-window .current-player-portfolio,
+.trade-negotiations-window .full-portfolio,
 .trade-negotiations-window .summary {
   margin-top: 20px; }
 
@@ -1587,7 +1587,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-negotiations-window [proposed="true"] {
   position: relative; }
 
-.trade-negotiations-window [proposed="true"]:before {
+.trade-negotiations-window [proposed="true"]:not(.money-proposal-container):before {
   content: '';
   width: 25px;
   height: 25px;
@@ -1599,8 +1599,18 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   pointer-events: none;
   z-index: 2; }
 
+.trade-negotiations-window .money-proposal-container {
+  margin-top: 15px; }
+
 .trade-negotiations-window input.money-proposal {
-  max-width: 80px; }
+  max-width: 80px;
+  color: #0aa959;
+  font-weight: bold;
+  font-size: 0.7em;
+  border: none;
+  border-bottom: 1px solid #ccc; }
+  .trade-negotiations-window input.money-proposal::placeholder {
+    font-weight: normal; }
 
 .trade-negotiations-window input.money-proposal:invalid {
   color: #db0926; }

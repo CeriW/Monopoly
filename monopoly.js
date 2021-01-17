@@ -3029,6 +3029,7 @@ function negotiateTrade(e){
 
 
     let otherPlayerMoneyProposal = document.createElement('div')
+    otherPlayerMoneyProposal.classList.add('money-proposal-container')
     otherPlayerMoneyProposal.innerHTML = proposalHTML
     input = document.createElement('input')
     input.setAttribute('class', 'money-proposal')

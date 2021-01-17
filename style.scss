@@ -1835,7 +1835,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         display: none;
     }
 
-    .current-player-portfolio,
+    .full-portfolio,
     .summary{
         margin-top: 20px;
     }
@@ -1865,7 +1865,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         position: relative;
     }
 
-    [proposed="true"]:before{
+    [proposed="true"]:not(.money-proposal-container):before{
         content: '';
         width: 25px;
         height: 25px;
@@ -1879,8 +1879,21 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     }
 
 
+    .money-proposal-container{
+        margin-top: 15px;
+    }
+
     input.money-proposal{
         max-width: 80px;
+        color: $green;
+        font-weight: bold;
+        font-size: 0.7em;
+        border: none;
+        border-bottom: 1px solid #ccc;
+
+        &::placeholder{
+            font-weight: normal;
+        }
     }
 
     input.money-proposal:invalid{
