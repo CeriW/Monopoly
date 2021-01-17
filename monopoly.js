@@ -3146,22 +3146,91 @@ function negotiateTrade(e){
             if (item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false')){
                 // If the item belongs to the current player, and has NOT already been proposed, add it to the proposal
                 tradeProposal[0][property] = spaces[property]
-                item.setAttribute('proposed', true)
+                
+                if (checkHousesInGroup()){
+                    toggleGroupInTrade(0, 'add')
+                } else{
+                    toggleProposalAttribute(item)
+                }
 
             } else if (item.parentNode.parentNode.classList.contains('current-player-portfolio') && item.getAttribute('proposed')){
                 // If the item belongs to the current player and it HAS already been proposed, remove it from the proposal
-                delete tradeProposal[0][property]
-                item.setAttribute('proposed', false)
+        
+                if (checkHousesInGroup()){
+                    toggleGroupInTrade(0, 'remove')
+                } else{
+                    toggleProposalAttribute(item)
+                    delete tradeProposal[0][property]
+                }
             
             } else if (!item.parentNode.parentNode.classList.contains('current-player-portfolio') && (!item.getAttribute('proposed') || item.getAttribute('proposed') === 'false') && !item.parentNode.classList.contains('player-cards')){
                 // If the item belongs to the other player and has NOT already been proposed, add it to the proposal
                 tradeProposal[1][property] = spaces[property]
-                item.setAttribute('proposed', true)
+                
+                if (checkHousesInGroup()){
+                    toggleGroupInTrade(1, 'add')
+                } else{
+                    toggleProposalAttribute(item)
+                }
 
             } else{
                 // If it fails all the previous tests, it must belong to the other player and already been proposed. Therefore remove it from the proposal.
-                delete tradeProposal[1][property]
-                item.setAttribute('proposed', false)
+                
+                if (checkHousesInGroup()){
+                    toggleGroupInTrade(1, 'remove')
+                } else{
+                    toggleProposalAttribute(item)
+                    delete tradeProposal[1][property]
+                }
+            }
+
+
+            function toggleProposalAttribute(node){
+                let currentStatus = node.getAttribute('proposed')
+                if (currentStatus === "true"){
+                    node.setAttribute('proposed', false)
+                } else{
+                    node.setAttribute('proposed', true)
+                }
+            }
+
+            // Return whether there are houses on ANY of the properties in the
+            // group. If so, the whole set must be traded.
+            function checkHousesInGroup(){
+                let group = spaces[property].group
+                let colourSet = getColourSet(group)
+                let confirmation = false
+
+                colourSet.forEach(function(tradeProperty){
+                    if (tradeProperty.houses > 0){
+                        confirmation = true
+                    }
+                })
+
+                return confirmation
+            }
+
+            // Players are not allowed to trade properties with buildings unless
+            // they trade the whole set.
+            // Index should be 0/1 for current/other player.
+            // Action should be 'add' or 'remove'
+            function toggleGroupInTrade(index, action){
+                let colourSet = getColourSet(spaces[property].group)
+                
+                if (action ==="add"){
+                    colourSet.forEach(function(tradeProperty){
+                        tradeProposal[index][tradeProperty.position] = spaces[tradeProperty.position]
+                        toggleProposalAttribute(document.querySelector('.full-portfolio-item[property="' + tradeProperty.position + '"]'))
+                    })
+                } else{
+                    colourSet.forEach(function(tradeProperty){
+                        delete tradeProposal[index][tradeProperty.position]
+                        toggleProposalAttribute(document.querySelector('.full-portfolio-item[property="' + tradeProperty.position + '"]'))
+                    })
+                }
+
+                console.log(tradeProposal)
+
             }
 
 
