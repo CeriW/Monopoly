@@ -2901,14 +2901,17 @@ function initiateTrade(){
 
     let currentPlayerSummary = createElement('div', 'current-player-summary', '', '', '')
 
+    let playerIdentity = createElement('div', 'player-identity')
+    currentPlayerSummary.appendChild(playerIdentity)
+
     // Token
-    currentPlayerSummary.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn-1].token))
+    playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn-1].token))
 
     // Name
-    currentPlayerSummary.appendChild(createElement('h2', '', players[turn-1].name, '', ''))
+    playerIdentity.appendChild(createElement('h2', '', players[turn-1].name, '', ''))
 
     // Money
-    currentPlayerSummary.appendChild(createElement('div', 'money', currencySymbolSpan +  players[turn-1].money, '', ''))
+    playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan +  players[turn-1].money, '', ''))
 
     // Portfolio
     currentPlayerSummary.appendChild(createElement('h3', '', 'YOU HAVE:', '', ''))
@@ -2947,9 +2950,11 @@ function initiateTrade(){
     players.forEach(function(player){
         if (player !== players[turn - 1]){
             let summary = createElement('div', 'other-player-summary', '' , 'player', player.id)
-            summary.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
-            summary.appendChild(createElement('h3', '', player.name, '', ''))
-            summary.appendChild(createElement('div', 'money', currencySymbolSpan + player.money, '', ''))
+            let playerIdentity = createElement('div', 'player-identity')
+            playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
+            playerIdentity.appendChild(createElement('h3', '', player.name, '', ''))
+            playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan + player.money, '', ''))
+            summary.appendChild(playerIdentity)
 
 
             let portfolio = generateFullPortfolioView(player.id)
@@ -3038,15 +3043,11 @@ function negotiateTrade(e){
     counterOfferButton.addEventListener('click', function(){
         tradeNegotiationsWindow.setAttribute('trade-status', 'counter-in-progress')
 
-        //currentPlayerInControl = !currentPlayerInControl
-
         if (currentPlayerInControl){
             popupTitle.innerHTML = players[turn - 1].name + ' is making a counter offer'
         } else{
             popupTitle.innerHTML = players[receiver - 1].name + ' is making a counter offer'
         }
-
-
     })
     tradeNegotiationsWindow.appendChild(counterOfferButton)
 
@@ -3073,7 +3074,7 @@ function negotiateTrade(e){
     input.setAttribute('max', players[turn-1].money)
     input.addEventListener('input', updateProposal)
     currentPlayerMoneyProposal.appendChild(input)
-    currentPlayerSummary.insertBefore(currentPlayerMoneyProposal, currentPlayerSummary.querySelector('.money').nextElementSibling)
+    currentPlayerSummary.insertBefore(currentPlayerMoneyProposal, currentPlayerSummary.querySelector('.player-identity').nextElementSibling)
 
 
     let otherPlayerMoneyProposal = document.createElement('div')
@@ -3089,7 +3090,7 @@ function negotiateTrade(e){
     otherPlayerMoneyProposal.appendChild(input)
 
 
-    otherPlayerSummary.insertBefore(otherPlayerMoneyProposal, otherPlayerSummary.querySelector('.money').nextElementSibling)
+    otherPlayerSummary.insertBefore(otherPlayerMoneyProposal, otherPlayerSummary.querySelector('.player-identity').nextElementSibling)
 
     openPopup('', 'Negotiate trade')
     popupMessage.appendChild(tradeNegotiationsWindow)

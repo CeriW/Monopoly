@@ -1483,11 +1483,38 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   background-image: url("images/hotel-icon.svg"); }
 
 /* Trade summary window  -----------------------------------------------------*/
+.trade-summary-window .player-identity,
+.trade-negotiations-window .player-identity {
+  display: grid;
+  grid-template-columns: 50px max-content;
+  grid-template-rows: auto auto;
+  gap: 0px 15px;
+  grid-template-areas: "Icon Name" "Icon Money"; }
+  .trade-summary-window .player-identity .player-token-icon,
+  .trade-negotiations-window .player-identity .player-token-icon {
+    grid-area: Icon;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain; }
+  .trade-summary-window .player-identity .money,
+  .trade-negotiations-window .player-identity .money {
+    grid-area: Money;
+    text-align: left; }
+  .trade-summary-window .player-identity h2, .trade-summary-window .player-identity h3,
+  .trade-negotiations-window .player-identity h2,
+  .trade-negotiations-window .player-identity h3 {
+    grid-area: Name;
+    margin: 0;
+    text-align: left; }
+  .trade-summary-window .player-identity + h3,
+  .trade-negotiations-window .player-identity + h3 {
+    font-size: 22px;
+    text-align: left;
+    margin: 0 0 5px; }
+
 .trade-summary-window {
   /* Current player */
   /* Other players */ }
-  .trade-summary-window .player-token-icon {
-    background-size: contain; }
   .trade-summary-window .player-cards {
     padding: 0;
     border: none;
@@ -1501,28 +1528,36 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   .trade-summary-window .money {
     margin-bottom: 15px; }
   .trade-summary-window > div:first-child {
-    display: grid;
-    grid-template-columns: 50px auto;
-    grid-template-rows: auto auto auto auto;
-    text-align: left;
-    column-gap: 20px; }
-    .trade-summary-window > div:first-child .player-token-icon {
-      grid-column: 1 / 1;
-      grid-row: 1 / 3;
-      background-position: center;
-      background-repeat: no-repeat; }
-    .trade-summary-window > div:first-child h2 {
-      grid-column: 2 / 3;
-      grid-row: 1 / 1;
-      margin: 0; }
-    .trade-summary-window > div:first-child .money {
-      grid-column: 2 / 2;
-      grid-row: 2 / 2; }
-    .trade-summary-window > div:first-child h3 {
-      grid-column: 1 / 3;
-      grid-row: 3 / 3;
-      font-size: 22px;
-      margin-bottom: 5px; }
+    /* display: grid;
+        grid-template-columns: 50px auto;
+        grid-template-rows: auto auto auto auto;
+        text-align: left;
+        column-gap: 20px;
+
+        .player-token-icon{
+            grid-column: 1 / 1;
+            grid-row: 1 / 3;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h2{
+            grid-column: 2 / 3;
+            grid-row: 1 / 1;
+            margin: 0;
+        }
+
+        .money{
+            grid-column: 2 / 2;
+            grid-row: 2 / 2;
+        }
+
+        h3{
+            grid-column: 1 / 3;
+            grid-row: 3 / 3;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }*/ }
     .trade-summary-window > div:first-child .current-player-portfolio {
       grid-column: 1 / 3;
       grid-row: 4 / 5;
@@ -1539,140 +1574,124 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   .trade-summary-window .other-player-summaries {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap; }
+    flex-wrap: wrap;
+    /*.player-token-icon{
+            height: 50px;
+            float: none;
+            margin: 0 auto;
+            background-repeat: no-repeat;
+            background-position: center;
+        }*/ }
     .trade-summary-window .other-player-summaries > div {
       border: 3px solid #000;
       padding: 10px;
       max-width: 220px;
       flex-basis: 220px; }
-    .trade-summary-window .other-player-summaries .player-token-icon {
-      height: 50px;
-      float: none;
-      margin: 0 auto;
-      background-repeat: no-repeat;
-      background-position: center; }
     .trade-summary-window .other-player-summaries h3 {
       margin: 0; }
     .trade-summary-window .other-player-summaries :before {
       display: none; }
 
 /* Trade negotiations window -------------------------------------------------*/
-.trade-negotiations-window.too-short-for-rent-tables .rent-table-window {
-  display: none; }
-
-.trade-negotiations-window[trade-status="proposed"] .trade-negotiation-summaries {
-  pointer-events: none; }
-
-.trade-negotiations-window .trade-negotiation-summaries {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around; }
-  .trade-negotiations-window .trade-negotiation-summaries > div {
-    flex-basis: calc(50% - 20px);
-    width: calc(50% - 20px);
-    min-width: 360px; }
-
-.trade-negotiations-window h2, .trade-negotiations-window h3 {
-  margin: 0; }
-
-.trade-negotiations-window .current-player-summary h3 {
-  display: none; }
-
-.trade-negotiations-window h3 {
-  font-size: 1.5em; }
-
-.trade-negotiations-window .player-token-icon {
-  height: 50px;
-  float: none;
-  margin: 0 auto;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain; }
-
-.trade-negotiations-window .full-portfolio:before {
-  display: none; }
-
-.trade-negotiations-window .summary {
-  margin-top: 20px; }
-
-.trade-negotiations-window .player-cards {
-  border: none; }
-
-.trade-negotiations-window .trade-button {
-  display: none; }
-
-.trade-negotiations-window[trade-status="counter-in-progress"] .accept-trade,
-.trade-negotiations-window[trade-status="counter-in-progress"] .make-counter-offer,
-.trade-negotiations-window[trade-status="unproposed"] button:not(.propose-trade),
-.trade-negotiations-window[trade-status="proposed"] button.propose-trade {
-  display: none; }
-
-.trade-negotiations-window .full-portfolio-item {
-  position: relative; }
-
-.trade-negotiations-window .full-portfolio-item .rent-table-window {
-  position: absolute;
-  transform: scale(0.7);
-  transform-origin: center top;
-  top: calc(100% + 15px);
-  left: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 5px;
-  opacity: 0;
-  transition: 0.3s;
-  pointer-events: none;
-  z-index: 2; }
-  .trade-negotiations-window .full-portfolio-item .rent-table-window:before {
-    content: '';
+.trade-negotiations-window {
+  /*.player-token-icon{
+        height: 50px;
+        float: none;
+        margin: 0 auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }*/ }
+  .trade-negotiations-window.too-short-for-rent-tables .rent-table-window {
+    display: none; }
+  .trade-negotiations-window[trade-status="proposed"] .trade-negotiation-summaries {
+    pointer-events: none; }
+  .trade-negotiations-window .trade-negotiation-summaries {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; }
+    .trade-negotiations-window .trade-negotiation-summaries > div {
+      flex-basis: calc(50% - 20px);
+      width: calc(50% - 20px);
+      min-width: 360px; }
+  .trade-negotiations-window h2, .trade-negotiations-window h3 {
+    margin: 0; }
+  .trade-negotiations-window .current-player-summary h3 {
+    display: none; }
+  .trade-negotiations-window h3 {
+    font-size: 1.5em; }
+  .trade-negotiations-window .full-portfolio:before {
+    display: none; }
+  .trade-negotiations-window .summary {
+    margin-top: 20px; }
+  .trade-negotiations-window .player-cards {
+    border: none; }
+  .trade-negotiations-window .trade-button {
+    display: none; }
+  .trade-negotiations-window[trade-status="counter-in-progress"] .accept-trade,
+  .trade-negotiations-window[trade-status="counter-in-progress"] .make-counter-offer,
+  .trade-negotiations-window[trade-status="unproposed"] button:not(.propose-trade),
+  .trade-negotiations-window[trade-status="proposed"] button.propose-trade {
+    display: none; }
+  .trade-negotiations-window .full-portfolio-item {
+    position: relative; }
+  .trade-negotiations-window .full-portfolio-item .rent-table-window {
     position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 20px 15px 20px;
-    border-color: transparent transparent #cccccc transparent;
-    bottom: 100%;
-    left: calc(50% - 20px);
+    transform: scale(0.7);
+    transform-origin: center top;
+    top: calc(100% + 15px);
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    opacity: 0;
+    transition: 0.3s;
+    pointer-events: none;
     z-index: 2; }
-
-.trade-negotiations-window .full-portfolio-item:hover,
-.trade-negotiations-window .player-card-icon:hover {
-  background-color: #d5e8d4; }
-  .trade-negotiations-window .full-portfolio-item:hover .rent-table-window,
-  .trade-negotiations-window .player-card-icon:hover .rent-table-window {
-    opacity: 1; }
-
-.trade-negotiations-window [proposed="true"] {
-  position: relative; }
-
-.trade-negotiations-window [proposed="true"]:not(.money-proposal-container):before {
-  content: '';
-  width: 25px;
-  height: 25px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: url("images/tick.svg") center no-repeat;
-  background-size: contain;
-  pointer-events: none;
-  z-index: 2; }
-
-.trade-negotiations-window .money-proposal-container {
-  margin-top: 15px;
-  margin-bottom: 20px; }
-
-.trade-negotiations-window input.money-proposal {
-  max-width: 80px;
-  color: #0aa959;
-  font-weight: bold;
-  font-size: 0.7em;
-  border: none;
-  border-bottom: 1px solid #ccc; }
-  .trade-negotiations-window input.money-proposal::placeholder {
-    font-weight: normal; }
-
-.trade-negotiations-window input.money-proposal:invalid {
-  color: #db0926; }
+    .trade-negotiations-window .full-portfolio-item .rent-table-window:before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 20px 15px 20px;
+      border-color: transparent transparent #cccccc transparent;
+      bottom: 100%;
+      left: calc(50% - 20px);
+      z-index: 2; }
+  .trade-negotiations-window .full-portfolio-item:hover,
+  .trade-negotiations-window .player-card-icon:hover {
+    background-color: #d5e8d4; }
+    .trade-negotiations-window .full-portfolio-item:hover .rent-table-window,
+    .trade-negotiations-window .player-card-icon:hover .rent-table-window {
+      opacity: 1; }
+  .trade-negotiations-window [proposed="true"] {
+    position: relative; }
+  .trade-negotiations-window [proposed="true"]:not(.money-proposal-container):before {
+    content: '';
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: url("images/tick.svg") center no-repeat;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 2; }
+  .trade-negotiations-window .money-proposal-container {
+    margin-top: 15px;
+    margin-bottom: 20px; }
+  .trade-negotiations-window input.money-proposal {
+    max-width: 80px;
+    color: #0aa959;
+    font-weight: bold;
+    font-size: 0.7em;
+    border: none;
+    border-bottom: 1px solid #ccc; }
+    .trade-negotiations-window input.money-proposal::placeholder {
+      font-weight: normal; }
+  .trade-negotiations-window input.money-proposal:invalid {
+    color: #db0926; }
 
 /* Trade mortgage warning ----------------------------------------------------*/
 .trade-mortgage-entry {
