@@ -98,7 +98,7 @@ let tradeProposal = [[], []]
 let communityChestCards = 
   [
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
@@ -113,13 +113,13 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
-    /*{description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
+    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
@@ -133,7 +133,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
@@ -213,6 +213,7 @@ let availableActions = {
 
 let currencySymbol = '₩'
 let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol + '</span>'
+
 
 // Page setup functions ------------------------------------------------------//
 
@@ -616,10 +617,83 @@ function fakeRollDice(fakeTotal){
 }
 
 
+// Note - all of this function is a teeny bit messy and could probably be improved.
+// However it is intended as a quick fix to make testing easier, not to be
+// an actual game feature.
 function quickStart(){
     createPlayers()
     let newPlayerDiceRoll = document.querySelector('.new-game-dice-roll')
     newPlayerDiceRoll.parentNode.removeChild(newPlayerDiceRoll)
+
+
+    let player = 0
+    quickPropertyOwnership(4,1,player)
+    quickPropertyOwnership(3,3,player)
+    quickPropertyOwnership(0,6,player)
+    quickPropertyOwnership(0,12,player)
+    quickPropertyOwnership(0,27,player)
+    quickMortgage(6, player)
+    quickMortgage(12, player)
+
+    communityChestCards.forEach(function(card){
+        if (card.description === 'Get Out of Jail Free'){
+            communityChestCards.unshift(card)
+        }
+    })
+
+    drawCard('community-chest')
+
+    player = 1
+    quickPropertyOwnership(0,5,player)
+    quickPropertyOwnership(0,15,player)
+    quickPropertyOwnership(0,25,player)
+    quickPropertyOwnership(0,35,player)
+    quickPropertyOwnership(0,21,player)
+
+    quickMortgage(5, player)
+    quickMortgage(25, player)
+    quickMortgage(21, player)
+
+
+    player = 2
+    quickPropertyOwnership(4,37,player)
+    quickPropertyOwnership(5,39,player)
+    quickPropertyOwnership(4,19,player)
+    quickPropertyOwnership(5,18,player)
+    quickPropertyOwnership(4,16,player)
+
+
+    player = 3
+    quickPropertyOwnership(4,31,player)
+    quickPropertyOwnership(5,32,player)
+    quickPropertyOwnership(4,34,player)
+    quickPropertyOwnership(0,28,player)
+    quickMortgage(28, player)
+
+    addToFeed('Quick start mode initiated')
+
+
+    function quickPropertyOwnership(houses, position, playerIndex){
+
+        buyProperty(position, players[playerIndex], 'purchase', spaces[position].price)
+        spaces[position].owner = players[playerIndex]
+        players[playerIndex].properties[position] = spaces[position]
+
+        if (spaces[position].type === 'property'){
+            spaces[position].houses = houses
+            //players[playerIndex].money -= spaces[position].houseCost * houses
+            updateHouseDisplay(position)
+        }
+    }
+
+    function quickMortgage(position, player){
+        document.querySelector('div[position="' + position + '"]').setAttribute('mortgaged', true)
+        players[player].money += spaces[position].price / 2
+    }
+
+
+
+    updatePlayerDetails()
 }
 
 
@@ -2377,9 +2451,6 @@ function displayBuildHousePanel(colour){
 
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
-
-
-    
     }
 
 
