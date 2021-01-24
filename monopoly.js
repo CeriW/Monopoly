@@ -1571,13 +1571,22 @@ function rollDice(){
 
 // The actual maths involved in moving the token, including passing go and going to jail.
 function moveToken(total){
+
+    // The token we wish to move
     let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
 
+    // The position the token is currently at
     let startPosition = parseInt(token.getAttribute('position'))
+    console.log(startPosition)
+
+    // The place we wish the token to end up
     let endPosition = startPosition + total
+    console.log(endPosition)
+
+    // If the end position is less than 39 (so not passing Go), set the token's position attribute to that number. Otherwise set it to the end position minus 40 (so resetting once you pass Go)    
     endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
     players[turn - 1].position = endPosition
-    //token.setAttribute('position', endPosition)
+    
 
 
     // If we're going to jail, do that, otherwise animate the token
@@ -1585,19 +1594,26 @@ function moveToken(total){
         // TODO - we should animate the token even if we're going to jail.
         goToJail(token)
     } else{
+
         let i = startPosition
-        positionToken(token, i)
 
         let myInterval = setInterval(function(){
             if (i <= endPosition){
-                positionToken(token, i)
+
+                if (i === 40){
+                    positionToken(token, 0)
+                } else{
+                    positionToken(token, i)
+                }
+
                 i++
 
                 // If i is 40, that means we've landed back on 'Go.
                 // Reset i and endPosition and give the player £200
-                if (i === 40){
+                if (i === 41){
                     i = 0
                     endPosition = endPosition - 40
+                    console.log(endPosition)
                     players[turn - 1].money += 200
                     updatePlayerDetails()
                     addToFeed(players[turn - 1].name + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
@@ -1609,6 +1625,9 @@ function moveToken(total){
                 window.clearInterval(myInterval)
                 specialEndPositions(endPosition)
             }
+
+            //console.log('i=' + i + ' endPosition = ' + endPosition)
+
 
         }, 100)
     }
@@ -1655,7 +1674,7 @@ function specialEndPositions(endPosition){
 }
 
 
-// Puts the token where you want it to be using CSS. No maths is involved.
+// Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
 
@@ -2931,7 +2950,6 @@ function landOnProperty(position){
                 })
 
                 let rentIndex = owners.length - 1
-                console.log(rentIndex)
                 rentAmount = spaces[position].rent[rentIndex]
                 
             }
