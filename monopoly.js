@@ -2262,14 +2262,19 @@ function displayPropertyOptions(number){
 
 function displayBuildHousePanel(colour){
 
+    let feedDetails = []
+
     // Get an array of all of the properties in that colour set.
     let colourSet = []
     for (i = 0; i < spaces.length; i++){
         let property = spaces[i]
         if (property.group === colour){
             colourSet.push(property)
+            feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses})
         }
     }
+
+    console.log(feedDetails)
 
     let houseBuildPanel = document.createElement('div')
 
@@ -2338,7 +2343,7 @@ function displayBuildHousePanel(colour){
         //sellHouseBtn.innerText = 'Sell house'
         //sellHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Sell hotel' : 'Sell house'
         sellHouseBtn.addEventListener('click', function(){
-            sellHouse(property.position) 
+            sellHouse(property.position)
         })
         buttonPanel.appendChild(sellHouseBtn)
 
@@ -2467,9 +2472,19 @@ function displayBuildHousePanel(colour){
         // Update visual display to show new higher number of houses
         document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
     
+        // Find the item in the feedDetails array and update the number
+        feedDetails.forEach(function(property){
+            if (property.name === spaces[number].name){
+                property.newBuildings++
+            }
+        })
+
+        console.log(feedDetails)
 
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
+
+        document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
     }
 
 
@@ -2537,8 +2552,127 @@ function displayBuildHousePanel(colour){
         players[turn - 1].money += (spaces[number].houseCost / 2)
         updatePlayerDetails()
 
+        // Find the property in the feedDetails array and update the number of buildings
+        feedDetails.forEach(function(property){
+            if (property.name === spaces[number].name){
+                property.newBuildings--
+            }
+        })
+
+        console.log(feedDetails)
         toggleHouseBuildButtons()
+
+        document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
         
+    }
+
+    // Build a player-readable message for the feed
+    function houseBuildingFeedMessage(){
+
+        let feedMessageBuy = []
+        let feedMessageSell = []
+
+        feedDetails.forEach(function(property){
+
+            // The player is leaving this property with more buildings than it started with
+            if (property.newBuildings > 0){
+
+                // Only create this message if there's actually something to say
+                let newMessage = ''
+
+                // The player has built a hotel
+                if (spaces[property.position].houses === 5){
+                    newMessage += 'a hotel on '
+                
+                // The player has built 1 house
+                } else if (property.newBuildings === 1){
+                    newMessage += property.newBuildings + ' house on '
+
+                // The player has built multiple houses (but no hotels)
+                } else if (property.newBuildings > 1){
+                    newMessage += property.newBuildings + ' houses on '
+                }
+
+                newMessage += property.name
+
+                feedMessageBuy.push(newMessage)
+
+            // The player is leaving this property with less buildings than     
+            } else if (property.newBuildings < 0){
+
+                // Only create this message if there's actually something to say
+                let newMessage = ''
+
+                // We've sold a hotel
+                if (property.originalBuildings === 5){
+                    newMessage = 'a hotel'
+
+                    // We've sold a hotel AND houses
+                    if (property.newBuildings <= -2){
+                        newMessage += ' and ' + ' 1 house on '
+                    }
+                    if (property.newBuildings <= -3){
+                        newMessage += ' and ' + Math.abs(property.newBuildings) + ' houses on '
+                    } else{
+                        newMessage += ' on '
+                    }
+                } else if (property.newBuildings === -1){
+                    newMessage += '1 house on '
+                } else if (property.newBuildings <= -2){
+                    newMessage += Math.abs(property.newBuildings) + ' houses on '
+                }
+
+
+                newMessage += property.name
+                feedMessageSell.push(newMessage)
+
+
+
+            }
+
+        })
+
+        // Build the message
+        let feedMessage = players[turn-1].name + ' has '
+
+        // Loop through the buildings that are new
+        if (feedMessageBuy.length > 0){
+            feedMessage += ' built '
+
+            for (i = 0; i < feedMessageBuy.length; i++){
+
+                addSeparator(feedMessageBuy, i)
+                feedMessage += feedMessageBuy[i]
+            }
+        }
+
+        if (feedMessageBuy.length > 0 && feedMessageSell.length > 0){
+            feedMessage += '. They have also '
+        }
+
+
+        // Loop through the buildings that have been sold
+        if (feedMessageSell.length > 0){
+            feedMessage += ' sold '
+
+            for (i = 0; i < feedMessageSell.length; i++){
+
+                addSeparator(feedMessageSell, i)
+                feedMessage += feedMessageSell[i] + ''
+            }
+        }
+
+        function addSeparator(array, i){
+            if (i > 0 && i !== array.length - 1){
+                feedMessage += ', '
+            } else if (i > 0 && i === array.length - 1){
+                feedMessage += ' & '
+            }
+        }
+
+        addToFeed(feedMessage, 'construction')
+        document.querySelector('#popup-close').removeEventListener('click', houseBuildingFeedMessage)
+
     }
 
 }

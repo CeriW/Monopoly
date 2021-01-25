@@ -8,8 +8,6 @@ An incomplete list of all the developments that need to be completed
 
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
 
-- Make it come up on the feed when players buy houses. If possible, have it come up with "Player 2 built 3 houses on Bond Street" rather than just coming up every time they hit build.
-
 - Don't have to wait until your turn to build houses/hotels
 
 - Reorder the readme so it's in alphabetical order
