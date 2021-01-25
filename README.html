@@ -107,6 +107,10 @@
             margin: 20px 0 0;
           }
 
+          .private-function .private-function{
+            background: #fff;
+          }
+
           .private-variable{
             margin-bottom: 20px;
           }
@@ -913,11 +917,17 @@
 </div>
 
 <div class="function">
-  <h3 class="function-name">displayHouseBuildPanel</h3>
+  <h3 class="function-name">displayBuildHousePanel</h3>
   <h4>Function parameters:</h4>
   <ul class="function-parameters">
     <li>colour - <i>string</i> - the 'group' property from the <i>spaces</i> array we are working with.</li>
   </ul>
+  <div class="private-variable">
+    <h4>Private variables of note:</h4>
+    <ul>
+      <li>feedDetails - <i>array of objects</i> - initialised as empty, but will be populated with objects representing each property in the colour set. Each object will have a name (string), position (number), newBuildings (number, which may be positive or negative), and originalBuildings (number representing how many buildings the property originally had). This variable is used to generate a user-readable message for the feed once the popup is closed. </li>
+    </ul>
+  </div>
   <div class="function-description">
     This function runs when the 'Manage colour set' button is clicked. This will then generate details of the colour set, including rent and current houses/hotels, and buttons to buy/sell hotels as appropriate. These buttons will have eventListeners on which prevent them from being clicked when they shouldn't be.
   </div>
@@ -961,6 +971,38 @@
       Mortgages a property by setting its mortgaged property in the <i>spaces</i> array to true, gives the owner the mortgage money amount, sets an attribute on its space on the board so it can be styled, and adds a message to the feed.
     </div>
   </div>
+
+  <div class="private-function">
+    <h4 class="function-name">houseBuildingFeedMessage</h4>
+    <div class="private-variable">
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>feedMessageBuy - <i>array of strings</i> - initialised as empty and populated with strings if houses/hotels have been built.</li>
+        <li>feedMessageSell - <i>array of strings</i> - initialised as empty and populated with strings if houses/hotels have been sold.</li>
+      </ul>
+    </div>
+    <div class="function-description">
+      Loops through the <i>feedDetails</i> array to check if buildings have been bought or sold. If so, generate a string for the appropriate array described above.
+      <br>
+      Once the loop is complete, generate a complete string using these arrays, and add it to the feed.
+    </div>
+
+    <div class="private-function">
+      <h4 class="function-name">addSeparator</h4>
+      <div class="private-variable">
+        <h4>Private variables of note:</h4>
+        <ul>
+          <li>i - <i>number</i> - The index from the array we're checking. Passed in from the loop described above.</li>
+          <li>array - <i>array</i> - The array we're checking from. Should be either feedMessageBuy or feedMessageSell</li>
+        </ul>
+      </div>
+      <div class="function-description">
+        Checks the value of array[i] against array.length. Will add commas and ampersands to the feed message as appropriate.
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <div class="function">
@@ -1163,6 +1205,7 @@
       <li>mortgage</li>
       <li>trade-accepted</li>
       <li>trade-rejected</li>
+      <li>construction</li>
     </ul>
   </div>
 </div>

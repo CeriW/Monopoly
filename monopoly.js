@@ -2274,8 +2274,6 @@ function displayBuildHousePanel(colour){
         }
     }
 
-    console.log(feedDetails)
-
     let houseBuildPanel = document.createElement('div')
 
     // Create a div to show an overview of the properties in this colour set
@@ -2559,7 +2557,6 @@ function displayBuildHousePanel(colour){
             }
         })
 
-        console.log(feedDetails)
         toggleHouseBuildButtons()
 
         document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
