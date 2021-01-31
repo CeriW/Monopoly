@@ -118,14 +118,14 @@ let communityChestCards =
 
 let chanceCards = 
   [
-    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    /*{description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
     {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
     {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   value: 'nearest-station' },
     {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
     {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
     {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
@@ -133,7 +133,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
 
@@ -1488,21 +1488,33 @@ function cardBasedMovement(chosenCard, type){
             break 
         // A basic move card which tells you to move to a numbered position that requires no complicated maths.
         default:
-            //moveToken(chosenCard.value)
-            addToFeed(getCardMovementFeedMessage(chosenCard.value), 'advance')
-            moveToken(calculateCardMovement(chosenCard.value))
+
+            if (chosenCard.value < 0){
+                addToFeed('backwards')
+                moveToken(chosenCard.value)
+            } else{
+                addToFeed(getCardMovementFeedMessage(chosenCard.value), 'advance')
+                moveToken(calculateCardMovement(chosenCard.value))
+            }
     }
 
 
     // Outputs a nice player readable message to put in the feed.
     function getCardMovementFeedMessage(position){
-        return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
+
+        if (position < 0){
+            return 'fix me'
+        } else{
+            return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
+        }
+
     }
 
 
     // Calculate how far a token needs to move to reach a specified position,
     // considering whether we need to pass Go or not.
     function calculateCardMovement(endPosition){
+       
         // If we don't need to pass go
         if (currentPosition < endPosition){
             return endPosition - currentPosition
@@ -1635,20 +1647,24 @@ function rollDice(){
 // The actual maths involved in moving the token, including passing go and going to jail.
 function moveToken(total){
 
+    console.log('total ' + total)
+
     // The token we wish to move
     let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
 
     // The position the token is currently at
     let startPosition = parseInt(token.getAttribute('position'))
-    console.log(startPosition)
 
     // The place we wish the token to end up
+    // Note - adding a negative number will subtract it. Therefore we want to
+    // add it regardless of whether it's positive or negative
     let endPosition = startPosition + total
-    console.log(endPosition)
 
     // If the end position is less than 39 (so not passing Go), set the token's position attribute to that number. Otherwise set it to the end position minus 40 (so resetting once you pass Go)    
-    endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
+    //endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
     players[turn - 1].position = endPosition
+
+    console.log('endposition ' + endPosition)
     
 
 
@@ -1660,39 +1676,67 @@ function moveToken(total){
 
         let i = startPosition
 
-        let myInterval = setInterval(function(){
-            if (i <= endPosition){
+        if (total < 0){
 
-                if (i === 40){
-                    positionToken(token, 0)
-                } else{
+            console.log('were going backwards ' + total)
+
+            let myInterval = setInterval(function(){
+                console.log('i ' + i + ', endPosition ' + endPosition)
+                
+                if (i >= endPosition){
                     positionToken(token, i)
+                    i--
+                    console.log('moved to ' + i)
+                } else{
+                    // Once the token has reached where it needs to be, stop the animation
+                    window.clearInterval(myInterval)
+                    specialEndPositions(endPosition)
                 }
+            }, 100)
 
-                i++
+        } else{
 
-                // If i is 40, that means we've landed back on 'Go.
-                // Reset i and endPosition and give the player £200
-                if (i === 41){
-                    i = 0
-                    endPosition = endPosition - 40
-                    console.log(endPosition)
-                    players[turn - 1].money += 200
-                    updatePlayerDetails()
-                    addToFeed(players[turn - 1].name + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
+            endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
+
+
+            let myInterval = setInterval(function(){
+                if (i <= endPosition){
+    
+                    // The space after 39 is 0, not 40
+                    if (i === 40){
+                        positionToken(token, 0)
+                    } else{
+                        positionToken(token, i)
+                    }
+    
+                    i++
+    
+                    // If i is 40, that means we've landed back on 'Go.
+                    // Reset i and endPosition and give the player £200
+                    if (i === 41){
+                        i = 0
+                        endPosition = endPosition - 40
+                        players[turn - 1].money += 200
+                        updatePlayerDetails()
+                        addToFeed(players[turn - 1].name + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
+                    }
                 }
-            }
+    
+                else{
+                    // Once the token has reached where it needs to be, stop the animation
+                    window.clearInterval(myInterval)
+                    specialEndPositions(endPosition)
+                }
+    
+                //console.log('i=' + i + ' endPosition = ' + endPosition)
+    
+    
+            }, 100)
+        }
 
-            else{
-                // Once the token has reached where it needs to be, stop the animation
-                window.clearInterval(myInterval)
-                specialEndPositions(endPosition)
-            }
-
-            //console.log('i=' + i + ' endPosition = ' + endPosition)
 
 
-        }, 100)
+        
     }
 }
     
