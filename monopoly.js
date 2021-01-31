@@ -1490,7 +1490,7 @@ function cardBasedMovement(chosenCard, type){
         default:
 
             if (chosenCard.value < 0){
-                addToFeed('backwards')
+                addToFeed(getCardMovementFeedMessage(chosenCard.value), 'go-back')
                 moveToken(chosenCard.value)
             } else{
                 addToFeed(getCardMovementFeedMessage(chosenCard.value), 'advance')
@@ -1502,8 +1502,12 @@ function cardBasedMovement(chosenCard, type){
     // Outputs a nice player readable message to put in the feed.
     function getCardMovementFeedMessage(position){
 
+        // Note - if the card is a 'go back' card, the 'position' will actually
+        // be the negative number of spaces to go back, rather than the actual
+        // position they're supposed to advance to.
+
         if (position < 0){
-            return 'fix me'
+            return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and went back to ' + spaces[players[turn - 1].position + position].name
         } else{
             return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
         }
