@@ -118,7 +118,7 @@ let communityChestCards =
 
 let chanceCards = 
   [
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -10 },
     /*{description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
@@ -1492,6 +1492,7 @@ function cardBasedMovement(chosenCard, type){
             if (chosenCard.value < 0){
                 addToFeed(getCardMovementFeedMessage(chosenCard.value), 'go-back')
                 moveToken(chosenCard.value)
+                //console.log(40 + currentPosition + endPosition)
             } else{
                 addToFeed(getCardMovementFeedMessage(chosenCard.value), 'advance')
                 moveToken(calculateCardMovement(chosenCard.value))
@@ -1507,7 +1508,8 @@ function cardBasedMovement(chosenCard, type){
         // position they're supposed to advance to.
 
         if (position < 0){
-            return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and went back to ' + spaces[players[turn - 1].position + position].name
+            //return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and went back to ' + spaces[players[turn - 1].position + position].name
+            return ('backwards')
         } else{
             return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
         }
@@ -1518,16 +1520,27 @@ function cardBasedMovement(chosenCard, type){
     // Calculate how far a token needs to move to reach a specified position,
     // considering whether we need to pass Go or not.
     function calculateCardMovement(endPosition){
+
+        // Moving forwards
+        if (endPosition > 0){
+            // If we don't need to pass go
+            if (currentPosition < endPosition){
+                return endPosition - currentPosition
+            }
+            
+            // If we DO need to pass go
+            else{  
+                return (40 + endPosition) - currentPosition
+            }
+
+        // Moving backwards
+        } else{
+            return (40 + currentPosition + endPosition)
+        }
+
+
        
-        // If we don't need to pass go
-        if (currentPosition < endPosition){
-            return endPosition - currentPosition
-        }
-        
-        // If we DO need to pass go
-        else{  
-            return (40 + endPosition) - currentPosition
-        }
+
     }
 }
 
@@ -1680,17 +1693,23 @@ function moveToken(total){
 
         let i = startPosition
 
+        // Moving backwards
         if (total < 0){
 
-            console.log('were going backwards ' + total)
-
             let myInterval = setInterval(function(){
-                console.log('i ' + i + ', endPosition ' + endPosition)
                 
                 if (i >= endPosition){
                     positionToken(token, i)
                     i--
-                    console.log('moved to ' + i)
+
+                    // If we've landed back on Go, we need to reset where we're moving to.
+                    if (i < 0){
+
+                        endPosition = 40 + endPosition
+                        i = 39
+
+                    }
+
                 } else{
                     // Once the token has reached where it needs to be, stop the animation
                     window.clearInterval(myInterval)
@@ -1698,6 +1717,8 @@ function moveToken(total){
                 }
             }, 100)
 
+
+        // Moving forwards
         } else{
 
             endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
