@@ -14,8 +14,6 @@ An incomplete list of all the developments that need to be completed
 
 - Be able to click backspace on the keyboard to go back to the full portfolio view.
 
-- Consider what other keyboard shortcuts might be available.
-
 - In the full portfolio, each colour set should display on its own line.
 
 - I know the game isn't designed for small screens, but I can:
@@ -32,15 +30,19 @@ An incomplete list of all the developments that need to be completed
 
 - update the code throughout to use the createElement function
 
-- Better testing options
-
 - In the full portfolio, you need to click the icon to learn more, you can't just click the name. You should be able to click anywhere.
 
 - Back button on full portfolio details is in the wrong place.
 
-- There are a lot of lets that should be consts
-
 - Cookies/local storage so you can come back to a game later.
+
+
+ONGOING THINGS
+
+- Better testing options
+
+- Consider what other keyboard shortcuts might be available.
+
 
 STRETCH GOALS
 

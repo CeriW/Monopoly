@@ -20,15 +20,15 @@ let availableTokens = [
 ]
 
 
-let board = document.querySelector('#board')
-let popupMessage = document.querySelector('#popup-message')
-let popupTitle = document.querySelector('#popup-title')
-let warningMessage = document.querySelector('#warning-message')
-let playerSummary = document.querySelector('#player-summary')
-let feed = document.querySelector('#feed-content')
-let bankContainer = document.querySelector('#bank')
-let bank = document.querySelector('#bank-content')
-let playerCreator = document.querySelector('#player-creator')
+const board = document.querySelector('#board')
+const popupMessage = document.querySelector('#popup-message')
+const popupTitle = document.querySelector('#popup-title')
+const warningMessage = document.querySelector('#warning-message')
+const playerSummary = document.querySelector('#player-summary')
+const feed = document.querySelector('#feed-content')
+const bankContainer = document.querySelector('#bank')
+const bank = document.querySelector('#bank-content')
+const playerCreator = document.querySelector('#player-creator')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -37,11 +37,11 @@ let turn = 0
 
 // Dice related elements
 let doublesCount = 0
-let diceContainer = document.querySelector('#dice-roll')
-let dice1 = document.querySelector('#dice-1')
-let dice2 = document.querySelector('#dice-2')
-let diceTotal = document.querySelector('#dice-total')
-let diceDoubles = document.querySelector('#doubles')
+const diceContainer = document.querySelector('#dice-roll')
+const dice1 = document.querySelector('#dice-1')
+const dice2 = document.querySelector('#dice-2')
+const diceTotal = document.querySelector('#dice-total')
+const diceDoubles = document.querySelector('#doubles')
 
 // A variable for how many sides the dice has. Used in testing where 
 // larger/smaller numbers are desirable.
@@ -314,15 +314,33 @@ function generateBoard(){
 
 function addEvents(){
 
+
     // Close the popup when the close button is clicked,
     // or the escape key is pressed.
     document.querySelector('#popup-close').addEventListener('click', closePopup)
 
 
-    // TODO - I don't know what I've done but this doesn't seem to work any more.
+    window.addEventListener('keydown', function(e){
+        let key = e.key
+
+        switch (key){
+            case 'Escape':
+
+                document.querySelector('#testing-toggle').checked = false
+                document.body.classList.remove('testing-panel-enabled')
+
+                if (document.body.getAttribute('close-popup') === 'true') {
+                    closePopup()
+                }
+                break
+
+
+        }
+    })
+    
     document.onkeydown = function(e) {
         e = e || window.event
-        if (e.keyCode == 27 && document.body.getAttribute('close-popup') === true) {
+        if (e.key == 'q' && document.body.getAttribute('close-popup') === true) {
             closePopup()
         }
     }
