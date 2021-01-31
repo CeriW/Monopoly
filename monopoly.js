@@ -565,12 +565,7 @@ function fakePlayerMoney(){
         form.appendChild(input)
         fakeMoneyPanel.appendChild(form)
 
-        form.addEventListener('submit', updateMoney)
-        input.addEventListener('input', updateMoney)
-        
-        function updateMoney(e){
-            e.preventDefault()
-
+        input.addEventListener('input', function(){
             let newMoney = parseInt(input.value)
             if (newMoney){
                 player.money = newMoney
@@ -580,7 +575,8 @@ function fakePlayerMoney(){
             window.setTimeout(function(){
                 input.value = ''
             }, 1300)
-        }
+        })
+        
 
     })
 }
