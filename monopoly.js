@@ -118,8 +118,8 @@ let communityChestCards =
 
 let chanceCards = 
   [
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -10 },
-    /*{description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
@@ -133,7 +133,7 @@ let chanceCards =
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
@@ -1492,7 +1492,6 @@ function cardBasedMovement(chosenCard, type){
             if (chosenCard.value < 0){
                 addToFeed(getCardMovementFeedMessage(chosenCard.value), 'go-back')
                 moveToken(chosenCard.value)
-                //console.log(40 + currentPosition + endPosition)
             } else{
                 addToFeed(getCardMovementFeedMessage(chosenCard.value), 'advance')
                 moveToken(calculateCardMovement(chosenCard.value))
@@ -1508,8 +1507,14 @@ function cardBasedMovement(chosenCard, type){
         // position they're supposed to advance to.
 
         if (position < 0){
-            //return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and went back to ' + spaces[players[turn - 1].position + position].name
-            return ('backwards')
+
+            // Check whether we need to pass go or not
+            let newPosition = players[turn - 1].position + position
+            if (newPosition < 0){
+                newPosition = newPosition + 40
+            }
+
+            return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and went back ' + Math.abs(position) + ' spaces to ' + spaces[newPosition].name
         } else{
             return players[turn-1].name + ' drew a ' + getReadableCardName(type) + ' card and advanced to ' + spaces[position].name
         }
