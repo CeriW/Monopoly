@@ -1192,6 +1192,11 @@ body:not(.warning-open) #warning {
 .full-portfolio-hotel {
   background-image: url("images/hotel-icon.svg"); }
 
+.full-portfolio .portfolio-divider {
+  width: 100%;
+  border-top: 1px solid #ebebeb;
+  margin: 10px 0; }
+
 /* Player action buttons  ----------------------------------------------------*/
 .player-action-button {
   display: none; }
@@ -1984,6 +1989,15 @@ body:not(.testing-panel-enabled) #testing-panel {
   margin: 5px 0 0; }
   #fake-dice-roll-dice-panel > div:hover {
     background: rgba(255, 255, 255, 0.2); }
+
+/* Money ----------------------------------*/
+#fake-player-money form {
+  margin-top: 3px;
+  text-align: left; }
+
+#fake-player-money input {
+  width: 70px;
+  float: right; }
 
 /* CONFETTI ----------------------------------------------------------------- */
 .confetti-container {

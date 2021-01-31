@@ -342,8 +342,6 @@ function addEvents(){
     // so it is always square
     window.addEventListener('resize', resizeBoard)
 
-    //diceRollButton.addEventListener('click', rollDice)
-
     addTestingEvents()
     
 
@@ -553,6 +551,38 @@ function addTestingEvents(){
         availableHotels = parseInt(availableHotelsInput.value)
         updateBank()
     })
+
+}
+
+function fakePlayerMoney(){
+    let fakeMoneyPanel = document.querySelector('#fake-player-money')
+    players.forEach(function(player){
+        let form = createElement('form', '', '', '', '')
+        let label = createElement('label', '', player.name, '', '')
+        let input = createElement('input', '', '', 'type', 'number')
+        input.setAttribute('step', 1)
+        form.appendChild(label)
+        form.appendChild(input)
+        fakeMoneyPanel.appendChild(form)
+
+        form.addEventListener('submit', updateMoney)
+        input.addEventListener('input', updateMoney)
+        
+        function updateMoney(e){
+            e.preventDefault()
+
+            let newMoney = parseInt(input.value)
+            if (newMoney){
+                player.money = newMoney
+            }
+            updatePlayerDetails()
+
+            window.setTimeout(function(){
+                input.value = ''
+            }, 1300)
+        }
+
+    })
 }
 
 
@@ -694,6 +724,8 @@ function quickStart(){
 
 
     updatePlayerDetails()
+
+    
 }
 
 
@@ -900,7 +932,12 @@ function createPlayers(){
     })
 
     newGameDiceRoll()
+
+    // Add the inputs and associated events to the testing panel. This is done
+    // here as it can't be done until after the players are created.
+    fakePlayerMoney()
 }
+
 
 
 function generatePlayerSummary(player){
@@ -2042,6 +2079,8 @@ function fullPortfolioView(e){
 function generateFullPortfolioView(player){
     let portfolioOutput = '<div class="full-portfolio">'
 
+    let previousIndex = 0
+
     players[player - 1].properties.forEach(function(property){
 
         portfolioOutput += '<div class="full-portfolio-item" property="' + property.position + '" mortgaged="' + property.mortgaged + '">'
@@ -2077,9 +2116,9 @@ function generateFullPortfolioView(player){
             portfolioOutput += value + '</div>'
             
         }
-
         portfolioOutput += '</div>'
         //portfolioOutput += '<div class="full-portfolio-item">' + property.name + '</div>'
+
     })
 
     portfolioOutput += '</div>'
