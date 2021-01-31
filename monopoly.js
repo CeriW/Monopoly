@@ -322,6 +322,7 @@ function addEvents(){
 
     window.addEventListener('keydown', function(e){
         let key = e.key
+        console.log(key)
 
         switch (key){
             case 'Escape':
@@ -332,6 +333,17 @@ function addEvents(){
                 if (document.body.getAttribute('close-popup') === 'true') {
                     closePopup()
                 }
+                break
+            case 'Backspace':
+
+                // If we're viewing the overview of a property which is owned,
+                // and the back button exists (meaning we must have come from
+                // the full portfolio), make it so that we can close the window
+                // with backspace
+                if (document.querySelector('.property-overview').getAttribute('player') && document.querySelector('.back-button')){
+                    fullPortfolioView(e)
+                }
+
                 break
 
 
@@ -2083,8 +2095,11 @@ function portfolioItemPreview(e){
 }
 
 function fullPortfolioView(e){
+
+
+    let player = (e.type === 'keydown') ? document.querySelector('.property-overview').getAttribute('player') :  e.target.getAttribute('player')
     
-    let player = e.target.getAttribute('player')
+
     let portfolioOutput = generateFullPortfolioView(player)
     openPopup(portfolioOutput, players[player - 1].name + '\'s property portfolio')
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)

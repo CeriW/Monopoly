@@ -12,8 +12,6 @@ An incomplete list of all the developments that need to be completed
 
 - Reorder the readme so it's in alphabetical order
 
-- Be able to click backspace on the keyboard to go back to the full portfolio view.
-
 - In the full portfolio, each colour set should display on its own line.
 
 - I know the game isn't designed for small screens, but I can:
@@ -31,8 +29,6 @@ An incomplete list of all the developments that need to be completed
 - update the code throughout to use the createElement function
 
 - In the full portfolio, you need to click the icon to learn more, you can't just click the name. You should be able to click anywhere.
-
-- Back button on full portfolio details is in the wrong place.
 
 - Cookies/local storage so you can come back to a game later.
 
