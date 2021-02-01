@@ -2186,6 +2186,10 @@ function generateFullPortfolioView(player){
         // Create the icon
         let propertyIcon = createElement('div', 'property-icon')
         propertyIcon.classList.add(property.group, property.position)
+        if (property.group === 'utility'){
+            propertyIcon.classList.add(property.name.replace(' ', '-').toLowerCase())
+        }
+
         propertyContainer.appendChild(propertyIcon)
 
         // Add the name
