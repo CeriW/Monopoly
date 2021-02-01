@@ -32,6 +32,8 @@ An incomplete list of all the developments that need to be completed
 
 - About section
 
+- Fix the broken house view in the trade window
+
 
 ONGOING THINGS
 

@@ -1289,12 +1289,13 @@ $jailAnimationLength: 1.5;
 .full-portfolio{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .full-portfolio-item{
     display: flex;
     align-items: center;
-    width: 380px;
+    width: 360px;
     transition: 0.2s;
     flex-wrap: wrap;
     margin-bottom: 5px;
@@ -1746,6 +1747,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
             margin: 0 0 5px;
         }
 
+    }
+
+    .portfolio-divider{
+        display: none;
     }
 }
 

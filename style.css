@@ -1156,12 +1156,13 @@ body:not(.warning-open) #warning {
 /* Full portfolio view  ------------------------------------------------------*/
 .full-portfolio {
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  justify-content: space-between; }
 
 .full-portfolio-item {
   display: flex;
   align-items: center;
-  width: 380px;
+  width: 360px;
   transition: 0.2s;
   flex-wrap: wrap;
   margin-bottom: 5px; }
@@ -1516,6 +1517,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     font-size: 22px;
     text-align: left;
     margin: 0 0 5px; }
+
+.trade-summary-window .portfolio-divider,
+.trade-negotiations-window .portfolio-divider {
+  display: none; }
 
 .trade-summary-window {
   /* Current player */

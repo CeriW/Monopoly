@@ -2207,10 +2207,8 @@ function generateFullPortfolioView(player){
         let value = property.price
 
         if (property.mortgaged){
-            portfolioOutput += property.price / 2
+            value = property.price / 2
         } else{
-
-            let value = property.price
 
             // Note - in every Monopoly game I have played, the hotel cost is
             // the same as the house cost. However, I have coded this bit this 
@@ -2247,6 +2245,19 @@ function generateFullPortfolioView(player){
     utilities.forEach(function(station){
         portfolioOutput.appendChild(station)
     })
+
+
+    // Group each group into their own section.
+    Array.from(portfolioOutput.children).forEach(function(child){
+        let previousGroup = child.previousElementSibling ? child.previousElementSibling.querySelector('.property-icon').classList[1] : child.nextElementSibling.querySelector('.property-icon').classList[1]
+        let currentGroup = child.querySelector('.property-icon').classList[1]
+
+        if (previousGroup !== currentGroup && child.previousElementSibling){
+            let divider = createElement('div', 'portfolio-divider')
+            portfolioOutput.insertBefore(divider, child)
+        }
+    })
+     
 
     return portfolioOutput
 }
