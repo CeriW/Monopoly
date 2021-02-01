@@ -24,13 +24,13 @@ An incomplete list of all the developments that need to be completed
 
 - Style Chance/CC cards more nicely.
 
-- Go back 3 spaces fix
-
 - update the code throughout to use the createElement function
 
 - In the full portfolio, you need to click the icon to learn more, you can't just click the name. You should be able to click anywhere.
 
 - Cookies/local storage so you can come back to a game later.
+
+- About section
 
 
 ONGOING THINGS

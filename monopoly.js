@@ -1669,8 +1669,6 @@ function rollDice(){
 // The actual maths involved in moving the token, including passing go and going to jail.
 function moveToken(total){
 
-    console.log('total ' + total)
-
     // The token we wish to move
     let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
 
@@ -1684,10 +1682,7 @@ function moveToken(total){
 
     // If the end position is less than 39 (so not passing Go), set the token's position attribute to that number. Otherwise set it to the end position minus 40 (so resetting once you pass Go)    
     //endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
-    players[turn - 1].position = endPosition
-
-    console.log('endposition ' + endPosition)
-    
+    players[turn - 1].position = endPosition  
 
 
     // If we're going to jail, do that, otherwise animate the token
@@ -2169,36 +2164,44 @@ function portfolioItemPreview(e){
 }
 
 function fullPortfolioView(e){
-
-
     let player = (e.type === 'keydown') ? document.querySelector('.property-overview').getAttribute('player') :  e.target.getAttribute('player')
-    
-
-    let portfolioOutput = generateFullPortfolioView(player)
-    openPopup(portfolioOutput, players[player - 1].name + '\'s property portfolio')
+    //let portfolioOutput = generateFullPortfolioView(player)
+    openPopup('', players[player - 1].name + '\'s property portfolio')
+    popupMessage.appendChild(generateFullPortfolioView(player))
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
 }
 
 function generateFullPortfolioView(player){
-    let portfolioOutput = '<div class="full-portfolio">'
 
-    let previousIndex = 0
-
+    let portfolioOutput = createElement('div', 'full-portfolio')
     players[player - 1].properties.forEach(function(property){
 
-        portfolioOutput += '<div class="full-portfolio-item" property="' + property.position + '" mortgaged="' + property.mortgaged + '">'
-        portfolioOutput += '<div class="property-icon ' + property.group + ' ' + spaces.indexOf(property) + '"></div>' 
-        portfolioOutput += '<div class="property-name">' + property.name + '</div>'
-        
+        // Create a containing div to hold all the info relating to this property
+        let propertyContainer = createElement('div', 'full-portfolio-item', '', 'property', property.position)
+        propertyContainer.setAttribute('mortgaged', property.mortgaged)
+
+        // Create the icon
+        let propertyIcon = createElement('div', 'property-icon')
+        propertyIcon.classList.add(property.group, property.position)
+        propertyContainer.appendChild(propertyIcon)
+
+        // Add the name
+        let propertyName = createElement('div', 'property-name', property.name)
+        propertyContainer.appendChild(propertyName)
+
+        // Add icons if there are houses/hotels
         if (property.houses === 5){
-            portfolioOutput += '<span class="full-portfolio-hotel"></span>'
+            let hotelIcon = createElement('span', 'full-portfolio-hotel')
+            propertyContainer.appendChild(hotelIcon)
         } else{
             for (i = 1; i <= property.houses; i++){
-                portfolioOutput += '<span class="full-portfolio-house"></span>'
+                let houseIcon = createElement('span', 'full-portfolio-house')
+                propertyContainer.appendChild(houseIcon)
             }
         }
 
-        portfolioOutput += '<div class="portfolio-item-value">value: ' + currencySymbolSpan
+        // Display the value of the property
+        let value = property.price
 
         if (property.mortgaged){
             portfolioOutput += property.price / 2
@@ -2215,18 +2218,20 @@ function generateFullPortfolioView(player){
             } else if (property.houses){
                 value += property.houses * property.houseCost
             }
-
-            portfolioOutput += value + '</div>'
-            
         }
-        portfolioOutput += '</div>'
-        //portfolioOutput += '<div class="full-portfolio-item">' + property.name + '</div>'
+
+        let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + value)
+        propertyContainer.appendChild(valueDisplay)
+
+
+        // Finally, add this property to the main portfolio
+        portfolioOutput.appendChild(propertyContainer)
 
     })
 
-    portfolioOutput += '</div>'
 
-    return portfolioOutput;
+
+    return portfolioOutput
 }
 
 function displayPropertyOptions(number){
@@ -3278,7 +3283,8 @@ function initiateTrade(){
     // Portfolio
     currentPlayerSummary.appendChild(createElement('h3', '', 'YOU HAVE:', '', ''))
     
-    let currentPlayerPortfolio = createElement('div', 'current-player-portfolio', generateFullPortfolioView(turn), '', '')
+    let currentPlayerPortfolio = createElement('div', 'current-player-portfolio', '', '', '')
+    currentPlayerPortfolio.appendChild(generateFullPortfolioView(turn))
     if (!currentPlayerPortfolio.querySelector('.full-portfolio').innerHTML){
         currentPlayerPortfolio.querySelector('.full-portfolio').innerHTML = 'You do not have any properties to trade.'
     }
@@ -3323,7 +3329,8 @@ function initiateTrade(){
             if (portfolio.length === 34){
                 portfolio = 'This player does not have any properties to trade.'
             }
-            summary.appendChild(createElement('div', 'full-portfolio', portfolio, '', ''))
+            summary.appendChild(createElement('div', 'full-portfolio'))
+            summary.lastChild.appendChild(generateFullPortfolioView(player.id))
 
             let cardDisplay = createElement('div', 'player-cards', '', '', '')
 
@@ -3497,6 +3504,7 @@ function negotiateTrade(e){
     // Event, type,
     function updateProposal(e){
 
+        console.log
 
         let item = e.target.parentNode
         
