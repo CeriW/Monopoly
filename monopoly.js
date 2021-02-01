@@ -2174,6 +2174,9 @@ function fullPortfolioView(e){
 function generateFullPortfolioView(player){
 
     let portfolioOutput = createElement('div', 'full-portfolio')
+    let stations = []
+    let utilities = []
+
     players[player - 1].properties.forEach(function(property){
 
         // Create a containing div to hold all the info relating to this property
@@ -2224,12 +2227,26 @@ function generateFullPortfolioView(player){
         propertyContainer.appendChild(valueDisplay)
 
 
-        // Finally, add this property to the main portfolio
-        portfolioOutput.appendChild(propertyContainer)
+        // If this is a station or utility, add these to an array to be looped
+        // through and added at the end of the list.
+        // Otherwise just add it to the end.
 
+        if (property.group === 'train-station'){
+            stations.push(propertyContainer)
+        } else if (property.group === 'utility'){
+            utilities.push(propertyContainer)
+        } else{
+            portfolioOutput.appendChild(propertyContainer)
+        }
     })
 
+    stations.forEach(function(station){
+        portfolioOutput.appendChild(station)
+    })
 
+    utilities.forEach(function(station){
+        portfolioOutput.appendChild(station)
+    })
 
     return portfolioOutput
 }
@@ -3326,6 +3343,7 @@ function initiateTrade(){
 
 
             let portfolio = generateFullPortfolioView(player.id)
+            // TODO - this won't work now the function doesn't do HTML strings.
             if (portfolio.length === 34){
                 portfolio = 'This player does not have any properties to trade.'
             }
