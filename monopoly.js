@@ -2221,7 +2221,7 @@ function generateFullPortfolioView(player){
             }
         }
 
-        let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + value)
+        let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value)
         propertyContainer.appendChild(valueDisplay)
 
 

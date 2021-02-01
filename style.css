@@ -839,8 +839,8 @@ div[mortgaged="true"]:after {
 #popup-close {
   width: 35px;
   position: absolute;
-  top: 55px;
-  right: 20px;
+  top: 1px;
+  right: 3px;
   z-index: 2; }
 
 body:not(.popup-open) #popup {
