@@ -1609,7 +1609,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       border: 3px solid #000;
       padding: 10px;
       max-width: 220px;
-      flex-basis: 220px; }
+      flex-basis: 220px;
+      margin-bottom: 10px; }
     .trade-summary-window .other-player-summaries h3 {
       margin: 0; }
     .trade-summary-window .other-player-summaries :before {

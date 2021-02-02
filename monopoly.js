@@ -2142,24 +2142,20 @@ function generateRentTable(number){
 }
 
 function portfolioItemPreview(e){
-    let target = e.target
+
+    let target = e.target.closest('.full-portfolio-item')
+
 
     // TODO - Why am I doing this with classes and not attributes?
 
-    if (target.classList.contains('property-icon')){
-        let targetProperty = target.classList.value
-        targetProperty = targetProperty.replace(/\D/g, '')
-        targetProperty = parseInt(targetProperty)
+    if (target){
+        let targetProperty = target.getAttribute('property')
         displayPropertyDetails(targetProperty)
-
-        // If we have come from a full portfolio, give us a back button
-        if (e.target.parentNode.classList.contains('full-portfolio-item')){
-            let backButton = document.createElement('div')
-            backButton.classList.add('back-button')
-            backButton.setAttribute('player', spaces[targetProperty].owner.id)
-            document.querySelector('.property-overview').appendChild(backButton)
-            backButton.addEventListener('click', fullPortfolioView)
-        }
+        let backButton = document.createElement('div')
+        backButton.classList.add('back-button')
+        backButton.setAttribute('player', spaces[targetProperty].owner.id)
+        document.querySelector('.property-overview').appendChild(backButton)
+        backButton.addEventListener('click', fullPortfolioView)
     }
 }
 
@@ -2168,7 +2164,7 @@ function fullPortfolioView(e){
     //let portfolioOutput = generateFullPortfolioView(player)
     openPopup('', players[player - 1].name + '\'s property portfolio')
     popupMessage.appendChild(generateFullPortfolioView(player))
-    document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview)
+    document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview, true)
 }
 
 function generateFullPortfolioView(player){
