@@ -32,7 +32,6 @@ An incomplete list of all the developments that need to be completed
 
 - Fix the broken house view in the trade window
 
--Property icons for utilities in fullPortfolio window
 
 
 ONGOING THINGS

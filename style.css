@@ -1537,6 +1537,17 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     display: none; }
   .trade-summary-window .money {
     margin-bottom: 15px; }
+  .trade-summary-window .full-portfolio-item {
+    width: 100%; }
+  .trade-summary-window .other-player-summary .property-name {
+    width: calc(100% - 50px); }
+  .trade-summary-window .other-player-summary .property-name + .full-portfolio-house,
+  .trade-summary-window .other-player-summary .property-name + .full-portfolio-hotel {
+    margin-left: 40px; }
+  .trade-summary-window .other-player-summary .full-portfolio-house,
+  .trade-summary-window .other-player-summary .full-portfolio-hotel {
+    width: 15px;
+    height: 15px; }
   .trade-summary-window > div:first-child {
     /* display: grid;
         grid-template-columns: 50px auto;

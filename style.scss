@@ -1778,6 +1778,25 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         margin-bottom: 15px;
     }
 
+    .full-portfolio-item{
+        width: 100%;
+    }
+
+    .other-player-summary .property-name{
+        width: calc(100% - 50px);
+    }
+
+    .other-player-summary .property-name + .full-portfolio-house,
+    .other-player-summary .property-name + .full-portfolio-hotel{
+        margin-left: 40px;
+    }
+
+    .other-player-summary .full-portfolio-house,
+    .other-player-summary .full-portfolio-hotel{
+        width: 15px;
+        height: 15px;
+    }
+
     /* Current player */
 
     & > div:first-child{
