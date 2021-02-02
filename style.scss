@@ -937,7 +937,8 @@ div[mortgaged="true"]{
     position: relative;
     text-align: center;
     box-shadow: 0 0 20px rgba(black, 0.4);
-
+    max-height: calc(100vh - 30px);
+    overflow-y: auto
 }
 
 #popup-message{
