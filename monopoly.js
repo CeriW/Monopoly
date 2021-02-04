@@ -1313,6 +1313,14 @@ function drawCard(type){
     let cardList = (type === "community-chest") ? communityChestCards : chanceCards
     let chosenCard = cardList.shift()
     openPopup(chosenCard.description, (type === "community-chest") ? 'Community Chest' : 'Chance')
+
+
+    let cardMessage = createElement('div', 'card-message', '', 'type', chosenCard.type)
+    let innerCardMessage = createElement('div', '', chosenCard.description)
+    cardMessage.appendChild(innerCardMessage)
+    openPopup('', (type === "community-chest") ? 'Community Chest' : 'Chance')
+    popupMessage.appendChild(cardMessage)
+
     cardList.push(chosenCard)
     
     switch (chosenCard.type){

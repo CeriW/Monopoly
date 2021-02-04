@@ -1710,6 +1710,29 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     background-image: url('images/hotel-icon.svg');
 }
 
+
+/* Chance and community chest card window ------------------------------------*/
+
+.card-message{
+    min-height: 300px;
+    padding: 30px 50% 30px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $token-selector-grey;
+    font-size: 1.3em;
+
+    background: url('images/card-images/+.svg') calc(100% - 30px) center no-repeat;
+    background-image: url('images/card-images/-.svg');
+    background-image: url('images/card-images/exchange.svg');
+    background-image: url('images/card-images/repairs.svg');
+    background-image: url('images/card-images/move.svg');
+    background-image: url('images/card-images/go-to-jail.svg');
+    background-image: url('images/card-images/getout.svg');
+    background-size: 33% auto;
+
+}
+
 /* Trade summary window  -----------------------------------------------------*/
 
 
