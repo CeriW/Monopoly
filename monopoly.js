@@ -262,8 +262,10 @@ function cardCurrency(){
 function generateBoard(){
 
     let positionNumber = 0
+    generateShortNames()
 
     spaces.forEach(function(space){
+        
 
         space.position = positionNumber
 
@@ -276,6 +278,7 @@ function generateBoard(){
         }
         
         newSpace.innerHTML = '<div class="property-name">' + space.name.toUpperCase() + '</div>'
+        newSpace.innerHTML += '<div class="property-nickname">' + space.shortName.toUpperCase() + '</div>'
 
         if (space.price){
             newSpace.innerHTML += '<div class="property-price">' + currencySymbolSpan + space.price + '</div>'
@@ -309,6 +312,31 @@ function generateBoard(){
 
         board.querySelector('#' + space.boardposition).appendChild(newSpace)
     })
+
+
+
+    // A function to generate shorter nicknames for the spaces on smaller screens.
+    // While I could set these manually, having a function like this will make
+    // adding new board types much simpler as I won't have to figure out suitable
+    // nicknames for all sorts of new property names.
+    function generateShortNames(){
+        
+        spaces.forEach(function(space){
+
+            let originalName = space.name
+            let newName = originalName
+
+            newName = newName.replace('Street',  'St.')
+            newName = newName.replace('Avenue',  'Ave.')
+            newName = newName.replace('Road',    'Rd.')
+            newName = newName.replace('Station', 'Stat.')
+            newName = newName.replace('The', '')
+            newName = newName.replace('Community Chest', 'Comm. Chest')
+            
+            space.shortName = newName
+        })
+
+    }
 
 }
 
@@ -382,7 +410,7 @@ function addEvents(){
         ;[].forEach.call(document.querySelectorAll('.token'), function(token){
             positionToken(token, token.getAttribute('position'))
         })
-    })
+    })s
 }
 
 function resizeBoard(){
@@ -402,11 +430,21 @@ function resizeBoard(){
         board.setAttribute('size', 'super-mini')
     } else{
         board.setAttribute('size', 'normal')
+
+        ;[].forEach.call(document.querySelectorAll('#board .property-name'), function(node){
+            
+            if (node.offsetWidth < node.scrollWidth){
+                console.log(node.textContent)
+            }
+
+
+
+        })
+
     }
-
-
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 }
+
 
 function setAvailableActions(){
     document.body.setAttribute('dice-roll-available', availableActions.rollDice)
