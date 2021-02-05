@@ -102,7 +102,7 @@ let communityChestCards =
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
-    {description: "Go to Jail – Go directly to jail – Do not pass Go–Do not collect £200",      type: 'move',     value: 10},
+    {description: "Go to Jail – Go directly to jail – Do not pass Go – Do not collect £200",    type: 'move',     value: 10},
     {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
     {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
@@ -1315,7 +1315,15 @@ function drawCard(type){
     openPopup(chosenCard.description, (type === "community-chest") ? 'Community Chest' : 'Chance')
 
 
-    let cardMessage = createElement('div', 'card-message', '', 'type', chosenCard.type)
+    let description = (chosenCard.type === 'move' && chosenCard.value === 10)
+    ? 'go-to-jail'
+    : chosenCard.type
+
+    let cardMessage = createElement('div', 'card-message', '', 'type', description)
+
+
+
+
     let innerCardMessage = createElement('div', '', chosenCard.description)
     cardMessage.appendChild(innerCardMessage)
     openPopup('', (type === "community-chest") ? 'Community Chest' : 'Chance')

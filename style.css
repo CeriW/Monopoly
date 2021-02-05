@@ -1500,13 +1500,25 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   border: 2px solid #dbdbdb;
   font-size: 1.3em;
   background: url("images/card-images/+.svg") calc(100% - 30px) center no-repeat;
-  background-image: url("images/card-images/-.svg");
-  background-image: url("images/card-images/exchange.svg");
-  background-image: url("images/card-images/repairs.svg");
-  background-image: url("images/card-images/move.svg");
-  background-image: url("images/card-images/go-to-jail.svg");
-  background-image: url("images/card-images/getout.svg");
   background-size: 33% auto; }
+
+.card-message[type="-"] {
+  background-image: url("images/card-images/-.svg"); }
+
+.card-message[type="repairs"] {
+  background-image: url("images/card-images/repairs.svg"); }
+
+.card-message[type="move"] {
+  background-image: url("images/card-images/move.svg"); }
+
+.card-message[type="exchange"] {
+  background-image: url("images/card-images/exchange.svg"); }
+
+.card-message[type="go-to-jail"] {
+  background-image: url("images/card-images/go-to-jail.svg"); }
+
+.card-message[type="getout"] {
+  background-image: url("images/card-images/getout.svg"); }
 
 /* Trade summary window  -----------------------------------------------------*/
 .trade-summary-window .player-identity,
