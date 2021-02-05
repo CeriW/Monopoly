@@ -602,6 +602,13 @@ $columnsize: 80px;
     min-height: 50px;
 }
 
+#board > .row > div[name="long"] .property-nickname{
+    display: none;
+}
+
+#board > .row > div[name="short"] .property-name{
+    display: none;
+}
 
 
 

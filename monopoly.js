@@ -323,16 +323,27 @@ function generateBoard(){
         
         spaces.forEach(function(space){
 
-            let originalName = space.name
-            let newName = originalName
+            let newName = space.name
 
             newName = newName.replace('Street',  'St.')
             newName = newName.replace('Avenue',  'Ave.')
             newName = newName.replace('Road',    'Rd.')
             newName = newName.replace('Station', 'Stat.')
             newName = newName.replace('The', '')
+            newName = newName.replace('Square', 'Sq.')
+            newName = newName.replace('Company', 'Co.')
+            newName = newName.replace('Lane', 'Ln.')
             newName = newName.replace('Community Chest', 'Comm. Chest')
             
+
+            let longNameTest = newName.match(/\b\w{8,}/g)
+            if (longNameTest){
+                newName.match(/\b\w{8,}/g).forEach(function(name){
+                    newName = newName.replace(name, name.slice(0,4) + '.')
+
+                })
+            }
+
             space.shortName = newName
         })
 
@@ -410,7 +421,7 @@ function addEvents(){
         ;[].forEach.call(document.querySelectorAll('.token'), function(token){
             positionToken(token, token.getAttribute('position'))
         })
-    })s
+    })
 }
 
 function resizeBoard(){
@@ -430,19 +441,20 @@ function resizeBoard(){
         board.setAttribute('size', 'super-mini')
     } else{
         board.setAttribute('size', 'normal')
-
-        ;[].forEach.call(document.querySelectorAll('#board .property-name'), function(node){
-            
-            if (node.offsetWidth < node.scrollWidth){
-                console.log(node.textContent)
-            }
-
-
-
-        })
-
     }
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
+
+    ;[].forEach.call(document.querySelectorAll('#board .row > div'), function(node){
+      
+        let name = node.querySelector('.property-name')
+        node.setAttribute('name', null)
+
+        if (name.offsetWidth < name.scrollWidth){
+            node.setAttribute('name', 'short')
+        } else{
+            node.setAttribute('name', 'long')
+        }
+    })
 }
 
 
