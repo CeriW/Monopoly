@@ -88,6 +88,78 @@ button{
     background: darken($lightgreen, 10%);
   }
 
+/* ABOUT -------------------------------------------------------------------- */
+
+#about-link{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 101;
+    padding: 5px 40px 5px 10px;
+    background: $black url('images/about/question-mark.svg') calc(100% - 5px) center no-repeat;
+    background-size: 25px; 
+    color: #fff;
+    font-size: 0.8em;
+}
+
+#about{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    background: $lightgreen;
+    color: $black;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    transition: 0.3s;
+
+    & > div{
+        padding: 30px;
+        max-width: 500px;
+    }
+}
+
+#about-close{
+    width: 35px;
+    height: 35px;
+    top: 10px;
+    right: 10px;
+    position: absolute;
+}
+
+#about:not(.hidden){
+    opacity: 1;
+    pointer-events: all;
+}
+
+#about.hidden{
+    opacity: 0;
+    pointer-events: none;
+}
+
+#about a{
+    color: $red;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+#about a:hover{
+    color: darken($red, 10%);
+}
+
+.contact-links a{
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 32px;
+    padding-left: 40px;
+}
+
 /* PLAYER CREATOR ----------------------------------------------------------- */
 
 #new-player-overlay{

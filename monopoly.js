@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = true;
+let quickStartGame = false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -368,6 +368,7 @@ function addEvents(){
 
                 document.querySelector('#testing-toggle').checked = false
                 document.body.classList.remove('testing-panel-enabled')
+                aboutToggle()
 
                 if (document.body.getAttribute('close-popup') === 'true') {
                     closePopup()
@@ -1655,6 +1656,10 @@ function openPopup(message, title){
         popupTitle.innerHTML = ''
     }
     document.body.classList.add('popup-open')
+}
+
+function aboutToggle(){
+    document.querySelector('#about').classList.toggle('hidden')
 }
 
 
