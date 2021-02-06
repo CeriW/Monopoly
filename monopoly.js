@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = false;
+let quickStartGame = true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -368,7 +368,7 @@ function addEvents(){
 
                 document.querySelector('#testing-toggle').checked = false
                 document.body.classList.remove('testing-panel-enabled')
-                aboutToggle()
+                document.querySelector('#about').classList.add('hidden')
 
                 if (document.body.getAttribute('close-popup') === 'true') {
                     closePopup()
@@ -390,12 +390,7 @@ function addEvents(){
         }
     })
     
-    document.onkeydown = function(e) {
-        e = e || window.event
-        if (e.key == 'q' && document.body.getAttribute('close-popup') === true) {
-            closePopup()
-        }
-    }
+
 
     board.addEventListener('click', function(e){
         let target = e.target
@@ -1643,6 +1638,10 @@ function closePopup(){
     // Reset the build house available action. We'll recheck whether it's
     // appropriate when the window is next opened.
     //availableActions.buildHouse = false
+
+
+    
+
 }
 
 // TODO - there's at least one instance in this project where I'd had to hack
@@ -2362,17 +2361,20 @@ function displayPropertyOptions(number){
     } 
 
     // If the player owns this property and it is their turn, display options to build/sell houses
-    else if (spaces[number].owner.id == turn){
+    else if (spaces[number].owner){
         
         optionsPanel.innerHTML = 'You own this property!<br>'
 
         let propertyType = spaces[number].type
         let colour = spaces[number].group
 
+        console.log(players[spaces[number].owner.id - 1])
+        console.log(checkColourSet(colour, spaces[number].owner.id))
+
         // Display house building options if this is a standard property (not station or utility)
         if (propertyType === 'property'){
             // If the owner of the property owns the full colour set...
-            if (checkColourSet(colour, players[turn -  1].id)){
+            if (checkColourSet(colour, spaces[number].owner.id)){
                 //availableActions.buildHouse = true
 
                 // Player may build houses/hotels.
@@ -2424,7 +2426,7 @@ function displayPropertyOptions(number){
                 mortgageMessage.innerText = 'This property is mortgaged.'
 
             // If the player owns the full colour set...
-            } else if(checkColourSet(colour, players[turn -  1].id)){
+            } else if(checkColourSet(colour, spaces[number].owner.id)){
 
                 let colourSet = getColourSet(colour)
 
@@ -2516,7 +2518,7 @@ function displayBuildHousePanel(colour){
         let property = spaces[i]
         if (property.group === colour){
             colourSet.push(property)
-            feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses})
+            feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses, owner: property.owner.name})
         }
     }
 
@@ -2708,9 +2710,10 @@ function displayBuildHousePanel(colour){
             availableHouses += 4
             availableHotels--
             document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .build-house-button').classList.add('disabled-button')
+            document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .sell-house-button').classList.remove('disabled-button')
         }
     
-        players[turn - 1].money -= spaces[number].houseCost
+        players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
         updatePlayerDetails()
     
         // Update visual display to show new higher number of houses
@@ -2723,12 +2726,28 @@ function displayBuildHousePanel(colour){
             }
         })
 
-        console.log(feedDetails)
-
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
 
-        document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
+        document.querySelector('#popup-close').addEventListener('click', runHouseBuildingFeedMessage, {once: true})
+        document.addEventListener('keydown', runHouseBuildingFeedMessage)
+
+        function runHouseBuildingFeedMessage(e){
+            // If it's a keydown event, check whether it's the escape key.
+            // If so, run the feed message and remove the listener from the close button
+            if (e.key === 'Escape'){
+                houseBuildingFeedMessage()
+                document.querySelector('#popup-close').removeEventListener('click', runHouseBuildingFeedMessage)
+                document.removeEventListener('keydown', runHouseBuildingFeedMessage)
+            
+            // If it's a click  event, just remove the eventlistener from keydown (since the click event is set to only run once anyway)
+            } else if(e.type === "click"){
+                houseBuildingFeedMessage()
+                document.removeEventListener('keydown', runHouseBuildingFeedMessage)
+            }
+
+            // If it's neither a click event or an escape key press, do nothing.
+        }
     }
 
 
@@ -2753,7 +2772,6 @@ function displayBuildHousePanel(colour){
                 // properties in that group to 0 houses. This is known as
                 // the hotel trap.
                 let wholeColourSet = getColourSet(spaces[number].group)
-                console.log(wholeColourSet)
 
                 wholeColourSet.forEach(function(property){
                     let propertyNumber = property.position
@@ -2762,7 +2780,7 @@ function displayBuildHousePanel(colour){
                     spaces[propertyNumber].houses = 0
 
                     // Refund the player the cost of 5 houses, halved
-                    players[turn - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+                    players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
 
                     // Return the hotel and houses to the bank
                     availableHotels++
@@ -2793,7 +2811,7 @@ function displayBuildHousePanel(colour){
         }
 
         // Players get half the value back for houses/hotels
-        players[turn - 1].money += (spaces[number].houseCost / 2)
+        players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
         updatePlayerDetails()
 
         // Find the property in the feedDetails array and update the number of buildings
@@ -2804,8 +2822,8 @@ function displayBuildHousePanel(colour){
         })
 
         toggleHouseBuildButtons()
+        //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
 
-        document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
         
     }
 
@@ -2876,7 +2894,7 @@ function displayBuildHousePanel(colour){
         })
 
         // Build the message
-        let feedMessage = players[turn-1].name + ' has '
+        let feedMessage = feedDetails[0].owner + ' has '
 
         // Loop through the buildings that are new
         if (feedMessageBuy.length > 0){
@@ -2914,7 +2932,7 @@ function displayBuildHousePanel(colour){
         }
 
         addToFeed(feedMessage, 'construction')
-        document.querySelector('#popup-close').removeEventListener('click', houseBuildingFeedMessage)
+        //document.querySelector('#popup-close').removeEventListener('click', houseBuildingFeedMessage)
 
     }
 

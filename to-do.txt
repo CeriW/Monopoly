@@ -20,6 +20,8 @@ FUNCTIONALITY
 
 - About section
 
+-Little tabs on board properties to display who the owner is.
+
 
 IMPROVEMENTS
 
