@@ -88,6 +88,10 @@ button{
     background: darken($lightgreen, 10%);
   }
 
+.smallText{
+    font-size: 0.7em;
+}
+
 /* ABOUT -------------------------------------------------------------------- */
 
 #about-link{
@@ -435,9 +439,10 @@ $tokens:
     'cat',
     'ducky',
     'thimble'
-;
+; 
 
 @each $token in $tokens{
+    .options-panel-owner .token[token="#{$token}"],
     .token-option-#{$token},
     .token-selector-chosen-indicator[chosentoken="#{$token}"]{
         background-image: url('images/tokens/#{$token}.svg');
@@ -1510,7 +1515,6 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
     padding: 5px;
 }
 
-
 //TODO - I tried implementing this as an each loop but couldn't get it to work.
 .property-overview-color.brown{background: $brown;}
 .property-overview-color.lightblue{background: $lightblue;}
@@ -1740,6 +1744,60 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 .house-visual-display[houses="5"] + .build-house-button{
     //display: none;
+}
+
+/* Owner details  ------------------------------------------------------------*/
+
+.options-panel-owner{
+    display: flex;
+    align-items: center;
+}
+
+.options-panel-owner .token{
+    position: relative;
+    margin-right: 20px;
+}
+
+
+.property-overview-options {
+    border: $border;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 0 10px;
+    grid-template-areas:
+      "owner property-options"
+      "owner mortgage-message";
+  }
+  
+  .options-panel-owner {
+      grid-area: owner;
+      padding: 10px;
+      border-right: $border;
+    
+}
+  
+.mortgage-message {
+    grid-area: mortgage-message;
+    padding-bottom: 10px;
+}
+  
+.property-options {
+    grid-area: property-options;
+    padding: 20px 10px 10px;
+
+    button{
+        margin: 5px;
+    }
+}
+  
+
+
+
+.property-options{
+    display: flex;
+    justify-content: center;
 }
 
 /* Left panel  ---------------------------------------------------------------*/

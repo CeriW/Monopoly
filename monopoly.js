@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame = true;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -361,7 +361,6 @@ function addEvents(){
 
     window.addEventListener('keydown', function(e){
         let key = e.key
-        console.log(key)
 
         switch (key){
             case 'Escape':
@@ -2333,7 +2332,7 @@ function generateFullPortfolioView(player){
 }
 
 function displayPropertyOptions(number){
-    let optionsPanel = document.createElement('div')
+    let optionsPanel = createElement('div', 'property-overview-options')
     
     let propertyOwner = spaces[number].owner
     // If this property is unowned, display a button to buy it
@@ -2363,13 +2362,28 @@ function displayPropertyOptions(number){
     // If the player owns this property and it is their turn, display options to build/sell houses
     else if (spaces[number].owner){
         
-        optionsPanel.innerHTML = 'You own this property!<br>'
+        //optionsPanel.innerHTML = 'You own this property!<br>'
+
+        let optionsPanelInner = createElement('div', 'options-panel-owner')
+        optionsPanelInner.appendChild(createElement('div', 'token', '', 'token', spaces[number].owner.token))
+        optionsPanelInner.appendChild(createElement('div', '', '<span class="smallText">OWNED BY</span><br>' + spaces[number].owner.name))
+        optionsPanel.appendChild(optionsPanelInner)
+
+        optionsPanelInner = createElement('div', 'property-options')
+        optionsPanel.appendChild(optionsPanelInner)
+
+
+        /*optionsPanel.innerHTML = 
+            '<div class="optionsPanelOwner">'
+            + '<div class="token" token="' + spaces[number].owner.token + '"></div>'
+            + '<div class="owner-name">This property is owned by ' + spaces[number].owner.name + '</div>'
+            + '</div>'*/
+
+        //optionsPanel.innerHTML = 'This property is owned by ' + spaces[number].owner.name + '<br>'
 
         let propertyType = spaces[number].type
         let colour = spaces[number].group
 
-        console.log(players[spaces[number].owner.id - 1])
-        console.log(checkColourSet(colour, spaces[number].owner.id))
 
         // Display house building options if this is a standard property (not station or utility)
         if (propertyType === 'property'){
@@ -2385,13 +2399,14 @@ function displayPropertyOptions(number){
                     displayBuildHousePanel(colour)
                 })
 
-                optionsPanel.appendChild(colourSetButton)
+                optionsPanelInner.appendChild(colourSetButton)
             }
         }
 
         // If this space has a truthy group, it must be a property, station or
         // utility, and therefore may be mortgaged.
-        if (colour){
+        // It must also belong to the current player.
+        if (colour && spaces[number].owner.id == turn){
 
             // Create the mortgage button. We'll disable this and change its 
             // text even if we determine mortgaging isn't allowed on
@@ -2401,7 +2416,7 @@ function displayPropertyOptions(number){
             mortgageButton.addEventListener('click', function(){
                 mortgageProperty(spaces[number])
             })
-            optionsPanel.appendChild(mortgageButton)
+            optionsPanelInner.appendChild(mortgageButton)
 
             // Create the unmortgage button
 
@@ -2409,7 +2424,7 @@ function displayPropertyOptions(number){
             unmortgageButton.addEventListener('click', function(){
                 unmortgageProperty(spaces[number])
             })
-            optionsPanel.appendChild(unmortgageButton)
+            optionsPanelInner.appendChild(unmortgageButton)
 
 
             mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
@@ -3622,7 +3637,6 @@ function negotiateTrade(e){
     // Event, type,
     function updateProposal(e){
 
-        console.log
 
         let item = e.target.parentNode
         

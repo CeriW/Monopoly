@@ -55,6 +55,9 @@ button {
 ::-webkit-scrollbar-thumb:hover {
   background: #b5d6b3; }
 
+.smallText {
+  font-size: 0.7em; }
+
 /* ABOUT -------------------------------------------------------------------- */
 #about-link {
   position: fixed;
@@ -333,46 +336,57 @@ button {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
 
+.options-panel-owner .token[token="dog"],
 .token-option-dog,
 .token-selector-chosen-indicator[chosentoken="dog"] {
   background-image: url("images/tokens/dog.svg"); }
 
+.options-panel-owner .token[token="iron"],
 .token-option-iron,
 .token-selector-chosen-indicator[chosentoken="iron"] {
   background-image: url("images/tokens/iron.svg"); }
 
+.options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
 
+.options-panel-owner .token[token="car"],
 .token-option-car,
 .token-selector-chosen-indicator[chosentoken="car"] {
   background-image: url("images/tokens/car.svg"); }
 
+.options-panel-owner .token[token="battleship"],
 .token-option-battleship,
 .token-selector-chosen-indicator[chosentoken="battleship"] {
   background-image: url("images/tokens/battleship.svg"); }
 
+.options-panel-owner .token[token="hat"],
 .token-option-hat,
 .token-selector-chosen-indicator[chosentoken="hat"] {
   background-image: url("images/tokens/hat.svg"); }
 
+.options-panel-owner .token[token="penguin"],
 .token-option-penguin,
 .token-selector-chosen-indicator[chosentoken="penguin"] {
   background-image: url("images/tokens/penguin.svg"); }
 
+.options-panel-owner .token[token="dinosaur"],
 .token-option-dinosaur,
 .token-selector-chosen-indicator[chosentoken="dinosaur"] {
   background-image: url("images/tokens/dinosaur.svg"); }
 
+.options-panel-owner .token[token="cat"],
 .token-option-cat,
 .token-selector-chosen-indicator[chosentoken="cat"] {
   background-image: url("images/tokens/cat.svg"); }
 
+.options-panel-owner .token[token="ducky"],
 .token-option-ducky,
 .token-selector-chosen-indicator[chosentoken="ducky"] {
   background-image: url("images/tokens/ducky.svg"); }
 
+.options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
@@ -1516,6 +1530,43 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
+
+/* Owner details  ------------------------------------------------------------*/
+.options-panel-owner {
+  display: flex;
+  align-items: center; }
+
+.options-panel-owner .token {
+  position: relative;
+  margin-right: 20px; }
+
+.property-overview-options {
+  border: 3px solid #000;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0 10px;
+  grid-template-areas: "owner property-options" "owner mortgage-message"; }
+
+.options-panel-owner {
+  grid-area: owner;
+  padding: 10px;
+  border-right: 3px solid #000; }
+
+.mortgage-message {
+  grid-area: mortgage-message;
+  padding-bottom: 10px; }
+
+.property-options {
+  grid-area: property-options;
+  padding: 20px 10px 10px; }
+  .property-options button {
+    margin: 5px; }
+
+.property-options {
+  display: flex;
+  justify-content: center; }
 
 /* Left panel  ---------------------------------------------------------------*/
 #left-panel {
