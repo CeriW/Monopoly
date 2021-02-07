@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -2360,6 +2360,8 @@ function displayPropertyOptions(number){
             })
             optionsPanelInner.appendChild(auctionButton)
 
+        } else{
+            optionsPanelInner.innerHTML = 'This property is unonwned'
         }
     } 
 
