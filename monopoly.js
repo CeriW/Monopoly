@@ -2335,6 +2335,10 @@ function displayPropertyOptions(number){
     let optionsPanel = createElement('div', 'property-overview-options')
     
     let propertyOwner = spaces[number].owner
+
+    let optionsPanelInner = createElement('div', 'property-options')
+    optionsPanel.appendChild(optionsPanelInner)
+
     // If this property is unowned, display a button to buy it
     if (!propertyOwner){
         if (players[turn - 1].position === number){
@@ -2345,7 +2349,7 @@ function displayPropertyOptions(number){
             buyButton.addEventListener('click', function(){
                 buyProperty(number, players[turn - 1], 'purchase', null)
             })
-            optionsPanel.appendChild(buyButton)
+            optionsPanelInner.appendChild(buyButton)
 
 
             // Auction property elements
@@ -2354,32 +2358,23 @@ function displayPropertyOptions(number){
             auctionButton.addEventListener('click', function(){
                 auctionProperty(number)
             })
-            optionsPanel.appendChild(auctionButton)
+            optionsPanelInner.appendChild(auctionButton)
 
         }
     } 
 
-    // If the player owns this property and it is their turn, display options to build/sell houses
+    // If this space is owned, display appropriate options.
     else if (spaces[number].owner){
         
         //optionsPanel.innerHTML = 'You own this property!<br>'
 
-        let optionsPanelInner = createElement('div', 'options-panel-owner')
-        optionsPanelInner.appendChild(createElement('div', 'token', '', 'token', spaces[number].owner.token))
-        optionsPanelInner.appendChild(createElement('div', '', '<span class="smallText">OWNED BY</span><br>' + spaces[number].owner.name))
-        optionsPanel.appendChild(optionsPanelInner)
-
-        optionsPanelInner = createElement('div', 'property-options')
-        optionsPanel.appendChild(optionsPanelInner)
+        optionsPanelOwner = createElement('div', 'options-panel-owner')
+        optionsPanelOwner.appendChild(createElement('div', 'token', '', 'token', spaces[number].owner.token))
+        optionsPanelOwner.appendChild(createElement('div', '', '<span class="smallText">OWNED BY</span><br>' + spaces[number].owner.name))
+        optionsPanel.appendChild(optionsPanelOwner)
 
 
-        /*optionsPanel.innerHTML = 
-            '<div class="optionsPanelOwner">'
-            + '<div class="token" token="' + spaces[number].owner.token + '"></div>'
-            + '<div class="owner-name">This property is owned by ' + spaces[number].owner.name + '</div>'
-            + '</div>'*/
 
-        //optionsPanel.innerHTML = 'This property is owned by ' + spaces[number].owner.name + '<br>'
 
         let propertyType = spaces[number].type
         let colour = spaces[number].group
@@ -2401,6 +2396,21 @@ function displayPropertyOptions(number){
 
                 optionsPanelInner.appendChild(colourSetButton)
             }
+        } else if (propertyType === 'station'){
+
+            let stationSet = getColourSet('train-station')
+            let stationCount = 0
+            stationSet.forEach(function(station){
+                if (station.owner && station.owner.id === spaces[number].owner.id){
+                    stationCount++
+                }
+            })
+
+            if (stationCount > 0){
+                let stationMessage = createElement('div', 'station-message', spaces[number].owner.name + ' also owns ' + (stationCount - 1) + ' other stations')
+                optionsPanel.appendChild(stationMessage)
+            }
+
         }
 
         // If this space has a truthy group, it must be a property, station or
@@ -2427,8 +2437,7 @@ function displayPropertyOptions(number){
             optionsPanelInner.appendChild(unmortgageButton)
 
 
-            mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
-            optionsPanel.appendChild(mortgageMessage)
+
             
             // If the current player owns all of the properties in this set,
             // we need to check that they don't have houses/hotels before
@@ -2438,6 +2447,8 @@ function displayPropertyOptions(number){
             if(spaces[number].mortgaged === true){
                 availableActions.mortgageProperty = false
                 availableActions.unmortgageProperty = true
+                mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
+                optionsPanel.appendChild(mortgageMessage)
                 mortgageMessage.innerText = 'This property is mortgaged.'
 
             // If the player owns the full colour set...
@@ -2460,6 +2471,8 @@ function displayPropertyOptions(number){
                     availableActions.unmortgageProperty = false    // This property shouldn't be able to be mortgaged in the first place, but this will hide the button.
                     availableActions.buildHouse = true
                     availableActions.buildHotel = true
+                    mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
+                    optionsPanel.appendChild(mortgageMessage)
                     mortgageMessage.innerText = 'You may not mortgage this while any properties in the colour set have houses or hotels.'
                 } else{
                     // There are no houses on this colour set. Enable both
@@ -2474,6 +2487,8 @@ function displayPropertyOptions(number){
                 if (checkMortgagesInColourSet(colour)){
                     availableActions.buildHouse = false
                     availableActions.buildHotel = false
+                    mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
+                    optionsPanel.appendChild(mortgageMessage)
                     mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
                 }
 
@@ -2487,7 +2502,11 @@ function displayPropertyOptions(number){
 
             setAvailableActions()
 
+
+
         }
+
+
 
         function mortgageProperty(property){
 
@@ -2743,26 +2762,6 @@ function displayBuildHousePanel(colour){
 
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
-
-        document.querySelector('#popup-close').addEventListener('click', runHouseBuildingFeedMessage, {once: true})
-        document.addEventListener('keydown', runHouseBuildingFeedMessage)
-
-        function runHouseBuildingFeedMessage(e){
-            // If it's a keydown event, check whether it's the escape key.
-            // If so, run the feed message and remove the listener from the close button
-            if (e.key === 'Escape'){
-                houseBuildingFeedMessage()
-                document.querySelector('#popup-close').removeEventListener('click', runHouseBuildingFeedMessage)
-                document.removeEventListener('keydown', runHouseBuildingFeedMessage)
-            
-            // If it's a click  event, just remove the eventlistener from keydown (since the click event is set to only run once anyway)
-            } else if(e.type === "click"){
-                houseBuildingFeedMessage()
-                document.removeEventListener('keydown', runHouseBuildingFeedMessage)
-            }
-
-            // If it's neither a click event or an escape key press, do nothing.
-        }
     }
 
 
@@ -2840,6 +2839,26 @@ function displayBuildHousePanel(colour){
         //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
 
         
+    }
+
+    document.querySelector('#popup-close').addEventListener('click', runHouseBuildingFeedMessage, {once: true})
+    document.addEventListener('keydown', runHouseBuildingFeedMessage)
+
+    function runHouseBuildingFeedMessage(e){
+        // If it's a keydown event, check whether it's the escape key.
+        // If so, run the feed message and remove the listener from the close button
+        if (e.key === 'Escape'){
+            houseBuildingFeedMessage()
+            document.querySelector('#popup-close').removeEventListener('click', runHouseBuildingFeedMessage)
+            document.removeEventListener('keydown', runHouseBuildingFeedMessage)
+        
+        // If it's a click  event, just remove the eventlistener from keydown (since the click event is set to only run once anyway)
+        } else if(e.type === "click"){
+            houseBuildingFeedMessage()
+            document.removeEventListener('keydown', runHouseBuildingFeedMessage)
+        }
+
+        // If it's neither a click event or an escape key press, do nothing.
     }
 
     // Build a player-readable message for the feed

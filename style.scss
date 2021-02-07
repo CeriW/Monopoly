@@ -1751,16 +1751,19 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .options-panel-owner{
     display: flex;
     align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .options-panel-owner .token{
     position: relative;
-    margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 
 .property-overview-options {
-    border: $border;
+    //border: $border;
+    background: #ececec;
     margin-top: 20px;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -1768,24 +1771,24 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     gap: 0 10px;
     grid-template-areas:
       "owner property-options"
-      "owner mortgage-message";
+      "owner message";
   }
   
-  .options-panel-owner {
-      grid-area: owner;
-      padding: 10px;
-      border-right: $border;
-    
+.options-panel-owner {
+    grid-area: owner;
+    padding: 10px;
+    border-right: 3px solid #fff; 
 }
   
+.station-message,
 .mortgage-message {
-    grid-area: mortgage-message;
+    grid-area: message;
     padding-bottom: 10px;
 }
   
 .property-options {
     grid-area: property-options;
-    padding: 20px 10px 10px;
+    padding: 10px;
 
     button{
         margin: 5px;
@@ -1798,6 +1801,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .property-options{
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 /* Left panel  ---------------------------------------------------------------*/
