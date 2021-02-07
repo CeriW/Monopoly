@@ -2457,6 +2457,88 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 }
 
 
+/* Bankruptcy ----------------------------------------------------------------*/
+
+#bankruptcy{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba($black, 0.7);
+    z-index: 100;
+}
+
+#bankruptcy-inner{
+    background: #fff;
+    border: $border;
+    border-color: $red;
+
+    width: 800px;
+    max-width: 100%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(black, 0.4);
+    max-height: calc(100vh - 30px);
+    overflow-y: auto;
+}
+
+#bankruptcy-title{
+    background: $red;
+    color: #fff;
+    font-size: 26px;
+    text-transform: uppercase;
+    padding: 5px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+#bankruptcy-message{
+    padding: 20px;
+}
+
+body[bankruptcy-proceedings = "false"] #bankruptcy{
+    display: none;
+}
+
+/*
+#popup-message{
+    padding: 20px;
+}
+
+#popup-close{
+    width: 35px;
+    position: absolute;
+    top: 1px;
+    right: 3px;
+    z-index: 2;
+}
+
+body:not(.popup-open) #popup{
+    display: none;
+}
+
+#popup-message{
+    min-height: 100px;
+}
+
+body[close-popup="false"] #popup-close{
+    display: none;
+}
+
+#popup-title{
+    background: #000;
+    color: #fff;
+    font-size: 26px;
+    text-transform: uppercase;
+    padding: 5px;
+    letter-spacing: 1px;
+}
+*/
 
 /* Testing panel -------------------------------------------------------------*/
 

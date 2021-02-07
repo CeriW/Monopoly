@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -208,7 +208,8 @@ let availableActions = {
     buildHotel: true,
     mortgageProperty: false,
     unmortgageProperty: false,
-    closePopup: true
+    closePopup: true,
+    bankruptcyProceedings: false
 }
 
 let currencySymbol = '₩'
@@ -464,6 +465,7 @@ function setAvailableActions(){
     document.body.setAttribute('mortgage-property', availableActions.mortgageProperty)
     document.body.setAttribute('unmortgage-property', availableActions.unmortgageProperty)
     document.body.setAttribute('close-popup', availableActions.closePopup)
+    document.body.setAttribute('bankruptcy-proceedings', availableActions.bankruptcyProceedings)
 }
 
 
@@ -541,6 +543,12 @@ function updatePlayerDetails(){
             })
 
             updateNode.setAttribute('cards', true)
+        }
+
+        if (player.money < 0){
+            availableActions.bankruptcyProceedings = true
+            setAvailableActions()
+            openBankruptcyProceedings()
         }
 
     })
@@ -4152,6 +4160,14 @@ function negotiateTrade(e){
         tradeProposal = [[], []]
     }
 
+}
+
+// BANKRUPTCY  ---------------------------------------------------------------//
+
+let bankcruptcyMessage = document.querySelector('#bankruptcy-message')
+
+function openBankruptcyProceedings(debtor, creditor){
+    console.log('bankruptcy!')
 }
 
 
