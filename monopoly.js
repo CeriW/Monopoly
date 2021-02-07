@@ -100,7 +100,8 @@ let tradeProposal = [[], []]
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    {description: "Doctor's fee — Pay £5000",                                                     type: '-',        value: 5000}
+    /*{description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
@@ -116,7 +117,7 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
 
 let chanceCards = 
@@ -474,7 +475,11 @@ function setAvailableActions(){
 
 // This function should be run every time a player's details have been updated.
 // This will trigger a nice animation.
-function updatePlayerDetails(){
+
+// The optional array parameter will contain a list of debtor/creditor/amount
+// entries, to be used if the player has entered bankruptcy
+
+function updatePlayerDetails(financialDetails){
 
     players.forEach(function(player){
 
@@ -548,10 +553,10 @@ function updatePlayerDetails(){
             updateNode.setAttribute('cards', true)
         }
 
-        if (player.money < 0){
+        if (player.money < 0 && financialDetails){
             availableActions.bankruptcyProceedings = true
             setAvailableActions()
-            openBankruptcyProceedings(player)
+            openBankruptcyProceedings(player.id, financialDetails[0].creditor, financialDetails[0].amount, financialDetails[0].originalMoney)
         }
 
     })
@@ -805,7 +810,7 @@ function quickStart(){
 
 
     // Instant bankruptcy
-    players[0].money = -1
+    //players[0].money = -1
 
     updatePlayerDetails()
 
@@ -1388,6 +1393,10 @@ function drawCard(type){
     popupMessage.appendChild(cardMessage)
 
     cardList.push(chosenCard)
+
+    // A list of any negative money transactions that happen as a result of this
+    // card. This will be passed to any bankruptcy proceedings that occur.
+    let financialDetails = []
     
     switch (chosenCard.type){
         case '+':
@@ -1397,9 +1406,13 @@ function drawCard(type){
             break
         case '-':
             // A card where the player has to surrender money to the bank
-            players[turn - 1].money -= chosenCard.value
+            financialDetails.push({debtor: players[turn - 1].id, creditor: 'bank', amount: chosenCard.value, originalMoney: players[turn - 1].money})
 
+            players[turn - 1].money -= chosenCard.value
             addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
+
+            
+
             break
         case 'getout':
             // TODO
@@ -1485,7 +1498,7 @@ function drawCard(type){
         }
 
     // While not all cards will require this, a large majority will
-    updatePlayerDetails()
+    updatePlayerDetails(financialDetails)
 }
 
 // TODO - are there other Monopoly sets where the cards aren't called
@@ -4170,8 +4183,10 @@ function negotiateTrade(e){
 // BANKRUPTCY  ---------------------------------------------------------------//
 
 
+function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
 
-function openBankruptcyProceedings(debtor, creditor){
+    let debtor = players[debtorID - 1]
+    let creditor = creditorID === 'bank' ? 'bank' : players[creditorID - 1]
 
     // Generate the title of the bankruptcy window, including icon and debtor name
     let bankruptcyTitleContent = createElement('div', 'bankruptcy-title')
@@ -4183,9 +4198,17 @@ function openBankruptcyProceedings(debtor, creditor){
     let debtorTitle =  createElement('h2', '', 'BANKRUPTCY WARNING - ' + debtor.name.toUpperCase())
     bankruptcyTitleContent.appendChild(debtorTitle)
 
-    console.log('bankruptcy!')
+    // Generate the message
 
-    bankcruptcyMessage.textContent = debtor.name
+    let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+
+    let bankruptcyDescription = createElement('div', '',
+        players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+        + 'However they only have ' + currencySymbolSpan + originalMoney + '. <br>'
+        + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan + (Math.abs(originalMoney - amount)) + '</span><br> if they wish to stay in the game.'
+        )
+    bankcruptcyMessage.appendChild(bankruptcyDescription)
+
 }
 
 
