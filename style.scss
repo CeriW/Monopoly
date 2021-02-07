@@ -1072,6 +1072,20 @@ body[close-popup="false"] #popup-close{
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 102;
+    text-align: center;
+    animation: warningAnimation 4s infinite;
+    transition: 0.2s;
+
+    button + button{
+        margin-left: 5px;
+    }
+}
+
+@keyframes warningAnimation{
+    0%{background: rgba($red, 0);}
+    50%{background: rgba($red, 0.8);}
+    100%{background: rgba($red, 0);}
 }
 
 #warning-inner{
@@ -1079,6 +1093,7 @@ body[close-popup="false"] #popup-close{
     border: 3px solid $red;
     background: #fff;
     position: relative;
+    box-shadow: 0 0 20px #000;
 }
 
 #warning-close{
@@ -1089,17 +1104,28 @@ body[close-popup="false"] #popup-close{
     z-index: 2;
 }
 
+#warning-icon{
+    background: $red;
+    padding: 10px;
+
+    img{
+        width: 50px;
+    }
+}
+
 #warning-title{
     background: $red;
     color: #fff;
     padding: 5px;
-    text-align: center;
     font-size: 30px;
     text-transform: uppercase;
 }
 
 #warning-message{
     padding: 20px;
+    background: $red;
+    color: #fff;
+
 }
 
 body:not(.warning-open) #warning{

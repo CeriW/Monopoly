@@ -23,12 +23,15 @@ let availableTokens = [
 const board = document.querySelector('#board')
 const popupMessage = document.querySelector('#popup-message')
 const popupTitle = document.querySelector('#popup-title')
-const warningMessage = document.querySelector('#warning-message')
+
 const playerSummary = document.querySelector('#player-summary')
 const feed = document.querySelector('#feed-content')
 const bankContainer = document.querySelector('#bank')
 const bank = document.querySelector('#bank-content')
 const playerCreator = document.querySelector('#player-creator')
+
+const warningMessage = document.querySelector('#warning-message')
+const warningTitle = document.querySelector('#warning-title')
 
 const bankcruptcyMessage = document.querySelector('#bankruptcy-message')
 const bankruptcyTitle = document.querySelector('#bankruptcy-title')
@@ -1689,8 +1692,9 @@ function aboutToggle(){
 
 // WARNING FUNCTIONS ---------------------------------------------------------//
 
-function openWarning(message){
+function openWarning(title, message){
     document.body.classList.add('warning-open')
+    warningTitle.innerHTML = title
     warningMessage.innerHTML = message
 }
 
@@ -4208,6 +4212,39 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
         + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan + (Math.abs(originalMoney - amount)) + '</span><br> if they wish to stay in the game.'
         )
     bankcruptcyMessage.appendChild(bankruptcyDescription)
+
+
+    // Generate the bankrupt button
+    let declareBankruptcyButton = createElement('button', '', 'Declare bankruptcy')
+    declareBankruptcyButton.addEventListener('click', declareBankruptcy)
+    bankcruptcyMessage.appendChild(declareBankruptcyButton)
+
+
+    function declareBankruptcy(){
+        //alert('bankruptcy!')
+        
+        openWarning('Are you sure?', '')
+
+        let warningContent = createElement('div', '', 'Declaring bankruptcy will remove you from the game and pass all of your assets to ' + creditorName + '. Are you sure you would like to declare bankruptcy? <br><br>')
+
+        // Confirm bankruptcy button
+        let confirmButton = createElement('button', '', 'Confirm bankruptcy')
+        confirmButton.addEventListener('click', function(){
+            
+            // THE ACTUAL STUFF INVOLVED IN GOING BANKRUPT
+            alert('bankrupt!')
+        })
+        warningContent.appendChild(confirmButton)
+
+        // Go back button
+        let goBackButton = createElement('button', '', 'Go back')
+        goBackButton.addEventListener('click', closeWarning)
+        warningContent.appendChild(goBackButton)
+
+
+        warningMessage.appendChild(warningContent)
+
+    }
 
 }
 

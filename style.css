@@ -963,13 +963,28 @@ body[close-popup="false"] #popup-close {
   bottom: 0;
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+  z-index: 102;
+  text-align: center;
+  animation: warningAnimation 4s infinite;
+  transition: 0.2s; }
+  #warning button + button {
+    margin-left: 5px; }
+
+@keyframes warningAnimation {
+  0% {
+    background: rgba(219, 9, 38, 0); }
+  50% {
+    background: rgba(219, 9, 38, 0.8); }
+  100% {
+    background: rgba(219, 9, 38, 0); } }
 
 #warning-inner {
   width: 500px;
   border: 3px solid #db0926;
   background: #fff;
-  position: relative; }
+  position: relative;
+  box-shadow: 0 0 20px #000; }
 
 #warning-close {
   width: 35px;
@@ -978,16 +993,23 @@ body[close-popup="false"] #popup-close {
   right: 2px;
   z-index: 2; }
 
+#warning-icon {
+  background: #db0926;
+  padding: 10px; }
+  #warning-icon img {
+    width: 50px; }
+
 #warning-title {
   background: #db0926;
   color: #fff;
   padding: 5px;
-  text-align: center;
   font-size: 30px;
   text-transform: uppercase; }
 
 #warning-message {
-  padding: 20px; }
+  padding: 20px;
+  background: #db0926;
+  color: #fff; }
 
 body:not(.warning-open) #warning {
   display: none; }
