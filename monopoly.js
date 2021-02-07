@@ -30,6 +30,9 @@ const bankContainer = document.querySelector('#bank')
 const bank = document.querySelector('#bank-content')
 const playerCreator = document.querySelector('#player-creator')
 
+const bankcruptcyMessage = document.querySelector('#bankruptcy-message')
+const bankruptcyTitle = document.querySelector('#bankruptcy-title')
+
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
 let turn = 0
@@ -548,7 +551,7 @@ function updatePlayerDetails(){
         if (player.money < 0){
             availableActions.bankruptcyProceedings = true
             setAvailableActions()
-            openBankruptcyProceedings()
+            openBankruptcyProceedings(player)
         }
 
     })
@@ -801,6 +804,8 @@ function quickStart(){
     }
 
 
+    // Instant bankruptcy
+    players[0].money = -1
 
     updatePlayerDetails()
 
@@ -4164,10 +4169,23 @@ function negotiateTrade(e){
 
 // BANKRUPTCY  ---------------------------------------------------------------//
 
-let bankcruptcyMessage = document.querySelector('#bankruptcy-message')
+
 
 function openBankruptcyProceedings(debtor, creditor){
+
+    // Generate the title of the bankruptcy window, including icon and debtor name
+    let bankruptcyTitleContent = createElement('div', 'bankruptcy-title')
+    bankruptcyTitle.appendChild(bankruptcyTitleContent)
+
+    let debtorIcon = createElement('div', 'token', '', 'token', debtor.token)
+    bankruptcyTitleContent.appendChild(debtorIcon)
+
+    let debtorTitle =  createElement('h2', '', 'BANKRUPTCY WARNING - ' + debtor.name.toUpperCase())
+    bankruptcyTitleContent.appendChild(debtorTitle)
+
     console.log('bankruptcy!')
+
+    bankcruptcyMessage.textContent = debtor.name
 }
 
 

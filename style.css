@@ -336,56 +336,67 @@ button {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
 
+.bankruptcy-title .token[token="dog"],
 .options-panel-owner .token[token="dog"],
 .token-option-dog,
 .token-selector-chosen-indicator[chosentoken="dog"] {
   background-image: url("images/tokens/dog.svg"); }
 
+.bankruptcy-title .token[token="iron"],
 .options-panel-owner .token[token="iron"],
 .token-option-iron,
 .token-selector-chosen-indicator[chosentoken="iron"] {
   background-image: url("images/tokens/iron.svg"); }
 
+.bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
 
+.bankruptcy-title .token[token="car"],
 .options-panel-owner .token[token="car"],
 .token-option-car,
 .token-selector-chosen-indicator[chosentoken="car"] {
   background-image: url("images/tokens/car.svg"); }
 
+.bankruptcy-title .token[token="battleship"],
 .options-panel-owner .token[token="battleship"],
 .token-option-battleship,
 .token-selector-chosen-indicator[chosentoken="battleship"] {
   background-image: url("images/tokens/battleship.svg"); }
 
+.bankruptcy-title .token[token="hat"],
 .options-panel-owner .token[token="hat"],
 .token-option-hat,
 .token-selector-chosen-indicator[chosentoken="hat"] {
   background-image: url("images/tokens/hat.svg"); }
 
+.bankruptcy-title .token[token="penguin"],
 .options-panel-owner .token[token="penguin"],
 .token-option-penguin,
 .token-selector-chosen-indicator[chosentoken="penguin"] {
   background-image: url("images/tokens/penguin.svg"); }
 
+.bankruptcy-title .token[token="dinosaur"],
 .options-panel-owner .token[token="dinosaur"],
 .token-option-dinosaur,
 .token-selector-chosen-indicator[chosentoken="dinosaur"] {
   background-image: url("images/tokens/dinosaur.svg"); }
 
+.bankruptcy-title .token[token="cat"],
 .options-panel-owner .token[token="cat"],
 .token-option-cat,
 .token-selector-chosen-indicator[chosentoken="cat"] {
   background-image: url("images/tokens/cat.svg"); }
 
+.bankruptcy-title .token[token="ducky"],
 .options-panel-owner .token[token="ducky"],
 .token-option-ducky,
 .token-selector-chosen-indicator[chosentoken="ducky"] {
   background-image: url("images/tokens/ducky.svg"); }
 
+.bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
@@ -2130,14 +2141,27 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   max-height: calc(100vh - 30px);
   overflow-y: auto; }
 
-#bankruptcy-title {
+/* Title -----------------------------*/
+#bankruptcy-title > div {
   background: #db0926;
   color: #fff;
+  padding: 5px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+#bankruptcy-title h2 {
   font-size: 26px;
   text-transform: uppercase;
   padding: 5px;
   letter-spacing: 1px;
-  text-align: center; }
+  margin: 0; }
+
+#bankruptcy-title .token {
+  position: relative;
+  float: left;
+  margin: -6px 20px 0 0; }
 
 #bankruptcy-message {
   padding: 20px; }

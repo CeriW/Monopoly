@@ -442,6 +442,7 @@ $tokens:
 ; 
 
 @each $token in $tokens{
+    .bankruptcy-title .token[token="#{$token}"],
     .options-panel-owner .token[token="#{$token}"],
     .token-option-#{$token},
     .token-selector-chosen-indicator[chosentoken="#{$token}"]{
@@ -2487,15 +2488,37 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     overflow-y: auto;
 }
 
+
+/* Title -----------------------------*/
+
 #bankruptcy-title{
-    background: $red;
-    color: #fff;
-    font-size: 26px;
-    text-transform: uppercase;
-    padding: 5px;
-    letter-spacing: 1px;
-    text-align: center;
+
+    & > div {
+        background: $red;
+        color: #fff;
+        padding: 5px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+     h2{
+        font-size: 26px;
+        text-transform: uppercase;
+        padding: 5px;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .token{
+        position: relative;
+        float: left;
+        margin: -6px 20px 0 0;
+    }
 }
+
+
 
 #bankruptcy-message{
     padding: 20px;
@@ -2504,6 +2527,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 body[bankruptcy-proceedings = "false"] #bankruptcy{
     display: none;
 }
+
+
+
 
 /*
 #popup-message{
