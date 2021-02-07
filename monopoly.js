@@ -2928,7 +2928,10 @@ function displayBuildHousePanel(colour){
         })
 
         // Build the message
-        let feedMessage = feedDetails[0].owner + ' has '
+        if (feedMessageBuy.length || feedMessageSell.length){
+            let feedMessage = feedDetails[0].owner + ' has '
+        }
+        
 
         // Loop through the buildings that are new
         if (feedMessageBuy.length > 0){
@@ -2965,7 +2968,10 @@ function displayBuildHousePanel(colour){
             }
         }
 
-        addToFeed(feedMessage, 'construction')
+        if (feedMessageBuy.length || feedMessageSell.length){
+            addToFeed(feedMessage, 'construction')
+        }
+
         //document.querySelector('#popup-close').removeEventListener('click', houseBuildingFeedMessage)
 
     }
