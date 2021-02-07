@@ -1768,22 +1768,36 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr auto;
-    gap: 0 10px;
     grid-template-areas:
       "owner property-options"
       "owner message";
-  }
+}
+
+
   
 .options-panel-owner {
     grid-area: owner;
     padding: 10px;
     border-right: 3px solid #fff; 
 }
-  
+
+.property-overview-options.single-item{
+    grid-template-columns: 100%;
+
+    .options-panel-owner{
+        border: none;
+    }
+}
+
+.utility-message,
 .station-message,
 .mortgage-message {
-    grid-area: message;
-    padding-bottom: 10px;
+    grid-area: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //padding-bottom: 10px;
+    padding: 10px;
 }
   
 .property-options {

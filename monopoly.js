@@ -2411,6 +2411,22 @@ function displayPropertyOptions(number){
                 optionsPanel.appendChild(stationMessage)
             }
 
+        } else if (propertyType === 'utility'){
+
+            let currentUtilityName = spaces[number].name
+            let utilityCount = []
+
+            spaces.forEach(function(space){
+                if (space.type === 'utility' && space.name !== currentUtilityName){
+                    utilityCount.push(space.name)
+                }
+            })
+
+            // Note - I am unaware of any board that has more than two utilities. However, this WILL work with more than two even if the grammar output isn't perfect.
+            if (utilityCount.length){
+                let utilityMessage = createElement('div', 'utility-message', spaces[number].owner.name + ' also owns ' + utilityCount)
+                optionsPanel.appendChild(utilityMessage)      
+            }
         }
 
         // If this space has a truthy group, it must be a property, station or
@@ -2502,9 +2518,18 @@ function displayPropertyOptions(number){
 
             setAvailableActions()
 
-
-
         }
+
+
+        // If there's no options available, delete the options container
+        if (!optionsPanelInner.innerHTML){
+            optionsPanelInner.parentNode.removeChild(optionsPanelInner)
+        }
+
+        if (optionsPanel.children.length === 1){
+            optionsPanel.classList.add('single-item')
+        }
+
 
 
 
@@ -2533,11 +2558,7 @@ function displayPropertyOptions(number){
         }       
     }
     
-    // If this property is unowned, or it is not currently the owner's turn,
-    // display a message
-    else{
-        optionsPanel.innerHTML = 'This property is owned by ' + spaces[number].owner.name
-    }
+
 
     popupMessage.appendChild(optionsPanel)
 }
@@ -2927,9 +2948,11 @@ function displayBuildHousePanel(colour){
 
         })
 
+        let feedMessage = ''
+
         // Build the message
         if (feedMessageBuy.length || feedMessageSell.length){
-            let feedMessage = feedDetails[0].owner + ' has '
+            feedMessage += feedDetails[0].owner + ' has '
         }
         
 
@@ -2968,7 +2991,7 @@ function displayBuildHousePanel(colour){
             }
         }
 
-        if (feedMessageBuy.length || feedMessageSell.length){
+        if (feedMessage){
             addToFeed(feedMessage, 'construction')
         }
 
