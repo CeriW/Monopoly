@@ -3119,7 +3119,7 @@ function buyProperty(number, player, method, price){
 function auctionProperty(number){
 
     let currentBid = 0
-    let currentNumberOfBidders = players.length
+    let currentNumberOfBidders = nonNullArrayItems(players)
 
 
     let auctionScreen = document.createElement('div')
@@ -3163,55 +3163,60 @@ function auctionProperty(number){
     playerBidInterfacesContainer.classList.add('player-bid-interfaces-container')
 
     for(i = 0; i < players.length; i++){
-        // The container for this player's interface
-        let playerBidInterface = document.createElement('div')
-        playerBidInterface.classList.add('player-bid-interface')
-        playerBidInterface.setAttribute('player', players[i].id)
-        
-        // Generate the player's token
-        let playerToken = document.createElement('div')
-        playerToken.classList.add('player-token-icon')
-        playerToken.setAttribute('player', players[i].id)
-        playerToken.setAttribute('token', players[i].token)
-        playerBidInterface.appendChild(playerToken)
 
-        // Generate the player's name
-        let playerHeading = document.createElement('h3')
-        playerHeading.classList.add('player-heading')
-        playerHeading.textContent = players[i].name
-        playerBidInterface.appendChild(playerHeading)
+        // Check the player exists before running the stuff
+        if (players[i]){
 
-        // Generate the player's money
-        let playerMoney = document.createElement('div')
-        playerMoney.classList.add('player-money')
-        playerMoney.innerHTML = currencySymbolSpan + players[i].money
-        playerBidInterface.appendChild(playerMoney)
+            // The container for this player's interface
+            let playerBidInterface = document.createElement('div')
+            playerBidInterface.classList.add('player-bid-interface')
+            playerBidInterface.setAttribute('player', players[i].id)
+            
+            // Generate the player's token
+            let playerToken = document.createElement('div')
+            playerToken.classList.add('player-token-icon')
+            playerToken.setAttribute('player', players[i].id)
+            playerToken.setAttribute('token', players[i].token)
+            playerBidInterface.appendChild(playerToken)
 
-        // Generate the input field for the player's bid.
-        let bidInput = document.createElement('input')
-        bidInput.setAttribute('type', 'number')
-        bidInput.setAttribute('placeholder', 'Your bid')
-        bidInput.setAttribute('min', 10)
-        playerBidInterface.appendChild(bidInput)
+            // Generate the player's name
+            let playerHeading = document.createElement('h3')
+            playerHeading.classList.add('player-heading')
+            playerHeading.textContent = players[i].name
+            playerBidInterface.appendChild(playerHeading)
 
-        // Generate the buttons for players to submit their bids.
-        let submitBidButton = document.createElement('button')
-        submitBidButton.textContent = 'Bid'
-        submitBidButton.classList.add('bid-button')
-        playerBidInterface.appendChild(submitBidButton)
+            // Generate the player's money
+            let playerMoney = document.createElement('div')
+            playerMoney.classList.add('player-money')
+            playerMoney.innerHTML = currencySymbolSpan + players[i].money
+            playerBidInterface.appendChild(playerMoney)
 
-        // Generate the buttons for players to abstain from bidding
-        let abstainButton = document.createElement('button')
-        abstainButton.textContent = 'Withdraw'
-        abstainButton.classList.add('abstain-button')
-        playerBidInterface.appendChild(abstainButton)
+            // Generate the input field for the player's bid.
+            let bidInput = document.createElement('input')
+            bidInput.setAttribute('type', 'number')
+            bidInput.setAttribute('placeholder', 'Your bid')
+            bidInput.setAttribute('min', 10)
+            playerBidInterface.appendChild(bidInput)
+
+            // Generate the buttons for players to submit their bids.
+            let submitBidButton = document.createElement('button')
+            submitBidButton.textContent = 'Bid'
+            submitBidButton.classList.add('bid-button')
+            playerBidInterface.appendChild(submitBidButton)
+
+            // Generate the buttons for players to abstain from bidding
+            let abstainButton = document.createElement('button')
+            abstainButton.textContent = 'Withdraw'
+            abstainButton.classList.add('abstain-button')
+            playerBidInterface.appendChild(abstainButton)
 
 
-        // Add an event listener to the panel so we can run various events
-        playerBidInterface.addEventListener('click', bidOnProperty)
+            // Add an event listener to the panel so we can run various events
+            playerBidInterface.addEventListener('click', bidOnProperty)
 
-        // Add all of this to the bid area
-        playerBidInterfacesContainer.appendChild(playerBidInterface)
+            // Add all of this to the bid area
+            playerBidInterfacesContainer.appendChild(playerBidInterface)
+        }
 
     }
 
@@ -3222,6 +3227,7 @@ function auctionProperty(number){
     availableActions.closePopup = false
     openPopup('', 'Auction')
     popupMessage.appendChild(auctionScreen)
+
 
 
 
@@ -3288,6 +3294,7 @@ function auctionProperty(number){
         }
     
     }
+
 
 }
 
@@ -4230,9 +4237,8 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
         // Confirm bankruptcy button
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
         confirmButton.addEventListener('click', function(){
-            
-            // THE ACTUAL STUFF INVOLVED IN GOING BANKRUPT
-            alert('bankrupt!')
+        
+            declareBankruptcyToBank()
         })
         warningContent.appendChild(confirmButton)
 
@@ -4243,6 +4249,27 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
 
 
         warningMessage.appendChild(warningContent)
+
+
+        function declareBankruptcyToBank(){
+
+            // Close the bankruptcy and warning windows.
+            closeWarning()
+            availableActions.bankruptcyProceedings = false
+            setAvailableActions()
+
+            // Remove the player from the game.
+            delete players[debtorID - 1]
+
+            // Auction off all of the player's properties
+            let propertiesToAuction = debtor.properties
+            console.log(propertiesToAuction)
+
+            propertiesToAuction.forEach(function(property){
+                auctionProperty(property.position)
+            })
+
+        }
 
     }
 
@@ -4317,3 +4344,18 @@ function createElement(elementType, elementClass, elementHTML, elementAttribute,
 }
   
 
+// ARRAY LENGTH  -------------------------------------------------------------//
+// As players lose the game, the players array will inevitably need to contain
+// null entries. This function does what players.length normally would
+
+function nonNullArrayItems(array){
+    let length = 0
+    for (i = 0; i < array.length; i++){
+        if (array[i]){
+            length++
+        }
+    }
+
+    return length
+
+}
