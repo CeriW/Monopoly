@@ -1273,11 +1273,6 @@ body:not(.warning-open) #warning {
   transition: 0.5s;
   max-height: 700px; }
 
-.individual-player-summary.bankrupt {
-  animation: zoomOut 0.5s both;
-  max-height: 0;
-  padding: 0 !important; }
-
 /* Full portfolio view  ------------------------------------------------------*/
 .full-portfolio {
   display: flex;
@@ -2234,6 +2229,13 @@ body[close-popup="false"] #popup-close{
     letter-spacing: 1px;
 }
 */
+/* Player removal ------------------------------------------------------------*/
+.individual-player-summary.bankrupt,
+.token.bankrupt {
+  animation: zoomOut 0.5s both;
+  max-height: 0;
+  padding: 0 !important; }
+
 /* Testing panel -------------------------------------------------------------*/
 #testing-panel,
 #testing-toggle-panel {

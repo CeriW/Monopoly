@@ -1002,6 +1002,7 @@ function createPlayers(){
         newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
+        newToken.setAttribute('player', player.id)
         //newToken.setAttribute('jail', false)
         board.appendChild(newToken)   
     })
@@ -4313,16 +4314,24 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
 }
 
 function removePlayerFromGame(playerID){
-  // Remove the player from the game.
-  delete players[playerID]
-  let playerSummary = document.querySelector('.individual-player-summary[player="' + playerID + '"]')
 
+    
+  delete players[playerID - 1]
+
+  // Remove the player's summary
+  let playerSummary = document.querySelector('.individual-player-summary[player="' + playerID + '"]')
   playerSummary.classList.add('bankrupt')
+
+  
+  // Remove the player's token
+  let token = document.querySelector('.token[player="' + playerID + '"]')
+  token.classList.add('bankrupt')
+  
   setTimeout(function(){
-      playerSummary.parentNode.removeChild(playerSummary)
+    playerSummary.parentNode.removeChild(playerSummary)
+    token.parentNode.removeChild(token)
   }, 2000)
-  
-  
+
   //increasePlayerTurn()
 }
 
