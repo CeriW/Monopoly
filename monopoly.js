@@ -509,7 +509,7 @@ function updatePlayerDetails(financialDetails){
         updateNode.innerHTML = currencySymbolSpan + player.money
 
         // JAIL
-        updateNode = document.querySelector('#player' + player.id + 'summary')
+        updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"]')
         if (player.inJail !== 0){
             updateNode.setAttribute('inJail', true)
         } else{
@@ -549,7 +549,7 @@ function updatePlayerDetails(financialDetails){
         })
 
         // GET OUT OF JAIL CARDS
-        updateNode = document.querySelector('#player' + player.id + 'summary .player-cards')
+        updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"] .player-cards')
         updateNode.innerHTML = ''
 
         if (player.getOutCards.length === 0){
@@ -768,7 +768,6 @@ function quickStart(){
         }
     })
 
-    drawCard('community-chest')
 
     player = 1
     quickPropertyOwnership(0,5,player)
@@ -1040,8 +1039,10 @@ function createPlayers(){
 
 
 function generatePlayerSummary(player){
-    let newSummary = document.createElement('div')
-    newSummary.setAttribute('id', 'player' + player.id + 'summary')
+    let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
+    //let newSummary = document.createElement('div')
+    //newSummary.setAttribute('id', 'player' + player.id + 'summary')
+
     
     let playerSummaryHeader = document.createElement('div')
     playerSummaryHeader.classList.add('player-summary-header')
@@ -2128,7 +2129,13 @@ function increasePlayerTurn(){
         turn = 1
     } else{
         turn ++
+
+        while (!players[turn]){
+            i++
+        }
     }
+
+
 
     availableActions.rollDice = true
     availableActions.endTurn = false
@@ -2142,7 +2149,7 @@ function increasePlayerTurn(){
         currentPlayer.classList.remove('current-player-summary')
     }
 
-    document.querySelector('#player' + turn + 'summary').classList.add('current-player-summary')
+    document.querySelector('.individual-player-summary[player="' + turn + '"]').classList.add('current-player-summary')
     
     // TODO - check whether this is being run twice?
     checkJail()
@@ -4293,6 +4300,7 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
 
             // Remove the player from the game.
             delete players[debtorID - 1]
+            increasePlayerTurn()
 
             // Auction off all of the player's properties
             debtor.properties.forEach(function(property){
