@@ -67,6 +67,13 @@ let availableHotels = 12
 // 42: money
 let tradeProposal = [[], []]
 
+
+// An array to hold properties to auction. When players go bankrupt this may 
+// contain multiple properties, and since other players can go bankrupt during
+// a bankruptcy auction, it is necessary to have this as a global variable so
+// it can be added to in the middle of existing bankruptcy proceedings.
+let propertiesToAuction = []
+
 /*
  Community chest and chance cards have a number of properties:
  type - the classification of card as follows:
@@ -3118,6 +3125,12 @@ function buyProperty(number, player, method, price){
 
 function auctionProperty(number){
 
+    if (number){
+        propertiesToAuction.push(spaces[number])
+    }
+    
+    let propertyID = propertiesToAuction[0].position
+
     let currentBid = 0
     let currentNumberOfBidders = nonNullArrayItems(players)
 
@@ -3128,7 +3141,7 @@ function auctionProperty(number){
     // Generate the rent table so players can see what they're buying
     let auctionRentTable = document.createElement('div')
     auctionRentTable.classList.add('auction-rent-table')
-    auctionRentTable.innerHTML += generatePropertyDetails(number)
+    auctionRentTable.innerHTML += generatePropertyDetails(propertyID)
     auctionScreen.appendChild(auctionRentTable)
 
     // Generate the areas for players to bid on the property
@@ -3231,6 +3244,8 @@ function auctionProperty(number){
 
 
 
+
+
     function bidOnProperty(e){
 
         // If a bid button has been clicked...
@@ -3281,17 +3296,35 @@ function auctionProperty(number){
             // If there is now one bidder left and someone has actually bid on this.
             if (currentNumberOfBidders === 1 && currentBid){
                 declareAuctionWinner()
+                endAuction()
             } else if (currentNumberOfBidders === 0 && !currentBid){
-                addToFeed(spaces[number].name + ' was available for auction but nobody bid on it.', 'auction')
+                addToFeed(spaces[propertyID].name + ' was available for auction but nobody bid on it.', 'auction')
+                spaces[propertyID].owner = null
                 closePopup()
+                endAuction()
             }
+
+
 
         }
     
         function declareAuctionWinner(){
             let winner = auctionScreen.querySelector('.current-winner').getAttribute('player')
-            buyProperty(number, players[winner - 1], 'auction', currentBid)
+            buyProperty(propertyID, players[winner - 1], 'auction', currentBid)
         }
+
+
+        function endAuction(){
+            // Auction is concluded one way or the other.
+            // Delete the first entry from the propertiesToAuction array
+            // If there are still properties to auction, run this again.
+            propertiesToAuction.shift()
+            console.log(propertiesToAuction[0])
+            if (propertiesToAuction[0]){
+                auctionProperty()
+            }
+        }
+
     
     }
 
@@ -4262,12 +4295,11 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
             delete players[debtorID - 1]
 
             // Auction off all of the player's properties
-            let propertiesToAuction = debtor.properties
-            console.log(propertiesToAuction)
-
-            propertiesToAuction.forEach(function(property){
-                auctionProperty(property.position)
+            debtor.properties.forEach(function(property){
+                propertiesToAuction.push(spaces[property.position])
             })
+
+            auctionProperty()
 
         }
 
