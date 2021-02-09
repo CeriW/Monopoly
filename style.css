@@ -854,22 +854,22 @@ div[mortgaged="true"]:after {
   background-image: url("images/tokens/thimble.svg"); }
 
 .player-bid-interface .player-token-icon[player="1"],
-#player1summary .player-summary-header,
+.individual-player-summary[player="1"] .player-summary-header,
 #player1token:before {
   background-color: yellow; }
 
 .player-bid-interface .player-token-icon[player="2"],
-#player2summary .player-summary-header,
+.individual-player-summary[player="2"] .player-summary-header,
 #player2token:before {
   background-color: cyan; }
 
 .player-bid-interface .player-token-icon[player="3"],
-#player3summary .player-summary-header,
+.individual-player-summary[player="3"] .player-summary-header,
 #player3token:before {
   background-color: yellowgreen; }
 
 .player-bid-interface .player-token-icon[player="4"],
-#player4summary .player-summary-header,
+.individual-player-summary[player="4"] .player-summary-header,
 #player4token:before {
   background-color: orange; }
 
@@ -1268,6 +1268,15 @@ body:not(.warning-open) #warning {
 
 .player-card-icon.zoomOut {
   animation: zoomOut 1s both; }
+
+.individual-player-summary {
+  transition: 0.5s;
+  max-height: 700px; }
+
+.individual-player-summary.bankrupt {
+  animation: zoomOut 0.5s both;
+  max-height: 0;
+  padding: 0 !important; }
 
 /* Full portfolio view  ------------------------------------------------------*/
 .full-portfolio {

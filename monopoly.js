@@ -755,12 +755,12 @@ function quickStart(){
 
     let player = 0
     quickPropertyOwnership(4,1,player)
-    quickPropertyOwnership(3,3,player)
+    /*quickPropertyOwnership(3,3,player)
     quickPropertyOwnership(0,6,player)
     quickPropertyOwnership(0,12,player)
     quickPropertyOwnership(0,27,player)
     quickMortgage(6, player)
-    quickMortgage(12, player)
+    quickMortgage(12, player)*/
 
     communityChestCards.forEach(function(card){
         if (card.description === 'Get Out of Jail Free'){
@@ -3326,7 +3326,6 @@ function auctionProperty(number){
             // Delete the first entry from the propertiesToAuction array
             // If there are still properties to auction, run this again.
             propertiesToAuction.shift()
-            console.log(propertiesToAuction[0])
             if (propertiesToAuction[0]){
                 auctionProperty()
             }
@@ -4298,9 +4297,7 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
             availableActions.bankruptcyProceedings = false
             setAvailableActions()
 
-            // Remove the player from the game.
-            delete players[debtorID - 1]
-            increasePlayerTurn()
+            removePlayerFromGame(debtor.id)
 
             // Auction off all of the player's properties
             debtor.properties.forEach(function(property){
@@ -4314,6 +4311,22 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
     }
 
 }
+
+function removePlayerFromGame(playerID){
+  // Remove the player from the game.
+  delete players[playerID]
+  let playerSummary = document.querySelector('.individual-player-summary[player="' + playerID + '"]')
+
+  playerSummary.classList.add('bankrupt')
+  setTimeout(function(){
+      playerSummary.parentNode.removeChild(playerSummary)
+  }, 2000)
+  
+  
+  //increasePlayerTurn()
+}
+
+
 
 
 // FEED FUNCTIONS ------------------------------------------------------------//
