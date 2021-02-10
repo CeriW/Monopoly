@@ -2556,6 +2556,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     padding: 20px;
 }
 
+body.popup-open #bankruptcy,
 body[bankruptcy-proceedings = "false"] #bankruptcy{
     display: none;
 }
