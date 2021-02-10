@@ -1886,13 +1886,13 @@ function specialEndPositions(endPosition){
             // Income tax
             players[turn - 1].money -= 200
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
-            updatePlayerDetails()
+            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
             addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
-            updatePlayerDetails()
+            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
             break
         case 0:
         case 10:

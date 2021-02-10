@@ -4,7 +4,7 @@ TOWARDS BANK
 - Buy property DONE
 - Win auction DONE
 - Chance/CC card to bank ('-' and repair cards)
-- No money to get out of jail
+- No money to get out of jail DONE
 - Income/Super Tax
 
 TOWARDS OTHER PLAYERS

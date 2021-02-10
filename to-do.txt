@@ -37,6 +37,8 @@ IMPROVEMENTS
 
 - Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
 
+- Super tax and income tax should probably have costs in their spaces entry, rather than being hard coded to 100/200
+
 
 ONGOING THINGS
 
