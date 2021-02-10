@@ -3115,9 +3115,6 @@ function buyProperty(number, player, method, price){
     spaces[number].owner = player
     closePopup()
 
-    // Store how much money the player has before this transaction, in case it
-    // is required in bankruptcy proceedings later.
-    let originalMoney = player.money
 
 
     switch(method){
@@ -3132,7 +3129,7 @@ function buyProperty(number, player, method, price){
 
     
     player.properties[number] = spaces[number]
-    updatePlayerDetails(player.id, 'bank', price, originalMoney)
+    updatePlayerDetails({debtorID: player.id, creditorID: 'bank', amount: price})
 
     
 }
