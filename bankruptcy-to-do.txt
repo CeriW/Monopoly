@@ -5,11 +5,25 @@ TOWARDS BANK
 - Win auction DONE
 - Chance/CC card to bank ('-' and repair cards)
 - No money to get out of jail DONE
-- Income/Super Tax
+- Income/Super Tax DONE
 
 TOWARDS OTHER PLAYERS
+NOTE - other players should not receive money until it's established the player actually has the money.
 - Rent (single player)
 - Chance/CC card to other players(exchange cards)
 
+
+
+
 - Need to check that trading doesn't allow more than you have.
-- Also can't build houses with more than you have.
+- Also can't build houses with more money than you have.
+
+
+
+GENERAL TO DO
+
+- Return houses to bank where appropriate (need to check the rules)
+- Mortgage off properties
+- Ability to sell houses
+
+- Check for winner

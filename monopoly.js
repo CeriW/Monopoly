@@ -110,8 +110,9 @@ let propertiesToAuction = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
-    /*{description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    /*{description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
+    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
@@ -125,7 +126,6 @@ let communityChestCards =
     {description: "Pay hospital fees of £100",                                                  type: '-',        value: 100 },
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
     {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
@@ -677,7 +677,7 @@ function fakePlayerMoney(){
                 input.value = ''
             }, 1300)
         })
-        
+
 
     })
 }
@@ -1380,6 +1380,8 @@ function newGameDiceRoll(){
 
 function drawCard(type){
 
+    let transactionDetails = null
+
     // Note that chance and community chest cards are not drawn randomly.
     // They are shuffled at the beginning of the game.
     // When drawn, the card is returned to the bottom of the pile.
@@ -1420,8 +1422,6 @@ function drawCard(type){
             transactionDetails = {debtorID: players[turn - 1].id, creditorID: 'bank', amount: chosenCard.value}
             players[turn - 1].money -= chosenCard.value
             addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
-
-            
 
             break
         case 'getout':
@@ -1487,7 +1487,7 @@ function drawCard(type){
 
             totalRepairCost = (houseRepairCost * numberOfHouses) + (hotelRepairCost * numberOfHotels)
             players[turn - 1].money -= totalRepairCost
-            updatePlayerDetails()
+            updatePlayerDetails({debtorID: players[turn -1].id, creditorID: 'bank', amount: totalRepairCost})
 
             let repairMessage = players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card'
 
@@ -4318,7 +4318,10 @@ function openBankruptcyProceedings(transactionDetails){
                 propertiesToAuction.push(spaces[property.position])
             })
 
-            auctionProperty()
+            if (propertiesToAuction.length > 0){
+                auctionProperty()
+            }
+
 
         }
 
