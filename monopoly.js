@@ -2125,16 +2125,21 @@ function checkJail(){
 
 function increasePlayerTurn(){
 
+    incrementTurn()
 
-    if (turn === players.length){
-        turn = 1
-    } else{
-        turn ++
+    function incrementTurn(){
+        turn++
 
-        while (!players[turn]){
-            i++
+        if (turn > players.length){
+          turn = 1
+        }
+        
+        if (!players[turn -1]){
+          incrementTurn()
         }
     }
+      
+      
 
 
 
@@ -4315,24 +4320,26 @@ function openBankruptcyProceedings(debtorID, creditorID, amount, originalMoney){
 
 function removePlayerFromGame(playerID){
 
+    addToFeed(players[playerID - 1].name + ' has gone bankrupt and is out of the game.', 'bankrupt')
+
+
+    delete players[playerID - 1]
+
+    // Remove the player's summary
+    let playerSummary = document.querySelector('.individual-player-summary[player="' + playerID + '"]')
+    playerSummary.classList.add('bankrupt')
+
+    // Remove the player's token
+    let token = document.querySelector('.token[player="' + playerID + '"]')
+    token.classList.add('bankrupt')
     
-  delete players[playerID - 1]
+    setTimeout(function(){
+        playerSummary.parentNode.removeChild(playerSummary)
+        token.parentNode.removeChild(token)
+    }, 2000)
 
-  // Remove the player's summary
-  let playerSummary = document.querySelector('.individual-player-summary[player="' + playerID + '"]')
-  playerSummary.classList.add('bankrupt')
 
-  
-  // Remove the player's token
-  let token = document.querySelector('.token[player="' + playerID + '"]')
-  token.classList.add('bankrupt')
-  
-  setTimeout(function(){
-    playerSummary.parentNode.removeChild(playerSummary)
-    token.parentNode.removeChild(token)
-  }, 2000)
-
-  //increasePlayerTurn()
+  increasePlayerTurn()
 }
 
 

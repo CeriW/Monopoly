@@ -2049,6 +2049,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .construction {
   background-image: url("images/feed-icons/construction.svg"), url("images/feed-icons/feed-circle.svg"); }
 
+.bankrupt {
+  background-image: url("images/feed-icons/bankrupt.svg"), url("images/feed-icons/feed-circle.svg"); }
+
 /* Auction panel  ------------------------------------------------------------*/
 .auction-screen {
   display: flex;
