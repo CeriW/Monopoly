@@ -1,8 +1,8 @@
 WAYS TO GO BANKRUPT
 
 TOWARDS BANK
-- Buy property
-- Win auction
+- Buy property DONE
+- Win auction DONE
 - Chance/CC card to bank ('-' and repair cards)
 - No money to get out of jail
 - Income/Super Tax
@@ -10,3 +10,6 @@ TOWARDS BANK
 TOWARDS OTHER PLAYERS
 - Rent (single player)
 - Chance/CC card to other players(exchange cards)
+
+- Need to check that trading doesn't allow more than you have.
+- Also can't build houses with more than you have.

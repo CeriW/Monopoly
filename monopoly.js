@@ -2088,7 +2088,7 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
-    updatePlayerDetails()
+    updatePlayerDetails({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
   
   }
 
@@ -4247,6 +4247,10 @@ function openBankruptcyProceedings(transactionDetails){
 
     let debtor = players[debtorID - 1]
     let creditor = creditorID === 'bank' ? 'bank' : players[creditorID - 1]
+
+
+    bankruptcyTitle.innerHTML = ''
+    bankcruptcyMessage.innerHTML = ''
 
     // Generate the title of the bankruptcy window, including icon and debtor name
     let bankruptcyTitleContent = createElement('div', 'bankruptcy-title')
