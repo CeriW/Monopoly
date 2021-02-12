@@ -111,7 +111,7 @@ let propertiesToAuction = []
 let communityChestCards = 
   [
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
-    /*{description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
+    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
@@ -127,7 +127,7 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
@@ -4330,10 +4330,18 @@ function openBankruptcyProceedings(transactionDetails){
 
             // Otherwise give all their assets to the creditor player
             } else{
+
+                //Properties
                 debtor.properties.forEach(function(property){
                     spaces[property.position].owner = players[creditorID - 1]
                     players[creditorID - 1].properties[property.position] = spaces[property.position]
                 })
+
+                // Get out of jail cards
+                debtor.getOutCards.forEach(function(card){
+                    players[creditorID - 1].getOutCards.push(card)
+                })
+
 
                 updatePlayerDetails()
             }
@@ -4351,7 +4359,8 @@ function removePlayerFromGame(playerID){
 
     addToFeed(players[playerID - 1].name + ' has gone bankrupt and is out of the game.', 'bankrupt')
 
-
+    // The empty space in the players array is intentional, since the ID
+    // numbers are linked to their index in the array.
     delete players[playerID - 1]
 
     // Remove the player's summary
