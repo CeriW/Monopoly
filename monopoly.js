@@ -3439,12 +3439,16 @@ function landOnProperty(position){
                     stationRent()
             }
             
+            
+            
+            let transactionDetails = {debtorID: currentPlayer.id, creditorID: owner, amount: rentAmount}
+            
             // Give/take the money between players as appropriate.
             players[owner - 1].money += rentAmount
             currentPlayer.money -= rentAmount
 
             addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
-            updatePlayerDetails()
+            updatePlayerDetails(transactionDetails)
 
 
             // Rent for standard properties which may have houses/hotels

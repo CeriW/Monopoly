@@ -3,7 +3,7 @@ WAYS TO GO BANKRUPT
 TOWARDS BANK
 - Buy property DONE
 - Win auction DONE
-- Chance/CC card to bank ('-' and repair cards)
+- Chance/CC card to bank ('-' and repair cards) DONE and DONE
 - No money to get out of jail DONE
 - Income/Super Tax DONE
 
