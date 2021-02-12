@@ -4317,14 +4317,28 @@ function openBankruptcyProceedings(transactionDetails){
 
             removePlayerFromGame(debtor.id)
 
-            // Auction off all of the player's properties
-            debtor.properties.forEach(function(property){
-                propertiesToAuction.push(spaces[property.position])
-            })
+            // If the player is in debt to the bank, auction all their properties
+            if (creditorID === 'bank'){
+                // Auction off all of the player's properties
+                debtor.properties.forEach(function(property){
+                    propertiesToAuction.push(spaces[property.position])
+                })
 
-            if (propertiesToAuction.length > 0){
-                auctionProperty()
+                if (propertiesToAuction.length > 0){
+                    auctionProperty()
+                }
+
+            // Otherwise give all their assets to the creditor player
+            } else{
+                debtor.properties.forEach(function(property){
+                    spaces[property.position].owner = players[creditorID - 1]
+                    players[creditorID - 1].properties[property.position] = spaces[property.position]
+                })
+
+                updatePlayerDetails()
             }
+
+
 
 
         }
