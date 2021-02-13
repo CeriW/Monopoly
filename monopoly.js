@@ -761,8 +761,8 @@ function quickStart(){
 
 
     let player = 0
-    quickPropertyOwnership(4,1,player)
-    /*quickPropertyOwnership(3,3,player)
+    /*quickPropertyOwnership(4,1,player)
+    quickPropertyOwnership(3,3,player)
     quickPropertyOwnership(0,6,player)
     quickPropertyOwnership(0,12,player)
     quickPropertyOwnership(0,27,player)
@@ -829,6 +829,8 @@ function quickStart(){
     //players[0].money = -1
 
     updatePlayerDetails()
+
+    console.clear()
 
     
 }
@@ -1390,9 +1392,14 @@ function newGameDiceRoll(){
 // check the player has suffient money and run appropriate actions if not.
 
 // transationDetails should be an object with the following properties:
-// debtorID, creditorID, amount
+// debtorID, creditorID, amount, purchase
+
+// Purchase should be an array of the properties being purchased. The bankruptcy
+// proceedings will allow this purchase to go through if the player gets
+// themselves out.
 
 function payMoney(transactionDetails){
+
     console.log(transactionDetails)
 
     debtor = players[transactionDetails.debtorID - 1]
@@ -1401,12 +1408,10 @@ function payMoney(transactionDetails){
 
 
     if (debtor.money < debt){
-        console.log('not enough money')
 
         switch (transactionDetails.creditorID){
             case 'bank':
                 openBankruptcyProceedings(transactionDetails)
-                console.log('bank')
                 break
 
             default :
@@ -1414,9 +1419,30 @@ function payMoney(transactionDetails){
 
         }
 
+
+    } else{
+
+
+        // Actually give ownership of the purchase over to the player now we've
+        // established they actually have enough money.
+
+        transactionDetails.purchase.forEach(function(property){
+            let propertyID = property.position
+
+            spaces[propertyID].owner = debtor
+            if (creditor !== 'bank' && creditor.properties[propertyID]){
+                delete creditor.properties[propertyID]
+            }
+            debtor.properties[propertyID] = spaces[propertyID]
+            
+        })
+
+
     }
 
 }
+
+
 
 
 // COMMUNITY CHEST AND CHANCE FUNCTIONS --------------------------------------//
@@ -3159,22 +3185,25 @@ function buyProperty(number, player, method, price){
     spaces[number].owner = player
     closePopup()
 
+    // Check that the player actually has enough money before granting them ownership.
+    if(player.money > price){
+        
+        switch(method){
+            case 'purchase':
+                //player.money -= spaces[number].price
+                price = spaces[number].price
+                addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'buy-property')
+                break
+            case 'auction':
+                //player.money -= price
+                addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
+        }
 
-
-    switch(method){
-        case 'purchase':
-            player.money -= spaces[number].price
-            addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
-            break
-        case 'auction':
-            player.money -= price
-            addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
+        player.properties[number] = spaces[number]
+       
     }
 
-    
-    player.properties[number] = spaces[number]
-    updatePlayerDetails({debtorID: player.id, creditorID: 'bank', amount: price})
-
+    payMoney({debtorID: player.id, creditorID: 'bank', amount: price, purchase: [spaces[number]]})
     
 }
 
