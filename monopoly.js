@@ -1400,7 +1400,17 @@ function payMoney(transactionDetails){
 
     debtor = players[transactionDetails.debtorID - 1]
     creditor = 'bank' ? 'bank' : players[creditorID - 1]
-    let debt = transactionDetails.amount
+    let debt = 0
+
+    if (transactionDetails.amount){
+        debt = transactionDetails.amount
+    } else{
+        let properties = transactionDetails.purchase
+        properties.forEach(function(property){
+            //debt = property.price
+            console.log(property.price)
+        })
+    }
 
 
     if (debtor.money < debt){
@@ -1431,6 +1441,10 @@ function payMoney(transactionDetails){
                     creditor.money += property.price
                 }
             })
+        }
+
+        if (debt){
+            debtor.money -= debt
         }
 
         updatePlayerDetails()
@@ -2114,6 +2128,7 @@ function getOutOfJail(method){
     switch (method){
         case 'pay':
             //player.money -= 50
+            payMoney({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
             availableActions.rollDice = true
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
             break
@@ -2157,7 +2172,7 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
-    payMoney({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
+    
   
   }
 
@@ -3181,26 +3196,27 @@ function updateHouseDisplay(number){
 }
 
 function buyProperty(number, player, method, price){
-    spaces[number].owner = player
+    //spaces[number].owner = player
     closePopup()
 
-    let property = spaces[number]
-    property.price = price
-
+    let property = spaces[number]    
+    if (price){
+        property.price = price
+    }
+    
     // Check that the player actually has enough money before granting them ownership.
     if(player.money > price){
         
         switch(method){
             case 'purchase':
                 //player.money -= spaces[number].price
-                price = spaces[number].price
-                addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'buy-property')
+                //price = spaces[number].price
+                addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'buy-property')
                 break
             case 'auction':
                 //player.money -= price
-
-                property.price = price
-                addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
+                //property.price = price
+                addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'auction')
         }
 
         // Now redundant since payMoney now deals with this.
@@ -3208,7 +3224,9 @@ function buyProperty(number, player, method, price){
        
     }
 
-    payMoney({debtorID: player.id, creditorID: 'bank', amount: price, purchase: [property]})
+    payMoney({debtorID: player.id, creditorID: 'bank', purchase: [property]})
+
+
 
     
 }
