@@ -110,7 +110,7 @@ let propertiesToAuction = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
     /*{description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
@@ -128,7 +128,7 @@ let communityChestCards =
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
     {description: "You inherit £100",                                                           type: '+',        value: 100 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },*/
+    ,*/
   ]
 
 let chanceCards = 
@@ -776,7 +776,7 @@ function quickStart(){
     })
 
 
-    player = 1
+    player = 2
     quickPropertyOwnership(0,5,player)
     quickPropertyOwnership(0,15,player)
     quickPropertyOwnership(0,25,player)
@@ -788,7 +788,7 @@ function quickStart(){
     quickMortgage(21, player)
 
 
-    player = 2
+    player = 0
     quickPropertyOwnership(4,37,player)
     quickPropertyOwnership(5,39,player)
     quickPropertyOwnership(4,19,player)
@@ -1530,8 +1530,8 @@ function drawCard(type){
             let hotelRepairCost = chosenCard.value[1]
 
             totalRepairCost = (houseRepairCost * numberOfHouses) + (hotelRepairCost * numberOfHotels)
-            players[turn - 1].money -= totalRepairCost
-            updatePlayerDetails({debtorID: players[turn -1].id, creditorID: 'bank', amount: totalRepairCost})
+            //players[turn - 1].money -= totalRepairCost
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: totalRepairCost})
 
             let repairMessage = players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card'
 
@@ -4340,7 +4340,7 @@ function openBankruptcyProceedings(transactionDetails){
         + amountToRaise
         + '</span><br> if they wish to stay in the game.'
     )
-    
+
     bankcruptcyMessage.appendChild(bankruptcyDescription)
 
 
