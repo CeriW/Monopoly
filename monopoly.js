@@ -486,11 +486,7 @@ function setAvailableActions(){
 
 // This function should be run every time a player's details have been updated.
 // This will trigger a nice animation.
-
-// The optional array parameter will contain a list of debtor/creditor/amount
-// entries, to be used if the player has entered bankruptcy
-
-function updatePlayerDetails(transactionDetails){
+function updatePlayerDetails(){
 
 
 
@@ -570,11 +566,11 @@ function updatePlayerDetails(transactionDetails){
         }
 
         // If the player has no money, open bankruptcy proceedings
-        if (player.money < 0 && transactionDetails){
+        /*if (player.money < 0 && transactionDetails){
             availableActions.bankruptcyProceedings = true
             setAvailableActions()
             openBankruptcyProceedings(transactionDetails)
-        }
+        }*/
 
     })
 
@@ -1408,34 +1404,37 @@ function payMoney(transactionDetails){
 
 
     if (debtor.money < debt){
-
-        switch (transactionDetails.creditorID){
-            case 'bank':
-                openBankruptcyProceedings(transactionDetails)
-                break
-
-            default :
-                console.log('oops')
-
-        }
+        openBankruptcyProceedings(transactionDetails)
 
 
     } else{
 
 
-        // Actually give ownership of the purchase over to the player now we've
-        // established they actually have enough money.
+        if (transactionDetails.purchase){
 
-        transactionDetails.purchase.forEach(function(property){
-            let propertyID = property.position
+            // Actually give ownership of the purchase over to the player
+            //  now we've established they have enough money.
+            transactionDetails.purchase.forEach(function(property){
+                let propertyID = property.position
 
-            spaces[propertyID].owner = debtor
-            if (creditor !== 'bank' && creditor.properties[propertyID]){
-                delete creditor.properties[propertyID]
-            }
-            debtor.properties[propertyID] = spaces[propertyID]
-            
-        })
+                // Actual ownership
+                spaces[propertyID].owner = debtor
+                if (creditor !== 'bank' && creditor.properties[propertyID]){
+                    delete creditor.properties[propertyID]
+                }
+                debtor.properties[propertyID] = spaces[propertyID]
+                
+                // Money exchange
+                debtor.money -= property.price
+
+                if (creditor !== 'bank'){
+                    creditor.money += property.price
+                }
+            })
+        }
+
+        updatePlayerDetails()
+
 
 
     }
@@ -2114,7 +2113,7 @@ function getOutOfJail(method){
   
     switch (method){
         case 'pay':
-            player.money -= 50
+            //player.money -= 50
             availableActions.rollDice = true
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
             break
@@ -2158,7 +2157,7 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
-    updatePlayerDetails({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
+    payMoney({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
   
   }
 
@@ -3199,7 +3198,8 @@ function buyProperty(number, player, method, price){
                 addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
         }
 
-        player.properties[number] = spaces[number]
+        // Now redundant since payMoney now deals with this.
+        //player.properties[number] = spaces[number]
        
     }
 
