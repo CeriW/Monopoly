@@ -3590,7 +3590,12 @@ function landOnProperty(position){
 
             //players[owner - 1].money += rentAmount
             //currentPlayer.money -= rentAmount
-            addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
+
+            let feedMessage = currentPlayer.money > rentAmount
+                            ? currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent'
+                            : currentPlayer.name + ' landed on ' + spaces[position].name + ' but does not have ' + currencySymbolSpan + rentAmount + ' to pay rent.'
+            addToFeed(feedMessage, 'rent')
+
             //updatePlayerDetails()
 
 
@@ -4480,6 +4485,14 @@ function openBankruptcyProceedings(transactionDetails){
             availableActions.bankruptcyProceedings = false
             setAvailableActions()
 
+
+
+            // Generate a nice message for the feed.
+            let feedMessage = players[debtorID - 1].name + ' has gone bankrupt to ' + creditorName + ' and is out of the game. '
+            addToFeed(feedMessage, 'bankrupt')
+
+            
+
             removePlayerFromGame(debtor.id)
 
             // If the player is in debt to the bank, auction all their properties
@@ -4515,6 +4528,9 @@ function openBankruptcyProceedings(transactionDetails){
                     players[creditorID - 1].getOutCards.push(card)
                 })
 
+                // Money
+                creditor.money += debtor.money
+
 
                 updatePlayerDetails()
             }
@@ -4529,8 +4545,6 @@ function openBankruptcyProceedings(transactionDetails){
 }
 
 function removePlayerFromGame(playerID){
-
-    addToFeed(players[playerID - 1].name + ' has gone bankrupt and is out of the game.', 'bankrupt')
 
     // The empty space in the players array is intentional, since the ID
     // numbers are linked to their index in the array.
