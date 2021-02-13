@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -210,7 +210,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 4
+let minNumberOfPlayers = 2
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -846,6 +846,7 @@ function intialisePlayerCreator(){
     icon.src = 'images/plus.svg'
     addPlayer.appendChild(icon)
     playerCreator.appendChild(addPlayer)
+    let currentNumberOfPlayers = minNumberOfPlayers
 
     addPlayer.addEventListener('click', function(){
         currentNumberOfPlayers++
@@ -1388,27 +1389,29 @@ function newGameDiceRoll(){
 // check the player has suffient money and run appropriate actions if not.
 
 // transationDetails should be an object with the following properties:
-// debtorID, creditorID, amount, purchase
+// debtorID, creditorID, amount, purchase, method
 
-// Purchase should be an array of the properties being purchased. The bankruptcy
-// proceedings will allow this purchase to go through if the player gets
+// Purchase should be an array of the properties being purchased (although optional).
+// The bankruptcy proceedings will allow this purchase to go through if the player gets
 // themselves out.
+
+// Method is used when it's an auction. This will tell the game to re-auction
+// the property if the player fails to get out of bankruptcy.
 
 function payMoney(transactionDetails){
 
-    console.log(transactionDetails)
+    //console.log(transactionDetails)
 
     debtor = players[transactionDetails.debtorID - 1]
     creditor = 'bank' ? 'bank' : players[creditorID - 1]
     let debt = 0
 
-    if (transactionDetails.amount){
+    if (transactionDetails.amount >= 0){
         debt = transactionDetails.amount
     } else{
         let properties = transactionDetails.purchase
         properties.forEach(function(property){
-            //debt = property.price
-            console.log(property.price)
+            debt += property.price
         })
     }
 
@@ -1967,15 +1970,17 @@ function specialEndPositions(endPosition){
             break
         case 4:
             // Income tax
-            players[turn - 1].money -= 200
+            //players[turn - 1].money -= 200
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
-            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
+            //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
             addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
-            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
+            //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 0:
         case 10:
@@ -3202,7 +3207,11 @@ function buyProperty(number, player, method, price){
     let property = spaces[number]    
     if (price){
         property.price = price
+    } else{
+        let price = spaces[number].price
     }
+
+    let transactionDetails = {debtorID: player.id, creditorID: 'bank', purchase: [property]}
     
     // Check that the player actually has enough money before granting them ownership.
     if(player.money > price){
@@ -3217,6 +3226,7 @@ function buyProperty(number, player, method, price){
                 //player.money -= price
                 //property.price = price
                 addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'auction')
+                transactionDetails.method = 'auction'
         }
 
         // Now redundant since payMoney now deals with this.
@@ -4354,6 +4364,9 @@ function negotiateTrade(e){
 
 function openBankruptcyProceedings(transactionDetails){
 
+    //console.log('bankruptcyProceedings has received the below:')
+    //console.log(transactionDetails)
+
     availableActions.bankruptcyProceedings = true
     setAvailableActions()
 
@@ -4383,7 +4396,18 @@ function openBankruptcyProceedings(transactionDetails){
 
     // Generate the message
     let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
-    let amountToRaise = transactionDetails.amount - Math.abs(players[debtorID - 1].money)
+    let amountToRaise = -Math.abs(players[debtorID - 1].money)
+
+    if (transactionDetails.amount){
+        amountToRaise += transactionDetails.amount
+    } else{
+        transactionDetails.purchase.forEach(function(property){
+            amountToRaise += property.price
+        })
+        //transactionDetails.amount - Math.abs(players[debtorID - 1].money)
+    }
+
+
 
 
     let bankruptcyDescription = createElement('div', '',
@@ -4443,9 +4467,17 @@ function openBankruptcyProceedings(transactionDetails){
                     propertiesToAuction.push(spaces[property.position])
                 })
 
+                // If they are declaring a bankruptcy as a result of winning an
+                // auction, add this property to the list so it can be re-auctioned
+                if (transactionDetails.method && transationDetails.method === 'auction'){
+                    propertiesToAuction = transactionDetails.purchase.concat(propertiesToAuction)
+                }
+
                 if (propertiesToAuction.length > 0){
                     auctionProperty()
                 }
+
+
 
             // Otherwise give all their assets to the creditor player
             } else{
