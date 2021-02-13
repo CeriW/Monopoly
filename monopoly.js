@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -210,7 +210,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 2
+let minNumberOfPlayers = 4
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -757,13 +757,13 @@ function quickStart(){
 
 
     let player = 0
-    /*quickPropertyOwnership(4,1,player)
+    quickPropertyOwnership(4,1,player)
     quickPropertyOwnership(3,3,player)
     quickPropertyOwnership(0,6,player)
     quickPropertyOwnership(0,12,player)
     quickPropertyOwnership(0,27,player)
     quickMortgage(6, player)
-    quickMortgage(12, player)*/
+    quickMortgage(12, player)
 
     communityChestCards.forEach(function(card){
         if (card.description === 'Get Out of Jail Free'){
@@ -772,7 +772,7 @@ function quickStart(){
     })
 
 
-    player = 2
+    player = 1
     quickPropertyOwnership(0,5,player)
     quickPropertyOwnership(0,15,player)
     quickPropertyOwnership(0,25,player)
@@ -784,7 +784,7 @@ function quickStart(){
     quickMortgage(21, player)
 
 
-    player = 0
+    player = 2
     quickPropertyOwnership(4,37,player)
     quickPropertyOwnership(5,39,player)
     quickPropertyOwnership(4,19,player)
@@ -793,11 +793,11 @@ function quickStart(){
 
 
     player = 3
-    quickPropertyOwnership(4,31,player)
-    quickPropertyOwnership(5,32,player)
-    quickPropertyOwnership(4,34,player)
-    quickPropertyOwnership(0,28,player)
-    quickMortgage(28, player)
+    //quickPropertyOwnership(4,31,player)
+    //quickPropertyOwnership(5,32,player)
+    //quickPropertyOwnership(4,34,player)
+    //quickPropertyOwnership(0,28,player)
+    //quickMortgage(28, player)
 
     addToFeed('Quick start mode initiated')
 
@@ -2453,13 +2453,16 @@ function generateFullPortfolioView(player){
 
     // Group each group into their own section.
     Array.from(portfolioOutput.children).forEach(function(child){
-        let previousGroup = child.previousElementSibling ? child.previousElementSibling.querySelector('.property-icon').classList[1] : child.nextElementSibling.querySelector('.property-icon').classList[1]
-        let currentGroup = child.querySelector('.property-icon').classList[1]
-
-        if (previousGroup !== currentGroup && child.previousElementSibling){
-            let divider = createElement('div', 'portfolio-divider')
-            portfolioOutput.insertBefore(divider, child)
+        if (child.previousElementSibling){
+            let previousGroup = child.previousElementSibling ? child.previousElementSibling.querySelector('.property-icon').classList[1] : child.nextElementSibling.querySelector('.property-icon').classList[1]
+            let currentGroup = child.querySelector('.property-icon').classList[1]
+    
+            if (previousGroup !== currentGroup && child.previousElementSibling){
+                let divider = createElement('div', 'portfolio-divider')
+                portfolioOutput.insertBefore(divider, child)
+            }
         }
+
     })
      
 
@@ -2749,7 +2752,7 @@ function displayBuildHousePanel(colour){
         let buildHouseBtn = document.createElement('button')
         buildHouseBtn.classList.add('build-house-button')
 
-        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'maximum-number-of-buildings-reached'].forEach(function(message){
+        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'not-enough-money', 'maximum-number-of-buildings-reached'].forEach(function(message){
             let innerSpan = document.createElement('span')
             innerSpan.classList.add(message)
             let readableMessage = message.replace(/-/g, ' ')
@@ -2871,19 +2874,30 @@ function displayBuildHousePanel(colour){
         }
 
         
-        // Despite the rule of  building evenly, check there are
+        // Despite the rule of building evenly, check there are
         // enough buildings in the bank. This will set an attribute on the
         // body which is used in the CSS to disable the appropriate
         // buttons regardless of what the other maths returns
 
+
         if (!availableHouses){
-            availableActions.buildHouse = false
+            availableActions.buildHouse = 'none-left'
         }
         
     
         if (!availableHotels){
-            availableActions.buildHotel = false
+            availableActions.buildHotel = 'none-left'
         }
+
+        if (players[colourSet[0].owner.id - 1].money < colourSet[0].houseCost){
+            availableActions.buildHouse = 'not-enough-money'
+        }
+        
+    
+        if (players[colourSet[0].owner.id - 1].money < colourSet[0].hotelCost){
+            availableActions.buildHotel = 'not-enough-money'
+        }
+
 
         setAvailableActions()
     }
@@ -2905,8 +2919,9 @@ function displayBuildHousePanel(colour){
             document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .sell-house-button').classList.remove('disabled-button')
         }
     
-        players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
-        updatePlayerDetails()
+        payMoney({debtorID: spaces[number].owner.id, creditorID: bank, amount: spaces[number].houseCost})
+        //players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
+        //updatePlayerDetails()
     
         // Update visual display to show new higher number of houses
         document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
