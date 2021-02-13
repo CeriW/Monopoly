@@ -752,6 +752,11 @@ function fakeRollDice(fakeTotal){
 // an actual game feature.
 function quickStart(){
     createPlayers()
+
+    players.forEach(function(player){
+        player.money = 10000
+    })
+
     let newPlayerDiceRoll = document.querySelector('.new-game-dice-roll')
     newPlayerDiceRoll.parentNode.removeChild(newPlayerDiceRoll)
 
@@ -1400,7 +1405,7 @@ function newGameDiceRoll(){
 
 function payMoney(transactionDetails){
 
-    //console.log(transactionDetails)
+    console.log(transactionDetails)
 
     debtor = players[transactionDetails.debtorID - 1]
     creditor = 'bank' ? 'bank' : players[creditorID - 1]
@@ -3581,10 +3586,12 @@ function landOnProperty(position){
             }*/
 
 
-            players[owner - 1].money += rentAmount
-            currentPlayer.money -= rentAmount
+            payMoney({debtorID: players[turn - 1].id, creditorID: owner, amount: rentAmount, method: 'rent'})
+
+            //players[owner - 1].money += rentAmount
+            //currentPlayer.money -= rentAmount
             addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
-            updatePlayerDetails()
+            //updatePlayerDetails()
 
 
             // Rent for standard properties which may have houses/hotels
