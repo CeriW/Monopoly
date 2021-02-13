@@ -491,6 +491,8 @@ function setAvailableActions(){
 
 function updatePlayerDetails(transactionDetails){
 
+
+
     players.forEach(function(player){
 
         // MONEY
@@ -507,6 +509,9 @@ function updatePlayerDetails(transactionDetails){
         }
 
         updateNode.innerHTML = currencySymbolSpan + player.money
+
+
+        
 
         // JAIL
         updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"]')
@@ -563,6 +568,7 @@ function updatePlayerDetails(transactionDetails){
             updateNode.setAttribute('cards', true)
         }
 
+        // If the player has no money, open bankruptcy proceedings
         if (player.money < 0 && transactionDetails){
             availableActions.bankruptcyProceedings = true
             setAvailableActions()
@@ -3441,14 +3447,28 @@ function landOnProperty(position){
             
             
             
-            let transactionDetails = {debtorID: currentPlayer.id, creditorID: owner, amount: rentAmount}
+
             
             // Give/take the money between players as appropriate.
+
+            // If the player doesn't have enough money, don't pay anything now.
+            // This might be given to the creditor later if the debtor gets
+            // out of bankruptcy.
+            /*if (currentPlayer.money < rentAmount){
+                let transactionDetails = {debtorID: currentPlayer.id, creditorID: owner, amount: rentAmount, shortfall: rentAmount - currentPlayer.money}
+                updatePlayerDetails(transactionDetails)
+            } else{
+                players[owner - 1].money += rentAmount
+                currentPlayer.money -= rentAmount
+                addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
+                updatePlayerDetails()
+            }*/
+
+
             players[owner - 1].money += rentAmount
             currentPlayer.money -= rentAmount
-
             addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
-            updatePlayerDetails(transactionDetails)
+            updatePlayerDetails()
 
 
             // Rent for standard properties which may have houses/hotels
@@ -4247,7 +4267,8 @@ function openBankruptcyProceedings(transactionDetails){
     let creditorID = transactionDetails.creditorID
     let amount = transactionDetails.amount
 
-    console.log('debtorID = ' + debtorID + '  creditorID = ' + creditorID + '  amount = ' + amount)
+    //console.log('debtorID = ' + debtorID + '  creditorID = ' + creditorID + '  amount = ' + amount)
+    console.log(transactionDetails)
 
     let debtor = players[debtorID - 1]
     let creditor = creditorID === 'bank' ? 'bank' : players[creditorID - 1]
@@ -4270,11 +4291,18 @@ function openBankruptcyProceedings(transactionDetails){
 
     let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
 
+    // If there is a shortfall (for rent), the money won't actually have passed
+    // hands yet. Therefore it's necessary to figure out how much we actually owe.
+    //let currentMoney = transactionDetails.shortfall ? players[debtorID - 1].money : 
+    let needToRaiseAmount = transactionDetails.shortfall ? transactionDetails.shortfall : Math.abs(players[debtorID - 1].money)
+
     let bankruptcyDescription = createElement('div', '',
         players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
         + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money + amount) + '. <br>'
-        + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan + (Math.abs(players[debtorID - 1].money)) + '</span><br> if they wish to stay in the game.'
-        )
+        + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
+        + needToRaiseAmount
+        + '</span><br> if they wish to stay in the game.'
+    )
     bankcruptcyMessage.appendChild(bankruptcyDescription)
 
 
@@ -4295,7 +4323,7 @@ function openBankruptcyProceedings(transactionDetails){
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
         confirmButton.addEventListener('click', function(){
         
-            declareBankruptcyToBank()
+            declareBankruptcy()
         })
         warningContent.appendChild(confirmButton)
 
@@ -4308,7 +4336,7 @@ function openBankruptcyProceedings(transactionDetails){
         warningMessage.appendChild(warningContent)
 
 
-        function declareBankruptcyToBank(){
+        function declareBankruptcy(){
 
             // Close the bankruptcy and warning windows.
             closeWarning()
