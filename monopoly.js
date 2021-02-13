@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -23,12 +23,18 @@ let availableTokens = [
 const board = document.querySelector('#board')
 const popupMessage = document.querySelector('#popup-message')
 const popupTitle = document.querySelector('#popup-title')
-const warningMessage = document.querySelector('#warning-message')
+
 const playerSummary = document.querySelector('#player-summary')
 const feed = document.querySelector('#feed-content')
 const bankContainer = document.querySelector('#bank')
 const bank = document.querySelector('#bank-content')
 const playerCreator = document.querySelector('#player-creator')
+
+const warningMessage = document.querySelector('#warning-message')
+const warningTitle = document.querySelector('#warning-title')
+
+const bankcruptcyMessage = document.querySelector('#bankruptcy-message')
+const bankruptcyTitle = document.querySelector('#bankruptcy-title')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -60,6 +66,13 @@ let availableHotels = 12
 // 40, 41: get out of jail cards
 // 42: money
 let tradeProposal = [[], []]
+
+
+// An array to hold properties to auction. When players go bankrupt this may 
+// contain multiple properties, and since other players can go bankrupt during
+// a bankruptcy auction, it is necessary to have this as a global variable so
+// it can be added to in the middle of existing bankruptcy proceedings.
+let propertiesToAuction = []
 
 /*
  Community chest and chance cards have a number of properties:
@@ -97,6 +110,8 @@ let tradeProposal = [[], []]
 // All of the possible community chest cards
 let communityChestCards = 
   [
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
@@ -111,7 +126,6 @@ let communityChestCards =
     {description: "Pay hospital fees of £100",                                                  type: '-',        value: 100 },
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
     {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
@@ -208,7 +222,8 @@ let availableActions = {
     buildHotel: true,
     mortgageProperty: false,
     unmortgageProperty: false,
-    closePopup: true
+    closePopup: true,
+    bankruptcyProceedings: false
 }
 
 let currencySymbol = '₩'
@@ -464,12 +479,19 @@ function setAvailableActions(){
     document.body.setAttribute('mortgage-property', availableActions.mortgageProperty)
     document.body.setAttribute('unmortgage-property', availableActions.unmortgageProperty)
     document.body.setAttribute('close-popup', availableActions.closePopup)
+    document.body.setAttribute('bankruptcy-proceedings', availableActions.bankruptcyProceedings)
 }
 
 
 // This function should be run every time a player's details have been updated.
 // This will trigger a nice animation.
-function updatePlayerDetails(){
+
+// The optional array parameter will contain a list of debtor/creditor/amount
+// entries, to be used if the player has entered bankruptcy
+
+function updatePlayerDetails(transactionDetails){
+
+
 
     players.forEach(function(player){
 
@@ -488,8 +510,11 @@ function updatePlayerDetails(){
 
         updateNode.innerHTML = currencySymbolSpan + player.money
 
+
+        
+
         // JAIL
-        updateNode = document.querySelector('#player' + player.id + 'summary')
+        updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"]')
         if (player.inJail !== 0){
             updateNode.setAttribute('inJail', true)
         } else{
@@ -529,7 +554,7 @@ function updatePlayerDetails(){
         })
 
         // GET OUT OF JAIL CARDS
-        updateNode = document.querySelector('#player' + player.id + 'summary .player-cards')
+        updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"] .player-cards')
         updateNode.innerHTML = ''
 
         if (player.getOutCards.length === 0){
@@ -541,6 +566,13 @@ function updatePlayerDetails(){
             })
 
             updateNode.setAttribute('cards', true)
+        }
+
+        // If the player has no money, open bankruptcy proceedings
+        if (player.money < 0 && transactionDetails){
+            availableActions.bankruptcyProceedings = true
+            setAvailableActions()
+            openBankruptcyProceedings(transactionDetails)
         }
 
     })
@@ -651,7 +683,7 @@ function fakePlayerMoney(){
                 input.value = ''
             }, 1300)
         })
-        
+
 
     })
 }
@@ -729,12 +761,12 @@ function quickStart(){
 
     let player = 0
     quickPropertyOwnership(4,1,player)
-    quickPropertyOwnership(3,3,player)
+    /*quickPropertyOwnership(3,3,player)
     quickPropertyOwnership(0,6,player)
     quickPropertyOwnership(0,12,player)
     quickPropertyOwnership(0,27,player)
     quickMortgage(6, player)
-    quickMortgage(12, player)
+    quickMortgage(12, player)*/
 
     communityChestCards.forEach(function(card){
         if (card.description === 'Get Out of Jail Free'){
@@ -742,7 +774,6 @@ function quickStart(){
         }
     })
 
-    drawCard('community-chest')
 
     player = 1
     quickPropertyOwnership(0,5,player)
@@ -793,6 +824,8 @@ function quickStart(){
     }
 
 
+    // Instant bankruptcy
+    //players[0].money = -1
 
     updatePlayerDetails()
 
@@ -975,6 +1008,7 @@ function createPlayers(){
         newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
+        newToken.setAttribute('player', player.id)
         //newToken.setAttribute('jail', false)
         board.appendChild(newToken)   
     })
@@ -1012,8 +1046,10 @@ function createPlayers(){
 
 
 function generatePlayerSummary(player){
-    let newSummary = document.createElement('div')
-    newSummary.setAttribute('id', 'player' + player.id + 'summary')
+    let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
+    //let newSummary = document.createElement('div')
+    //newSummary.setAttribute('id', 'player' + player.id + 'summary')
+
     
     let playerSummaryHeader = document.createElement('div')
     playerSummaryHeader.classList.add('player-summary-header')
@@ -1350,6 +1386,8 @@ function newGameDiceRoll(){
 
 function drawCard(type){
 
+    let transactionDetails = null
+
     // Note that chance and community chest cards are not drawn randomly.
     // They are shuffled at the beginning of the game.
     // When drawn, the card is returned to the bottom of the pile.
@@ -1375,6 +1413,8 @@ function drawCard(type){
     popupMessage.appendChild(cardMessage)
 
     cardList.push(chosenCard)
+
+
     
     switch (chosenCard.type){
         case '+':
@@ -1384,9 +1424,11 @@ function drawCard(type){
             break
         case '-':
             // A card where the player has to surrender money to the bank
-            players[turn - 1].money -= chosenCard.value
 
+            transactionDetails = {debtorID: players[turn - 1].id, creditorID: 'bank', amount: chosenCard.value}
+            players[turn - 1].money -= chosenCard.value
             addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
+
             break
         case 'getout':
             // TODO
@@ -1407,16 +1449,14 @@ function drawCard(type){
 
             break
         case 'exchange':
-            // TODO
 
-            let currentPlayer = players[turn - 1]
+        let currentPlayer = players[turn - 1]
 
             players.forEach(function(player){
 
                 if(player.id != turn){
                     player.money -= chosenCard.value
                     currentPlayer.money += chosenCard.value
-                    console.log('not the current player')
                 }
             })
 
@@ -1453,7 +1493,7 @@ function drawCard(type){
 
             totalRepairCost = (houseRepairCost * numberOfHouses) + (hotelRepairCost * numberOfHotels)
             players[turn - 1].money -= totalRepairCost
-            updatePlayerDetails()
+            updatePlayerDetails({debtorID: players[turn -1].id, creditorID: 'bank', amount: totalRepairCost})
 
             let repairMessage = players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card'
 
@@ -1472,7 +1512,7 @@ function drawCard(type){
         }
 
     // While not all cards will require this, a large majority will
-    updatePlayerDetails()
+    updatePlayerDetails(transactionDetails)
 }
 
 // TODO - are there other Monopoly sets where the cards aren't called
@@ -1663,8 +1703,9 @@ function aboutToggle(){
 
 // WARNING FUNCTIONS ---------------------------------------------------------//
 
-function openWarning(message){
+function openWarning(title, message){
     document.body.classList.add('warning-open')
+    warningTitle.innerHTML = title
     warningMessage.innerHTML = message
 }
 
@@ -1851,13 +1892,13 @@ function specialEndPositions(endPosition){
             // Income tax
             players[turn - 1].money -= 200
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
-            updatePlayerDetails()
+            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
             addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
-            updatePlayerDetails()
+            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
             break
         case 0:
         case 10:
@@ -2053,7 +2094,7 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
-    updatePlayerDetails()
+    updatePlayerDetails({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
   
   }
 
@@ -2086,12 +2127,23 @@ function checkJail(){
 
 function increasePlayerTurn(){
 
+    incrementTurn()
 
-    if (turn === players.length){
-        turn = 1
-    } else{
-        turn ++
+    function incrementTurn(){
+        turn++
+
+        if (turn > players.length){
+          turn = 1
+        }
+        
+        if (!players[turn -1]){
+          incrementTurn()
+        }
     }
+      
+      
+
+
 
     availableActions.rollDice = true
     availableActions.endTurn = false
@@ -2105,7 +2157,7 @@ function increasePlayerTurn(){
         currentPlayer.classList.remove('current-player-summary')
     }
 
-    document.querySelector('#player' + turn + 'summary').classList.add('current-player-summary')
+    document.querySelector('.individual-player-summary[player="' + turn + '"]').classList.add('current-player-summary')
     
     // TODO - check whether this is being run twice?
     checkJail()
@@ -3069,6 +3121,8 @@ function buyProperty(number, player, method, price){
     spaces[number].owner = player
     closePopup()
 
+
+
     switch(method){
         case 'purchase':
             player.money -= spaces[number].price
@@ -3081,15 +3135,21 @@ function buyProperty(number, player, method, price){
 
     
     player.properties[number] = spaces[number]
-    updatePlayerDetails()
+    updatePlayerDetails({debtorID: player.id, creditorID: 'bank', amount: price})
 
     
 }
 
 function auctionProperty(number){
 
+    if (number){
+        propertiesToAuction.push(spaces[number])
+    }
+    
+    let propertyID = propertiesToAuction[0].position
+
     let currentBid = 0
-    let currentNumberOfBidders = players.length
+    let currentNumberOfBidders = nonNullArrayItems(players)
 
 
     let auctionScreen = document.createElement('div')
@@ -3098,7 +3158,7 @@ function auctionProperty(number){
     // Generate the rent table so players can see what they're buying
     let auctionRentTable = document.createElement('div')
     auctionRentTable.classList.add('auction-rent-table')
-    auctionRentTable.innerHTML += generatePropertyDetails(number)
+    auctionRentTable.innerHTML += generatePropertyDetails(propertyID)
     auctionScreen.appendChild(auctionRentTable)
 
     // Generate the areas for players to bid on the property
@@ -3133,55 +3193,60 @@ function auctionProperty(number){
     playerBidInterfacesContainer.classList.add('player-bid-interfaces-container')
 
     for(i = 0; i < players.length; i++){
-        // The container for this player's interface
-        let playerBidInterface = document.createElement('div')
-        playerBidInterface.classList.add('player-bid-interface')
-        playerBidInterface.setAttribute('player', players[i].id)
-        
-        // Generate the player's token
-        let playerToken = document.createElement('div')
-        playerToken.classList.add('player-token-icon')
-        playerToken.setAttribute('player', players[i].id)
-        playerToken.setAttribute('token', players[i].token)
-        playerBidInterface.appendChild(playerToken)
 
-        // Generate the player's name
-        let playerHeading = document.createElement('h3')
-        playerHeading.classList.add('player-heading')
-        playerHeading.textContent = players[i].name
-        playerBidInterface.appendChild(playerHeading)
+        // Check the player exists before running the stuff
+        if (players[i]){
 
-        // Generate the player's money
-        let playerMoney = document.createElement('div')
-        playerMoney.classList.add('player-money')
-        playerMoney.innerHTML = currencySymbolSpan + players[i].money
-        playerBidInterface.appendChild(playerMoney)
+            // The container for this player's interface
+            let playerBidInterface = document.createElement('div')
+            playerBidInterface.classList.add('player-bid-interface')
+            playerBidInterface.setAttribute('player', players[i].id)
+            
+            // Generate the player's token
+            let playerToken = document.createElement('div')
+            playerToken.classList.add('player-token-icon')
+            playerToken.setAttribute('player', players[i].id)
+            playerToken.setAttribute('token', players[i].token)
+            playerBidInterface.appendChild(playerToken)
 
-        // Generate the input field for the player's bid.
-        let bidInput = document.createElement('input')
-        bidInput.setAttribute('type', 'number')
-        bidInput.setAttribute('placeholder', 'Your bid')
-        bidInput.setAttribute('min', 10)
-        playerBidInterface.appendChild(bidInput)
+            // Generate the player's name
+            let playerHeading = document.createElement('h3')
+            playerHeading.classList.add('player-heading')
+            playerHeading.textContent = players[i].name
+            playerBidInterface.appendChild(playerHeading)
 
-        // Generate the buttons for players to submit their bids.
-        let submitBidButton = document.createElement('button')
-        submitBidButton.textContent = 'Bid'
-        submitBidButton.classList.add('bid-button')
-        playerBidInterface.appendChild(submitBidButton)
+            // Generate the player's money
+            let playerMoney = document.createElement('div')
+            playerMoney.classList.add('player-money')
+            playerMoney.innerHTML = currencySymbolSpan + players[i].money
+            playerBidInterface.appendChild(playerMoney)
 
-        // Generate the buttons for players to abstain from bidding
-        let abstainButton = document.createElement('button')
-        abstainButton.textContent = 'Withdraw'
-        abstainButton.classList.add('abstain-button')
-        playerBidInterface.appendChild(abstainButton)
+            // Generate the input field for the player's bid.
+            let bidInput = document.createElement('input')
+            bidInput.setAttribute('type', 'number')
+            bidInput.setAttribute('placeholder', 'Your bid')
+            bidInput.setAttribute('min', 10)
+            playerBidInterface.appendChild(bidInput)
+
+            // Generate the buttons for players to submit their bids.
+            let submitBidButton = document.createElement('button')
+            submitBidButton.textContent = 'Bid'
+            submitBidButton.classList.add('bid-button')
+            playerBidInterface.appendChild(submitBidButton)
+
+            // Generate the buttons for players to abstain from bidding
+            let abstainButton = document.createElement('button')
+            abstainButton.textContent = 'Withdraw'
+            abstainButton.classList.add('abstain-button')
+            playerBidInterface.appendChild(abstainButton)
 
 
-        // Add an event listener to the panel so we can run various events
-        playerBidInterface.addEventListener('click', bidOnProperty)
+            // Add an event listener to the panel so we can run various events
+            playerBidInterface.addEventListener('click', bidOnProperty)
 
-        // Add all of this to the bid area
-        playerBidInterfacesContainer.appendChild(playerBidInterface)
+            // Add all of this to the bid area
+            playerBidInterfacesContainer.appendChild(playerBidInterface)
+        }
 
     }
 
@@ -3192,6 +3257,9 @@ function auctionProperty(number){
     availableActions.closePopup = false
     openPopup('', 'Auction')
     popupMessage.appendChild(auctionScreen)
+
+
+
 
 
 
@@ -3245,19 +3313,37 @@ function auctionProperty(number){
             // If there is now one bidder left and someone has actually bid on this.
             if (currentNumberOfBidders === 1 && currentBid){
                 declareAuctionWinner()
+                endAuction()
             } else if (currentNumberOfBidders === 0 && !currentBid){
-                addToFeed(spaces[number].name + ' was available for auction but nobody bid on it.', 'auction')
+                addToFeed(spaces[propertyID].name + ' was available for auction but nobody bid on it.', 'auction')
+                spaces[propertyID].owner = null
                 closePopup()
+                endAuction()
             }
+
+
 
         }
     
         function declareAuctionWinner(){
             let winner = auctionScreen.querySelector('.current-winner').getAttribute('player')
-            buyProperty(number, players[winner - 1], 'auction', currentBid)
+            buyProperty(propertyID, players[winner - 1], 'auction', currentBid)
         }
+
+
+        function endAuction(){
+            // Auction is concluded one way or the other.
+            // Delete the first entry from the propertiesToAuction array
+            // If there are still properties to auction, run this again.
+            propertiesToAuction.shift()
+            if (propertiesToAuction[0]){
+                auctionProperty()
+            }
+        }
+
     
     }
+
 
 }
 
@@ -3359,10 +3445,28 @@ function landOnProperty(position){
                     stationRent()
             }
             
+            
+            
+
+            
             // Give/take the money between players as appropriate.
+
+            // If the player doesn't have enough money, don't pay anything now.
+            // This might be given to the creditor later if the debtor gets
+            // out of bankruptcy.
+            /*if (currentPlayer.money < rentAmount){
+                let transactionDetails = {debtorID: currentPlayer.id, creditorID: owner, amount: rentAmount, shortfall: rentAmount - currentPlayer.money}
+                updatePlayerDetails(transactionDetails)
+            } else{
+                players[owner - 1].money += rentAmount
+                currentPlayer.money -= rentAmount
+                addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
+                updatePlayerDetails()
+            }*/
+
+
             players[owner - 1].money += rentAmount
             currentPlayer.money -= rentAmount
-
             addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
             updatePlayerDetails()
 
@@ -4154,6 +4258,158 @@ function negotiateTrade(e){
 
 }
 
+// BANKRUPTCY  ---------------------------------------------------------------//
+
+
+function openBankruptcyProceedings(transactionDetails){
+
+    let debtorID = transactionDetails.debtorID
+    let creditorID = transactionDetails.creditorID
+    let amount = transactionDetails.amount
+
+    //console.log('debtorID = ' + debtorID + '  creditorID = ' + creditorID + '  amount = ' + amount)
+    console.log(transactionDetails)
+
+    let debtor = players[debtorID - 1]
+    let creditor = creditorID === 'bank' ? 'bank' : players[creditorID - 1]
+
+
+    bankruptcyTitle.innerHTML = ''
+    bankcruptcyMessage.innerHTML = ''
+
+    // Generate the title of the bankruptcy window, including icon and debtor name
+    let bankruptcyTitleContent = createElement('div', 'bankruptcy-title')
+    bankruptcyTitle.appendChild(bankruptcyTitleContent)
+
+    let debtorIcon = createElement('div', 'token', '', 'token', debtor.token)
+    bankruptcyTitleContent.appendChild(debtorIcon)
+
+    let debtorTitle =  createElement('h2', '', 'BANKRUPTCY WARNING - ' + debtor.name.toUpperCase())
+    bankruptcyTitleContent.appendChild(debtorTitle)
+
+    // Generate the message
+
+    let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+
+    // If there is a shortfall (for rent), the money won't actually have passed
+    // hands yet. Therefore it's necessary to figure out how much we actually owe.
+    //let currentMoney = transactionDetails.shortfall ? players[debtorID - 1].money : 
+    let needToRaiseAmount = transactionDetails.shortfall ? transactionDetails.shortfall : Math.abs(players[debtorID - 1].money)
+
+    let bankruptcyDescription = createElement('div', '',
+        players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+        + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money + amount) + '. <br>'
+        + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
+        + needToRaiseAmount
+        + '</span><br> if they wish to stay in the game.'
+    )
+    bankcruptcyMessage.appendChild(bankruptcyDescription)
+
+
+    // Generate the bankrupt button
+    let declareBankruptcyButton = createElement('button', '', 'Declare bankruptcy')
+    declareBankruptcyButton.addEventListener('click', declareBankruptcy)
+    bankcruptcyMessage.appendChild(declareBankruptcyButton)
+
+
+    function declareBankruptcy(){
+        //alert('bankruptcy!')
+        
+        openWarning('Are you sure?', '')
+
+        let warningContent = createElement('div', '', 'Declaring bankruptcy will remove you from the game and pass all of your assets to ' + creditorName + '. Are you sure you would like to declare bankruptcy? <br><br>')
+
+        // Confirm bankruptcy button
+        let confirmButton = createElement('button', '', 'Confirm bankruptcy')
+        confirmButton.addEventListener('click', function(){
+        
+            declareBankruptcy()
+        })
+        warningContent.appendChild(confirmButton)
+
+        // Go back button
+        let goBackButton = createElement('button', '', 'Go back')
+        goBackButton.addEventListener('click', closeWarning)
+        warningContent.appendChild(goBackButton)
+
+
+        warningMessage.appendChild(warningContent)
+
+
+        function declareBankruptcy(){
+
+            // Close the bankruptcy and warning windows.
+            closeWarning()
+            availableActions.bankruptcyProceedings = false
+            setAvailableActions()
+
+            removePlayerFromGame(debtor.id)
+
+            // If the player is in debt to the bank, auction all their properties
+            if (creditorID === 'bank'){
+                // Auction off all of the player's properties
+                debtor.properties.forEach(function(property){
+                    propertiesToAuction.push(spaces[property.position])
+                })
+
+                if (propertiesToAuction.length > 0){
+                    auctionProperty()
+                }
+
+            // Otherwise give all their assets to the creditor player
+            } else{
+
+                //Properties
+                debtor.properties.forEach(function(property){
+                    spaces[property.position].owner = players[creditorID - 1]
+                    players[creditorID - 1].properties[property.position] = spaces[property.position]
+                })
+
+                // Get out of jail cards
+                debtor.getOutCards.forEach(function(card){
+                    players[creditorID - 1].getOutCards.push(card)
+                })
+
+
+                updatePlayerDetails()
+            }
+
+
+
+
+        }
+
+    }
+
+}
+
+function removePlayerFromGame(playerID){
+
+    addToFeed(players[playerID - 1].name + ' has gone bankrupt and is out of the game.', 'bankrupt')
+
+    // The empty space in the players array is intentional, since the ID
+    // numbers are linked to their index in the array.
+    delete players[playerID - 1]
+
+    // Remove the player's summary
+    let playerSummary = document.querySelector('.individual-player-summary[player="' + playerID + '"]')
+    playerSummary.classList.add('bankrupt')
+
+    // Remove the player's token
+    let token = document.querySelector('.token[player="' + playerID + '"]')
+    token.classList.add('bankrupt')
+    
+    setTimeout(function(){
+        playerSummary.parentNode.removeChild(playerSummary)
+        token.parentNode.removeChild(token)
+    }, 2000)
+
+
+  increasePlayerTurn()
+}
+
+
+
 
 // FEED FUNCTIONS ------------------------------------------------------------//
 
@@ -4223,3 +4479,18 @@ function createElement(elementType, elementClass, elementHTML, elementAttribute,
 }
   
 
+// ARRAY LENGTH  -------------------------------------------------------------//
+// As players lose the game, the players array will inevitably need to contain
+// null entries. This function does what players.length normally would
+
+function nonNullArrayItems(array){
+    let length = 0
+    for (i = 0; i < array.length; i++){
+        if (array[i]){
+            length++
+        }
+    }
+
+    return length
+
+}

@@ -18,7 +18,7 @@ FUNCTIONALITY
 
 - Cookies/local storage so you can come back to a game later.
 
--Little tabs on board properties to display who the owner is.
+- Little tabs on board properties to display who the owner is.
 
 - On portfolio, say that the player owns no properties if that is the case
 
@@ -36,6 +36,8 @@ IMPROVEMENTS
 - update the code throughout to use the createElement function
 
 - Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
+
+- Super tax and income tax should probably have costs in their spaces entry, rather than being hard coded to 100/200
 
 
 ONGOING THINGS

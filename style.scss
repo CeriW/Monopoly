@@ -442,6 +442,7 @@ $tokens:
 ; 
 
 @each $token in $tokens{
+    .bankruptcy-title .token[token="#{$token}"],
     .options-panel-owner .token[token="#{$token}"],
     .token-option-#{$token},
     .token-selector-chosen-indicator[chosentoken="#{$token}"]{
@@ -942,21 +943,21 @@ div[mortgaged="true"]{
 }
 
 .player-bid-interface .player-token-icon[player="1"],
-#player1summary .player-summary-header,
+.individual-player-summary[player="1"] .player-summary-header,
 #player1token:before{
     background-color: yellow;
 }
 
 .player-bid-interface .player-token-icon[player="2"],
-#player2summary .player-summary-header,
+.individual-player-summary[player="2"] .player-summary-header,
 #player2token:before{background-color: cyan;}
 
 .player-bid-interface .player-token-icon[player="3"],
-#player3summary .player-summary-header,
+.individual-player-summary[player="3"] .player-summary-header,
 #player3token:before{background-color: yellowgreen;}
 
 .player-bid-interface .player-token-icon[player="4"],
-#player4summary .player-summary-header,
+.individual-player-summary[player="4"] .player-summary-header,
 #player4token:before{background-color: orange;}
 
 
@@ -1071,6 +1072,20 @@ body[close-popup="false"] #popup-close{
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 102;
+    text-align: center;
+    animation: warningAnimation 4s infinite;
+    transition: 0.2s;
+
+    button + button{
+        margin-left: 5px;
+    }
+}
+
+@keyframes warningAnimation{
+    0%{background: rgba($red, 0);}
+    50%{background: rgba($red, 0.8);}
+    100%{background: rgba($red, 0);}
 }
 
 #warning-inner{
@@ -1078,6 +1093,7 @@ body[close-popup="false"] #popup-close{
     border: 3px solid $red;
     background: #fff;
     position: relative;
+    box-shadow: 0 0 20px #000;
 }
 
 #warning-close{
@@ -1088,17 +1104,28 @@ body[close-popup="false"] #popup-close{
     z-index: 2;
 }
 
+#warning-icon{
+    background: $red;
+    padding: 10px;
+
+    img{
+        width: 50px;
+    }
+}
+
 #warning-title{
     background: $red;
     color: #fff;
     padding: 5px;
-    text-align: center;
     font-size: 30px;
     text-transform: uppercase;
 }
 
 #warning-message{
     padding: 20px;
+    background: $red;
+    color: #fff;
+
 }
 
 body:not(.warning-open) #warning{
@@ -1368,6 +1395,11 @@ $jailAnimationLength: 1.5;
 
 .player-card-icon.zoomOut{
     animation: zoomOut 1s both;
+}
+
+.individual-player-summary{
+    transition: 0.5s;
+    max-height: 700px;
 }
 
 
@@ -2341,6 +2373,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .trade-accepted     {background-image: url('images/feed-icons/trade-accepted.svg'), url('images/feed-icons/feed-circle.svg');}
 .trade-rejected     {background-image: url('images/feed-icons/trade-rejected.svg'), url('images/feed-icons/feed-circle.svg');}
 .construction       {background-image: url('images/feed-icons/construction.svg'), url('images/feed-icons/feed-circle.svg');}
+.bankrupt           {background-image: url('images/feed-icons/bankrupt.svg'), url('images/feed-icons/feed-circle.svg');}
 
 /* Auction panel  ------------------------------------------------------------*/
 
@@ -2456,6 +2489,126 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     color: #fff;
 }
 
+
+/* Bankruptcy ----------------------------------------------------------------*/
+
+#bankruptcy{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba($black, 0.7);
+    z-index: 100;
+}
+
+#bankruptcy-inner{
+    background: #fff;
+    border: $border;
+    border-color: $red;
+
+    width: 800px;
+    max-width: 100%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(black, 0.4);
+    max-height: calc(100vh - 30px);
+    overflow-y: auto;
+}
+
+
+/* Title -----------------------------*/
+
+#bankruptcy-title{
+
+    & > div {
+        background: $red;
+        color: #fff;
+        padding: 5px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+     h2{
+        font-size: 26px;
+        text-transform: uppercase;
+        padding: 5px;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .token{
+        position: relative;
+        float: left;
+        margin: -6px 20px 0 0;
+    }
+}
+
+
+
+#bankruptcy-message{
+    padding: 20px;
+}
+
+body.popup-open #bankruptcy,
+body[bankruptcy-proceedings = "false"] #bankruptcy{
+    display: none;
+}
+
+
+
+
+/*
+#popup-message{
+    padding: 20px;
+}
+
+#popup-close{
+    width: 35px;
+    position: absolute;
+    top: 1px;
+    right: 3px;
+    z-index: 2;
+}
+
+body:not(.popup-open) #popup{
+    display: none;
+}
+
+#popup-message{
+    min-height: 100px;
+}
+
+body[close-popup="false"] #popup-close{
+    display: none;
+}
+
+#popup-title{
+    background: #000;
+    color: #fff;
+    font-size: 26px;
+    text-transform: uppercase;
+    padding: 5px;
+    letter-spacing: 1px;
+}
+*/
+
+
+/* Player removal ------------------------------------------------------------*/
+
+
+.individual-player-summary.bankrupt,
+.token.bankrupt{
+    animation: zoomOut 0.5s both;
+    max-height: 0;
+    padding: 0 !important;
+}
 
 
 /* Testing panel -------------------------------------------------------------*/

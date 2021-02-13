@@ -336,56 +336,67 @@ button {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
 
+.bankruptcy-title .token[token="dog"],
 .options-panel-owner .token[token="dog"],
 .token-option-dog,
 .token-selector-chosen-indicator[chosentoken="dog"] {
   background-image: url("images/tokens/dog.svg"); }
 
+.bankruptcy-title .token[token="iron"],
 .options-panel-owner .token[token="iron"],
 .token-option-iron,
 .token-selector-chosen-indicator[chosentoken="iron"] {
   background-image: url("images/tokens/iron.svg"); }
 
+.bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
 
+.bankruptcy-title .token[token="car"],
 .options-panel-owner .token[token="car"],
 .token-option-car,
 .token-selector-chosen-indicator[chosentoken="car"] {
   background-image: url("images/tokens/car.svg"); }
 
+.bankruptcy-title .token[token="battleship"],
 .options-panel-owner .token[token="battleship"],
 .token-option-battleship,
 .token-selector-chosen-indicator[chosentoken="battleship"] {
   background-image: url("images/tokens/battleship.svg"); }
 
+.bankruptcy-title .token[token="hat"],
 .options-panel-owner .token[token="hat"],
 .token-option-hat,
 .token-selector-chosen-indicator[chosentoken="hat"] {
   background-image: url("images/tokens/hat.svg"); }
 
+.bankruptcy-title .token[token="penguin"],
 .options-panel-owner .token[token="penguin"],
 .token-option-penguin,
 .token-selector-chosen-indicator[chosentoken="penguin"] {
   background-image: url("images/tokens/penguin.svg"); }
 
+.bankruptcy-title .token[token="dinosaur"],
 .options-panel-owner .token[token="dinosaur"],
 .token-option-dinosaur,
 .token-selector-chosen-indicator[chosentoken="dinosaur"] {
   background-image: url("images/tokens/dinosaur.svg"); }
 
+.bankruptcy-title .token[token="cat"],
 .options-panel-owner .token[token="cat"],
 .token-option-cat,
 .token-selector-chosen-indicator[chosentoken="cat"] {
   background-image: url("images/tokens/cat.svg"); }
 
+.bankruptcy-title .token[token="ducky"],
 .options-panel-owner .token[token="ducky"],
 .token-option-ducky,
 .token-selector-chosen-indicator[chosentoken="ducky"] {
   background-image: url("images/tokens/ducky.svg"); }
 
+.bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
@@ -843,22 +854,22 @@ div[mortgaged="true"]:after {
   background-image: url("images/tokens/thimble.svg"); }
 
 .player-bid-interface .player-token-icon[player="1"],
-#player1summary .player-summary-header,
+.individual-player-summary[player="1"] .player-summary-header,
 #player1token:before {
   background-color: yellow; }
 
 .player-bid-interface .player-token-icon[player="2"],
-#player2summary .player-summary-header,
+.individual-player-summary[player="2"] .player-summary-header,
 #player2token:before {
   background-color: cyan; }
 
 .player-bid-interface .player-token-icon[player="3"],
-#player3summary .player-summary-header,
+.individual-player-summary[player="3"] .player-summary-header,
 #player3token:before {
   background-color: yellowgreen; }
 
 .player-bid-interface .player-token-icon[player="4"],
-#player4summary .player-summary-header,
+.individual-player-summary[player="4"] .player-summary-header,
 #player4token:before {
   background-color: orange; }
 
@@ -952,13 +963,28 @@ body[close-popup="false"] #popup-close {
   bottom: 0;
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+  z-index: 102;
+  text-align: center;
+  animation: warningAnimation 4s infinite;
+  transition: 0.2s; }
+  #warning button + button {
+    margin-left: 5px; }
+
+@keyframes warningAnimation {
+  0% {
+    background: rgba(219, 9, 38, 0); }
+  50% {
+    background: rgba(219, 9, 38, 0.8); }
+  100% {
+    background: rgba(219, 9, 38, 0); } }
 
 #warning-inner {
   width: 500px;
   border: 3px solid #db0926;
   background: #fff;
-  position: relative; }
+  position: relative;
+  box-shadow: 0 0 20px #000; }
 
 #warning-close {
   width: 35px;
@@ -967,16 +993,23 @@ body[close-popup="false"] #popup-close {
   right: 2px;
   z-index: 2; }
 
+#warning-icon {
+  background: #db0926;
+  padding: 10px; }
+  #warning-icon img {
+    width: 50px; }
+
 #warning-title {
   background: #db0926;
   color: #fff;
   padding: 5px;
-  text-align: center;
   font-size: 30px;
   text-transform: uppercase; }
 
 #warning-message {
-  padding: 20px; }
+  padding: 20px;
+  background: #db0926;
+  color: #fff; }
 
 body:not(.warning-open) #warning {
   display: none; }
@@ -1235,6 +1268,10 @@ body:not(.warning-open) #warning {
 
 .player-card-icon.zoomOut {
   animation: zoomOut 1s both; }
+
+.individual-player-summary {
+  transition: 0.5s;
+  max-height: 700px; }
 
 /* Full portfolio view  ------------------------------------------------------*/
 .full-portfolio {
@@ -2012,6 +2049,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .construction {
   background-image: url("images/feed-icons/construction.svg"), url("images/feed-icons/feed-circle.svg"); }
 
+.bankrupt {
+  background-image: url("images/feed-icons/bankrupt.svg"), url("images/feed-icons/feed-circle.svg"); }
+
 /* Auction panel  ------------------------------------------------------------*/
 .auction-screen {
   display: flex;
@@ -2103,6 +2143,102 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .player-bid-interface.current-winner {
   background: #0aa959;
   color: #fff; }
+
+/* Bankruptcy ----------------------------------------------------------------*/
+#bankruptcy {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 100; }
+
+#bankruptcy-inner {
+  background: #fff;
+  border: 3px solid #000;
+  border-color: #db0926;
+  width: 800px;
+  max-width: 100%;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  max-height: calc(100vh - 30px);
+  overflow-y: auto; }
+
+/* Title -----------------------------*/
+#bankruptcy-title > div {
+  background: #db0926;
+  color: #fff;
+  padding: 5px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+#bankruptcy-title h2 {
+  font-size: 26px;
+  text-transform: uppercase;
+  padding: 5px;
+  letter-spacing: 1px;
+  margin: 0; }
+
+#bankruptcy-title .token {
+  position: relative;
+  float: left;
+  margin: -6px 20px 0 0; }
+
+#bankruptcy-message {
+  padding: 20px; }
+
+body.popup-open #bankruptcy,
+body[bankruptcy-proceedings="false"] #bankruptcy {
+  display: none; }
+
+/*
+#popup-message{
+    padding: 20px;
+}
+
+#popup-close{
+    width: 35px;
+    position: absolute;
+    top: 1px;
+    right: 3px;
+    z-index: 2;
+}
+
+body:not(.popup-open) #popup{
+    display: none;
+}
+
+#popup-message{
+    min-height: 100px;
+}
+
+body[close-popup="false"] #popup-close{
+    display: none;
+}
+
+#popup-title{
+    background: #000;
+    color: #fff;
+    font-size: 26px;
+    text-transform: uppercase;
+    padding: 5px;
+    letter-spacing: 1px;
+}
+*/
+/* Player removal ------------------------------------------------------------*/
+.individual-player-summary.bankrupt,
+.token.bankrupt {
+  animation: zoomOut 0.5s both;
+  max-height: 0;
+  padding: 0 !important; }
 
 /* Testing panel -------------------------------------------------------------*/
 #testing-panel,
