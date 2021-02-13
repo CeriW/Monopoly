@@ -1413,7 +1413,7 @@ function payMoney(transactionDetails){
         if (transactionDetails.purchase){
 
             // Actually give ownership of the purchase over to the player
-            //  now we've established they have enough money.
+            // now we've established they have enough money.
             transactionDetails.purchase.forEach(function(property){
                 let propertyID = property.position
 
@@ -3184,6 +3184,9 @@ function buyProperty(number, player, method, price){
     spaces[number].owner = player
     closePopup()
 
+    let property = spaces[number]
+    property.price = price
+
     // Check that the player actually has enough money before granting them ownership.
     if(player.money > price){
         
@@ -3195,6 +3198,8 @@ function buyProperty(number, player, method, price){
                 break
             case 'auction':
                 //player.money -= price
+
+                property.price = price
                 addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
         }
 
@@ -3203,7 +3208,8 @@ function buyProperty(number, player, method, price){
        
     }
 
-    payMoney({debtorID: player.id, creditorID: 'bank', amount: price, purchase: [spaces[number]]})
+    payMoney({debtorID: player.id, creditorID: 'bank', amount: price, purchase: [property]})
+
     
 }
 
