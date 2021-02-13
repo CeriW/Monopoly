@@ -110,9 +110,9 @@ let propertiesToAuction = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    /*{description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
@@ -127,7 +127,8 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You inherit £100",                                                           type: '+',        value: 100 },
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },*/
   ]
 
 let chanceCards = 
@@ -1382,6 +1383,42 @@ function newGameDiceRoll(){
 }
 
 
+// PAY MONEY -----------------------------------------------------------------//
+
+
+// Every time money changes hands, this function should be used. This will
+// check the player has suffient money and run appropriate actions if not.
+
+// transationDetails should be an object with the following properties:
+// debtorID, creditorID, amount
+
+function payMoney(transactionDetails){
+    console.log(transactionDetails)
+
+    debtor = players[transactionDetails.debtorID - 1]
+    creditor = 'bank' ? 'bank' : players[creditorID - 1]
+    let debt = transactionDetails.amount
+
+
+    if (debtor.money < debt){
+        console.log('not enough money')
+
+        switch (transactionDetails.creditorID){
+            case 'bank':
+                openBankruptcyProceedings(transactionDetails)
+                console.log('bank')
+                break
+
+            default :
+                console.log('oops')
+
+        }
+
+    }
+
+}
+
+
 // COMMUNITY CHEST AND CHANCE FUNCTIONS --------------------------------------//
 
 function drawCard(type){
@@ -1426,7 +1463,8 @@ function drawCard(type){
             // A card where the player has to surrender money to the bank
 
             transactionDetails = {debtorID: players[turn - 1].id, creditorID: 'bank', amount: chosenCard.value}
-            players[turn - 1].money -= chosenCard.value
+            payMoney(transactionDetails)
+            //players[turn - 1].money -= chosenCard.value
             addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
 
             break
@@ -4263,6 +4301,9 @@ function negotiateTrade(e){
 
 function openBankruptcyProceedings(transactionDetails){
 
+    availableActions.bankruptcyProceedings = true
+    setAvailableActions()
+
     let debtorID = transactionDetails.debtorID
     let creditorID = transactionDetails.creditorID
     let amount = transactionDetails.amount
@@ -4288,21 +4329,18 @@ function openBankruptcyProceedings(transactionDetails){
     bankruptcyTitleContent.appendChild(debtorTitle)
 
     // Generate the message
-
     let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+    let amountToRaise = transactionDetails.amount - Math.abs(players[debtorID - 1].money)
 
-    // If there is a shortfall (for rent), the money won't actually have passed
-    // hands yet. Therefore it's necessary to figure out how much we actually owe.
-    //let currentMoney = transactionDetails.shortfall ? players[debtorID - 1].money : 
-    let needToRaiseAmount = transactionDetails.shortfall ? transactionDetails.shortfall : Math.abs(players[debtorID - 1].money)
 
     let bankruptcyDescription = createElement('div', '',
         players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
-        + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money + amount) + '. <br>'
+        + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
         + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
-        + needToRaiseAmount
+        + amountToRaise
         + '</span><br> if they wish to stay in the game.'
     )
+    
     bankcruptcyMessage.appendChild(bankruptcyDescription)
 
 
