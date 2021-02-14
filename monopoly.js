@@ -74,6 +74,11 @@ let tradeProposal = [[], []]
 // it can be added to in the middle of existing bankruptcy proceedings.
 let propertiesToAuction = []
 
+
+// TODO - description
+let transactionQueue = []
+
+
 /*
  Community chest and chance cards have a number of properties:
  type - the classification of card as follows:
@@ -110,6 +115,7 @@ let propertiesToAuction = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
+    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
@@ -118,7 +124,6 @@ let communityChestCards =
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
     {description: "Go to Jail – Go directly to jail – Do not pass Go – Do not collect £200",    type: 'move',     value: 10},
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
     {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
     {description: "It is your birthday — Collect £10",                                          type: '+',        value: 10 },
@@ -127,7 +132,7 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You inherit £100",                                                           type: '+',        value: 100 },
   ]
 
 let chanceCards = 
@@ -376,8 +381,16 @@ function addEvents(){
 
     window.addEventListener('keydown', function(e){
         let key = e.key
+        console.log(e.key)
 
         switch (key){
+
+
+            case '2':
+                fakeRollDice(2)
+                break
+
+
             case 'Escape':
 
                 document.querySelector('#testing-toggle').checked = false
@@ -485,11 +498,7 @@ function setAvailableActions(){
 
 // This function should be run every time a player's details have been updated.
 // This will trigger a nice animation.
-
-// The optional array parameter will contain a list of debtor/creditor/amount
-// entries, to be used if the player has entered bankruptcy
-
-function updatePlayerDetails(transactionDetails){
+function updatePlayerDetails(){
 
 
 
@@ -569,11 +578,11 @@ function updatePlayerDetails(transactionDetails){
         }
 
         // If the player has no money, open bankruptcy proceedings
-        if (player.money < 0 && transactionDetails){
+        /*if (player.money < 0 && transactionDetails){
             availableActions.bankruptcyProceedings = true
             setAvailableActions()
             openBankruptcyProceedings(transactionDetails)
-        }
+        }*/
 
     })
 
@@ -755,18 +764,23 @@ function fakeRollDice(fakeTotal){
 // an actual game feature.
 function quickStart(){
     createPlayers()
+
+    players.forEach(function(player){
+        player.money = 10000
+    })
+
     let newPlayerDiceRoll = document.querySelector('.new-game-dice-roll')
     newPlayerDiceRoll.parentNode.removeChild(newPlayerDiceRoll)
 
 
     let player = 0
     quickPropertyOwnership(4,1,player)
-    /*quickPropertyOwnership(3,3,player)
+    quickPropertyOwnership(3,3,player)
     quickPropertyOwnership(0,6,player)
     quickPropertyOwnership(0,12,player)
     quickPropertyOwnership(0,27,player)
     quickMortgage(6, player)
-    quickMortgage(12, player)*/
+    quickMortgage(12, player)
 
     communityChestCards.forEach(function(card){
         if (card.description === 'Get Out of Jail Free'){
@@ -796,11 +810,11 @@ function quickStart(){
 
 
     player = 3
-    quickPropertyOwnership(4,31,player)
-    quickPropertyOwnership(5,32,player)
-    quickPropertyOwnership(4,34,player)
-    quickPropertyOwnership(0,28,player)
-    quickMortgage(28, player)
+    //quickPropertyOwnership(4,31,player)
+    //quickPropertyOwnership(5,32,player)
+    //quickPropertyOwnership(4,34,player)
+    //quickPropertyOwnership(0,28,player)
+    //quickMortgage(28, player)
 
     addToFeed('Quick start mode initiated')
 
@@ -829,6 +843,8 @@ function quickStart(){
 
     updatePlayerDetails()
 
+    console.clear()
+
     
 }
 
@@ -847,6 +863,7 @@ function intialisePlayerCreator(){
     icon.src = 'images/plus.svg'
     addPlayer.appendChild(icon)
     playerCreator.appendChild(addPlayer)
+    let currentNumberOfPlayers = minNumberOfPlayers
 
     addPlayer.addEventListener('click', function(){
         currentNumberOfPlayers++
@@ -1382,6 +1399,102 @@ function newGameDiceRoll(){
 }
 
 
+// PAY MONEY -----------------------------------------------------------------//
+
+
+// Every time money changes hands, this function should be used. This will
+// check the player has suffient money and run appropriate actions if not.
+
+// transationDetails should be an object with the following properties:
+// debtorID, creditorID, amount, purchase, method
+
+// Purchase should be an array of the properties being purchased (although optional).
+// The bankruptcy proceedings will allow this purchase to go through if the player gets
+// themselves out.
+
+// Method is used when it's an auction. This will tell the game to re-auction
+// the property if the player fails to get out of bankruptcy.
+
+function payMoney(transactionDetails){
+
+    // Check whether we're dealing with a list of transactions or just one
+    if (transactionDetails && typeof(transactionDetails === 'object')){
+        transactionQueue.push(transactionDetails)
+    }
+
+    transactionDetails = transactionQueue[0]
+    console.log(transactionDetails)
+
+
+    debtor = players[transactionDetails.debtorID - 1]
+    creditor = transactionDetails.creditorID === 'bank' ? 'bank' : players[transactionDetails.creditorID - 1]
+    let debt = 0
+
+    // Check whether we're dealing with a preset amount or the cost of a purchase
+    if (transactionDetails.amount >= 0){
+        debt = transactionDetails.amount
+    } else{
+        let properties = transactionDetails.purchase
+        properties.forEach(function(property){
+            debt += property.price
+        })
+    }
+
+
+    let bankruptcy = (debtor.money < debt) ? true : false
+
+    if (bankruptcy){
+        openBankruptcyProceedings(transactionDetails)
+
+    } else{
+
+        if (transactionDetails.purchase){
+
+            // Actually give ownership of the purchase over to the player
+            // now we've established they have enough money.
+            transactionDetails.purchase.forEach(function(property){
+                let propertyID = property.position
+
+                // Actual ownership
+                spaces[propertyID].owner = debtor
+                if (creditor !== 'bank' && creditor.properties[propertyID]){
+                    delete creditor.properties[propertyID]
+                }
+                debtor.properties[propertyID] = spaces[propertyID]
+                
+                // Money exchange
+                debtor.money -= property.price
+
+                if (creditor !== 'bank'){
+                    creditor.money += property.price
+                }
+            })
+        } else if (debt > 0){
+                debtor.money -= debt
+
+                console.log(creditor)
+                
+                if (creditor !== 'bank'){
+                    creditor.money += debt
+                    console.log('yo')
+                }
+    
+            
+        }
+
+        updatePlayerDetails()
+    }
+
+    transactionQueue.shift()
+    if (transactionQueue.length > 0 && !bankruptcy){
+        payMoney()
+    }
+
+}
+
+
+
+
 // COMMUNITY CHEST AND CHANCE FUNCTIONS --------------------------------------//
 
 function drawCard(type){
@@ -1426,7 +1539,8 @@ function drawCard(type){
             // A card where the player has to surrender money to the bank
 
             transactionDetails = {debtorID: players[turn - 1].id, creditorID: 'bank', amount: chosenCard.value}
-            players[turn - 1].money -= chosenCard.value
+            payMoney(transactionDetails)
+            //players[turn - 1].money -= chosenCard.value
             addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
 
             break
@@ -1450,26 +1564,28 @@ function drawCard(type){
             break
         case 'exchange':
 
-        let currentPlayer = players[turn - 1]
 
-            players.forEach(function(player){
-
-                if(player.id != turn){
-                    player.money -= chosenCard.value
-                    currentPlayer.money += chosenCard.value
-                }
-            })
-
-            let exchangeMessage = currentPlayer.name + ' drew a ' + getReadableCardName(type) + ' card and '
+            // The player is receiving money from all the other players
             if (chosenCard.value > 0){
-                exchangeMessage += ' received ' + currencySymbolSpan + chosenCard.value + ' from all of the other players'
+
+                players.forEach(function(player){
+                    if (player.id != turn){
+                        transactionQueue.push({debtorID: player.id, creditorID: turn, amount: chosenCard.value, method: 'card'})
+                    }
+                })
+
+
+
             } else{
-                let amount = chosenCard.value.toString()
-                amount = amount.replace(/\D/g, '')
-                exchangeMessage += ' paid ' + currencySymbolSpan + amount + ' to all of the other players'
+
             }
 
-            addToFeed(exchangeMessage, 'exchange')
+            if (transactionQueue.length){
+                payMoney()
+            }
+
+
+
             break
         case 'repairs':
 
@@ -1492,8 +1608,8 @@ function drawCard(type){
             let hotelRepairCost = chosenCard.value[1]
 
             totalRepairCost = (houseRepairCost * numberOfHouses) + (hotelRepairCost * numberOfHotels)
-            players[turn - 1].money -= totalRepairCost
-            updatePlayerDetails({debtorID: players[turn -1].id, creditorID: 'bank', amount: totalRepairCost})
+            //players[turn - 1].money -= totalRepairCost
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: totalRepairCost})
 
             let repairMessage = players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card'
 
@@ -1890,15 +2006,17 @@ function specialEndPositions(endPosition){
             break
         case 4:
             // Income tax
-            players[turn - 1].money -= 200
+            //players[turn - 1].money -= 200
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
-            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
+            //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 38:
             // Super tax
             players[turn - 1].money -= 100
             addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
-            updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
+            //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 0:
         case 10:
@@ -2050,7 +2168,8 @@ function getOutOfJail(method){
   
     switch (method){
         case 'pay':
-            player.money -= 50
+            //player.money -= 50
+            payMoney({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
             availableActions.rollDice = true
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
             break
@@ -2094,7 +2213,7 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
-    updatePlayerDetails({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
+    
   
   }
 
@@ -2370,13 +2489,16 @@ function generateFullPortfolioView(player){
 
     // Group each group into their own section.
     Array.from(portfolioOutput.children).forEach(function(child){
-        let previousGroup = child.previousElementSibling ? child.previousElementSibling.querySelector('.property-icon').classList[1] : child.nextElementSibling.querySelector('.property-icon').classList[1]
-        let currentGroup = child.querySelector('.property-icon').classList[1]
-
-        if (previousGroup !== currentGroup && child.previousElementSibling){
-            let divider = createElement('div', 'portfolio-divider')
-            portfolioOutput.insertBefore(divider, child)
+        if (child.previousElementSibling){
+            let previousGroup = child.previousElementSibling ? child.previousElementSibling.querySelector('.property-icon').classList[1] : child.nextElementSibling.querySelector('.property-icon').classList[1]
+            let currentGroup = child.querySelector('.property-icon').classList[1]
+    
+            if (previousGroup !== currentGroup && child.previousElementSibling){
+                let divider = createElement('div', 'portfolio-divider')
+                portfolioOutput.insertBefore(divider, child)
+            }
         }
+
     })
      
 
@@ -2666,7 +2788,7 @@ function displayBuildHousePanel(colour){
         let buildHouseBtn = document.createElement('button')
         buildHouseBtn.classList.add('build-house-button')
 
-        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'maximum-number-of-buildings-reached'].forEach(function(message){
+        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'not-enough-money', 'maximum-number-of-buildings-reached'].forEach(function(message){
             let innerSpan = document.createElement('span')
             innerSpan.classList.add(message)
             let readableMessage = message.replace(/-/g, ' ')
@@ -2788,19 +2910,30 @@ function displayBuildHousePanel(colour){
         }
 
         
-        // Despite the rule of  building evenly, check there are
+        // Despite the rule of building evenly, check there are
         // enough buildings in the bank. This will set an attribute on the
         // body which is used in the CSS to disable the appropriate
         // buttons regardless of what the other maths returns
 
+
         if (!availableHouses){
-            availableActions.buildHouse = false
+            availableActions.buildHouse = 'none-left'
         }
         
     
         if (!availableHotels){
-            availableActions.buildHotel = false
+            availableActions.buildHotel = 'none-left'
         }
+
+        if (players[colourSet[0].owner.id - 1].money < colourSet[0].houseCost){
+            availableActions.buildHouse = 'not-enough-money'
+        }
+        
+    
+        if (players[colourSet[0].owner.id - 1].money < colourSet[0].hotelCost){
+            availableActions.buildHotel = 'not-enough-money'
+        }
+
 
         setAvailableActions()
     }
@@ -2822,8 +2955,9 @@ function displayBuildHousePanel(colour){
             document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .sell-house-button').classList.remove('disabled-button')
         }
     
-        players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
-        updatePlayerDetails()
+        payMoney({debtorID: spaces[number].owner.id, creditorID: bank, amount: spaces[number].houseCost})
+        //players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
+        //updatePlayerDetails()
     
         // Update visual display to show new higher number of houses
         document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
@@ -2926,7 +3060,7 @@ function displayBuildHousePanel(colour){
             houseBuildingFeedMessage()
             document.querySelector('#popup-close').removeEventListener('click', runHouseBuildingFeedMessage)
             document.removeEventListener('keydown', runHouseBuildingFeedMessage)
-        
+
         // If it's a click  event, just remove the eventlistener from keydown (since the click event is set to only run once anyway)
         } else if(e.type === "click"){
             houseBuildingFeedMessage()
@@ -3118,24 +3252,42 @@ function updateHouseDisplay(number){
 }
 
 function buyProperty(number, player, method, price){
-    spaces[number].owner = player
+    //spaces[number].owner = player
     closePopup()
 
-
-
-    switch(method){
-        case 'purchase':
-            player.money -= spaces[number].price
-            addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + spaces[number].price, 'buy-property')
-            break
-        case 'auction':
-            player.money -= price
-            addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + price, 'auction')
+    let property = spaces[number]    
+    if (price){
+        property.price = price
+    } else{
+        let price = spaces[number].price
     }
 
+    let transactionDetails = {debtorID: player.id, creditorID: 'bank', purchase: [property]}
     
-    player.properties[number] = spaces[number]
-    updatePlayerDetails({debtorID: player.id, creditorID: 'bank', amount: price})
+    // Check that the player actually has enough money before granting them ownership.
+    if(player.money > price){
+        
+        switch(method){
+            case 'purchase':
+                //player.money -= spaces[number].price
+                //price = spaces[number].price
+                addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'buy-property')
+                break
+            case 'auction':
+                //player.money -= price
+                //property.price = price
+                addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'auction')
+                transactionDetails.method = 'auction'
+        }
+
+        // Now redundant since payMoney now deals with this.
+        //player.properties[number] = spaces[number]
+       
+    }
+
+    payMoney({debtorID: player.id, creditorID: 'bank', purchase: [property]})
+
+
 
     
 }
@@ -3465,10 +3617,17 @@ function landOnProperty(position){
             }*/
 
 
-            players[owner - 1].money += rentAmount
-            currentPlayer.money -= rentAmount
-            addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent', 'rent')
-            updatePlayerDetails()
+            payMoney({debtorID: players[turn - 1].id, creditorID: owner, amount: rentAmount, method: 'rent'})
+
+            //players[owner - 1].money += rentAmount
+            //currentPlayer.money -= rentAmount
+
+            let feedMessage = currentPlayer.money > rentAmount
+                            ? currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent'
+                            : currentPlayer.name + ' landed on ' + spaces[position].name + ' but does not have ' + currencySymbolSpan + rentAmount + ' to pay rent.'
+            addToFeed(feedMessage, 'rent')
+
+            //updatePlayerDetails()
 
 
             // Rent for standard properties which may have houses/hotels
@@ -4263,12 +4422,13 @@ function negotiateTrade(e){
 
 function openBankruptcyProceedings(transactionDetails){
 
+    availableActions.bankruptcyProceedings = true
+    setAvailableActions()
+
     let debtorID = transactionDetails.debtorID
     let creditorID = transactionDetails.creditorID
     let amount = transactionDetails.amount
 
-    //console.log('debtorID = ' + debtorID + '  creditorID = ' + creditorID + '  amount = ' + amount)
-    console.log(transactionDetails)
 
     let debtor = players[debtorID - 1]
     let creditor = creditorID === 'bank' ? 'bank' : players[creditorID - 1]
@@ -4288,21 +4448,28 @@ function openBankruptcyProceedings(transactionDetails){
     bankruptcyTitleContent.appendChild(debtorTitle)
 
     // Generate the message
-
     let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+    let amountToRaise = -Math.abs(players[debtorID - 1].money)
 
-    // If there is a shortfall (for rent), the money won't actually have passed
-    // hands yet. Therefore it's necessary to figure out how much we actually owe.
-    //let currentMoney = transactionDetails.shortfall ? players[debtorID - 1].money : 
-    let needToRaiseAmount = transactionDetails.shortfall ? transactionDetails.shortfall : Math.abs(players[debtorID - 1].money)
+    if (transactionDetails.amount){
+        amountToRaise += transactionDetails.amount
+    } else{
+        transationDetails.purchase.forEach(function(property){
+            amountToRaise += property.price
+        })
+    }
+
+
+
 
     let bankruptcyDescription = createElement('div', '',
         players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
-        + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money + amount) + '. <br>'
+        + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
         + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
-        + needToRaiseAmount
+        + amountToRaise
         + '</span><br> if they wish to stay in the game.'
     )
+
     bankcruptcyMessage.appendChild(bankruptcyDescription)
 
 
@@ -4343,6 +4510,14 @@ function openBankruptcyProceedings(transactionDetails){
             availableActions.bankruptcyProceedings = false
             setAvailableActions()
 
+
+
+            // Generate a nice message for the feed.
+            let feedMessage = players[debtorID - 1].name + ' has gone bankrupt to ' + creditorName + ' and is out of the game. '
+            addToFeed(feedMessage, 'bankrupt')
+
+            
+
             removePlayerFromGame(debtor.id)
 
             // If the player is in debt to the bank, auction all their properties
@@ -4352,9 +4527,17 @@ function openBankruptcyProceedings(transactionDetails){
                     propertiesToAuction.push(spaces[property.position])
                 })
 
+                // If they are declaring a bankruptcy as a result of winning an
+                // auction, add this property to the list so it can be re-auctioned
+                if (transactionDetails.method && transationDetails.method === 'auction'){
+                    propertiesToAuction = transactionDetails.purchase.concat(propertiesToAuction)
+                }
+
                 if (propertiesToAuction.length > 0){
                     auctionProperty()
                 }
+
+
 
             // Otherwise give all their assets to the creditor player
             } else{
@@ -4370,12 +4553,18 @@ function openBankruptcyProceedings(transactionDetails){
                     players[creditorID - 1].getOutCards.push(card)
                 })
 
+                // Money
+                creditor.money += debtor.money
+
 
                 updatePlayerDetails()
             }
 
 
 
+            if (transactionQueue.length){
+                payMoney()
+            }
 
         }
 
@@ -4384,8 +4573,6 @@ function openBankruptcyProceedings(transactionDetails){
 }
 
 function removePlayerFromGame(playerID){
-
-    addToFeed(players[playerID - 1].name + ' has gone bankrupt and is out of the game.', 'bankrupt')
 
     // The empty space in the players array is intentional, since the ID
     // numbers are linked to their index in the array.

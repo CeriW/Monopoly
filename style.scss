@@ -1702,13 +1702,16 @@ body[unmortgage-property="false"] .unmortgage-button{
 
 
 .no-more-houses-in-bank,
-.no-more-hotels-in-bank{
+.no-more-hotels-in-bank,
+.not-enough-money{
     display: none;
 }
 
 
+
+
 // If there are no houses in the bank
-body[build-house="false"]{
+body[build-house="none-left"]{
     .no-more-houses-in-bank{
         display: block;
     }
@@ -1719,7 +1722,7 @@ body[build-house="false"]{
 }
 
 // If there are no hotels in the bank
-body[build-hotel="false"]{
+body[build-hotel="none-left"]{
     .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
         display: block;
     }
@@ -1729,6 +1732,36 @@ body[build-hotel="false"]{
     }
 }
 
+// If the player does not have enough mmoney
+body[build-house="not-enough-money"]{
+
+    .build-house-button{
+        @include disabledButton();
+    }
+
+    .build-house-button span:not(.not-enough-money){
+        display: none !important;
+    }
+
+    .not-enough-money{
+        display: block;
+    }
+}
+
+body[build-hotel="not-enough-money"]{
+
+    .build-hotel-button{
+        @include disabledButton();
+    }
+
+    .build-hotel-button span:not(.not-enough-money){
+        display: none !important;
+    }
+
+    .not-enough-money{
+        display: block;
+    }
+}
 
 
 .house-visual-display{
