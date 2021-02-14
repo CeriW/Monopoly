@@ -74,6 +74,11 @@ let tradeProposal = [[], []]
 // it can be added to in the middle of existing bankruptcy proceedings.
 let propertiesToAuction = []
 
+
+// TODO - description
+let transactionQueue = []
+
+
 /*
  Community chest and chance cards have a number of properties:
  type - the classification of card as follows:
@@ -110,15 +115,15 @@ let propertiesToAuction = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
+    /*{description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
-    /*{description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
     {description: "Go to Jail – Go directly to jail – Do not pass Go – Do not collect £200",    type: 'move',     value: 10},
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
     {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
     {description: "It is your birthday — Collect £10",                                          type: '+',        value: 10 },
@@ -377,8 +382,16 @@ function addEvents(){
 
     window.addEventListener('keydown', function(e){
         let key = e.key
+        console.log(e.key)
 
         switch (key){
+
+
+            case '2':
+                fakeRollDice(2)
+                break
+
+
             case 'Escape':
 
                 document.querySelector('#testing-toggle').checked = false
@@ -1405,12 +1418,20 @@ function newGameDiceRoll(){
 
 function payMoney(transactionDetails){
 
+    // Check whether we're dealing with a list of transactions or just one
+    if (transactionDetails && typeof(transactionDetails === 'object')){
+        transactionQueue.push(transactionDetails)
+    }
+
+    transactionDetails = transactionQueue[0]
     console.log(transactionDetails)
 
+
     debtor = players[transactionDetails.debtorID - 1]
-    creditor = 'bank' ? 'bank' : players[creditorID - 1]
+    creditor = transactionDetails.creditorID === 'bank' ? 'bank' : players[transactionDetails.creditorID - 1]
     let debt = 0
 
+    // Check whether we're dealing with a preset amount or the cost of a purchase
     if (transactionDetails.amount >= 0){
         debt = transactionDetails.amount
     } else{
@@ -1421,12 +1442,12 @@ function payMoney(transactionDetails){
     }
 
 
-    if (debtor.money < debt){
+    let bankruptcy = (debtor.money < debt) ? true : false
+
+    if (bankruptcy){
         openBankruptcyProceedings(transactionDetails)
 
-
     } else{
-
 
         if (transactionDetails.purchase){
 
@@ -1449,16 +1470,25 @@ function payMoney(transactionDetails){
                     creditor.money += property.price
                 }
             })
-        }
+        } else if (debt > 0){
+                debtor.money -= debt
 
-        if (debt){
-            debtor.money -= debt
+                console.log(creditor)
+                
+                if (creditor !== 'bank'){
+                    creditor.money += debt
+                    console.log('yo')
+                }
+    
+            
         }
 
         updatePlayerDetails()
+    }
 
-
-
+    transactionQueue.shift()
+    if (transactionQueue.length > 0 && !bankruptcy){
+        payMoney()
     }
 
 }
@@ -1535,26 +1565,28 @@ function drawCard(type){
             break
         case 'exchange':
 
-        let currentPlayer = players[turn - 1]
 
-            players.forEach(function(player){
-
-                if(player.id != turn){
-                    player.money -= chosenCard.value
-                    currentPlayer.money += chosenCard.value
-                }
-            })
-
-            let exchangeMessage = currentPlayer.name + ' drew a ' + getReadableCardName(type) + ' card and '
+            // The player is receiving money from all the other players
             if (chosenCard.value > 0){
-                exchangeMessage += ' received ' + currencySymbolSpan + chosenCard.value + ' from all of the other players'
+
+                players.forEach(function(player){
+                    if (player.id != turn){
+                        transactionQueue.push({debtorID: player.id, creditorID: turn, amount: chosenCard.value, method: 'card'})
+                    }
+                })
+
+
+
             } else{
-                let amount = chosenCard.value.toString()
-                amount = amount.replace(/\D/g, '')
-                exchangeMessage += ' paid ' + currencySymbolSpan + amount + ' to all of the other players'
+
             }
 
-            addToFeed(exchangeMessage, 'exchange')
+            if (transactionQueue.length){
+                payMoney()
+            }
+
+
+
             break
         case 'repairs':
 
@@ -3029,7 +3061,7 @@ function displayBuildHousePanel(colour){
             houseBuildingFeedMessage()
             document.querySelector('#popup-close').removeEventListener('click', runHouseBuildingFeedMessage)
             document.removeEventListener('keydown', runHouseBuildingFeedMessage)
-        
+
         // If it's a click  event, just remove the eventlistener from keydown (since the click event is set to only run once anyway)
         } else if(e.type === "click"){
             houseBuildingFeedMessage()
@@ -4391,9 +4423,6 @@ function negotiateTrade(e){
 
 function openBankruptcyProceedings(transactionDetails){
 
-    //console.log('bankruptcyProceedings has received the below:')
-    //console.log(transactionDetails)
-
     availableActions.bankruptcyProceedings = true
     setAvailableActions()
 
@@ -4401,8 +4430,6 @@ function openBankruptcyProceedings(transactionDetails){
     let creditorID = transactionDetails.creditorID
     let amount = transactionDetails.amount
 
-    //console.log('debtorID = ' + debtorID + '  creditorID = ' + creditorID + '  amount = ' + amount)
-    console.log(transactionDetails)
 
     let debtor = players[debtorID - 1]
     let creditor = creditorID === 'bank' ? 'bank' : players[creditorID - 1]
@@ -4428,10 +4455,9 @@ function openBankruptcyProceedings(transactionDetails){
     if (transactionDetails.amount){
         amountToRaise += transactionDetails.amount
     } else{
-        transactionDetails.purchase.forEach(function(property){
+        transationDetails.purchase.forEach(function(property){
             amountToRaise += property.price
         })
-        //transactionDetails.amount - Math.abs(players[debtorID - 1].money)
     }
 
 
@@ -4537,6 +4563,9 @@ function openBankruptcyProceedings(transactionDetails){
 
 
 
+            if (transactionQueue.length){
+                payMoney()
+            }
 
         }
 
