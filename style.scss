@@ -2595,6 +2595,48 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
 }
 
 
+/* Mortgages after bankruptcy ------------------------------------------------*/
+
+.bankruptcy-mortgage-table{
+
+    & > div{
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        grid-template-rows: 1fr;
+        gap: 0px 5px;
+        grid-template-areas:
+          "property-name keep-mortgage-button unmortgage-button";
+    
+        padding: 5px 0;
+        margin: 5px 0;
+        border-bottom: 1px solid $lightgrey;
+    
+        &:first-child{
+            border-top: 1px solid $lightgrey;
+        }
+    }
+
+    .unmortgage-button {
+        grid-area: unmortgage-button;
+        min-width: 190px;
+    }
+
+    .keep-mortgage-button {
+        grid-area: keep-mortgage-button;
+        min-width: 190px;
+    }
+    
+    .property-name {
+        grid-area: property-name;
+        display: flex;
+        align-items: center;    
+    }
+}
+
+
+.bankruptcy-mortgage-table > div{
+
+}
 
 
 /*
@@ -2631,6 +2673,9 @@ body[close-popup="false"] #popup-close{
     letter-spacing: 1px;
 }
 */
+
+
+
 
 
 /* Player removal ------------------------------------------------------------*/

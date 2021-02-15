@@ -2222,6 +2222,32 @@ body.popup-open #bankruptcy,
 body[bankruptcy-proceedings="false"] #bankruptcy {
   display: none; }
 
+/* Mortgages after bankruptcy ------------------------------------------------*/
+.bankruptcy-mortgage-table > div {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-template-rows: 1fr;
+  gap: 0px 5px;
+  grid-template-areas: "property-name keep-mortgage-button unmortgage-button";
+  padding: 5px 0;
+  margin: 5px 0;
+  border-bottom: 1px solid #ccc; }
+  .bankruptcy-mortgage-table > div:first-child {
+    border-top: 1px solid #ccc; }
+
+.bankruptcy-mortgage-table .unmortgage-button {
+  grid-area: unmortgage-button;
+  min-width: 190px; }
+
+.bankruptcy-mortgage-table .keep-mortgage-button {
+  grid-area: keep-mortgage-button;
+  min-width: 190px; }
+
+.bankruptcy-mortgage-table .property-name {
+  grid-area: property-name;
+  display: flex;
+  align-items: center; }
+
 /*
 #popup-message{
     padding: 20px;

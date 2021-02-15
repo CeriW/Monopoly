@@ -115,8 +115,8 @@ let transactionQueue = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 5000000 },
+    /*{description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
@@ -132,7 +132,7 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 },
+    {description: "You inherit £100",                                                           type: '+',        value: 100 },*/
   ]
 
 let chanceCards = 
@@ -381,7 +381,6 @@ function addEvents(){
 
     window.addEventListener('keydown', function(e){
         let key = e.key
-        console.log(e.key)
 
         switch (key){
 
@@ -833,6 +832,7 @@ function quickStart(){
     }
 
     function quickMortgage(position, player){
+        spaces[position].mortgaged = true
         document.querySelector('div[position="' + position + '"]').setAttribute('mortgaged', true)
         players[player].money += spaces[position].price / 2
     }
@@ -1423,7 +1423,7 @@ function payMoney(transactionDetails){
     }
 
     transactionDetails = transactionQueue[0]
-    console.log(transactionDetails)
+    //console.log(transactionDetails)
 
 
     debtor = players[transactionDetails.debtorID - 1]
@@ -4509,6 +4509,7 @@ function openBankruptcyProceedings(transactionDetails){
             closeWarning()
             availableActions.bankruptcyProceedings = false
             setAvailableActions()
+            let mortgagedProperties = []
 
 
 
@@ -4542,10 +4543,18 @@ function openBankruptcyProceedings(transactionDetails){
             // Otherwise give all their assets to the creditor player
             } else{
 
+
+
                 //Properties
                 debtor.properties.forEach(function(property){
                     spaces[property.position].owner = players[creditorID - 1]
                     players[creditorID - 1].properties[property.position] = spaces[property.position]
+
+                    // If the property is mortgaged, add it to an array. The
+                    // new owner will need to choose what to do about this.
+                    if (property.mortgaged){
+                        mortgagedProperties.push(property)
+                    }
                 })
 
                 // Get out of jail cards
@@ -4558,17 +4567,77 @@ function openBankruptcyProceedings(transactionDetails){
 
 
                 updatePlayerDetails()
+                if (mortgagedProperties.length){
+                    mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties)
+                }
+
             }
 
 
 
-            if (transactionQueue.length){
+            if (transactionQueue.length && !mortgagedProperties.length){
                 payMoney()
             }
 
         }
 
     }
+}
+
+function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties){
+
+    availableActions.closePopup = false
+    availableActions.unmortgageProperty = true
+    setAvailableActions()
+
+
+    let mortgageTable = createElement('div', 'bankruptcy-mortgage-table')
+
+    mortgagedProperties.forEach(function(property){
+        let row = createElement('div', '', )
+
+        let propertyName = createElement('div', 'property-name', property.name)
+        row.appendChild(propertyName)
+
+        let keepMortgageButton = createElement('button', 'keep-mortgage-button', 'Keep mortgage (' + currencySymbolSpan + ((property.price/2) * 0.1) + ')', 'property', property.position)
+        row.appendChild(keepMortgageButton)
+
+        let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage (' + currencySymbolSpan + (property.price * 1.05) + ')', 'property', property.position)
+        row.appendChild(unmortgageButton)
+
+        mortgageTable.appendChild(row)
+    })
+
+    openPopup('You have mortgaged properties', 'Hello')
+    popupMessage.appendChild(mortgageTable)
+
+    mortgageTable.addEventListener('click', function(e){
+        console.log(transactionQueue)
+
+        let button = e.target.closest('button')
+
+        if (button.classList.contains('keep-mortgage-button')){
+            let originalPrice = spaces[button.getAttribute('property')].price
+            transactionQueue.push({debtorID: transactionDetails.creditorID, creditorID: 'bank', amount: ((originalPrice/2) * 0.1)})
+
+            ;[].forEach.call(button.parentNode.querySelectorAll('button'), function(button){
+                button.classList.add('disabled-button')
+            })
+
+
+        } else{
+            console.log('lol')
+        }
+
+        if (!mortgageTable.querySelector('button:not(.disabled-button)')){
+            closePopup()
+            payMoney()            
+        }
+
+
+    })
+
+
 
 }
 
