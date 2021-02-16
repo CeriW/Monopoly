@@ -4545,11 +4545,13 @@ function openBankruptcyProceedings(transactionDetails){
 
             // If the player is in debt to the bank, auction all their properties
             if (creditorID === 'bank'){
-                // Auction off all of the player's properties
+
                 debtor.properties.forEach(function(property){
+
+                    // Add the property to a queue to be auctioned
                     propertiesToAuction.push(spaces[property.position])
 
-                    
+                    // If the property has houses/ hotels, return them to the bank
                     if (property.houses){
                         if (property.houses = 5){
                             availableHouses += 4
@@ -4561,6 +4563,10 @@ function openBankruptcyProceedings(transactionDetails){
                         spaces[property.position].houses = 0
                         updateHouseDisplay(property.position)
                     }
+
+                    // Unmortgage the property and show it as such on the board
+                    property.mortgaged = false
+                    document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
 
                     
 
