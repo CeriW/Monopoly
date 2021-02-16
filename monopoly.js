@@ -74,6 +74,11 @@ let tradeProposal = [[], []]
 // it can be added to in the middle of existing bankruptcy proceedings.
 let propertiesToAuction = []
 
+// The outcome of multiple auctions is stored in this. This is used when going
+// bankrupt to multiple players at once - the proceeds will be evenly split
+// among all the other players.
+let auctionTotal = 0
+
 
 // TODO - description
 let transactionQueue = []
@@ -115,9 +120,9 @@ let transactionQueue = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 5000000 },
-    /*{description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
-    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
+    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
+    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
+    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
@@ -132,12 +137,13 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 },*/
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -5000 },
+    /*{description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
@@ -150,9 +156,8 @@ let chanceCards =
     {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
     {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
-    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
 
@@ -385,8 +390,8 @@ function addEvents(){
         switch (key){
 
 
-            case '2':
-                fakeRollDice(2)
+            case '7':
+                fakeRollDice(7)
                 break
 
 
@@ -840,6 +845,10 @@ function quickStart(){
 
     // Instant bankruptcy
     //players[0].money = -1
+
+    players.forEach(function(player){
+        player.money = 1000
+    })
 
     updatePlayerDetails()
 
@@ -1426,7 +1435,8 @@ function payMoney(transactionDetails){
 
     // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
-    creditor = transactionDetails.creditorID === 'bank' ? 'bank' : players[transactionDetails.creditorID - 1]
+    creditor = typeof transactionDetails.creditorID === 'string' ? transactionDetails.creditorID : players[transactionDetails.creditorID - 1]
+
     let debt = 0
 
     // Check whether we're dealing with a preset amount or the cost of a purchase
@@ -1462,8 +1472,7 @@ function payMoney(transactionDetails){
 
                 // Actual ownership
                 spaces[propertyID].owner = debtor
-                console.log(spaces[propertyID])
-                if (creditor !== 'bank' && creditor.properties[propertyID]){
+                if (typeof creditor === 'object' && creditor.properties[propertyID]){
                     delete creditor.properties[propertyID]
                 }
                 
@@ -1572,16 +1581,31 @@ function drawCard(type){
 
             // The player is receiving money from all the other players
             if (chosenCard.value > 0){
-
                 players.forEach(function(player){
                     if (player.id != turn){
                         transactionQueue.push({debtorID: player.id, creditorID: turn, amount: chosenCard.value, method: 'card'})
                     }
                 })
 
-
-
+            // The player is paying money to all of the other players.
+            // Note - there are no official rules regarding what happens if a
+            // player doesn't have enough money to pay this. Phil Orbanes (who 
+            // is generally considered the authority on the rules) says to
+            // auction off all the properties in case of bankruptcy and split
+            // the proceeds among all the other players. This is the fairest
+            // way. I'm not a fan of this however since it's not how it would
+            // actually work in real life.
             } else{
+
+                let totalDebt = Math.abs(chosenCard.value * (players.length -1))
+                console.log('total ' + totalDebt)
+
+                if (players[turn - 1].money < totalDebt){
+                    console.log('not enough money')
+                }
+
+                transactionQueue.push({debtorID: players[turn - 1].id, creditorID: 'allOtherPlayers', amount: totalDebt, method: 'card'})
+
 
             }
 
@@ -3315,7 +3339,7 @@ function buyProperty(number, player, method, price){
     
 }
 
-function auctionProperty(number){
+function auctionProperty(number, proceedsToAll){
 
     if (number){
         propertiesToAuction.push(spaces[number])
@@ -3503,6 +3527,14 @@ function auctionProperty(number){
         function declareAuctionWinner(){
             let winner = auctionScreen.querySelector('.current-winner').getAttribute('player')
             buyProperty(propertyID, players[winner - 1], 'auction', currentBid)
+
+            if (proceedsToAll){
+                let equalShare = Math.floor(currentBid / (players.length - 1))                
+                players.forEach(function(player){
+                    player.money += equalShare
+                })
+                updatePlayerDetails()
+            }
         }
 
 
@@ -4471,7 +4503,22 @@ function openBankruptcyProceedings(transactionDetails){
     bankruptcyTitleContent.appendChild(debtorTitle)
 
     // Generate the message
-    let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+    // TO FIX
+
+    let creditorName = ''
+    switch (creditorID){
+        case 'bank':
+            creditorName = 'the bank'
+            break
+        case 'allOtherPlayers':
+            creditorName = 'all the other players'
+            break
+        default:
+            creditorName = creditor.name
+    }
+
+    //let creditorName = creditor === 'bank' ? 'the bank' : 'FIX ME'
+    //let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
     let amountToRaise = -Math.abs(players[debtorID - 1].money)
 
     if (transactionDetails.amount){
@@ -4483,10 +4530,16 @@ function openBankruptcyProceedings(transactionDetails){
     }
 
 
+    let message = ''
+    if (creditorID === 'allOtherPlayers'){
+        message += players[debtorID - 1].name + ' owes ' + currencySymbolSpan + (transactionDetails.amount / (players.length - 1)) + ' each  to ' + creditorName + '. '
+    } else{
+        message += players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+    }
 
 
     let bankruptcyDescription = createElement('div', '',
-        players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+        message
         + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
         + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
         + amountToRaise
@@ -4512,9 +4565,9 @@ function openBankruptcyProceedings(transactionDetails){
         // Confirm bankruptcy button
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
         confirmButton.addEventListener('click', function(){
-        
             declareBankruptcy()
         })
+        
         warningContent.appendChild(confirmButton)
 
         // Go back button
@@ -4544,7 +4597,11 @@ function openBankruptcyProceedings(transactionDetails){
             removePlayerFromGame(debtor.id)
 
             // If the player is in debt to the bank, auction all their properties
-            if (creditorID === 'bank'){
+            if (creditorID === 'bank' || creditorID === 'allOtherPlayers'){
+
+                // Reset the auctionTotal. We are probably about to do
+                // multiple auctions which we may need to know the total proceeds from.
+                auctionTotal = 0
 
                 debtor.properties.forEach(function(property){
 
@@ -4568,19 +4625,22 @@ function openBankruptcyProceedings(transactionDetails){
                     property.mortgaged = false
                     document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
 
-                    
+            
 
 
                 })
 
                 // If they are declaring a bankruptcy as a result of winning an
                 // auction, add this property to the list so it can be re-auctioned
-                if (transactionDetails.method && transationDetails.method === 'auction'){
+                if (transactionDetails.method && transactionDetails.method === 'auction'){
                     propertiesToAuction = transactionDetails.purchase.concat(propertiesToAuction)
                 }
 
                 if (propertiesToAuction.length > 0){
-                    auctionProperty()
+                    // True/false is passed to the auctionProperty function to 
+                    // indicate that the proceeds should be split between all
+                    // the other players once concluded.
+                    auctionProperty(null, transactionDetails.creditorID === 'allOtherPlayers')
                 }
 
             
