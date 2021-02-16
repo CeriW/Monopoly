@@ -1832,9 +1832,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     margin-top: 20px;
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto auto;
     grid-template-areas:
       "owner property-options"
+      "owner message"
       "owner message";
 }
 
@@ -1864,6 +1865,12 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     //padding-bottom: 10px;
     padding: 10px;
 }
+
+.station-message + .mortgage-message{
+    padding-top: 0;
+}
+
+
   
 .property-options {
     grid-area: property-options;
