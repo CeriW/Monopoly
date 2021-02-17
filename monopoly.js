@@ -1594,18 +1594,11 @@ function drawCard(type){
             // auction off all the properties in case of bankruptcy and split
             // the proceeds among all the other players. This is the fairest
             // way. I'm not a fan of this however since it's not how it would
-            // actually work in real life.
+            // actually work in real life, but who am I to argue?
             } else{
 
                 let totalDebt = Math.abs(chosenCard.value * (players.length -1))
-                console.log('total ' + totalDebt)
-
-                if (players[turn - 1].money < totalDebt){
-                    console.log('not enough money')
-                }
-
                 transactionQueue.push({debtorID: players[turn - 1].id, creditorID: 'allOtherPlayers', amount: totalDebt, method: 'card'})
-
 
             }
 
@@ -4564,9 +4557,7 @@ function openBankruptcyProceedings(transactionDetails){
 
         // Confirm bankruptcy button
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
-        confirmButton.addEventListener('click', function(){
-            declareBankruptcy()
-        })
+        confirmButton.addEventListener('click', declareBankruptcy)
         
         warningContent.appendChild(confirmButton)
 
@@ -4624,16 +4615,22 @@ function openBankruptcyProceedings(transactionDetails){
                     // Unmortgage the property and show it as such on the board
                     property.mortgaged = false
                     document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
-
-            
-
-
                 })
 
                 // If they are declaring a bankruptcy as a result of winning an
                 // auction, add this property to the list so it can be re-auctioned
                 if (transactionDetails.method && transactionDetails.method === 'auction'){
                     propertiesToAuction = transactionDetails.purchase.concat(propertiesToAuction)
+                }
+
+                // If going bankrupt to all other players (usually via a card),
+                // split the money evenly among all the other players.
+                if (creditorID === 'allOtherPlayers'){
+                    players.forEach(function(player){
+                        player.money += Math.floor(debtor.money / nonNullArrayItems(players))
+                    })
+
+                    updatePlayerDetails()
                 }
 
                 if (propertiesToAuction.length > 0){
