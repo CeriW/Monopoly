@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -120,10 +120,10 @@ let transactionQueue = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
+    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    /*{description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
@@ -137,14 +137,15 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
   ]
 
 let chanceCards = 
   [
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -5000 },
-    /*{description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
-    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
+    /*{description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
+
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
@@ -219,7 +220,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 4
+let minNumberOfPlayers = 2
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -615,6 +616,10 @@ function updateBank(){
         hotelContainer.appendChild(hotelIcon)
     }
 
+    /*
+    
+    The build/sell house functions should take care of this
+
     if (availableHouses < 1){
         availableActions.buildHouse = false
     } else{
@@ -625,7 +630,7 @@ function updateBank(){
         availableActions.buildHotel = false
     } else{
         availableActions.buildHotel = true
-    }
+    }*/
 
     setAvailableActions()
 
@@ -1476,7 +1481,7 @@ function payMoney(transactionDetails){
                     delete creditor.properties[propertyID]
                 }
                 
-                //debtor.properties[propertyID] = spaces[propertyID]
+                debtor.properties[propertyID] = spaces[propertyID]
                 
                 // Money exchange
                 debtor.money -= property.price
@@ -2202,7 +2207,7 @@ function getOutOfJail(method){
 
             // Remove the card from the player, and return it to the deck it came from.
             let usedCard = player.getOutCards.pop()
-            let cardList = usedCard.deck = 'community-chest' ? communityChestCards : chanceCards
+            let cardList = usedCard.deck === 'community-chest' ? communityChestCards : chanceCards
             cardList.push(usedCard)
 
             // Remove the icon from the player's summary
@@ -2283,6 +2288,7 @@ function increasePlayerTurn(){
     }
       
       
+    doublesCount = 0
 
 
 
@@ -2977,7 +2983,7 @@ function displayBuildHousePanel(colour){
             document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .sell-house-button').classList.remove('disabled-button')
         }
     
-        payMoney({debtorID: spaces[number].owner.id, creditorID: bank, amount: spaces[number].houseCost})
+        payMoney({debtorID: spaces[number].owner.id, creditorID: 'bank', amount: spaces[number].houseCost})
         //players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
         //updatePlayerDetails()
     
@@ -2993,6 +2999,7 @@ function displayBuildHousePanel(colour){
 
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
+        updateBank()
     }
 
     document.querySelector('#popup-close').addEventListener('click', runHouseBuildingFeedMessage, {once: true})
@@ -3014,6 +3021,88 @@ function displayBuildHousePanel(colour){
 
         // If it's neither a click event or an escape key press, do nothing.
     }
+
+    function sellHouse(number){
+
+
+        let currentHousesOnProperty = spaces[number].houses
+      
+        // If there is a hotel
+        if (currentHousesOnProperty === 5){
+      
+            // When hotels are sold, they are exchanged for 4 houses...
+            if (availableHouses >= 4){
+                availableHotels++
+                availableHouses -= 4
+                spaces[number].houses--
+                updateHouseDisplay(number)
+            }
+      
+            // but if there aren't 4 houses left in the bank...
+            else{
+      
+                // The player must sell their hotels wholesale and return all
+                // properties in that group to 0 houses. This is known as
+                // the hotel trap.
+                let wholeColourSet = getColourSet(spaces[number].group)
+      
+                wholeColourSet.forEach(function(property){
+                    let propertyNumber = property.position
+      
+                    // Reset the number of houses to 0
+                    spaces[propertyNumber].houses = 0
+      
+                    // Refund the player the cost of 5 houses, halved
+                    players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+      
+                    // Return the hotel and houses to the bank
+                    availableHotels++
+                    availableHouses += 4
+      
+                    updateHouseDisplay(propertyNumber)
+      
+                    toggleHouseBuildButtons()
+      
+                })
+      
+      
+                // TODO - While not in the official rulebook, Phil Orbanes,
+                // Chief Judge at US & World Championships allows ONLY IN
+                // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
+                // BANKRUPTCY that players may sell houses down to the stage
+                // where the bank has enough to cover it.
+                // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
+      
+                
+      
+            }
+      
+      
+        } else{
+            availableHouses++
+            spaces[number].houses--
+            updateHouseDisplay(number)
+            toggleHouseBuildButtons()
+      
+        }
+      
+        // Players get half the value back for houses/hotels
+        players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
+        updatePlayerDetails()
+      
+      
+      
+        // Find the property in the feedDetails array and update the number of buildings
+        feedDetails.forEach(function(property){
+            if (property.name === spaces[number].name){
+                property.newBuildings--
+            }
+        })
+      
+        toggleHouseBuildButtons()
+      
+        //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
+      }
 
     // Build a player-readable message for the feed
     function houseBuildingFeedMessage(){
@@ -3134,87 +3223,7 @@ function displayBuildHousePanel(colour){
 
 }
 
-function sellHouse(number){
 
-
-    let currentHousesOnProperty = spaces[number].houses
-
-    // If there is a hotel
-    if (currentHousesOnProperty === 5){
-
-        // When hotels are sold, they are exchanged for 4 houses...
-        if (availableHouses >= 4){
-            availableHotels++
-            availableHouses -= 4
-            spaces[number].houses--
-            updateHouseDisplay(number)
-        }
-
-        // but if there aren't 4 houses left in the bank...
-        else{
-
-            // The player must sell their hotels wholesale and return all
-            // properties in that group to 0 houses. This is known as
-            // the hotel trap.
-            let wholeColourSet = getColourSet(spaces[number].group)
-
-            wholeColourSet.forEach(function(property){
-                let propertyNumber = property.position
-
-                // Reset the number of houses to 0
-                spaces[propertyNumber].houses = 0
-
-                // Refund the player the cost of 5 houses, halved
-                players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
-
-                // Return the hotel and houses to the bank
-                availableHotels++
-                availableHouses += 4
-
-                updateHouseDisplay(propertyNumber)
-
-                toggleHouseBuildButtons()
-  
-            })
-
-
-            // TODO - While not in the official rulebook, Phil Orbanes,
-            // Chief Judge at US & World Championships allows ONLY IN
-            // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
-            // BANKRUPTCY that players may sell houses down to the stage
-            // where the bank has enough to cover it.
-            // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
-
-            
-
-        }
-
-
-    } else{
-        availableHouses++
-        spaces[number].houses--
-        updateHouseDisplay(number)
-        toggleHouseBuildButtons()
-
-    }
-
-    // Players get half the value back for houses/hotels
-    players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
-    updatePlayerDetails()
-
-
-
-    // Find the property in the feedDetails array and update the number of buildings
-    feedDetails.forEach(function(property){
-        if (property.name === spaces[number].name){
-            property.newBuildings--
-        }
-    })
-
-    toggleHouseBuildButtons()
-
-    //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
-}
 
 
 function unmortgageProperty(property, player, multiple){
@@ -4549,7 +4558,6 @@ function openBankruptcyProceedings(transactionDetails){
 
 
     function declareBankruptcy(){
-        //alert('bankruptcy!')
         
         openWarning('Are you sure?', '')
 
@@ -4587,7 +4595,7 @@ function openBankruptcyProceedings(transactionDetails){
             
             removePlayerFromGame(debtor.id)
 
-            // If the player is in debt to the bank, auction all their properties
+            // If the player is in debt to the bank or everyone, auction all their properties
             if (creditorID === 'bank' || creditorID === 'allOtherPlayers'){
 
                 // Reset the auctionTotal. We are probably about to do
@@ -4600,12 +4608,16 @@ function openBankruptcyProceedings(transactionDetails){
                     propertiesToAuction.push(spaces[property.position])
 
                     // If the property has houses/ hotels, return them to the bank
+                    // We'll give the debtor the money as this will be split if the
+                    // bankruptcy is to all the other players.
                     if (property.houses){
-                        if (property.houses = 5){
+                        if (property.houses === 5){
                             availableHouses += 4
                             availableHotels++
+                            debtor.money += (property.hotelCost / 2) + (property.houseCost * 2) 
                         } else{
                             availableHouses += property.houses
+                            debtor.money += property.houses * (property.houseCost / 2)
                         }
 
                         spaces[property.position].houses = 0
@@ -4639,6 +4651,12 @@ function openBankruptcyProceedings(transactionDetails){
                     // the other players once concluded.
                     auctionProperty(null, transactionDetails.creditorID === 'allOtherPlayers')
                 }
+
+                // Return all held get out of jail cards to their decks.
+                debtor.getOutCards.forEach(function(card){
+                    let cardList = card.deck === 'community-chest' ? communityChestCards : chanceCards
+                    cardList.push(card)
+                })
 
             
                 
@@ -4717,7 +4735,6 @@ function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperti
     popupMessage.appendChild(mortgageTable)
 
     mortgageTable.addEventListener('click', function(e){
-        console.log(transactionQueue)
 
         let button = e.target.closest('button')
 

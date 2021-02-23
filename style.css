@@ -1510,11 +1510,17 @@ body[unmortgage-property="false"] .unmortgage-button {
 body[build-house="none-left"] .no-more-houses-in-bank {
   display: block; }
 
+body[build-house="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-houses-in-bank) {
+  display: none !important; }
+
 body[build-house="none-left"] .build-house-button span:not(.no-more-houses-in-bank) {
   display: none !important; }
 
 body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank {
-  display: block; }
+  display: block;
+  background: #ccc;
+  color: #8f8f8f;
+  pointer-events: none; }
 
 body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
   display: none; }

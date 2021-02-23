@@ -1716,16 +1716,29 @@ body[build-house="none-left"]{
         display: block;
     }
 
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-houses-in-bank){
+        display: none !important;
+    }
+
     .build-house-button span:not(.no-more-houses-in-bank){
         display: none !important;
     }
 }
 
+body[build-house="none-left"][build-hotel="true"]{
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.build-hotel){
+        //display: none;
+    }
+}
+
+
 // If there are no hotels in the bank
 body[build-hotel="none-left"]{
     .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
         display: block;
+        @include disabledButton()
     }
+
 
     .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank){
         display: none;
