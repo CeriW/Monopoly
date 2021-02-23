@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -220,7 +220,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 2
+let minNumberOfPlayers = 4
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -772,6 +772,7 @@ function fakeRollDice(fakeTotal){
 // However it is intended as a quick fix to make testing easier, not to be
 // an actual game feature.
 function quickStart(){
+    
     createPlayers()
 
     players.forEach(function(player){

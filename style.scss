@@ -1711,7 +1711,7 @@ body[unmortgage-property="false"] .unmortgage-button{
 
 
 // If there are no houses in the bank
-body[build-house="none-left"]{
+/*body[build-house="none-left"]{
     .no-more-houses-in-bank{
         display: block;
     }
@@ -1729,10 +1729,49 @@ body[build-house="none-left"][build-hotel="true"]{
     .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.build-hotel){
         //display: none;
     }
+}*/
+
+// No houses in bank, and the property doesn't have 4 houses (which would mean
+// they'd be looking to build a hotel)
+body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button{
+    @include disabledButton();
+
+    span:not(.no-more-houses-in-bank){
+        display: none;
+    }
+
+    .no-more-houses-in-bank{
+        display: block;
+    }
+}
+
+// 4 houses, hotels are okay
+body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .build-house-button{
+
+    span:not(.build-hotel){
+        display: none;
+    }
+
+    .build-hotel{
+        display: block;
+    }
 }
 
 
-// If there are no hotels in the bank
+// 4 houses but no hotels in the bank
+body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button{
+    @include disabledButton();
+    
+    span:not(.no-more-hotels-in-bank){
+        display: none;
+    }
+
+    .no-more-hotels-in-bank{
+        display: block;
+    }
+}
+
+/*// If there are no hotels in the bank
 body[build-hotel="none-left"]{
     .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
         display: block;
@@ -1743,7 +1782,7 @@ body[build-hotel="none-left"]{
     .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank){
         display: none;
     }
-}
+}*/
 
 // If the player does not have enough mmoney
 body[build-house="not-enough-money"]{

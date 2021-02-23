@@ -1507,24 +1507,61 @@ body[unmortgage-property="false"] .unmortgage-button {
 .not-enough-money {
   display: none; }
 
-body[build-house="none-left"] .no-more-houses-in-bank {
-  display: block; }
+/*body[build-house="none-left"]{
+    .no-more-houses-in-bank{
+        display: block;
+    }
 
-body[build-house="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-houses-in-bank) {
-  display: none !important; }
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-houses-in-bank){
+        display: none !important;
+    }
 
-body[build-house="none-left"] .build-house-button span:not(.no-more-houses-in-bank) {
-  display: none !important; }
+    .build-house-button span:not(.no-more-houses-in-bank){
+        display: none !important;
+    }
+}
 
-body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank {
-  display: block;
+body[build-house="none-left"][build-hotel="true"]{
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.build-hotel){
+        //display: none;
+    }
+}*/
+body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button {
   background: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
+  body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button span:not(.no-more-houses-in-bank) {
+    display: none; }
+  body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button .no-more-houses-in-bank {
+    display: block; }
 
-body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
+body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.build-hotel) {
   display: none; }
 
+body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .build-house-button .build-hotel {
+  display: block; }
+
+body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button {
+  background: #ccc;
+  color: #8f8f8f;
+  pointer-events: none; }
+  body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
+    display: none; }
+  body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button .no-more-hotels-in-bank {
+    display: block; }
+
+/*// If there are no hotels in the bank
+body[build-hotel="none-left"]{
+    .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
+        display: block;
+        @include disabledButton()
+    }
+
+
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank){
+        display: none;
+    }
+}*/
 body[build-house="not-enough-money"] .build-house-button {
   background: #ccc;
   color: #8f8f8f;
