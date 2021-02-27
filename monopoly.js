@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -121,7 +121,7 @@ let transactionQueue = []
 let communityChestCards = 
   [
     {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
-    /*{description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
+    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
@@ -137,15 +137,14 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }*/
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
-    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -5000 },
-    /*{description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
-
     {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    /*{description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
+    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
     {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
@@ -1950,6 +1949,8 @@ function moveToken(total){
         // Moving backwards
         if (total < 0){
 
+            endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
+
             let myInterval = setInterval(function(){
                 
                 if (i >= endPosition){
@@ -2628,7 +2629,7 @@ function displayPropertyOptions(number){
             })
 
             // Note - I am unaware of any board that has more than two utilities. However, this WILL work with more than two even if the grammar output isn't perfect.
-            if (utilityCount.length){
+            if (utilityCount.length > 1){
                 let utilityMessage = createElement('div', 'utility-message', spaces[number].owner.name + ' also owns ' + utilityCount)
                 optionsPanel.appendChild(utilityMessage)      
             }
@@ -4520,8 +4521,10 @@ function openBankruptcyProceedings(transactionDetails){
             creditorName = creditor.name
     }
 
-    //let creditorName = creditor === 'bank' ? 'the bank' : 'FIX ME'
-    //let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+    // This doesn't get used until much later, but I need to store it before
+    // it gets deleted from the players array.
+    let debtorName = players[debtorID - 1].name
+
     let amountToRaise = -Math.abs(players[debtorID - 1].money)
 
     if (transactionDetails.amount){
@@ -4593,6 +4596,25 @@ function openBankruptcyProceedings(transactionDetails){
             let feedMessage = players[debtorID - 1].name + ' has gone bankrupt to ' + creditorName + ' and is out of the game. '
             addToFeed(feedMessage, 'bankrupt')
 
+            debtor.properties.forEach(function(property){
+                // If the property has houses/ hotels, return them to the bank.
+                // This happens regardless of who you're in debt to. The
+                // proceeds will be given to the creditor(s) later on.
+                if (property.houses){
+                    if (property.houses === 5){
+                        availableHouses += 4
+                        availableHotels++
+                        debtor.money += (property.hotelCost / 2) + (property.houseCost * 2) 
+                    } else{
+                        availableHouses += property.houses
+                        debtor.money += property.houses * (property.houseCost / 2)
+                    }
+
+                    spaces[property.position].houses = 0
+                    updateHouseDisplay(property.position)
+                }
+            })
+
             
             removePlayerFromGame(debtor.id)
 
@@ -4607,23 +4629,6 @@ function openBankruptcyProceedings(transactionDetails){
 
                     // Add the property to a queue to be auctioned
                     propertiesToAuction.push(spaces[property.position])
-
-                    // If the property has houses/ hotels, return them to the bank
-                    // We'll give the debtor the money as this will be split if the
-                    // bankruptcy is to all the other players.
-                    if (property.houses){
-                        if (property.houses === 5){
-                            availableHouses += 4
-                            availableHotels++
-                            debtor.money += (property.hotelCost / 2) + (property.houseCost * 2) 
-                        } else{
-                            availableHouses += property.houses
-                            debtor.money += property.houses * (property.houseCost / 2)
-                        }
-
-                        spaces[property.position].houses = 0
-                        updateHouseDisplay(property.position)
-                    }
 
                     // Unmortgage the property and show it as such on the board
                     property.mortgaged = false
@@ -4692,7 +4697,7 @@ function openBankruptcyProceedings(transactionDetails){
 
                 updatePlayerDetails()
                 if (mortgagedProperties.length){
-                    mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties)
+                    mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
                 }
 
             }
@@ -4708,7 +4713,7 @@ function openBankruptcyProceedings(transactionDetails){
     }
 }
 
-function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties){
+function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
 
     availableActions.closePopup = false
     availableActions.unmortgageProperty = true
@@ -4723,16 +4728,23 @@ function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperti
         let propertyName = createElement('div', 'property-name', property.name)
         row.appendChild(propertyName)
 
-        let keepMortgageButton = createElement('button', 'keep-mortgage-button', 'Keep mortgage (' + currencySymbolSpan + ((property.price/2) * 0.1) + ')', 'property', property.position)
+        let keepMortgageButton = createElement('button', 'keep-mortgage-button', 'Keep mortgage (' + currencySymbolSpan + (Math.ceil((property.price/2) * 0.1)) + ')', 'property', property.position)
         row.appendChild(keepMortgageButton)
 
-        let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage (' + currencySymbolSpan + (property.price * 1.05) + ')', 'property', property.position)
+        let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage (' + currencySymbolSpan + (Math.ceil(property.price * 1.05)) + ')', 'property', property.position)
         row.appendChild(unmortgageButton)
 
         mortgageTable.appendChild(row)
     })
 
-    openPopup('You have mortgaged properties', 'Hello')
+    let newMessage = 'Congratulations ' + players[transactionDetails.creditorID - 1].name + ', you are the new owner of all of ' + debtorName + '\''
+    if (!debtorName.test(/s$/gm)){
+        newMessage += 's'
+    }
+    newMessage += 'properties. '
+
+
+    openPopup(newMessage, 'Mortgaged properties')
     popupMessage.appendChild(mortgageTable)
 
     mortgageTable.addEventListener('click', function(e){
@@ -4741,7 +4753,7 @@ function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperti
 
         if (button.classList.contains('keep-mortgage-button')){
             let originalPrice = spaces[button.getAttribute('property')].price
-            transactionQueue.push({debtorID: transactionDetails.creditorID, creditorID: 'bank', amount: ((originalPrice/2) * 0.1)})
+            transactionQueue.push({debtorID: transactionDetails.creditorID, creditorID: 'bank', amount: (Math.ceil((originalPrice/2) * 0.1))})
 
             ;[].forEach.call(button.parentNode.querySelectorAll('button'), function(button){
                 button.classList.add('disabled-button')
@@ -4750,7 +4762,7 @@ function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperti
 
         } else{
 
-            unmortgageProperty(spaces[button.getAttribute('property')], creditor, true)
+            unmortgageProperty(spaces[button.getAttribute('property')], players[transactionDetails.creditorID - 1], true)
             availableActions.unmortgageProperty = true
             setAvailableActions()
 
@@ -4762,7 +4774,14 @@ function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperti
 
         if (!mortgageTable.querySelector('button:not(.disabled-button)')){
             closePopup()
-            payMoney()            
+            
+            // Note that the transaction queue won't have anything in it if the
+            // creditor has chosen to unmortgage everything (since
+            // unmortgageProperty() deals with that)
+            if (transactionQueue.length){
+                payMoney()     
+            }
+       
         }
 
 
