@@ -2612,8 +2612,11 @@ function displayPropertyOptions(number){
                 }
             })
 
-            if (stationCount > 0){
-                let stationMessage = createElement('div', 'station-message', spaces[number].owner.name + ' also owns ' + (stationCount - 1) + ' other stations')
+            if (stationCount > 1){
+                let stationMessage = createElement('div', 'station-message', spaces[number].owner.name + ' also owns ' + (stationCount - 1) + ' other station')
+                if (stationCount > 2){
+                    stationMessage.innerHTML += 's'
+                }
                 optionsPanel.appendChild(stationMessage)
             }
 
