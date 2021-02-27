@@ -219,7 +219,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 4
+let minNumberOfPlayers = 2
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -4738,10 +4738,10 @@ function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperti
     })
 
     let newMessage = 'Congratulations ' + players[transactionDetails.creditorID - 1].name + ', you are the new owner of all of ' + debtorName + '\''
-    if (!debtorName.test(/s$/gm)){
+    if (!debtorName.match(/s$/gm)){
         newMessage += 's'
     }
-    newMessage += 'properties. '
+    newMessage += ' properties. <br><br> Unfortunately some of them are mortgaged. You must decide whether to pay off the mortgages or pay the bank 10% to keep them mortgaged.<br><br>'
 
 
     openPopup(newMessage, 'Mortgaged properties')
