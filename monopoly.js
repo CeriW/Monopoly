@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -74,6 +74,11 @@ let tradeProposal = [[], []]
 // it can be added to in the middle of existing bankruptcy proceedings.
 let propertiesToAuction = []
 
+// The outcome of multiple auctions is stored in this. This is used when going
+// bankrupt to multiple players at once - the proceeds will be evenly split
+// among all the other players.
+let auctionTotal = 0
+
 
 // TODO - description
 let transactionQueue = []
@@ -115,10 +120,10 @@ let transactionQueue = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
+    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
     {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
     {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
-    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50000},
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
+    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
     {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
     {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
     {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
@@ -132,12 +137,13 @@ let communityChestCards =
     {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
     {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
     {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 },
+    {description: "You inherit £100",                                                           type: '+',        value: 100 }
   ]
 
 let chanceCards = 
   [
     {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    /*{description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
@@ -150,9 +156,8 @@ let chanceCards =
     {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
     {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
-    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
   ]
 
 
@@ -214,7 +219,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 4
+let minNumberOfPlayers = 2
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -381,13 +386,12 @@ function addEvents(){
 
     window.addEventListener('keydown', function(e){
         let key = e.key
-        console.log(e.key)
 
         switch (key){
 
 
-            case '2':
-                fakeRollDice(2)
+            case '7':
+                fakeRollDice(7)
                 break
 
 
@@ -611,6 +615,10 @@ function updateBank(){
         hotelContainer.appendChild(hotelIcon)
     }
 
+    /*
+    
+    The build/sell house functions should take care of this
+
     if (availableHouses < 1){
         availableActions.buildHouse = false
     } else{
@@ -621,7 +629,7 @@ function updateBank(){
         availableActions.buildHotel = false
     } else{
         availableActions.buildHotel = true
-    }
+    }*/
 
     setAvailableActions()
 
@@ -763,6 +771,7 @@ function fakeRollDice(fakeTotal){
 // However it is intended as a quick fix to make testing easier, not to be
 // an actual game feature.
 function quickStart(){
+    
     createPlayers()
 
     players.forEach(function(player){
@@ -833,6 +842,7 @@ function quickStart(){
     }
 
     function quickMortgage(position, player){
+        spaces[position].mortgaged = true
         document.querySelector('div[position="' + position + '"]').setAttribute('mortgaged', true)
         players[player].money += spaces[position].price / 2
     }
@@ -840,6 +850,10 @@ function quickStart(){
 
     // Instant bankruptcy
     //players[0].money = -1
+
+    players.forEach(function(player){
+        player.money = 1000
+    })
 
     updatePlayerDetails()
 
@@ -1423,11 +1437,11 @@ function payMoney(transactionDetails){
     }
 
     transactionDetails = transactionQueue[0]
-    console.log(transactionDetails)
 
-
+    // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
-    creditor = transactionDetails.creditorID === 'bank' ? 'bank' : players[transactionDetails.creditorID - 1]
+    creditor = typeof transactionDetails.creditorID === 'string' ? transactionDetails.creditorID : players[transactionDetails.creditorID - 1]
+
     let debt = 0
 
     // Check whether we're dealing with a preset amount or the cost of a purchase
@@ -1440,7 +1454,8 @@ function payMoney(transactionDetails){
         })
     }
 
-
+    // Check whether we're going bankrupt or not as a result of this transaction.
+    // If we're not, we need to make sure any necessary ownerships get transferred.
     let bankruptcy = (debtor.money < debt) ? true : false
 
     if (bankruptcy){
@@ -1453,13 +1468,19 @@ function payMoney(transactionDetails){
             // Actually give ownership of the purchase over to the player
             // now we've established they have enough money.
             transactionDetails.purchase.forEach(function(property){
+
+                //console.log(property)
+                
                 let propertyID = property.position
+
+                //buyProperty(propertyID, players[creditorID - 1], transactionDetails.method, transactionDetails.amount)
 
                 // Actual ownership
                 spaces[propertyID].owner = debtor
-                if (creditor !== 'bank' && creditor.properties[propertyID]){
+                if (typeof creditor === 'object' && creditor.properties[propertyID]){
                     delete creditor.properties[propertyID]
                 }
+                
                 debtor.properties[propertyID] = spaces[propertyID]
                 
                 // Money exchange
@@ -1469,14 +1490,12 @@ function payMoney(transactionDetails){
                     creditor.money += property.price
                 }
             })
+
         } else if (debt > 0){
                 debtor.money -= debt
-
-                console.log(creditor)
                 
                 if (creditor !== 'bank'){
                     creditor.money += debt
-                    console.log('yo')
                 }
     
             
@@ -1567,16 +1586,24 @@ function drawCard(type){
 
             // The player is receiving money from all the other players
             if (chosenCard.value > 0){
-
                 players.forEach(function(player){
                     if (player.id != turn){
                         transactionQueue.push({debtorID: player.id, creditorID: turn, amount: chosenCard.value, method: 'card'})
                     }
                 })
 
-
-
+            // The player is paying money to all of the other players.
+            // Note - there are no official rules regarding what happens if a
+            // player doesn't have enough money to pay this. Phil Orbanes (who 
+            // is generally considered the authority on the rules) says to
+            // auction off all the properties in case of bankruptcy and split
+            // the proceeds among all the other players. This is the fairest
+            // way. I'm not a fan of this however since it's not how it would
+            // actually work in real life, but who am I to argue?
             } else{
+
+                let totalDebt = Math.abs(chosenCard.value * (players.length -1))
+                transactionQueue.push({debtorID: players[turn - 1].id, creditorID: 'allOtherPlayers', amount: totalDebt, method: 'card'})
 
             }
 
@@ -1922,6 +1949,8 @@ function moveToken(total){
         // Moving backwards
         if (total < 0){
 
+            endPosition <= 39 ? token.setAttribute('position', endPosition) : token.setAttribute('position', endPosition - 40)
+
             let myInterval = setInterval(function(){
                 
                 if (i >= endPosition){
@@ -2180,7 +2209,7 @@ function getOutOfJail(method){
 
             // Remove the card from the player, and return it to the deck it came from.
             let usedCard = player.getOutCards.pop()
-            let cardList = usedCard.deck = 'community-chest' ? communityChestCards : chanceCards
+            let cardList = usedCard.deck === 'community-chest' ? communityChestCards : chanceCards
             cardList.push(usedCard)
 
             // Remove the icon from the player's summary
@@ -2261,6 +2290,7 @@ function increasePlayerTurn(){
     }
       
       
+    doublesCount = 0
 
 
 
@@ -2582,8 +2612,11 @@ function displayPropertyOptions(number){
                 }
             })
 
-            if (stationCount > 0){
-                let stationMessage = createElement('div', 'station-message', spaces[number].owner.name + ' also owns ' + (stationCount - 1) + ' other stations')
+            if (stationCount > 1){
+                let stationMessage = createElement('div', 'station-message', spaces[number].owner.name + ' also owns ' + (stationCount - 1) + ' other station')
+                if (stationCount > 2){
+                    stationMessage.innerHTML += 's'
+                }
                 optionsPanel.appendChild(stationMessage)
             }
 
@@ -2599,7 +2632,7 @@ function displayPropertyOptions(number){
             })
 
             // Note - I am unaware of any board that has more than two utilities. However, this WILL work with more than two even if the grammar output isn't perfect.
-            if (utilityCount.length){
+            if (utilityCount.length > 1){
                 let utilityMessage = createElement('div', 'utility-message', spaces[number].owner.name + ' also owns ' + utilityCount)
                 optionsPanel.appendChild(utilityMessage)      
             }
@@ -2955,7 +2988,7 @@ function displayBuildHousePanel(colour){
             document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .sell-house-button').classList.remove('disabled-button')
         }
     
-        payMoney({debtorID: spaces[number].owner.id, creditorID: bank, amount: spaces[number].houseCost})
+        payMoney({debtorID: spaces[number].owner.id, creditorID: 'bank', amount: spaces[number].houseCost})
         //players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
         //updatePlayerDetails()
     
@@ -2971,83 +3004,7 @@ function displayBuildHousePanel(colour){
 
         updateHouseDisplay(number)
         toggleHouseBuildButtons()
-    }
-
-
-    function sellHouse(number){
-        let currentHousesOnProperty = spaces[number].houses
-
-        // If there is a hotel
-        if (currentHousesOnProperty === 5){
-
-            // When hotels are sold, they are exchanged for 4 houses...
-            if (availableHouses >= 4){
-                availableHotels++
-                availableHouses -= 4
-                spaces[number].houses--
-                updateHouseDisplay(number)
-            }
-
-            // but if there aren't 4 houses left in the bank...
-            else{
-
-                // The player must sell their hotels wholesale and return all
-                // properties in that group to 0 houses. This is known as
-                // the hotel trap.
-                let wholeColourSet = getColourSet(spaces[number].group)
-
-                wholeColourSet.forEach(function(property){
-                    let propertyNumber = property.position
-
-                    // Reset the number of houses to 0
-                    spaces[propertyNumber].houses = 0
-
-                    // Refund the player the cost of 5 houses, halved
-                    players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
-
-                    // Return the hotel and houses to the bank
-                    availableHotels++
-                    availableHouses += 4
-
-                    updateHouseDisplay(propertyNumber)
-                    toggleHouseBuildButtons()
-                })
-
-
-                // TODO - While not in the official rulebook, Phil Orbanes,
-                // Chief Judge at US & World Championships allows ONLY IN
-                // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
-                // BANKRUPTCY that players may sell houses down to the stage
-                // where the bank has enough to cover it.
-                // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
-
-                
-
-            }
-
-
-        } else{
-            availableHouses++
-            spaces[number].houses--
-            updateHouseDisplay(number)
-            toggleHouseBuildButtons()
-        }
-
-        // Players get half the value back for houses/hotels
-        players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
-        updatePlayerDetails()
-
-        // Find the property in the feedDetails array and update the number of buildings
-        feedDetails.forEach(function(property){
-            if (property.name === spaces[number].name){
-                property.newBuildings--
-            }
-        })
-
-        toggleHouseBuildButtons()
-        //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
-
-        
+        updateBank()
     }
 
     document.querySelector('#popup-close').addEventListener('click', runHouseBuildingFeedMessage, {once: true})
@@ -3069,6 +3026,88 @@ function displayBuildHousePanel(colour){
 
         // If it's neither a click event or an escape key press, do nothing.
     }
+
+    function sellHouse(number){
+
+
+        let currentHousesOnProperty = spaces[number].houses
+      
+        // If there is a hotel
+        if (currentHousesOnProperty === 5){
+      
+            // When hotels are sold, they are exchanged for 4 houses...
+            if (availableHouses >= 4){
+                availableHotels++
+                availableHouses -= 4
+                spaces[number].houses--
+                updateHouseDisplay(number)
+            }
+      
+            // but if there aren't 4 houses left in the bank...
+            else{
+      
+                // The player must sell their hotels wholesale and return all
+                // properties in that group to 0 houses. This is known as
+                // the hotel trap.
+                let wholeColourSet = getColourSet(spaces[number].group)
+      
+                wholeColourSet.forEach(function(property){
+                    let propertyNumber = property.position
+      
+                    // Reset the number of houses to 0
+                    spaces[propertyNumber].houses = 0
+      
+                    // Refund the player the cost of 5 houses, halved
+                    players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+      
+                    // Return the hotel and houses to the bank
+                    availableHotels++
+                    availableHouses += 4
+      
+                    updateHouseDisplay(propertyNumber)
+      
+                    toggleHouseBuildButtons()
+      
+                })
+      
+      
+                // TODO - While not in the official rulebook, Phil Orbanes,
+                // Chief Judge at US & World Championships allows ONLY IN
+                // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
+                // BANKRUPTCY that players may sell houses down to the stage
+                // where the bank has enough to cover it.
+                // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
+      
+                
+      
+            }
+      
+      
+        } else{
+            availableHouses++
+            spaces[number].houses--
+            updateHouseDisplay(number)
+            toggleHouseBuildButtons()
+      
+        }
+      
+        // Players get half the value back for houses/hotels
+        players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
+        updatePlayerDetails()
+      
+      
+      
+        // Find the property in the feedDetails array and update the number of buildings
+        feedDetails.forEach(function(property){
+            if (property.name === spaces[number].name){
+                property.newBuildings--
+            }
+        })
+      
+        toggleHouseBuildButtons()
+      
+        //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
+      }
 
     // Build a player-readable message for the feed
     function houseBuildingFeedMessage(){
@@ -3190,7 +3229,9 @@ function displayBuildHousePanel(colour){
 }
 
 
-function unmortgageProperty(property, player){
+
+
+function unmortgageProperty(property, player, multiple){
 
     // Half the property price, plus 10%
     let mortgageValue = Math.round((property.price / 2) * 1.1)
@@ -3201,22 +3242,34 @@ function unmortgageProperty(property, player){
     // Take the mortgage money from the player
 
     if (player){
-        player.money -= mortgageValue
+        transactionQueue.push({debtorID: player.id, creditorID: 'bank', amount: mortgageValue, method:'unmortgage'})
     } else{
-        players[turn - 1].money -= mortgageValue
+        transactionQueue.push({debtorID: players[turn - 1].id, creditorID: 'bank', amount: mortgageValue, method:'unmortgage'})
+    }
+
+    // If we are in the middle of bankruptcy proceedings, we don't want to
+    // retrigger payMoney. The only way the length can be 1 is if the entry
+    // we've just added is the only one and there is nothing else in the queue.
+    if (transactionQueue.length === 1){
+        payMoney()
     }
 
     let playerName = player ? player.name : players[turn-1].name 
     addToFeed(playerName + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
     
-    updatePlayerDetails()
+    //updatePlayerDetails()
 
     // Change what actions are appropriate
-    availableActions.mortgageProperty = true
-    availableActions.unmortgageProperty = false
+    // If the 'multiple' parameter is true, we are dealing with a
+    // post-bankruptcy so don't want to disable additional unmortgages.
 
-    // Clear the message
-    mortgageMessage.innerText = ''
+    if (!multiple){
+        availableActions.mortgageProperty = true
+        availableActions.unmortgageProperty = false    
+        // Clear the message
+        mortgageMessage.innerText = ''
+    }
+
     
     // If there are still other mortgaged properties in this set,
     // prevent the player from building.
@@ -3229,7 +3282,6 @@ function unmortgageProperty(property, player){
 
     // Show the property as unmortgaged on the board.
     document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
-
 
 
     setAvailableActions()
@@ -3255,7 +3307,9 @@ function buyProperty(number, player, method, price){
     //spaces[number].owner = player
     closePopup()
 
-    let property = spaces[number]    
+    // If we've set a price, this will be a result of an auction.
+    // Otherwise go with the default price.
+    let property = Object.assign({}, spaces[number]) 
     if (price){
         property.price = price
     } else{
@@ -3292,7 +3346,7 @@ function buyProperty(number, player, method, price){
     
 }
 
-function auctionProperty(number){
+function auctionProperty(number, proceedsToAll){
 
     if (number){
         propertiesToAuction.push(spaces[number])
@@ -3480,6 +3534,14 @@ function auctionProperty(number){
         function declareAuctionWinner(){
             let winner = auctionScreen.querySelector('.current-winner').getAttribute('player')
             buyProperty(propertyID, players[winner - 1], 'auction', currentBid)
+
+            if (proceedsToAll){
+                let equalShare = Math.floor(currentBid / (players.length - 1))                
+                players.forEach(function(player){
+                    player.money += equalShare
+                })
+                updatePlayerDetails()
+            }
         }
 
 
@@ -4448,7 +4510,24 @@ function openBankruptcyProceedings(transactionDetails){
     bankruptcyTitleContent.appendChild(debtorTitle)
 
     // Generate the message
-    let creditorName = creditor === 'bank' ? 'the bank' : creditor.name
+    // TO FIX
+
+    let creditorName = ''
+    switch (creditorID){
+        case 'bank':
+            creditorName = 'the bank'
+            break
+        case 'allOtherPlayers':
+            creditorName = 'all the other players'
+            break
+        default:
+            creditorName = creditor.name
+    }
+
+    // This doesn't get used until much later, but I need to store it before
+    // it gets deleted from the players array.
+    let debtorName = players[debtorID - 1].name
+
     let amountToRaise = -Math.abs(players[debtorID - 1].money)
 
     if (transactionDetails.amount){
@@ -4460,10 +4539,16 @@ function openBankruptcyProceedings(transactionDetails){
     }
 
 
+    let message = ''
+    if (creditorID === 'allOtherPlayers'){
+        message += players[debtorID - 1].name + ' owes ' + currencySymbolSpan + (transactionDetails.amount / (players.length - 1)) + ' each  to ' + creditorName + '. '
+    } else{
+        message += players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+    }
 
 
     let bankruptcyDescription = createElement('div', '',
-        players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+        message
         + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
         + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
         + amountToRaise
@@ -4480,7 +4565,6 @@ function openBankruptcyProceedings(transactionDetails){
 
 
     function declareBankruptcy(){
-        //alert('bankruptcy!')
         
         openWarning('Are you sure?', '')
 
@@ -4488,10 +4572,8 @@ function openBankruptcyProceedings(transactionDetails){
 
         // Confirm bankruptcy button
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
-        confirmButton.addEventListener('click', function(){
+        confirmButton.addEventListener('click', declareBankruptcy)
         
-            declareBankruptcy()
-        })
         warningContent.appendChild(confirmButton)
 
         // Go back button
@@ -4509,6 +4591,7 @@ function openBankruptcyProceedings(transactionDetails){
             closeWarning()
             availableActions.bankruptcyProceedings = false
             setAvailableActions()
+            let mortgagedProperties = []
 
 
 
@@ -4516,36 +4599,94 @@ function openBankruptcyProceedings(transactionDetails){
             let feedMessage = players[debtorID - 1].name + ' has gone bankrupt to ' + creditorName + ' and is out of the game. '
             addToFeed(feedMessage, 'bankrupt')
 
-            
+            debtor.properties.forEach(function(property){
+                // If the property has houses/ hotels, return them to the bank.
+                // This happens regardless of who you're in debt to. The
+                // proceeds will be given to the creditor(s) later on.
+                if (property.houses){
+                    if (property.houses === 5){
+                        availableHouses += 4
+                        availableHotels++
+                        debtor.money += (property.hotelCost / 2) + (property.houseCost * 2) 
+                    } else{
+                        availableHouses += property.houses
+                        debtor.money += property.houses * (property.houseCost / 2)
+                    }
 
+                    spaces[property.position].houses = 0
+                    updateHouseDisplay(property.position)
+                }
+            })
+
+            
             removePlayerFromGame(debtor.id)
 
-            // If the player is in debt to the bank, auction all their properties
-            if (creditorID === 'bank'){
-                // Auction off all of the player's properties
+            // If the player is in debt to the bank or everyone, auction all their properties
+            if (creditorID === 'bank' || creditorID === 'allOtherPlayers'){
+
+                // Reset the auctionTotal. We are probably about to do
+                // multiple auctions which we may need to know the total proceeds from.
+                auctionTotal = 0
+
                 debtor.properties.forEach(function(property){
+
+                    // Add the property to a queue to be auctioned
                     propertiesToAuction.push(spaces[property.position])
+
+                    // Unmortgage the property and show it as such on the board
+                    property.mortgaged = false
+                    document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
                 })
 
                 // If they are declaring a bankruptcy as a result of winning an
                 // auction, add this property to the list so it can be re-auctioned
-                if (transactionDetails.method && transationDetails.method === 'auction'){
+                if (transactionDetails.method && transactionDetails.method === 'auction'){
                     propertiesToAuction = transactionDetails.purchase.concat(propertiesToAuction)
                 }
 
-                if (propertiesToAuction.length > 0){
-                    auctionProperty()
+                // If going bankrupt to all other players (usually via a card),
+                // split the money evenly among all the other players.
+                if (creditorID === 'allOtherPlayers'){
+                    players.forEach(function(player){
+                        player.money += Math.floor(debtor.money / nonNullArrayItems(players))
+                    })
+
+                    updatePlayerDetails()
                 }
+
+                if (propertiesToAuction.length > 0){
+                    // True/false is passed to the auctionProperty function to 
+                    // indicate that the proceeds should be split between all
+                    // the other players once concluded.
+                    auctionProperty(null, transactionDetails.creditorID === 'allOtherPlayers')
+                }
+
+                // Return all held get out of jail cards to their decks.
+                debtor.getOutCards.forEach(function(card){
+                    let cardList = card.deck === 'community-chest' ? communityChestCards : chanceCards
+                    cardList.push(card)
+                })
+
+            
+                
 
 
 
             // Otherwise give all their assets to the creditor player
             } else{
 
+
+
                 //Properties
                 debtor.properties.forEach(function(property){
                     spaces[property.position].owner = players[creditorID - 1]
                     players[creditorID - 1].properties[property.position] = spaces[property.position]
+
+                    // If the property is mortgaged, add it to an array. The
+                    // new owner will need to choose what to do about this.
+                    if (property.mortgaged){
+                        mortgagedProperties.push(property)
+                    }
                 })
 
                 // Get out of jail cards
@@ -4558,17 +4699,98 @@ function openBankruptcyProceedings(transactionDetails){
 
 
                 updatePlayerDetails()
+                if (mortgagedProperties.length){
+                    mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
+                }
+
             }
 
 
 
-            if (transactionQueue.length){
+            if (transactionQueue.length && !mortgagedProperties.length){
                 payMoney()
             }
 
         }
 
     }
+}
+
+function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
+
+    availableActions.closePopup = false
+    availableActions.unmortgageProperty = true
+    setAvailableActions()
+
+
+    let mortgageTable = createElement('div', 'bankruptcy-mortgage-table')
+
+    mortgagedProperties.forEach(function(property){
+        let row = createElement('div', '', )
+
+        let propertyName = createElement('div', 'property-name', property.name)
+        row.appendChild(propertyName)
+
+        let keepMortgageButton = createElement('button', 'keep-mortgage-button', 'Keep mortgage (' + currencySymbolSpan + (Math.ceil((property.price/2) * 0.1)) + ')', 'property', property.position)
+        row.appendChild(keepMortgageButton)
+
+        let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage (' + currencySymbolSpan + (Math.ceil(property.price * 1.05)) + ')', 'property', property.position)
+        row.appendChild(unmortgageButton)
+
+        mortgageTable.appendChild(row)
+    })
+
+    let newMessage = 'Congratulations ' + players[transactionDetails.creditorID - 1].name + ', you are the new owner of all of ' + debtorName + '\''
+    if (!debtorName.match(/s$/gm)){
+        newMessage += 's'
+    }
+    newMessage += ' properties. <br><br> Unfortunately some of them are mortgaged. You must decide whether to pay off the mortgages or pay the bank 10% to keep them mortgaged.<br><br>'
+
+
+    openPopup(newMessage, 'Mortgaged properties')
+    popupMessage.appendChild(mortgageTable)
+
+    mortgageTable.addEventListener('click', function(e){
+
+        let button = e.target.closest('button')
+
+        if (button.classList.contains('keep-mortgage-button')){
+            let originalPrice = spaces[button.getAttribute('property')].price
+            transactionQueue.push({debtorID: transactionDetails.creditorID, creditorID: 'bank', amount: (Math.ceil((originalPrice/2) * 0.1))})
+
+            ;[].forEach.call(button.parentNode.querySelectorAll('button'), function(button){
+                button.classList.add('disabled-button')
+            })
+
+
+        } else{
+
+            unmortgageProperty(spaces[button.getAttribute('property')], players[transactionDetails.creditorID - 1], true)
+            availableActions.unmortgageProperty = true
+            setAvailableActions()
+
+            ;[].forEach.call(button.parentNode.querySelectorAll('button'), function(button){
+                button.classList.add('disabled-button')
+            })
+            
+        }
+
+        if (!mortgageTable.querySelector('button:not(.disabled-button)')){
+            closePopup()
+            
+            // Note that the transaction queue won't have anything in it if the
+            // creditor has chosen to unmortgage everything (since
+            // unmortgageProperty() deals with that)
+            if (transactionQueue.length){
+                payMoney()     
+            }
+       
+        }
+
+
+    })
+
+
 
 }
 

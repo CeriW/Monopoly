@@ -1711,9 +1711,13 @@ body[unmortgage-property="false"] .unmortgage-button{
 
 
 // If there are no houses in the bank
-body[build-house="none-left"]{
+/*body[build-house="none-left"]{
     .no-more-houses-in-bank{
         display: block;
+    }
+
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-houses-in-bank){
+        display: none !important;
     }
 
     .build-house-button span:not(.no-more-houses-in-bank){
@@ -1721,16 +1725,64 @@ body[build-house="none-left"]{
     }
 }
 
-// If there are no hotels in the bank
+body[build-house="none-left"][build-hotel="true"]{
+    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.build-hotel){
+        //display: none;
+    }
+}*/
+
+// No houses in bank, and the property doesn't have 4 houses (which would mean
+// they'd be looking to build a hotel)
+body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button{
+    @include disabledButton();
+
+    span:not(.no-more-houses-in-bank){
+        display: none;
+    }
+
+    .no-more-houses-in-bank{
+        display: block;
+    }
+}
+
+// 4 houses, hotels are okay
+body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .build-house-button{
+
+    span:not(.build-hotel){
+        display: none;
+    }
+
+    .build-hotel{
+        display: block;
+    }
+}
+
+
+// 4 houses but no hotels in the bank
+body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button{
+    @include disabledButton();
+    
+    span:not(.no-more-hotels-in-bank){
+        display: none;
+    }
+
+    .no-more-hotels-in-bank{
+        display: block;
+    }
+}
+
+/*// If there are no hotels in the bank
 body[build-hotel="none-left"]{
     .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
         display: block;
+        @include disabledButton()
     }
+
 
     .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank){
         display: none;
     }
-}
+}*/
 
 // If the player does not have enough mmoney
 body[build-house="not-enough-money"]{
@@ -1832,9 +1884,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     margin-top: 20px;
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto auto;
     grid-template-areas:
       "owner property-options"
+      "owner message"
       "owner message";
 }
 
@@ -1864,6 +1917,12 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     //padding-bottom: 10px;
     padding: 10px;
 }
+
+.station-message + .mortgage-message{
+    padding-top: 0;
+}
+
+
   
 .property-options {
     grid-area: property-options;
@@ -2595,6 +2654,48 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
 }
 
 
+/* Mortgages after bankruptcy ------------------------------------------------*/
+
+.bankruptcy-mortgage-table{
+
+    & > div{
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        grid-template-rows: 1fr;
+        gap: 0px 5px;
+        grid-template-areas:
+          "property-name keep-mortgage-button unmortgage-button";
+    
+        padding: 5px 0;
+        margin: 5px 0;
+        border-bottom: 1px solid $lightgrey;
+    
+        &:first-child{
+            border-top: 1px solid $lightgrey;
+        }
+    }
+
+    .unmortgage-button {
+        grid-area: unmortgage-button;
+        min-width: 190px;
+    }
+
+    .keep-mortgage-button {
+        grid-area: keep-mortgage-button;
+        min-width: 190px;
+    }
+    
+    .property-name {
+        grid-area: property-name;
+        display: flex;
+        align-items: center;    
+    }
+}
+
+
+.bankruptcy-mortgage-table > div{
+
+}
 
 
 /*
@@ -2631,6 +2732,9 @@ body[close-popup="false"] #popup-close{
     letter-spacing: 1px;
 }
 */
+
+
+
 
 
 /* Player removal ------------------------------------------------------------*/

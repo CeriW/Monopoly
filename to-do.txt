@@ -76,3 +76,5 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - Use a weather API to display appropriate weather over the welcome screen.
 
 - Share on social media when you win
+
+- Sound effects
