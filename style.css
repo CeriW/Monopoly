@@ -2270,8 +2270,8 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   display: grid;
   grid-template-columns: 7fr 10fr;
   gap: 20px 10px;
-  grid-template-rows: auto auto auto;
-  grid-template-areas: "Description Description" "Financial Worth" "Functions Functions"; }
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas: "Description Description" "Financial Worth" "Functions Functions" "Button Button"; }
 
 .bankruptcy-description {
   grid-area: Description;
@@ -2292,12 +2292,37 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
     background: #db0926;
     color: #fff; }
 
-.Functions {
+#bankruptcy-message .full-portfolio {
   grid-area: Functions; }
+  #bankruptcy-message .full-portfolio .full-portfolio-item {
+    width: 100%; }
+  #bankruptcy-message .full-portfolio .house-visual-display {
+    height: 26px;
+    width: 110px; }
+  #bankruptcy-message .full-portfolio .full-portfolio-house,
+  #bankruptcy-message .full-portfolio .full-portfolio-hotel {
+    display: none; }
 
-.Description {
-  grid-area: Description; }
+/*
+.get-out-of-bankruptcy-table{
+    border-bottom: 1px solid $lightgrey;
+    grid-area: Functions;
 
+    .get-out-of-bankruptcy-table-entry{
+        padding: 10px 0;
+        border-top: 1px solid $lightgrey;
+        text-align: left;
+
+        .property-icon{
+            margin-right: 20px;
+        }
+
+        .house-visual-display{
+            width: 130px;
+            height: 25px;
+        }
+    }
+}*/
 /* Mortgages after bankruptcy ------------------------------------------------*/
 .bankruptcy-mortgage-table > div {
   display: grid;

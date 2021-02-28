@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -83,6 +83,9 @@ let auctionTotal = 0
 // TODO - description
 let transactionQueue = []
 
+
+
+let feedDetails = []
 
 /*
  Community chest and chance cards have a number of properties:
@@ -388,11 +391,6 @@ function addEvents(){
         let key = e.key
 
         switch (key){
-
-
-            case '7':
-                fakeRollDice(7)
-                break
 
 
             case 'Escape':
@@ -785,11 +783,11 @@ function quickStart(){
     let player = 0
     quickPropertyOwnership(4,1,player)
     quickPropertyOwnership(3,3,player)
-    quickPropertyOwnership(0,6,player)
-    quickPropertyOwnership(0,12,player)
-    quickPropertyOwnership(0,27,player)
-    quickMortgage(6, player)
-    quickMortgage(12, player)
+    //quickPropertyOwnership(0,6,player)
+    //quickPropertyOwnership(0,12,player)
+    //quickPropertyOwnership(0,27,player)
+    //quickMortgage(6, player)
+    //quickMortgage(12, player)
 
     communityChestCards.forEach(function(card){
         if (card.description === 'Get Out of Jail Free'){
@@ -2450,6 +2448,7 @@ function generateFullPortfolioView(player){
         // Create a containing div to hold all the info relating to this property
         let propertyContainer = createElement('div', 'full-portfolio-item', '', 'property', property.position)
         propertyContainer.setAttribute('mortgaged', property.mortgaged)
+        propertyContainer.setAttribute('group', property.group)
 
         // Create the icon
         let propertyIcon = createElement('div', 'property-icon')
@@ -2744,29 +2743,7 @@ function displayPropertyOptions(number){
 
 
 
-        function mortgageProperty(property){
-
-            let mortgageValue = property.price / 2
-
-            // Set the property as mortgaged and add this info to the feed.
-            property.mortgaged = true
-            addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
-
-            // Give the player the mortgage money
-            players[turn - 1].money += mortgageValue
-            updatePlayerDetails()
-
-            // Show the property as mortgaged on the board.
-            document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
-
-            // Change what actions are appropriate
-            availableActions.mortgageProperty = false
-            availableActions.unmortgageProperty = true
-            availableActions.buildHouse = false
-            availableActions.buildHotel = false
-
-            setAvailableActions()
-        }       
+          
     }
     
 
@@ -2774,9 +2751,31 @@ function displayPropertyOptions(number){
     popupMessage.appendChild(optionsPanel)
 }
 
-function displayBuildHousePanel(colour){
+function mortgageProperty(property){
 
-    let feedDetails = []
+    let mortgageValue = property.price / 2
+
+    // Set the property as mortgaged and add this info to the feed.
+    property.mortgaged = true
+    addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
+
+    // Give the player the mortgage money
+    players[turn - 1].money += mortgageValue
+    updatePlayerDetails()
+
+    // Show the property as mortgaged on the board.
+    document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
+
+    // Change what actions are appropriate
+    availableActions.mortgageProperty = false
+    availableActions.unmortgageProperty = true
+    availableActions.buildHouse = false
+    availableActions.buildHotel = false
+
+    setAvailableActions()
+}     
+
+function displayBuildHousePanel(colour){
 
     // Get an array of all of the properties in that colour set.
     let colourSet = []
@@ -2877,101 +2876,14 @@ function displayBuildHousePanel(colour){
     openPopup('', 'Manage colour group')
     popupMessage.appendChild(houseBuildPanel)
 
-    toggleHouseBuildButtons()
+    toggleHouseBuildButtons(colour)
 
     // According to the rules, players must build houses evenly. For example,
     // they can't have 4 houses on one property in the set and 1 on another.
     // This function will toggle the buttons as appropriate to force
     // this behaviour.
     
-    function toggleHouseBuildButtons(){
-        
-        // Create an array of the number of houses on all the properties
-        // in the colour set.
-        let colourSetHouses = []
-        colourSet.forEach(function(property){
-            colourSetHouses.push(spaces[property.position].houses)
-        })
-
-        
-        // Get the highest number of houses in the set.
-        let highestNumberOfHouses = Math.max(...colourSetHouses)
-        let lowestNumberOfHouses = Math.min(...colourSetHouses)
     
-    
-        // Functions to check whether all the properties have the same number of buildings
-        function checkHouseAmount(houses){
-            return highestNumberOfHouses === houses
-        }
-          
-        function checkAllHousesSame(){
-            return(colourSetHouses.every(checkHouseAmount))
-        }
-
-        
-        // If all of the properties have the same number of houses...
-        if (checkAllHousesSame()){
-
-            
-            if (highestNumberOfHouses === 5){
-
-
-
-                // If all the properties have hotels, enable all the sell buttons
-                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .sell-house-button'), function(button){
-                    button.classList.remove('disabled-button')
-                })
-            }
-            
-            // If all the properties have the same amount of houses but they're NOT hotels, enable all of the build and sell buttons
-            else{
-                ;[].forEach.call(document.querySelectorAll('.house-visual-display + .button-panel .build-house-button, .house-visual-display:not([houses="0"]) + .button-panel .sell-house-button'), function(button){
-                    button.classList.remove('disabled-button')
-                })
-
-            }
-
-        // If all the properties DON'T have the same number of houses...
-        } else{
-            // Prevent building on properties that have the most number of houses
-            ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
-                button.classList.add('disabled-button')
-            })
-
-            // Prevent selling buildings on properties that have the least
-            ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button' ), function(button){
-                button.classList.add('disabled-button')
-            })
-        }
-
-        
-        // Despite the rule of building evenly, check there are
-        // enough buildings in the bank. This will set an attribute on the
-        // body which is used in the CSS to disable the appropriate
-        // buttons regardless of what the other maths returns
-
-
-        if (!availableHouses){
-            availableActions.buildHouse = 'none-left'
-        }
-        
-    
-        if (!availableHotels){
-            availableActions.buildHotel = 'none-left'
-        }
-
-        if (players[colourSet[0].owner.id - 1].money < colourSet[0].houseCost){
-            availableActions.buildHouse = 'not-enough-money'
-        }
-        
-    
-        if (players[colourSet[0].owner.id - 1].money < colourSet[0].hotelCost){
-            availableActions.buildHotel = 'not-enough-money'
-        }
-
-
-        setAvailableActions()
-    }
     
     
     function buildHouse(number){
@@ -3005,7 +2917,7 @@ function displayBuildHousePanel(colour){
         })
 
         updateHouseDisplay(number)
-        toggleHouseBuildButtons()
+        toggleHouseBuildButtons(spaces[number].group)
         updateBank()
     }
 
@@ -3029,87 +2941,7 @@ function displayBuildHousePanel(colour){
         // If it's neither a click event or an escape key press, do nothing.
     }
 
-    function sellHouse(number){
 
-
-        let currentHousesOnProperty = spaces[number].houses
-      
-        // If there is a hotel
-        if (currentHousesOnProperty === 5){
-      
-            // When hotels are sold, they are exchanged for 4 houses...
-            if (availableHouses >= 4){
-                availableHotels++
-                availableHouses -= 4
-                spaces[number].houses--
-                updateHouseDisplay(number)
-            }
-      
-            // but if there aren't 4 houses left in the bank...
-            else{
-      
-                // The player must sell their hotels wholesale and return all
-                // properties in that group to 0 houses. This is known as
-                // the hotel trap.
-                let wholeColourSet = getColourSet(spaces[number].group)
-      
-                wholeColourSet.forEach(function(property){
-                    let propertyNumber = property.position
-      
-                    // Reset the number of houses to 0
-                    spaces[propertyNumber].houses = 0
-      
-                    // Refund the player the cost of 5 houses, halved
-                    players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
-      
-                    // Return the hotel and houses to the bank
-                    availableHotels++
-                    availableHouses += 4
-      
-                    updateHouseDisplay(propertyNumber)
-      
-                    toggleHouseBuildButtons()
-      
-                })
-      
-      
-                // TODO - While not in the official rulebook, Phil Orbanes,
-                // Chief Judge at US & World Championships allows ONLY IN
-                // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
-                // BANKRUPTCY that players may sell houses down to the stage
-                // where the bank has enough to cover it.
-                // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
-      
-                
-      
-            }
-      
-      
-        } else{
-            availableHouses++
-            spaces[number].houses--
-            updateHouseDisplay(number)
-            toggleHouseBuildButtons()
-      
-        }
-      
-        // Players get half the value back for houses/hotels
-        players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
-        updatePlayerDetails()
-      
-      
-      
-        // Find the property in the feedDetails array and update the number of buildings
-        feedDetails.forEach(function(property){
-            if (property.name === spaces[number].name){
-                property.newBuildings--
-            }
-        })
-      
-        toggleHouseBuildButtons()
-      
-        //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
-      }
 
     // Build a player-readable message for the feed
     function houseBuildingFeedMessage(){
@@ -3229,6 +3061,202 @@ function displayBuildHousePanel(colour){
     }
 
 }
+
+function toggleHouseBuildButtons(group){
+
+    if (group === 'utility' || group === 'train-station'){
+        return
+    }
+        
+    // Create an array of the number of houses on all the properties
+    // in the colour set.
+    let colourSetHouses = []
+
+    let colourSet = getColourSet(group)
+    
+    colourSet.forEach(function(property){
+        colourSetHouses.push(spaces[property.position].houses)
+    })
+
+ 
+
+    
+    // Get the highest number of houses in the set.
+    let highestNumberOfHouses = Math.max(...colourSetHouses)
+    let lowestNumberOfHouses = Math.min(...colourSetHouses)
+
+    console.log('least houses = ' + lowestNumberOfHouses)
+
+
+    // Functions to check whether all the properties have the same number of buildings
+    function checkHouseAmount(houses){
+        return highestNumberOfHouses === houses
+    }
+      
+    function checkAllHousesSame(){
+        return(colourSetHouses.every(checkHouseAmount))
+    }
+
+    
+    // If all of the properties have the same number of houses...
+    if (checkAllHousesSame()){
+
+        console.log('all houses are the same')
+
+        
+        if (highestNumberOfHouses === 5){
+
+
+            // If all the properties have hotels, enable all the sell buttons
+            ;[].forEach.call(document.querySelectorAll('.colour-set-overview .house-visual-display + .button-panel .sell-house-button,     .full-portfolio-item[group="' + group + '"] .house-visual-display + .button-panel .sell-house-button'), function(button){
+                button.classList.remove('disabled-button')
+            })
+        }
+        
+        // If all the properties have the same amount of houses but they're NOT hotels, enable all of the build and sell buttons
+        else{
+            ;[].forEach.call(document.querySelectorAll('.colour-set-overview .house-visual-display + .button-panel .build-house-button,      .colour-set-overview .house-visual-display:not([houses="0"]) + .button-panel .sell-house-button,       .full-portfolio-item[group="' + group + '"] .house-visual-display:not([houses="0"]) + .button-panel .sell-house-button'), function(button){
+                button.classList.remove('disabled-button')
+            })
+
+        }
+
+    // If all the properties DON'T have the same number of houses...
+    } else{
+
+        //console.log('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button')
+
+        console.log(document.querySelectorAll('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="2"] + .button-panel .sell-house-button'))
+
+        // Prevent building on properties that have the most number of houses
+        ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
+            button.classList.add('disabled-button')
+        })
+
+        // Prevent selling buildings on properties that have the least
+        ;[].forEach.call(document.querySelectorAll('.colour-set-overview .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button, .full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button'), function(button){
+            button.classList.add('disabled-button')
+        })
+
+
+        /*;[].forEach.call(document.querySelectorAll('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button'), function(button){
+            button.classList.add('disabled-button')
+            console.log(button)
+        })*/
+    }
+
+    
+    // Despite the rule of building evenly, check there are
+    // enough buildings in the bank. This will set an attribute on the
+    // body which is used in the CSS to disable the appropriate
+    // buttons regardless of what the other maths returns
+
+
+    if (!availableHouses){
+        availableActions.buildHouse = 'none-left'
+    }
+    
+
+    if (!availableHotels){
+        availableActions.buildHotel = 'none-left'
+    }
+
+    //console.log(colourSet)
+
+    if (players[colourSet[0].owner.id - 1].money < colourSet[0].houseCost){
+        availableActions.buildHouse = 'not-enough-money'
+    }
+    
+
+    if (players[colourSet[0].owner.id - 1].money < colourSet[0].hotelCost){
+        availableActions.buildHotel = 'not-enough-money'
+    }
+
+
+    setAvailableActions()
+}
+
+function sellHouse(number){
+
+
+    let currentHousesOnProperty = spaces[number].houses
+  
+    // If there is a hotel
+    if (currentHousesOnProperty === 5){
+  
+        // When hotels are sold, they are exchanged for 4 houses...
+        if (availableHouses >= 4){
+            availableHotels++
+            availableHouses -= 4
+            spaces[number].houses--
+            updateHouseDisplay(number)
+        }
+  
+        // but if there aren't 4 houses left in the bank...
+        else{
+  
+            // The player must sell their hotels wholesale and return all
+            // properties in that group to 0 houses. This is known as
+            // the hotel trap.
+            let wholeColourSet = getColourSet(spaces[number].group)
+  
+            wholeColourSet.forEach(function(property){
+                let propertyNumber = property.position
+  
+                // Reset the number of houses to 0
+                spaces[propertyNumber].houses = 0
+  
+                // Refund the player the cost of 5 houses, halved
+                players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+  
+                // Return the hotel and houses to the bank
+                availableHotels++
+                availableHouses += 4
+  
+                updateHouseDisplay(propertyNumber)
+  
+                //toggleHouseBuildButtons(spaces[number].group)
+  
+            })
+  
+  
+            // TODO - While not in the official rulebook, Phil Orbanes,
+            // Chief Judge at US & World Championships allows ONLY IN
+            // CIRCUMSTANCES WHERE PLAYERS ARE TRYING TO GET OUT OF
+            // BANKRUPTCY that players may sell houses down to the stage
+            // where the bank has enough to cover it.
+            // https://www.reddit.com/r/monopoly/comments/8fa7ee/please_describe_the_hotel_trap_selling_hotels/
+  
+            
+  
+        }
+  
+  
+    } else{
+        availableHouses++
+        spaces[number].houses--
+        updateHouseDisplay(number)
+        //toggleHouseBuildButtons(spaces[number].group)
+  
+    }
+  
+    // Players get half the value back for houses/hotels
+    players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
+    updatePlayerDetails()
+  
+  
+  
+    // Find the property in the feedDetails array and update the number of buildings
+    feedDetails.forEach(function(property){
+        if (property.name === spaces[number].name){
+            property.newBuildings--
+        }
+    })
+  
+    //toggleHouseBuildButtons(spaces[number].group)
+  
+    //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
+  }
 
 
 
@@ -4573,19 +4601,144 @@ function openBankruptcyProceedings(transactionDetails){
     worthDetails.innerHTML = '<span style="font-size: 1.3em;">Your current worth is <b>' + currencySymbolSpan + (calculatePlayerWorth(debtorID)) + '</b>.</span><br>'
 
     if (amountToRaise > calculatePlayerWorth(debtorID)){
-        worthDetails.innerHTML += 'You are unable to be able to raise enough money for this unless another player agrees to trade properties for more than they\'re worth.'
+        worthDetails.innerHTML += 'You are unable to raise enough money for this unless another player agrees to trade properties for more than they\'re worth.'
         worthDetails.setAttribute('ableToRaise', false)
     } else{
         worthDetails.innerHTML += 'You should be able to raise enough money by trading with other players, mortgaging properties and selling buildings.'
         worthDetails.setAttribute('ableToRaise', true)
     }
+
+    bankcruptcyMessage.appendChild(worthDetails)
+
+
+
+    // Generate the functions which will allow the player to get themselves out
+    // of bankruptcy
+
+    let functionsArea = generateFullPortfolioView(debtorID)
+    bankcruptcyMessage.appendChild(functionsArea)
+    
+    ;[].forEach.call(functionsArea.querySelectorAll('.full-portfolio-item'), function(node){
+        
+        let property = spaces[node.getAttribute('property')]
+
+
+        // Group the houses together so we can use the same CSS as sellHouse
+
+        let houseVisualDisplay = createElement('div', 'house-visual-display', '', 'houses', property.houses)
+        node.appendChild(houseVisualDisplay)
+
+
+        let buttonPanel = createElement('div', 'button-panel')
+        node.appendChild(buttonPanel)
+
+
+        // Sell houses button -------------------*/
+
+        let sellHouseButton = createElement('button', 'sell-house-button', 'Sell house', 'group', property.group)
+        buttonPanel.appendChild(sellHouseButton)
+        toggleHouseBuildButtons(property.group)
+
+        sellHouseButton.addEventListener('click', function(){
+            //sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
+            sellHouse(property.position)
+            sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
+            toggleHouseBuildButtons(property.group)
+            //console.log(property.group)
+            
+        })
+
+
+
+
+        // Mortgage button -----------------------*/
+        let mortgageButton = createElement('button', '', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
+
+        // If the property is already mortgaged, disable this button
+        if (property.mortgaged){
+            mortgageButton.classList.add('disabled-button')
+            mortgageButton.innerHTML = 'Already mortgaged'
+        }
+
+        mortgageButton.addEventListener('click', function(){
+            mortgageProperty(property)
+            mortgageButton.classList.add('disabled-button')
+            mortgageButton.innerHTML = 'Already mortgaged'
+        })
+
+        buttonPanel.appendChild(mortgageButton)
+
+
+
+
+
+    })
+
+
+
+
+
+
+
+    /*players[debtorID - 1].properties.forEach(function(property){
+        let propertyDisplay = createElement('div', 'get-out-of-bankruptcy-table-entry')
+
+        // Name
+        propertyDisplay.appendChild(createElement('div', '', property.name))
+
+        // Icon
+        let propertyIcon = createElement('div', 'property-icon', '', 'mortgaged', property.mortgaged)
+        propertyIcon.classList.add(property.group)
+        if (property.group === 'utility'){
+            let propertyName = property.name.replace(/\s/g, '-').toLowerCase()
+            propertyIcon.classList.add(propertyName)
+        }
+        propertyDisplay.appendChild(propertyIcon)
+
+
+        // Mortgage button
+        let mortgageButton = createElement('button', '', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
+
+        // If the property is already mortgaged, disable this button
+        if (property.mortgaged){
+            mortgageButton.classList.add('disabled-button')
+            mortgageButton.innerHTML = 'Already mortgaged'
+        }
+
+        mortgageButton.addEventListener('click', function(){
+            mortgageProperty(spaces[property.position])
+        })
+        propertyDisplay.appendChild(mortgageButton)
+
+
+        // House display
+
+        if (property.type === 'property'){
+
+            let houses = createElement('div', 'house-visual-display', '', 'houses', property.houses)
+            propertyDisplay.appendChild(houses)
+    
+            // Sell house button
+            let sellHouseButton = createElement('button')
+            propertyDisplay.appendChild(sellHouseButton)
+    
+            if (property.houses === 5){
+                sellHouseButton.innerHTML = 'Sell hotel (' + currencySymbolSpan + property.hotelCost/2 + ')'
+            } else{
+                sellHouseButton.innerHTML = 'Sell house (' + currencySymbolSpan + property.houseCost/2 + ')'
+            }
+            
+        }
+
+        getOutOfBankruptcyTable.appendChild(propertyDisplay)
+        
+
+    })*/
+
     
 
 
 
-
-
-    bankcruptcyMessage.appendChild(worthDetails)
 
 
 

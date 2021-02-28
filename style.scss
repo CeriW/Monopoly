@@ -2655,11 +2655,12 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
     display: grid;
     grid-template-columns: 7fr 10fr;
     gap: 20px 10px;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto auto auto;
     grid-template-areas:
         "Description Description"
         "Financial Worth"
-        "Functions Functions";
+        "Functions Functions"
+        "Button Button";
     
 }
 
@@ -2692,9 +2693,44 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
     }
 }
 
-.Functions { grid-area: Functions; }
-.Description { grid-area: Description; }
+#bankruptcy-message .full-portfolio{
+    grid-area: Functions;
 
+    .full-portfolio-item{
+        width: 100%;
+    }
+
+    .house-visual-display{
+        height: 26px;
+        width: 110px;
+    }
+
+    .full-portfolio-house,
+    .full-portfolio-hotel{
+        display: none;
+    }
+}
+
+/*
+.get-out-of-bankruptcy-table{
+    border-bottom: 1px solid $lightgrey;
+    grid-area: Functions;
+
+    .get-out-of-bankruptcy-table-entry{
+        padding: 10px 0;
+        border-top: 1px solid $lightgrey;
+        text-align: left;
+
+        .property-icon{
+            margin-right: 20px;
+        }
+
+        .house-visual-display{
+            width: 130px;
+            height: 25px;
+        }
+    }
+}*/
 
 
 /* Mortgages after bankruptcy ------------------------------------------------*/
