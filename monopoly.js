@@ -4818,6 +4818,57 @@ function removePlayerFromGame(playerID){
 }
 
 
+// GENERATE WORTH ------------------------------------------------------------//
+
+// Figure out what a player's total worth is. Originally created for the
+// bankruptcy screen but has potential uses elsewhere.
+
+function calculateWorth(playerID){
+
+    let worth = 0
+    let player = players[playerID - 1]
+
+    // Money
+    worth += player.money
+
+
+    // Properties
+    player.properties.forEach(function(property){
+        
+        // While the properties array does store a copy of the property object,
+        // it is not kept up to date. We need to reference the spaces array
+        // for the most recent details
+        let space = spaces[property.position]
+
+        // If it's mortgaged, add half the price
+        if (space.mortgaged){
+            worth += (space.price / 2)
+
+        // If it's not mortgaged...
+        } else{
+
+            // Add the standard cost of the property
+            worth += space.price
+
+            // Note that houses and hotels are only worth half their original
+            // cost (since that's what they sell for)
+
+            // If it has a hotel
+            if (space.houses === 5){
+                worth += (space.hotelCost / 2) + (space.houseCost * 2)
+            }
+            // If it doesn't have a hotel
+            else{
+                worth += (space.houseCost * space.houses) / 2
+            }
+
+        }
+    })
+
+
+    console.log(worth)
+}
+
 
 
 // FEED FUNCTIONS ------------------------------------------------------------//
