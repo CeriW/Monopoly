@@ -2261,12 +2261,42 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   float: left;
   margin: -6px 20px 0 0; }
 
-#bankruptcy-message {
-  padding: 20px; }
-
 body.popup-open #bankruptcy,
 body[bankruptcy-proceedings="false"] #bankruptcy {
   display: none; }
+
+#bankruptcy-message {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 7fr 10fr;
+  gap: 20px 10px;
+  grid-template-rows: auto auto auto;
+  grid-template-areas: "Description Description" "Financial Worth" "Functions Functions"; }
+
+.bankruptcy-description {
+  grid-area: Description;
+  font-size: 1.3em; }
+
+.bankruptcy-financial-details {
+  border: 1px solid #ccc;
+  padding: 20px;
+  grid-area: Financial; }
+
+.bankruptcy-worth-details {
+  grid-area: Worth;
+  padding: 12px; }
+  .bankruptcy-worth-details[abletoraise="true"] {
+    background: #0aa959;
+    color: #fff; }
+  .bankruptcy-worth-details[abletoraise="false"] {
+    background: #db0926;
+    color: #fff; }
+
+.Functions {
+  grid-area: Functions; }
+
+.Description {
+  grid-area: Description; }
 
 /* Mortgages after bankruptcy ------------------------------------------------*/
 .bankruptcy-mortgage-table > div {

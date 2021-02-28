@@ -219,7 +219,7 @@ let spaces =  [
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 2
+let minNumberOfPlayers = 4
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -852,12 +852,14 @@ function quickStart(){
     //players[0].money = -1
 
     players.forEach(function(player){
-        player.money = 1000
+        player.money = 1
     })
 
     updatePlayerDetails()
 
     console.clear()
+
+    fakeRollDice(4)
 
     
 }
@@ -4528,6 +4530,27 @@ function openBankruptcyProceedings(transactionDetails){
     // it gets deleted from the players array.
     let debtorName = players[debtorID - 1].name
 
+
+    let message = ''
+    if (creditorID === 'allOtherPlayers'){
+        message += players[debtorID - 1].name + ', you owe ' + currencySymbolSpan + (transactionDetails.amount / (players.length - 1)) + ' each  to ' + creditorName + '. '
+    } else{
+        message += players[debtorID - 1].name + ', you owe ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+    }
+
+
+    let bankruptcyDescription = createElement('div', 'bankruptcy-description',
+        message
+        + 'However you only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
+
+    )
+
+    bankcruptcyMessage.appendChild(bankruptcyDescription)
+
+
+
+    // Generate the financial details section
+
     let amountToRaise = -Math.abs(players[debtorID - 1].money)
 
     if (transactionDetails.amount){
@@ -4538,24 +4561,34 @@ function openBankruptcyProceedings(transactionDetails){
         })
     }
 
-
-    let message = ''
-    if (creditorID === 'allOtherPlayers'){
-        message += players[debtorID - 1].name + ' owes ' + currencySymbolSpan + (transactionDetails.amount / (players.length - 1)) + ' each  to ' + creditorName + '. '
-    } else{
-        message += players[debtorID - 1].name + ' owes ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
-    }
-
-
-    let bankruptcyDescription = createElement('div', '',
-        message
-        + 'However they only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
-        + 'They will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
+    let financialDetails = createElement('div', 'bankruptcy-financial-details')
+    financialDetails.innerHTML =
+        'You will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
         + amountToRaise
-        + '</span><br> if they wish to stay in the game.'
-    )
+        + '</span><br> if you wish to stay in the game.'
+    bankcruptcyMessage.appendChild(financialDetails)
 
-    bankcruptcyMessage.appendChild(bankruptcyDescription)
+
+    let worthDetails = createElement('div', 'bankruptcy-worth-details', '')
+    worthDetails.innerHTML = '<span style="font-size: 1.3em;">Your current worth is <b>' + currencySymbolSpan + (calculatePlayerWorth(debtorID)) + '</b>.</span><br>'
+
+    if (amountToRaise > calculatePlayerWorth(debtorID)){
+        worthDetails.innerHTML += 'You are unable to be able to raise enough money for this unless another player agrees to trade properties for more than they\'re worth.'
+        worthDetails.setAttribute('ableToRaise', false)
+    } else{
+        worthDetails.innerHTML += 'You should be able to raise enough money by trading with other players, mortgaging properties and selling buildings.'
+        worthDetails.setAttribute('ableToRaise', true)
+    }
+    
+
+
+
+
+
+    bankcruptcyMessage.appendChild(worthDetails)
+
+
+
 
 
     // Generate the bankrupt button
@@ -4817,6 +4850,58 @@ function removePlayerFromGame(playerID){
   increasePlayerTurn()
 }
 
+
+// GENERATE WORTH ------------------------------------------------------------//
+
+// Figure out what a player's total worth is. Originally created for the
+// bankruptcy screen but has potential uses elsewhere.
+
+function calculatePlayerWorth(playerID){
+
+    let worth = 0
+    let player = players[playerID - 1]
+
+    // Money
+    worth += player.money
+
+
+    // Properties
+    player.properties.forEach(function(property){
+        
+        // While the properties array does store a copy of the property object,
+        // it is not kept up to date. We need to reference the spaces array
+        // for the most recent details
+        let space = spaces[property.position]
+
+        // If it's mortgaged, add half the price
+        if (space.mortgaged){
+            worth += (space.price / 2)
+
+        // If it's not mortgaged...
+        } else{
+
+            // Add the standard cost of the property
+            worth += space.price
+
+            // Note that houses and hotels are only worth half their original
+            // cost (since that's what they sell for)
+
+            // If it has a hotel
+            if (space.houses === 5){
+                worth += (space.hotelCost / 2) + (space.houseCost * 2)
+            }
+            // If it doesn't have a hotel
+            else{
+                worth += (space.houseCost * space.houses) / 2
+            }
+
+        }
+    })
+
+
+    console.log(worth)
+    return worth
+}
 
 
 
