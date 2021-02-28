@@ -783,9 +783,9 @@ function quickStart(){
     let player = 0
     quickPropertyOwnership(4,1,player)
     quickPropertyOwnership(3,3,player)
-    //quickPropertyOwnership(0,6,player)
-    //quickPropertyOwnership(0,12,player)
-    //quickPropertyOwnership(0,27,player)
+    quickPropertyOwnership(0,6,player)
+    quickPropertyOwnership(0,12,player)
+    quickPropertyOwnership(0,27,player)
     //quickMortgage(6, player)
     //quickMortgage(12, player)
 
@@ -3190,6 +3190,8 @@ function sellHouse(number){
             availableHouses -= 4
             spaces[number].houses--
             updateHouseDisplay(number)
+            return spaces[number].hotelCost / 2
+
         }
   
         // but if there aren't 4 houses left in the bank...
@@ -3237,6 +3239,8 @@ function sellHouse(number){
         spaces[number].houses--
         updateHouseDisplay(number)
         //toggleHouseBuildButtons(spaces[number].group)
+
+        return spaces[number].houseCost / 2
   
     }
   
@@ -4591,9 +4595,10 @@ function openBankruptcyProceedings(transactionDetails){
 
     let financialDetails = createElement('div', 'bankruptcy-financial-details')
     financialDetails.innerHTML =
-        'You will need to raise at least <br><span style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
+        'You will need to raise at least <div class="amount-to-raise-display" style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
         + amountToRaise
-        + '</span><br> if you wish to stay in the game.'
+        + '</div> if you wish to stay in the game.'
+
     bankcruptcyMessage.appendChild(financialDetails)
 
 
@@ -4622,6 +4627,7 @@ function openBankruptcyProceedings(transactionDetails){
         
         let property = spaces[node.getAttribute('property')]
 
+        let display = document.querySelector('.amount-to-raise-display')
 
         // Group the houses together so we can use the same CSS as sellHouse
 
@@ -4641,10 +4647,14 @@ function openBankruptcyProceedings(transactionDetails){
 
         sellHouseButton.addEventListener('click', function(){
             //sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
-            sellHouse(property.position)
+            amountToRaise -= sellHouse(property.position)
             sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             toggleHouseBuildButtons(property.group)
-            //console.log(property.group)
+
+            
+
+            display.innerHTML = currencySymbolSpan + amountToRaise
+            animateUpdate(display, 'good')
             
         })
 
@@ -4664,6 +4674,11 @@ function openBankruptcyProceedings(transactionDetails){
             mortgageProperty(property)
             mortgageButton.classList.add('disabled-button')
             mortgageButton.innerHTML = 'Already mortgaged'
+
+            
+            amountToRaise -= spaces[property.position].price / 2
+            display.innerHTML = currencySymbolSpan + amountToRaise
+            animateUpdate(display, 'good')
         })
 
         buttonPanel.appendChild(mortgageButton)

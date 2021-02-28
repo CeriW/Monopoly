@@ -2281,6 +2281,8 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   border: 1px solid #ccc;
   padding: 20px;
   grid-area: Financial; }
+  .bankruptcy-financial-details .amount-to-raise-display {
+    transform-origin: center; }
 
 .bankruptcy-worth-details {
   grid-area: Worth;
@@ -2301,6 +2303,11 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
     width: 110px; }
   #bankruptcy-message .full-portfolio .full-portfolio-house,
   #bankruptcy-message .full-portfolio .full-portfolio-hotel {
+    display: none; }
+  #bankruptcy-message .full-portfolio [group="utility"] .sell-house-button,
+  #bankruptcy-message .full-portfolio [group="utility"] .house-visual-display,
+  #bankruptcy-message .full-portfolio [group="train-station"] .sell-house-button,
+  #bankruptcy-message .full-portfolio [group="train-station"] .house-visual-display {
     display: none; }
 
 /*

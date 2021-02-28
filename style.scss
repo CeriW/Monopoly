@@ -2675,6 +2675,10 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
     border: 1px solid $lightgrey;
     padding: 20px;
     grid-area: Financial;
+
+    .amount-to-raise-display{
+        transform-origin: center;
+    }
 }
 
 .bankruptcy-worth-details{
@@ -2708,6 +2712,16 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
     .full-portfolio-house,
     .full-portfolio-hotel{
         display: none;
+    }
+
+    [group="utility"],
+    [group="train-station"]{
+
+        .sell-house-button,
+        .house-visual-display{
+            display: none;
+        }
+
     }
 }
 
