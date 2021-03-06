@@ -2348,7 +2348,11 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   #bankruptcy-message .full-portfolio-item .house-visual-display[houses="0"] + .button-panel .sell-house-button {
     display: none; }
   #bankruptcy-message .full-portfolio-item .portfolio-item-value {
-    margin-left: 20px; }
+    margin-left: 10px; }
+  #bankruptcy-message .full-portfolio-item[mortgageable="false"] .mortgage-button {
+    background: #ccc;
+    color: #8f8f8f;
+    pointer-events: none; }
 
 /* Mortgages after bankruptcy ------------------------------------------------*/
 .bankruptcy-mortgage-table > div {

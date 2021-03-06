@@ -2780,7 +2780,11 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
     }
 
     .portfolio-item-value{
-        margin-left: 20px;
+        margin-left: 10px;
+    }
+
+    &[mortgageable="false"] .mortgage-button{
+        @include disabledButton();
     }
 }
 

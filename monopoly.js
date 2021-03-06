@@ -4647,13 +4647,32 @@ function openBankruptcyProceedings(transactionDetails){
         buttonPanel.appendChild(sellHouseButton)
         toggleHouseBuildButtons(property.group)
 
-        sellHouseButton.addEventListener('click', function(){
+        sellHouseButton.addEventListener('click', function(e){
             //sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             amountToRaise -= sellHouse(property.position)
             sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             toggleHouseBuildButtons(property.group)
             display.innerHTML = currencySymbolSpan + amountToRaise
             animateUpdate(display, 'good')
+
+
+            // Check whether there are houses elsewhere in the group. This will
+            // determine whether the other properties in the group can be mortgaged.
+            let housesRemainingInGroup = 0
+            debtor.properties.forEach(function(soldHouseProperty){
+                if (soldHouseProperty.group === property.group){
+                    housesRemainingInGroup += soldHouseProperty.houses
+                }
+            })
+
+            housesRemainingInGroup = (housesRemainingInGroup > 0) ? false : true
+
+            ;[].forEach.call(bankcruptcyMessage.querySelectorAll('.full-portfolio .full-portfolio-item'), function(node){
+                if (node.getAttribute('group') === property.group ){
+                    node.setAttribute('mortgageable', housesRemainingInGroup)
+                }
+            })
+
         })
 
 
@@ -4676,6 +4695,7 @@ function openBankruptcyProceedings(transactionDetails){
             
             display.innerHTML = currencySymbolSpan + amountToRaise
             animateUpdate(display, 'good')
+
         })
 
         buttonPanel.appendChild(mortgageButton)
