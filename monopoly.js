@@ -2751,7 +2751,7 @@ function displayPropertyOptions(number){
     popupMessage.appendChild(optionsPanel)
 }
 
-function mortgageProperty(property){
+function mortgageProperty(property, bankruptcy){
 
     let mortgageValue = property.price / 2
 
@@ -2759,9 +2759,14 @@ function mortgageProperty(property){
     property.mortgaged = true
     addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
 
-    // Give the player the mortgage money
-    players[turn - 1].money += mortgageValue
-    updatePlayerDetails()
+    // Give the player the money if we are not dealing with bankruptcy.
+    // If we ARE dealing with bankruptcy, that function will deal with handing
+    // over the remainder if this transaction gets them back in the black.
+    if (!bankruptcy){
+        players[turn - 1].money += mortgageValue
+        updatePlayerDetails()
+    }
+
 
     // Show the property as mortgaged on the board.
     document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
@@ -3296,7 +3301,7 @@ function unmortgageProperty(property, player, multiple){
     //updatePlayerDetails()
 
     // Change what actions are appropriate
-    // If the 'multiple' parameter is true, we are dealing with a
+    // If we are dealing with a
     // post-bankruptcy so don't want to disable additional unmortgages.
 
     if (!multiple){
@@ -4673,6 +4678,8 @@ function openBankruptcyProceedings(transactionDetails){
                 }
             })
 
+            bankruptcyEscapeCheck()
+
         })
 
 
@@ -4688,7 +4695,7 @@ function openBankruptcyProceedings(transactionDetails){
         }
 
         mortgageButton.addEventListener('click', function(){
-            amountToRaise -= mortgageProperty(property)
+            amountToRaise -= mortgageProperty(property, true)
             mortgageButton.classList.add('disabled-button')
             mortgageButton.innerHTML = 'Already mortgaged'
 
@@ -4696,19 +4703,35 @@ function openBankruptcyProceedings(transactionDetails){
             display.innerHTML = currencySymbolSpan + amountToRaise
             animateUpdate(display, 'good')
 
+            bankruptcyEscapeCheck()
+
         })
 
         buttonPanel.appendChild(mortgageButton)
-
-
-
-
-
     })
 
 
 
+    // Check whether we're out of bankruptcy, and end proceedings if so.
+    function bankruptcyEscapeCheck(){
 
+        if (amountToRaise <= 0){
+
+            // Hand over the excess money they raised
+            debtor.money -= amountToRaise
+            updatePlayerDetails()
+
+            // Close the bankruptcy window
+            availableActions.bankruptcyProceedings = false
+
+
+            // Add a message to the feed
+            addToFeed(debtor.name + ' successfully escaped out of bankruptcy', 'bankrupt')
+    
+        }
+
+
+    }
 
 
 
