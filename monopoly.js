@@ -2773,6 +2773,8 @@ function mortgageProperty(property){
     availableActions.buildHotel = false
 
     setAvailableActions()
+
+    return mortgageValue
 }     
 
 function displayBuildHousePanel(colour){
@@ -4650,19 +4652,15 @@ function openBankruptcyProceedings(transactionDetails){
             amountToRaise -= sellHouse(property.position)
             sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             toggleHouseBuildButtons(property.group)
-
-            
-
             display.innerHTML = currencySymbolSpan + amountToRaise
             animateUpdate(display, 'good')
-            
         })
 
 
 
 
         // Mortgage button -----------------------*/
-        let mortgageButton = createElement('button', '', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
+        let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
 
         // If the property is already mortgaged, disable this button
         if (property.mortgaged){
@@ -4671,12 +4669,11 @@ function openBankruptcyProceedings(transactionDetails){
         }
 
         mortgageButton.addEventListener('click', function(){
-            mortgageProperty(property)
+            amountToRaise -= mortgageProperty(property)
             mortgageButton.classList.add('disabled-button')
             mortgageButton.innerHTML = 'Already mortgaged'
 
             
-            amountToRaise -= spaces[property.position].price / 2
             display.innerHTML = currencySymbolSpan + amountToRaise
             animateUpdate(display, 'good')
         })

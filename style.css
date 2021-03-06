@@ -1294,7 +1294,8 @@ body:not(.warning-open) #warning {
     font-size: 0.8em;
     text-align: left;
     width: 100%;
-    margin-left: 40px; }
+    margin-left: 40px;
+    grid-area: value; }
   .full-portfolio-item .property-name {
     flex-grow: 1;
     text-align: left;
@@ -1473,8 +1474,8 @@ body[build-house="false"] .colour-set-button,
   color: #8f8f8f;
   pointer-events: none; }
 
-body[mortgage-property="false"] .mortgage-button,
-body[unmortgage-property="false"] .unmortgage-button {
+body[mortgage-property="false"] .property-options .mortgage-button,
+body[unmortgage-property="false"] .property-options .unmortgage-button {
   display: none; }
 
 .house-visual-display[houses="5"] + .button-panel {
@@ -2330,6 +2331,25 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
         }
     }
 }*/
+#bankruptcy-message .full-portfolio-item {
+  display: grid;
+  grid-template-columns: 19px 1fr min-content min-content 220px;
+  grid-template-rows: 1fr;
+  gap: 0px 10px;
+  grid-template-areas: "icon name houses value buttons"; }
+  #bankruptcy-message .full-portfolio-item .button-panel {
+    grid-area: buttons; }
+    #bankruptcy-message .full-portfolio-item .button-panel button {
+      width: 100%; }
+  #bankruptcy-message .full-portfolio-item .house-visual-display:not([houses="0"]) + .button-panel .mortgage-button {
+    display: none; }
+  #bankruptcy-message .full-portfolio-item .house-visual-display[houses="undefined"] + .button-panel .mortgage-button {
+    display: block; }
+  #bankruptcy-message .full-portfolio-item .house-visual-display[houses="0"] + .button-panel .sell-house-button {
+    display: none; }
+  #bankruptcy-message .full-portfolio-item .portfolio-item-value {
+    margin-left: 20px; }
+
 /* Mortgages after bankruptcy ------------------------------------------------*/
 .bankruptcy-mortgage-table > div {
   display: grid;

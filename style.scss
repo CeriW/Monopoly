@@ -1430,6 +1430,7 @@ $jailAnimationLength: 1.5;
         text-align: left;
         width: 100%;
         margin-left: 40px;
+        grid-area: value;
     }
 
     .property-name{
@@ -1652,8 +1653,8 @@ body[build-house="false"] .colour-set-button,
     @include disabledButton();
 }
 
-body[mortgage-property="false"] .mortgage-button,
-body[unmortgage-property="false"] .unmortgage-button{
+body[mortgage-property="false"] .property-options .mortgage-button,
+body[unmortgage-property="false"] .property-options .unmortgage-button{
     display: none;
 }
 
@@ -2745,6 +2746,45 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
         }
     }
 }*/
+
+
+#bankruptcy-message .full-portfolio-item {
+    display: grid;
+    grid-template-columns: 19px 1fr min-content min-content 220px;
+    grid-template-rows: 1fr;
+    gap: 0px 10px;
+    grid-template-areas:
+      "icon name houses value buttons";
+
+    .button-panel {
+        grid-area: buttons;
+
+        button{
+            width: 100%;
+        }
+    
+    }
+
+    .house-visual-display:not([houses="0"]) + .button-panel .mortgage-button{
+        display: none;
+    }
+
+    // Note - houses will be undefined if this is a utility or station
+    .house-visual-display[houses="undefined"] + .button-panel .mortgage-button{
+        display: block;
+    }
+
+
+    .house-visual-display[houses="0"] + .button-panel .sell-house-button{
+        display: none;
+    }
+
+    .portfolio-item-value{
+        margin-left: 20px;
+    }
+}
+
+
 
 
 /* Mortgages after bankruptcy ------------------------------------------------*/
