@@ -857,7 +857,7 @@ function quickStart(){
 
     console.clear()
 
-    fakeRollDice(4)
+    //fakeRollDice(4)
 
     
 }
@@ -2277,6 +2277,9 @@ function increasePlayerTurn(){
 
     incrementTurn()
 
+    // Increment turn, making sure that we're landing on a turn for which an
+    // actual player exists. A player won't exist if that player has lost and 
+    // left the game, or we've gone past the end of the players array.
     function incrementTurn(){
         turn++
 
@@ -3300,8 +3303,7 @@ function unmortgageProperty(property, player, multiple){
     
     //updatePlayerDetails()
 
-    // Change what actions are appropriate
-    // If we are dealing with a
+    // Change what actions are appropriate. If we are dealing with a
     // post-bankruptcy so don't want to disable additional unmortgages.
 
     if (!multiple){
@@ -4550,6 +4552,13 @@ function openBankruptcyProceedings(transactionDetails){
     let debtorTitle =  createElement('h2', '', 'BANKRUPTCY WARNING - ' + debtor.name.toUpperCase())
     bankruptcyTitleContent.appendChild(debtorTitle)
 
+
+    // We'll store any mortgages made here, and actually process them if
+    // the player gets out of bankruptcy. This ensures creditors aren't
+    // receiving mortgaged properties unnecessarily if the debtor 
+    // doesn't get out.
+    let mortgageQueue = []
+
     // Generate the message
     // TO FIX
 
@@ -4686,6 +4695,7 @@ function openBankruptcyProceedings(transactionDetails){
 
 
         // Mortgage button -----------------------*/
+
         let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
 
         // If the property is already mortgaged, disable this button
@@ -4695,9 +4705,16 @@ function openBankruptcyProceedings(transactionDetails){
         }
 
         mortgageButton.addEventListener('click', function(){
-            amountToRaise -= mortgageProperty(property, true)
+
+            mortgageQueue.push(property)
+            amountToRaise -= Math.floor(property.price / 2)
             mortgageButton.classList.add('disabled-button')
             mortgageButton.innerHTML = 'Already mortgaged'
+
+            console.log(mortgageQueue)
+
+            //amountToRaise -= mortgageProperty(property, true)
+
 
             
             display.innerHTML = currencySymbolSpan + amountToRaise
@@ -4719,15 +4736,22 @@ function openBankruptcyProceedings(transactionDetails){
 
             // Hand over the excess money they raised
             debtor.money -= amountToRaise
-            updatePlayerDetails()
 
             // Close the bankruptcy window
             availableActions.bankruptcyProceedings = false
+
+            // Do the mortgages that are in the queue, now we've established 
+            // that the player actually has enough money for it.
+            mortgageQueue.forEach(function(property){
+                mortgageProperty(property, true)
+            })
 
 
             // Add a message to the feed
             addToFeed(debtor.name + ' successfully escaped out of bankruptcy', 'bankrupt')
     
+            updatePlayerDetails()
+
         }
 
 
@@ -5106,8 +5130,6 @@ function calculatePlayerWorth(playerID){
         }
     })
 
-
-    console.log(worth)
     return worth
 }
 

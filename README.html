@@ -493,6 +493,24 @@
   </div>
 </div>
 
+
+
+<div class="variable">
+  <h3 class="variable-name">propertiesToAuction</h3>
+  <div class="variable-type">array</div>
+  <div class="variable-description">
+An array to hold properties to auction. When players go bankrupt this may contain multiple properties, and since other players can go bankrupt during a bankruptcy auction, it is necessary to have this as a global variable so it can be added to in the middle of existing bankruptcy proceedings.
+  </div>
+</div>
+
+<div class="variable">
+  <h3 class="variable-name">feedDetails</h3>
+  <div class="variable-type">array of objects</div>
+  <div class="variable-description">
+    initialised as empty, but will be populated with objects representing each property in the colour set. Each object will have a name (string), position (number), newBuildings (number, which may be positive or negative), and originalBuildings (number representing how many buildings the property originally had). This variable is used to generate a user-readable message for the feed once the popup is closed.
+  </div>
+</div>
+
 <!-- Variable item template 
 
 <div class="variable">
@@ -894,6 +912,13 @@
   <div class="function-description">
     Runs when the current player ends their turn. Incrememnts the <i>turn</i> variable (making sure to pass it back to player 1 if the final player has just ended their turn), updates the interface and makes the appropriate actions available for the player whose turn it is next.
   </div>
+
+  <div class="private-function">
+    <h4 class="function-name">incrementTurn</h4>
+    <div class="function-description">
+      Increment the <i>turn</i> variable, making sure that we're landing on a turn for which an actual player exists. A player won't exist if that player has lost and left the game, or we've gone past the end of the players array.
+    </div>
+  </div>
 </div>
 
 <div class="function">
@@ -959,21 +984,8 @@
   <ul class="function-parameters">
     <li>colour - <i>string</i> - the 'group' property from the <i>spaces</i> array we are working with.</li>
   </ul>
-  <div class="private-variable">
-    <h4>Private variables of note:</h4>
-    <ul>
-      <li>feedDetails - <i>array of objects</i> - initialised as empty, but will be populated with objects representing each property in the colour set. Each object will have a name (string), position (number), newBuildings (number, which may be positive or negative), and originalBuildings (number representing how many buildings the property originally had). This variable is used to generate a user-readable message for the feed once the popup is closed. </li>
-    </ul>
-  </div>
   <div class="function-description">
     This function runs when the 'Manage colour set' button is clicked. This will then generate details of the colour set, including rent and current houses/hotels, and buttons to buy/sell hotels as appropriate. These buttons will have eventListeners on which prevent them from being clicked when they shouldn't be.
-  </div>
-
-  <div class="private-function">
-    <h4 class="function-name">toggleHouseBuildButtons</h4>
-    <div class="function-description">
-      Makes build/sell buttons available or unavailable as appropriate. The main function of this code is to force players to build evenly - for example you have to build 1 house on each property in a colour set before you can build 2 on any of them. This function also checks there are enough houses/hotels in the bank before players are allowed to build.      
-    </div>
   </div>
 
   <div class="private-function">
@@ -987,27 +999,7 @@
     </div>
   </div>
 
-  <div class="private-function">
-    <h4 class="function-name">sellHouse</h4>
-    <h5>Function parameters:</h4>
-    <ul class="function-parameters">
-      <li>number - <i>number</i> - the position number for the space we are working with.</li>
-    </ul>
-    <div class="function-description">
-      Sells a building on the space specified. There is some disagreement in professional Monopoly circles over what is supposed to happen if you want to sell a hotel but there aren't enough houses in the bank, so at present it goes by the official, original rulebook. I would like to expand the game so it can be set to have different options for what players think should happen.
-    </div>
-  </div>
 
-  <div class="private-function">
-    <h4 class="function-name">mortgageProperty</h4>
-    <h5>Function parameters:</h4>
-    <ul class="function-parameters">
-      <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to mortgage.</li>
-    </ul>
-    <div class="function-description">
-      Mortgages a property by setting its mortgaged property in the <i>spaces</i> array to true, gives the owner the mortgage money amount, sets an attribute on its space on the board so it can be styled, and adds a message to the feed.
-    </div>
-  </div>
 
   <div class="private-function">
     <h4 class="function-name">houseBuildingFeedMessage</h4>
@@ -1047,7 +1039,8 @@
   <h5>Function parameters:</h4>
   <ul class="function-parameters">
     <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to unmortgage.</li>
-    <li>player (optional) - object - the player object to take the money from. If not specified, this will be the current player (which is what you want most of the time, but after trading mortgaged properties it needs to be the correct property owner, despite it not being their turn)</li>
+    <li>player (optional) - <i>object</i> - the player object to take the money from. If not specified, this will be the current player (which is what you want most of the time, but after trading mortgaged properties it needs to be the correct property owner, despite it not being their turn)</li>
+    <li>multiple (optional) - <i>boolean</i> - if this function is being run from bankruptcy proceedings, this will be passed as true, ensuring that the game does not disable further mortgages (as normally you'd want to disable more mortgaging in a window with a single property after you'd just mortgaged it)</li>
   </ul>
   <div class="function-description">
     Unmortgages the property, basically by doing all the same things the mortgageProperty function does but in reverse.
@@ -1084,6 +1077,7 @@
   <h3 class="function-name">auctionProperty</h3>
   <ul class="function-parameters">
     <li>number - <i>number</i> - the position number for the space we are working with.</li>
+    <li>proceedsToAll - <i>boolean</i> - If this is being called as part of a bankruptcy where the debtor has gone bankrupt due to a Chance/Community Chest card where they owe all other players, this optional parameter will be passed as true, which tells bidOnProperty() to split the proceeds between all the other players.</li>
   </ul>
   <div class="private-variable">
     <h4>Private variables of note:</h4>
@@ -1114,6 +1108,14 @@
     <div class="function-description">
       Finds the 'player' attribute on the .current-winner node, and declares that player the winner. Runs the buyProperty() function, passing in the appropriate details.
     </div>
+  </div>
+
+  <div class="private-function">
+    <h4 class="function-name">endAuction</h4>
+      <h5>Function parameters:</h5>
+      <div class="function-description">
+        Is called when an auction ends. Deletes the first entry in the <i>propertiesToAuction</i> array, and if there are still items remaining, run auctionProperty() again.
+      </div>
   </div>
 
 </div>
@@ -1522,8 +1524,110 @@
     </div>
 
     </div>
+
 </div>
 
+
+<div class="function">
+  <h3 class="function-name">nonNullArrayItems</h3>
+    <h4>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>array - <i>array</i> - an array</li>
+    </ul>
+    <div class="function-description">
+      Returns the number of non-null items in the given array. Does what array.length would normally do, but as players leave the game it is necessary to have empty entries in the array (we don't move the items to compensate when they're removed), hence this function.
+    </div>
+</div>
+
+
+<div class="function">
+  <h3 class="function-name">removePlayerFromGame</h3>
+    <h4>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>playerID - <i>number</i> - the ID property from the player object we are about to remove from the game</li>
+    </ul>
+    <div class="function-description">
+      Carries out the necessary actions for when a player leaves the game - deletes them from the <i>players</i> array (leaving an intentional gap), removes their summary and token from the display and calls increasePlayerTurn to move onto the next player's turn.
+    </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">payMoney</h3>
+    <h4>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>transactionDetails - <i>object</i> - an optional object parameter which contains details of the transaction that has caused this function to be run. The object should contain the following properties:
+        <ul>
+          <li>debtorID - <i>number/string</i> - the ID number from the player object from <i>players</i> of the person who is spending money.</li>
+          <li>creditorID - <i>number/string</i> - Either the ID number from the player object from <i>players</i> of the person who is receiving money, or 'bank' for things like property purchases, get out of jail payments, appropriate Chance/Community Chest cards etc.</li>
+          <li>amount - <i>numberg</i> - the cost of the purchase/bill</li>
+          <li>purchase - <i>object</i> - the item being purchased as an object from the <i>spaces</i> array.</li>
+          <li>method - <i>string</i> - the reason this function has been called. Could be 'auction', 'rent', 'card', 'unmortgage'</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="function-description">
+      One of, if not <i>the</i> most important functions in the game. This function is called every time money changes hands and makes sure that a great many things that need to happen do happen:
+      <ul>
+        <li>If we've been passed a <i>transactionDetails</i> parameter, add it onto the <i>transactionQueue</i> array.</li>
+        <li>Regardless of whether we were passed <i>transactionDetails</i>, we will run the transaction at the front of the <i>transactionQueue</i>. This is necessary as there are eventualities where there are multiple transactions that need to be processed in a row (for example, some Chance/Community Chest cards)</li>
+        <li>Figure out how much money the debtor needs to hand over</li>
+        <li>If the debtor doesn't have this much money, open bankruptcy proceedings.</li>
+        <li>If the debtor does have enough money and this is a purchase, exchange ownership of the property and pass the money over. </li>
+        <li>If the debtor does have enough money and this isn't a purchase, hand the money over.</li>
+        <li>Check whether there are more transactions in the queue, and run this function again if so.</li>
+      </ul>
+
+    </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">calculatePlayerWorth</h3>
+    <h4>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>playerID - <i>number/string</i> - the ID number of the player from the <i>players</i> array we wish to calculate for</li>
+    </ul>
+    <div class="function-description">
+      Calculates the total worth of the player's portfolio, including:
+      <ul>
+        <li>The player's money</li>
+        <li>Mortgaged properties at half their value</li>
+        <li>Unmortgaged properties at their full value</li>
+        <li>All the houses/hotels on their properties at half their cost (since that's what they sell for)</li>
+      </ul>
+      Returns the worth as a number.
+    </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">mortgageProperty</h4>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>property - <i>object</i> - the property object from the <i>spaces</i> array that we are about to mortgage.</li>
+    <li>bankruptcy - <i>boolean</i> - if we are running this as part of bankruptcy proceedings, this optional parameter will be passed as true, meaning that the player does not get the proceeds from this mortgage, but rather it is removed from their debt.</li>
+  </ul>
+  <div class="function-description">
+    Mortgages a property by setting its mortgaged property in the <i>spaces</i> array to true, gives the owner the mortgage money amount, sets an attribute on its space on the board so it can be styled, and adds a message to the feed.
+  </div>
+</div>
+
+<div class="function">
+  <h3 class="function-name">sellHouse</h4>
+  <h4>Function parameters:</h4>
+  <ul class="function-parameters">
+    <li>number - <i>number</i> - the position number for the space we are working with.</li>
+  </ul>
+  <div class="function-description">
+    Sells a building on the space specified. There is some disagreement in professional Monopoly circles over what is supposed to happen if you want to sell a hotel but there aren't enough houses in the bank, so at present it goes by the official, original rulebook. I would like to expand the game so it can be set to have different options for what players think should happen.
+    <br>Returns the amount the seller got for selling, which is used in bankruptcy proceedings if applicable.
+  </div>
+</div>
+
+<div class="private-function">
+  <h4 class="function-name">toggleHouseBuildButtons</h4>
+  <div class="function-description">
+    Makes build/sell buttons available or unavailable as appropriate. The main function of this code is to force players to build evenly - for example you have to build 1 house on each property in a colour set before you can build 2 on any of them. This function also checks there are enough houses/hotels in the bank before players are allowed to build.      
+  </div>
+</div>
 
 <div>
   <h2>Available feed icons</h2>
@@ -1553,6 +1657,7 @@
     <div><img src="images/feed-icons/trade-accepted.svg">trade-accepted</div>
     <div><img src="images/feed-icons/trade-rejected.svg">trade-rejected</div>
   </div>
+
 
 </div>
 
