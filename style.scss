@@ -850,6 +850,15 @@ div[mortgaged="true"]{
     justify-content: space-between;
 }
 
+#water-works{
+    background: url('images/water-works.svg') center 60% no-repeat;
+    background-size: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
 /* Currency symbol -----------------------------------------------------------*/
 
 .currencySymbol{
