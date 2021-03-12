@@ -731,6 +731,11 @@ div[mortgaged="true"]:after {
   background: url("images/chance.svg") center calc(100% - 6px) no-repeat;
   background-size: 50px; }
 
+#free-parking {
+  background: url("images/free-parking.svg") center no-repeat;
+  background-size: contain;
+  color: transparent; }
+
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
   display: inline-block;
