@@ -736,6 +736,11 @@ div[mortgaged="true"]:after {
   background-size: contain;
   color: transparent; }
 
+#go-to-jail {
+  background: url("images/go-to-jail.svg") center no-repeat;
+  background-size: contain;
+  color: transparent; }
+
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
   display: inline-block;
