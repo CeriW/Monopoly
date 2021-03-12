@@ -177,7 +177,7 @@ let spaces =  [
     {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardposition: 'south'},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardposition: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
-    {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardposition: 'south'},
+    {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardposition: 'south', label: 'Pay £200'},
     {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardposition: 'south', rent:[25,50,100,200],                owner: null},
     {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardposition: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'south'},
@@ -214,7 +214,7 @@ let spaces =  [
     {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardposition: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250, owner: null, houses: 0, mortgaged: false},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardposition: 'east'},
     {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardposition: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
-    {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardposition: 'east'},
+    {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardposition: 'east', label:'Pay £100'},
     {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardposition: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
 ]
 
@@ -311,6 +311,14 @@ function generateBoard(){
         if (space.price){
             newSpace.innerHTML += '<div class="property-price">' + currencySymbolSpan + space.price + '</div>'
             newSpace.setAttribute('price', space.price)
+        }
+
+        if (space.label){
+
+            let labelText = space.label.toUpperCase()
+            labelText = labelText.replace('£', currencySymbolSpan)
+
+            newSpace.innerHTML += '<div class="space-label">' + labelText + '</div>'
         }
 
 

@@ -861,11 +861,17 @@ div[mortgaged="true"]{
 #super-tax{
     background: url('images/super-tax.svg') center no-repeat;
     background-size: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #income-tax{
     background: url('images/income-tax.svg') center no-repeat;
     background-size: 22%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /* Currency symbol -----------------------------------------------------------*/
