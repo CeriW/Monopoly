@@ -759,6 +759,10 @@ div[mortgaged="true"]:after {
   background: url("images/super-tax.svg") center no-repeat;
   background-size: 60%; }
 
+#income-tax {
+  background: url("images/income-tax.svg") center no-repeat;
+  background-size: 22%; }
+
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
   display: inline-block;

@@ -78,3 +78,5 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - Share on social media when you win
 
 - Sound effects
+
+- Income Tax to have the option for 10% rather than just £200
