@@ -741,6 +741,13 @@ div[mortgaged="true"]:after {
   background-size: contain;
   color: transparent; }
 
+#electric-company {
+  background: url("images/electric-company.svg") center 60% no-repeat;
+  background-size: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
+
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
   display: inline-block;
