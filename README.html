@@ -426,6 +426,8 @@
       <li>hotelCost - <i>number</i> - how much it costs to build a hotel on this property. Only relevant for property spaces. The cost to sell hotels is half this amount. I have never seen a Monopoly set where this is different to the house price, but I am including this in case I later discover that there is a board where this is different.</li>
       <li>owner - <i>object</i> - initialised as null, but later is updated to be an object containing the player who owns the property. Note that this object is not kept up to date (the <i>players</i> variable should be used for up to date info) but is included as an object as various non-changing properties are used throughout the code, such as name and id.</li>
       <li>houses - <i>number</i> - how many houses are on this property. Only relevant for property spaces. Note that a value of 5 indicates a hotel.</li>
+      <li>label - <i>string</i> - label text to go on the space. This is used on the Super Tax and Income Tax soaces to generate the "Pay 200" etc text, although it could be used on any space for any message. Note that the code will automatically replace any £ symbols with <i>currencySymbolSpan</i></li>
+      
     </ul>
   </div>
 </div>
