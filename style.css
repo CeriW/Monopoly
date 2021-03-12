@@ -755,6 +755,10 @@ div[mortgaged="true"]:after {
   flex-direction: column;
   justify-content: space-between; }
 
+#super-tax {
+  background: url("images/super-tax.svg") center no-repeat;
+  background-size: 60%; }
+
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
   display: inline-block;
