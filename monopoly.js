@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -4612,7 +4612,7 @@ function openBankruptcyProceedings(transactionDetails){
     if (transactionDetails.amount){
         amountToRaise += transactionDetails.amount
     } else{
-        transationDetails.purchase.forEach(function(property){
+        transactionDetails.purchase.forEach(function(property){
             amountToRaise += property.price
         })
     }
