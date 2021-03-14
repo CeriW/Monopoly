@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -33,7 +33,7 @@ const playerCreator = document.querySelector('#player-creator')
 const warningMessage = document.querySelector('#warning-message')
 const warningTitle = document.querySelector('#warning-title')
 
-const bankcruptcyMessage = document.querySelector('#bankruptcy-message')
+const bankruptcyMessage = document.querySelector('#bankruptcy-message')
 const bankruptcyTitle = document.querySelector('#bankruptcy-title')
 
 // Stores which player's turn it is.
@@ -83,6 +83,11 @@ let auctionTotal = 0
 // TODO - description
 let transactionQueue = []
 
+
+// This is the value of the current debt where the player is trying to get out
+// of bankruptcy. Since there are multiple private functions which need access
+// to this amount so they can update it, it is a global variable.
+let currentDebt = 0
 
 
 let feedDetails = []
@@ -3816,7 +3821,11 @@ function checkPropertyOwner(position){
 
 // TRADING FUNCTIONS ---------------------------------------------------------//
 
-function initiateTrade(){
+// If this is happening as part of bankruptcy proceedings, the bankruptcy
+// parameter will be passed as true, which indicates that we need to update the
+// bankruptcy display
+
+function initiateTrade(bankruptcy){
 
     let tradeWindow = document.createElement('div')
     tradeWindow.classList.add('trade-summary-window')
@@ -3904,7 +3913,9 @@ function initiateTrade(){
             summary.appendChild(cardDisplay)
 
             let tradeButton = createElement('button', 'trade-button', 'Trade', '', '')
-            tradeButton.addEventListener('click', negotiateTrade)
+            tradeButton.addEventListener('click', function(){
+                negotiateTrade(event, true)
+            })
             summary.appendChild(tradeButton)
 
 
@@ -3923,7 +3934,7 @@ function initiateTrade(){
 
 }
 
-function negotiateTrade(e){
+function negotiateTrade(e, bankruptcy){
 
     let receiver = e.target.parentNode.getAttribute('player')
     let currentPlayerInControl = true
@@ -4358,8 +4369,28 @@ function negotiateTrade(e){
             players[receiver - 1].money -= money
             players[turn - 1].money += money
         }
+
+
+        // If this trade is happening during bankruptcy proceedings, make sure
+        // the amount the player has left to raise gets updated.
+        if (bankruptcy){
+            updateCurrentDebt(tradeProposal[1][42])
+        }
+
+
+        addToFeed(feedMessage, 'trade-accepted')
+        updatePlayerDetails()
+        closePopup()
+        if (mortgageList0.length > 0 || mortgageList1.length > 0){
+            tradeMortgageWarning()
+        }
+        tradeProposal = [[], []]
           
 
+
+
+
+        
 
         // Generate a nice, readable message for the feed.
 
@@ -4519,13 +4550,6 @@ function negotiateTrade(e){
 
 
 
-        addToFeed(feedMessage, 'trade-accepted')
-        updatePlayerDetails()
-        closePopup()
-        if (mortgageList0.length > 0 || mortgageList1.length > 0){
-            tradeMortgageWarning()
-        }
-        tradeProposal = [[], []]
     }
 
 }
@@ -4548,7 +4572,7 @@ function openBankruptcyProceedings(transactionDetails){
 
 
     bankruptcyTitle.innerHTML = ''
-    bankcruptcyMessage.innerHTML = ''
+    bankruptcyMessage.innerHTML = ''
 
     // Generate the title of the bankruptcy window, including icon and debtor name
     let bankruptcyTitleContent = createElement('div', 'bankruptcy-title')
@@ -4601,35 +4625,35 @@ function openBankruptcyProceedings(transactionDetails){
 
     )
 
-    bankcruptcyMessage.appendChild(bankruptcyDescription)
+    bankruptcyMessage.appendChild(bankruptcyDescription)
 
 
 
     // Generate the financial details section
 
-    let amountToRaise = -Math.abs(players[debtorID - 1].money)
+    currentDebt = -Math.abs(players[debtorID - 1].money)
 
     if (transactionDetails.amount){
-        amountToRaise += transactionDetails.amount
+        currentDebt += transactionDetails.amount
     } else{
         transactionDetails.purchase.forEach(function(property){
-            amountToRaise += property.price
+            currentDebt += property.price
         })
     }
 
     let financialDetails = createElement('div', 'bankruptcy-financial-details')
     financialDetails.innerHTML =
         'You will need to raise at least <div class="amount-to-raise-display" style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
-        + amountToRaise
+        + currentDebt
         + '</div> if you wish to stay in the game.'
 
-    bankcruptcyMessage.appendChild(financialDetails)
+    bankruptcyMessage.appendChild(financialDetails)
 
 
     let worthDetails = createElement('div', 'bankruptcy-worth-details', '')
     worthDetails.innerHTML = '<span style="font-size: 1.3em;">Your current worth is <b>' + currencySymbolSpan + (calculatePlayerWorth(debtorID)) + '</b>.</span><br>'
 
-    if (amountToRaise > calculatePlayerWorth(debtorID)){
+    if (currentDebt > calculatePlayerWorth(debtorID)){
         worthDetails.innerHTML += 'You are unable to raise enough money for this unless another player agrees to trade properties for more than they\'re worth.'
         worthDetails.setAttribute('ableToRaise', false)
     } else{
@@ -4637,7 +4661,7 @@ function openBankruptcyProceedings(transactionDetails){
         worthDetails.setAttribute('ableToRaise', true)
     }
 
-    bankcruptcyMessage.appendChild(worthDetails)
+    bankruptcyMessage.appendChild(worthDetails)
 
 
 
@@ -4645,7 +4669,7 @@ function openBankruptcyProceedings(transactionDetails){
     // of bankruptcy
 
     let functionsArea = generateFullPortfolioView(debtorID)
-    bankcruptcyMessage.appendChild(functionsArea)
+    bankruptcyMessage.appendChild(functionsArea)
     
     ;[].forEach.call(functionsArea.querySelectorAll('.full-portfolio-item'), function(node){
         
@@ -4671,10 +4695,10 @@ function openBankruptcyProceedings(transactionDetails){
 
         sellHouseButton.addEventListener('click', function(e){
             //sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
-            amountToRaise -= sellHouse(property.position)
+            currentDebt -= sellHouse(property.position)
             sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             toggleHouseBuildButtons(property.group)
-            display.innerHTML = currencySymbolSpan + amountToRaise
+            display.innerHTML = currencySymbolSpan + currentDebt
             animateUpdate(display, 'good')
 
 
@@ -4689,7 +4713,7 @@ function openBankruptcyProceedings(transactionDetails){
 
             housesRemainingInGroup = (housesRemainingInGroup > 0) ? false : true
 
-            ;[].forEach.call(bankcruptcyMessage.querySelectorAll('.full-portfolio .full-portfolio-item'), function(node){
+            ;[].forEach.call(bankruptcyMessage.querySelectorAll('.full-portfolio .full-portfolio-item'), function(node){
                 if (node.getAttribute('group') === property.group ){
                     node.setAttribute('mortgageable', housesRemainingInGroup)
                 }
@@ -4715,17 +4739,15 @@ function openBankruptcyProceedings(transactionDetails){
         mortgageButton.addEventListener('click', function(){
 
             mortgageQueue.push(property)
-            amountToRaise -= Math.floor(property.price / 2)
+            currentDebt -= Math.floor(property.price / 2)
             mortgageButton.classList.add('disabled-button')
             mortgageButton.innerHTML = 'Already mortgaged'
 
-            console.log(mortgageQueue)
-
-            //amountToRaise -= mortgageProperty(property, true)
+            //currentDebt -= mortgageProperty(property, true)
 
 
             
-            display.innerHTML = currencySymbolSpan + amountToRaise
+            display.innerHTML = currencySymbolSpan + currentDebt
             animateUpdate(display, 'good')
 
             bankruptcyEscapeCheck()
@@ -4737,13 +4759,14 @@ function openBankruptcyProceedings(transactionDetails){
 
 
 
+
     // Check whether we're out of bankruptcy, and end proceedings if so.
     function bankruptcyEscapeCheck(){
 
-        if (amountToRaise <= 0){
+        if (currentDebt <= 0){
 
             // Hand over the excess money they raised
-            debtor.money -= amountToRaise
+            debtor.money -= currentDebt
 
             // Close the bankruptcy window
             availableActions.bankruptcyProceedings = false
@@ -4827,14 +4850,22 @@ function openBankruptcyProceedings(transactionDetails){
 
 
 
-
+    // Generate the trade button
+    let tradeButton = createElement('button', '', 'Initiate trade')
+    tradeButton.addEventListener('click', function(){
+        initiateTrade(true)
+    })
+    bankruptcyMessage.appendChild(tradeButton)
 
 
 
     // Generate the bankrupt button
     let declareBankruptcyButton = createElement('button', '', 'Declare bankruptcy')
     declareBankruptcyButton.addEventListener('click', declareBankruptcy)
-    bankcruptcyMessage.appendChild(declareBankruptcyButton)
+    bankruptcyMessage.appendChild(declareBankruptcyButton)
+
+
+
 
 
     function declareBankruptcy(){
@@ -4973,7 +5004,7 @@ function openBankruptcyProceedings(transactionDetails){
 
                 updatePlayerDetails()
                 if (mortgagedProperties.length){
-                    mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
+                    mortgagesAfterbankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
                 }
 
             }
@@ -4989,7 +5020,22 @@ function openBankruptcyProceedings(transactionDetails){
     }
 }
 
-function mortgagesAfterBankcruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
+
+// Update the current debt by a given amount, and also update the display in
+// the bankruptcy window
+function updateCurrentDebt(amount){
+
+    // Deduct the amount from the currentDebt variable
+    currentDebt -= amount
+
+    // Update the display
+    let display = document.querySelector('.amount-to-raise-display')
+    display.innerHTML = currencySymbolSpan + currentDebt
+
+
+}
+
+function mortgagesAfterbankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
 
     availableActions.closePopup = false
     availableActions.unmortgageProperty = true
