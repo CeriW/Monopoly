@@ -2021,6 +2021,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       font-weight: normal; }
   .trade-negotiations-window input.money-proposal:invalid {
     color: #db0926; }
+  .trade-negotiations-window .money-proposal-container[bankruptcy-in-progress="true"] {
+    opacity: 0.1; }
 
 /* Trade mortgage warning ----------------------------------------------------*/
 .trade-mortgage-entry {

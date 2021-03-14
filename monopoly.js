@@ -3822,8 +3822,9 @@ function checkPropertyOwner(position){
 // TRADING FUNCTIONS ---------------------------------------------------------//
 
 // If this is happening as part of bankruptcy proceedings, the bankruptcy
-// parameter will be passed as true, which indicates that we need to update the
-// bankruptcy display
+// parameter will be passed to acceptTrade() as true via this function, which
+// will indicate that we need to update the bankruptcy display once a trade
+// has been accepted. 
 
 function initiateTrade(bankruptcy){
 
@@ -4002,6 +4003,7 @@ function negotiateTrade(e, bankruptcy){
     // Create inputs to propose money
     let proposalHTML = 'Money to trade: ' + currencySymbolSpan
 
+
     let currentPlayerMoneyProposal = document.createElement('div')
     currentPlayerMoneyProposal.classList.add('money-proposal-container')
     currentPlayerMoneyProposal.innerHTML = proposalHTML
@@ -4011,6 +4013,12 @@ function negotiateTrade(e, bankruptcy){
     input.setAttribute('type', 'number')
     input.setAttribute('min', '1')
     input.setAttribute('max', players[turn-1].money)
+
+    if (bankruptcy){
+        currentPlayerMoneyProposal.setAttribute('bankruptcy-in-progress', true)
+        input.setAttribute('disabled', true)
+    }
+
     input.addEventListener('input', updateProposal)
     currentPlayerMoneyProposal.appendChild(input)
     currentPlayerSummary.insertBefore(currentPlayerMoneyProposal, currentPlayerSummary.querySelector('.player-identity').nextElementSibling)
@@ -4390,7 +4398,7 @@ function negotiateTrade(e, bankruptcy){
 
 
 
-        
+
 
         // Generate a nice, readable message for the feed.
 

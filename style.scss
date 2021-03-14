@@ -2389,6 +2389,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     input.money-proposal:invalid{
         color: $red;
     }
+
+    .money-proposal-container[bankruptcy-in-progress="true"]{
+        opacity: 0.1;
+    }
 }
 
 
