@@ -4014,6 +4014,8 @@ function negotiateTrade(e, bankruptcy){
     input.setAttribute('min', '1')
     input.setAttribute('max', players[turn-1].money)
 
+    // If this trade is happening as part of bankruptcy proceedings, the 
+    // current player shouldn't be allowed to trade money away.
     if (bankruptcy){
         currentPlayerMoneyProposal.setAttribute('bankruptcy-in-progress', true)
         input.setAttribute('disabled', true)
@@ -4567,12 +4569,14 @@ function negotiateTrade(e, bankruptcy){
 
 function openBankruptcyProceedings(transactionDetails){
 
+    console.log(transactionDetails)
+
     availableActions.bankruptcyProceedings = true
     setAvailableActions()
 
     let debtorID = transactionDetails.debtorID
     let creditorID = transactionDetails.creditorID
-    let amount = transactionDetails.amount
+    let amount = transactionDetails.purchase ? transactionDetails.purchase[0].price : transactionDetails.amount
 
 
     let debtor = players[debtorID - 1]
