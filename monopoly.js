@@ -3201,7 +3201,7 @@ function toggleHouseBuildButtons(group){
 
 function sellHouse(number){
 
-
+    let proceeds = 0
     let currentHousesOnProperty = spaces[number].houses
   
     // If there is a hotel
@@ -3213,7 +3213,7 @@ function sellHouse(number){
             availableHouses -= 4
             spaces[number].houses--
             updateHouseDisplay(number)
-            return spaces[number].hotelCost / 2
+            proceeds = spaces[number].hotelCost / 2
 
         }
   
@@ -3240,7 +3240,7 @@ function sellHouse(number){
   
                 updateHouseDisplay(propertyNumber)
   
-                //toggleHouseBuildButtons(spaces[number].group)
+                toggleHouseBuildButtons(spaces[number].group)
   
             })
   
@@ -3263,7 +3263,7 @@ function sellHouse(number){
         updateHouseDisplay(number)
         toggleHouseBuildButtons(spaces[number].group)
 
-        return spaces[number].houseCost / 2
+        proceeds = spaces[number].houseCost / 2
   
     }
   
@@ -3271,6 +3271,7 @@ function sellHouse(number){
     players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
     updatePlayerDetails()
   
+    //console.log(players[spaces[number].owner.id - 1])
   
   
     // Find the property in the feedDetails array and update the number of buildings
@@ -3281,6 +3282,8 @@ function sellHouse(number){
     })
   
     toggleHouseBuildButtons(spaces[number].group)
+
+    return proceeds
   
     //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
   }
