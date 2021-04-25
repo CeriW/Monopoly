@@ -3261,7 +3261,7 @@ function sellHouse(number){
         availableHouses++
         spaces[number].houses--
         updateHouseDisplay(number)
-        //toggleHouseBuildButtons(spaces[number].group)
+        toggleHouseBuildButtons(spaces[number].group)
 
         return spaces[number].houseCost / 2
   
@@ -3280,7 +3280,7 @@ function sellHouse(number){
         }
     })
   
-    //toggleHouseBuildButtons(spaces[number].group)
+    toggleHouseBuildButtons(spaces[number].group)
   
     //document.querySelector('#popup-close').addEventListener('click', houseBuildingFeedMessage)
   }
