@@ -3108,7 +3108,7 @@ function toggleHouseBuildButtons(group){
     let highestNumberOfHouses = Math.max(...colourSetHouses)
     let lowestNumberOfHouses = Math.min(...colourSetHouses)
 
-    console.log('least houses = ' + lowestNumberOfHouses)
+    //console.log('least houses = ' + lowestNumberOfHouses)
 
 
     // Functions to check whether all the properties have the same number of buildings
@@ -3124,7 +3124,7 @@ function toggleHouseBuildButtons(group){
     // If all of the properties have the same number of houses...
     if (checkAllHousesSame()){
 
-        console.log('all houses are the same')
+        //console.log('all houses are the same')
 
         
         if (highestNumberOfHouses === 5){
@@ -3149,7 +3149,7 @@ function toggleHouseBuildButtons(group){
 
         //console.log('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button')
 
-        console.log(document.querySelectorAll('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="2"] + .button-panel .sell-house-button'))
+        //console.log(document.querySelectorAll('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="2"] + .button-panel .sell-house-button'))
 
         // Prevent building on properties that have the most number of houses
         ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
@@ -4569,8 +4569,6 @@ function negotiateTrade(e, bankruptcy){
 
 function openBankruptcyProceedings(transactionDetails){
 
-    console.log(transactionDetails)
-
     availableActions.bankruptcyProceedings = true
     setAvailableActions()
 
@@ -5155,6 +5153,8 @@ function removePlayerFromGame(playerID){
 // bankruptcy screen but has potential uses elsewhere.
 
 function calculatePlayerWorth(playerID){
+
+    console.log(players[playerID - 1])
 
     let worth = 0
     let player = players[playerID - 1]
