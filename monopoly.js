@@ -150,8 +150,8 @@ let communityChestCards =
 
 let chanceCards = 
   [
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
-    /*{description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
+    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
+    /*{description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
@@ -4781,13 +4781,23 @@ function openBankruptcyProceedings(transactionDetails){
             // Hand over the excess money they raised
             debtor.money -= currentDebt
 
-            // If the debt is to another player, pay the bill
-            console.log(typeof(creditor))
-
+            console.log(creditorID)
+            
             // If the creditor is an object, that means it's another player,
             // who should receive the proceeds.
             if (typeof(creditor) === 'object'){
                 players[creditorID - 1].money += amount
+
+            // If it's all the other players (as a result of a chance/CC card)
+            } else if (creditorID === 'allOtherPlayers'){
+                
+                // Figure out what share of the proceeds each player should get
+                let shareOfProceeds = Math.floor(amount / (nonNullArrayItems(players) - 1))
+
+                players.forEach(function(player){
+                    player.money += shareOfProceeds
+                })
+
             }
 
 
