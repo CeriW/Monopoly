@@ -4781,6 +4781,16 @@ function openBankruptcyProceedings(transactionDetails){
             // Hand over the excess money they raised
             debtor.money -= currentDebt
 
+            // If the debt is to another player, pay the bill
+            console.log(typeof(creditor))
+
+            // If the creditor is an object, that means it's another player,
+            // who should receive the proceeds.
+            if (typeof(creditor) === 'object'){
+                players[creditorID - 1].money += amount
+            }
+
+
             // Close the bankruptcy window
             availableActions.bankruptcyProceedings = false
 
