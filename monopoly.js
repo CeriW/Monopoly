@@ -1182,7 +1182,9 @@ function generatePlayerSummary(player){
     })
 
     let newTradeButton = createElement('button', 'player-action-button', 'Initiate trade', '', '')
-    newTradeButton.addEventListener('click', initiateTrade)
+    newTradeButton.addEventListener('click', function(){
+        initiateTrade(false)
+    })
 
     // Append all these new elements to the relevant player summary
     newSummary.appendChild(newGetOut50Button)
@@ -3831,6 +3833,7 @@ function checkPropertyOwner(position){
 
 function initiateTrade(bankruptcy){
 
+
     let tradeWindow = document.createElement('div')
     tradeWindow.classList.add('trade-summary-window')
 
@@ -3918,7 +3921,7 @@ function initiateTrade(bankruptcy){
 
             let tradeButton = createElement('button', 'trade-button', 'Trade', '', '')
             tradeButton.addEventListener('click', function(){
-                negotiateTrade(event, true)
+                negotiateTrade(event, bankruptcy)
             })
             summary.appendChild(tradeButton)
 
@@ -3939,6 +3942,8 @@ function initiateTrade(bankruptcy){
 }
 
 function negotiateTrade(e, bankruptcy){
+
+    console.log(bankruptcy)
 
     let receiver = e.target.parentNode.getAttribute('player')
     let currentPlayerInControl = true
@@ -4264,10 +4269,16 @@ function negotiateTrade(e, bankruptcy){
         // I could be extra and make it so that if you add money on one side when the other side already has money, deduct it.
 
 
-        // Check if the proposal has items in it on both sides. If so, 
-        // enable the 'propose trade' button
-        if (entries0.length > 0 && entries1.length > 0 && !bothSidesMoney){
-            proposeTradeButton.classList.remove('disabled-button')
+        
+        // Check if the proposal has items in it on both sides. If so...
+        if (entries0.length > 0 && entries1.length > 0){
+            // If we're not in bankruptcy, check both sides don't have money in their proposal.
+            // If we ARE in bankruptcy, the other player must be trading money.
+            if ((!bankruptcy && !bothSidesMoney) || (bankruptcy && tradeProposal[1][42])){
+                proposeTradeButton.classList.remove('disabled-button')
+            } else{
+                proposeTradeButton.classList.add('disabled-button')
+            }
         } else{
             proposeTradeButton.classList.add('disabled-button')
         }
@@ -4780,8 +4791,6 @@ function openBankruptcyProceedings(transactionDetails){
 
             // Hand over the excess money they raised
             debtor.money -= currentDebt
-
-            console.log(creditorID)
             
             // If the creditor is an object, that means it's another player,
             // who should receive the proceeds.
