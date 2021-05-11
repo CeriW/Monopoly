@@ -1,4 +1,4 @@
-// monopoly.js by Ceri Woolway - cxv712@gmail.com
+// monopoly.js by Ceri Woolway - ceriwoolway@gmail.com
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
@@ -4714,13 +4714,21 @@ function openBankruptcyProceedings(transactionDetails){
         // Sell houses button -------------------*/
 
         let sellHouseButton = createElement('button', 'sell-house-button', 'Sell house', 'group', property.group)
+        sellHouseButton.setAttribute('houses', property.houses)
+        changeSellHouseButtonText(sellHouseButton)
         buttonPanel.appendChild(sellHouseButton)
         toggleHouseBuildButtons(property.group)
+
+        function changeSellHouseButtonText(button){
+            button.innerHTML = button.getAttribute('houses') === '5' ? 'Sell hotel' : 'Sell house'
+        }
 
         sellHouseButton.addEventListener('click', function(e){
             //sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             currentDebt -= sellHouse(property.position)
             sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
+            sellHouseButton.setAttribute('houses', property.houses)
+            changeSellHouseButtonText(sellHouseButton)
             toggleHouseBuildButtons(property.group)
             display.innerHTML = currencySymbolSpan + currentDebt
             animateUpdate(display, 'good')

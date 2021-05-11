@@ -11,7 +11,7 @@ TOWARDS OTHER PLAYERS
 NOTE - other players should not receive money until it's established the player actually has the money.
 - Rent (single player) DONE
 - Chance/CC card to other players(exchange cards) DONE
-- Chance/CC card to other players (exchange cards) actually going bankrupt
+- Chance/CC card to other players (exchange cards) actually going bankrupt DONE
 
 
 
@@ -20,7 +20,7 @@ NOTE - other players should not receive money until it's established the player 
 - Also can't build houses with more money than you have. DONE
 
 
-- The button that should say 'Sell hotel' in the bankruptcy window says 'Sell house'
+- The button that should say 'Sell hotel' in the bankruptcy window says 'Sell house' DONE
 
 - Somewhere along the line I have broken the 'Accept trade' button
 
