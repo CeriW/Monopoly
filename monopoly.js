@@ -4401,6 +4401,7 @@ function negotiateTrade(e, bankruptcy){
             updateCurrentDebt(tradeProposal[1][42])
         }
 
+        let feedMessage = players[turn - 1].name + ' traded ' + generateTradeFeedMessage(nameList0) + ' for ' + players[receiver - 1].name + '\'s ' + generateTradeFeedMessage(nameList1)
 
         addToFeed(feedMessage, 'trade-accepted')
         updatePlayerDetails()
@@ -4449,7 +4450,6 @@ function negotiateTrade(e, bankruptcy){
         countCardsInTrade(1, nameList1)
 
 
-        let feedMessage = players[turn - 1].name + ' traded ' + generateTradeFeedMessage(nameList0) + ' for ' + players[receiver - 1].name + '\'s ' + generateTradeFeedMessage(nameList1)
 
         function generateTradeFeedMessage(array){
 
