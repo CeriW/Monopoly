@@ -1622,13 +1622,78 @@ An array to hold properties to auction. When players go bankrupt this may contai
     Sells a building on the space specified. There is some disagreement in professional Monopoly circles over what is supposed to happen if you want to sell a hotel but there aren't enough houses in the bank, so at present it goes by the official, original rulebook. I would like to expand the game so it can be set to have different options for what players think should happen.
     <br>Returns the amount the seller got for selling, which is used in bankruptcy proceedings if applicable.
   </div>
+
+  <div class="private-function">
+    <h4 class="function-name">toggleHouseBuildButtons</h4>
+    <div class="function-description">
+      Makes build/sell buttons available or unavailable as appropriate. The main function of this code is to force players to build evenly - for example you have to build 1 house on each property in a colour set before you can build 2 on any of them. This function also checks there are enough houses/hotels in the bank before players are allowed to build.      
+    </div>
+  </div>
 </div>
 
-<div class="private-function">
-  <h4 class="function-name">toggleHouseBuildButtons</h4>
-  <div class="function-description">
-    Makes build/sell buttons available or unavailable as appropriate. The main function of this code is to force players to build evenly - for example you have to build 1 house on each property in a colour set before you can build 2 on any of them. This function also checks there are enough houses/hotels in the bank before players are allowed to build.      
-  </div>
+
+
+
+<div class="function">
+  <h3 class="function-name">openBankruptcyProceedings</h3>
+    <h4>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>transactionDetails - <i>object</i> - this will be passed in by payMoney and will contain details (debtorID, creditorID, amount, purchase, method) of the transaction that has caused this function to be run.</li>
+    </ul>
+
+    <div class="private-variable">
+      <h4>Private variables of note:</h4>
+      <ul>
+        <li>mortgageQueue - <i>array</i> - a list of the mortgages taken out as part of these bankruptcy proceedings. These mortgages will only go through if the player successfully gets themselves out of bankruptcy. This prevents creditors receiving unnecessarily mortgaged properties if the debtor doesn't get out.</li>
+      </ul>
+    </div>
+
+    <div class="function-description">
+      This function will be called when <i>payMoney</i> tries to run a transaction that the player does not have enough money to cover. It generates the bankruptcy window, containing details of the debt and various methods to get out of it.
+      </ul>
+    </div>
+
+    <div class="private-function">
+      <h4 class="function-name">bankruptcyEscapeCheck</h4>
+      <div class="function-description">
+        Runs when a player takes an action that gets them money in the bankruptcy window. If the player now has enough money to cover whatever transaction caused <i>openBankruptcyProceedings</i> to run it will send the appropriate amount of money to the creditor and close the bankruptcy window.
+        <p>Any mortgages in <i>mortgageQueue</i> will now be processed.</p>
+      </div>
+    </div>
+
+    <div class="private-function">
+      <h4 class="function-name">declareBankruptcy</h4>
+      <div class="function-description">
+        Asks the player if they're absolutely sure that they want to declare bankruptcy, and if they confirm...
+      </div>
+
+      <div class="private-function">
+        <h4 class="function-name">confirmBankruptcy</h4>
+        <div class="private-variable">
+          <h4>Private variables of note:</h4>
+          <ul>
+            <li>mortgagedProperties - <i>array</i> - if the debtor has gone bankrupt to just one player, any mortgaged properties will be added to this list for the creditor to decide what to do with.</li>
+          </ul>
+        </div>
+        <div class="function-description">
+          <ul>
+            <li>Generate a message for the feed.</li>
+            <li>Loop through all of the player's properties and return any buildings to the bank, adding half the value to the now bankrupt player's money.</li>
+            <li>Remove the player from the game by calling <i>removePlayerFromGame()</i></li>
+            <li>If the debtor was in debt to either the bank or all the other players (as opposed to just one player):
+              <ul>
+                <li>Auction off all of the debtor's properties.</li>
+                <li>Return all 'Get out of jail free' cards to their respective decks.</li>
+              </ul>
+            </li>
+            <li>Otherwise if the debtor has gone bankrupt to just one player, hand over all properties, money and 'Get out of jail free' cards. If any of the properties are mortgaged, <i>mortgagesAfterbankruptcyTransfer()</i> will run which will ask the creditor whether they wish to keep or repay the mortgage.</li>
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
 </div>
 
 <div>

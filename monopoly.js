@@ -4926,7 +4926,7 @@ function openBankruptcyProceedings(transactionDetails){
 
         // Confirm bankruptcy button
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
-        confirmButton.addEventListener('click', declareBankruptcy)
+        confirmButton.addEventListener('click', confirmBankruptcy)
         
         warningContent.appendChild(confirmButton)
 
@@ -4939,7 +4939,7 @@ function openBankruptcyProceedings(transactionDetails){
         warningMessage.appendChild(warningContent)
 
 
-        function declareBankruptcy(){
+        function confirmBankruptcy(){
 
             // Close the bankruptcy and warning windows.
             closeWarning()
@@ -5054,7 +5054,7 @@ function openBankruptcyProceedings(transactionDetails){
 
                 updatePlayerDetails()
                 if (mortgagedProperties.length){
-                    mortgagesAfterbankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
+                    mortgagesAfterBankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
                 }
 
             }
@@ -5085,7 +5085,7 @@ function updateCurrentDebt(amount){
 
 }
 
-function mortgagesAfterbankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
+function mortgagesAfterBankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
 
     availableActions.closePopup = false
     availableActions.unmortgageProperty = true
