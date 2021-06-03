@@ -1341,6 +1341,9 @@ An array to hold properties to auction. When players go bankrupt this may contai
 
 <div class="function">
   <h3 class="function-name">initiateTrade</h3>
+    <ul class="function-parameters">
+      <li>bankruptcy - <i>boolean (optional)</i> - If this is happening as part of bankruptcy proceedings, the bankruptcy parameter will be passed to acceptTrade() as true via this function, which will indicate that we need to update the bankruptcy display once a trade has been accepted. </li>
+    </ul>
     <div class="private-variable">
       <h4>Private variables of note:</h4>
       <ul>
