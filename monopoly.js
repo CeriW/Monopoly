@@ -5081,8 +5081,6 @@ function updateCurrentDebt(amount){
     // Update the display
     let display = document.querySelector('.amount-to-raise-display')
     display.innerHTML = currencySymbolSpan + currentDebt
-
-
 }
 
 function mortgagesAfterBankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){

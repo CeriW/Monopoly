@@ -1644,7 +1644,16 @@ An array to hold properties to auction. When players go bankrupt this may contai
   </div>
 </div>
 
-
+<div class="function">
+  <h3 class="function-name">updateCurrentDebt</h3>
+    <h4>Function parameters:</h4>
+    <ul class="function-parameters">
+      <li>amount - <i>number</i> - the amount that <i>currentDebt</i> is being reduced by.</li>
+    </ul>
+    <div class="function-description">
+      When other functions such as mortgaging, trades and selling buildings are run as part of bankruptcy proceedings, this function will be called, decreasing the <i>currentDebt</i> global variable and update .amount-to-raise-display in the bankruptcy window.
+    </div>
+</div>
 
 
 <div class="function">
@@ -1738,6 +1747,7 @@ An array to hold properties to auction. When players go bankrupt this may contai
     <div><img src="images/feed-icons/trade-rejected.svg">trade-rejected</div>
   </div>
 
+  
 
 </div>
 
