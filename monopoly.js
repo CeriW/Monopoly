@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -1453,6 +1453,8 @@ function payMoney(transactionDetails){
 
     transactionDetails = transactionQueue[0]
 
+    console.log(transactionDetails)
+
     // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
     creditor = typeof transactionDetails.creditorID === 'string' ? transactionDetails.creditorID : players[transactionDetails.creditorID - 1]
@@ -1508,8 +1510,21 @@ function payMoney(transactionDetails){
 
         } else if (debt > 0){
                 debtor.money -= debt
-                
-                if (creditor !== 'bank'){
+
+                // If this debt is to all the other players (e.g. through a Chance
+                // or Community Chest card), share the money out
+                if (creditor === "allOtherPlayers"){
+
+                    credit = transactionDetails.amount/(players.length - 1)
+
+                    players.forEach(function(player){
+                        if (player.id != turn){
+                            player.money += credit
+                        }
+                    })
+
+                // Otherwise if it is a debt to anyone else but the bank...
+                } else if (creditor !== 'bank'){
                     creditor.money += debt
                 }
     
