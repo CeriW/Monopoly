@@ -1860,6 +1860,11 @@ function closePopup(){
 // this since I needed to attach nodes with event listeners; HTML alone isn't
 // always enough. This might be able to be improved.
 function openPopup(message, title){
+
+    // The trade negotiation window requires the overflow to be set to visible.
+    // This resets it.
+    document.querySelector('#popup-inner').style.overflow = 'auto'
+
     popupMessage.innerHTML = message
     if (title){
         popupTitle.innerHTML = title
@@ -4082,6 +4087,9 @@ function negotiateTrade(e, bankruptcy){
         // but the bottom of the list won't.
         if (rentTable.getBoundingClientRect().bottom > window.innerHeight){
             tradeNegotiationsWindow.classList.add('too-short-for-rent-tables')
+            document.querySelector('#popup-inner').style.overflow = 'auto'
+        } else{
+            document.querySelector('#popup-inner').style.overflow = 'visible'
         }
     })
 
