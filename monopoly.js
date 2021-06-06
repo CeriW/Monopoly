@@ -612,15 +612,13 @@ function updateBank(){
 
     let houseContainer = document.createElement('div')
     for (i = 1; i <= availableHouses; i++){
-        let houseIcon = document.createElement('div')
-        houseIcon.classList.add('bank-house-icon')
+        let houseIcon = createElement('div', 'bank-house-icon')
         houseContainer.appendChild(houseIcon)
     }
 
     let hotelContainer = document.createElement('div')
     for (i = 1; i <= availableHotels; i++){
-        let hotelIcon = document.createElement('div')
-        hotelIcon.classList.add('bank-hotel-icon')
+        let hotelIcon = createElement('div', 'bank-hotel-icon')
         hotelContainer.style.minWidth = '74px'
         hotelContainer.style.flexBasis = '74px'
         hotelContainer.appendChild(hotelIcon)
@@ -4961,6 +4959,8 @@ function openBankruptcyProceedings(transactionDetails){
 
         warningMessage.appendChild(warningContent)
 
+        
+
 
         function confirmBankruptcy(){
 
@@ -4994,6 +4994,9 @@ function openBankruptcyProceedings(transactionDetails){
                     updateHouseDisplay(property.position)
                 }
             })
+
+            // Update the bank now that we've sorted the houses/hotels
+            updateBank()
 
             
             removePlayerFromGame(debtor.id)
@@ -5087,9 +5090,7 @@ function openBankruptcyProceedings(transactionDetails){
             if (transactionQueue.length && !mortgagedProperties.length){
                 payMoney()
             }
-
         }
-
     }
 }
 
