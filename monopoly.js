@@ -5219,14 +5219,11 @@ function removePlayerFromGame(playerID){
 
 function calculatePlayerWorth(playerID){
 
-    console.log(players[playerID - 1])
-
     let worth = 0
     let player = players[playerID - 1]
 
     // Money
     worth += player.money
-
 
     // Properties
     player.properties.forEach(function(property){
@@ -5241,24 +5238,27 @@ function calculatePlayerWorth(playerID){
             worth += (space.price / 2)
 
         // If it's not mortgaged...
-        } else{
+        } else {
 
             // Add the standard cost of the property
             worth += space.price
+            console.log('standard price - no buildings: ' + worth)
 
             // Note that houses and hotels are only worth half their original
             // cost (since that's what they sell for)
 
             // If it has a hotel
-            if (space.houses === 5){
+            if (space.houses && space.houses === 5){
                 worth += (space.hotelCost / 2) + (space.houseCost * 2)
             }
             // If it doesn't have a hotel
-            else{
-                worth += (space.houseCost * space.houses) / 2
+            else if (space.houses){
+                worth += ((space.houseCost * space.houses) / 2)
             }
 
         }
+
+        
     })
 
     return worth
