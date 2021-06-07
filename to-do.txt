@@ -29,6 +29,8 @@ FUNCTIONALITY
 
 IMPROVEMENTS
 
+- Make the quick start functionality actually good.
+
 - Refactor all the things with player specific IDs to have player attributes instead.
 
 - Reorder the readme so it's in alphabetical order
@@ -38,6 +40,8 @@ IMPROVEMENTS
 - Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
 
 - Super tax and income tax should probably have costs in their spaces entry, rather than being hard coded to 100/200
+
+- There are a lot of things that should have cursor: pointer on them.
 
 
 ONGOING THINGS

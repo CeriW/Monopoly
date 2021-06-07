@@ -4738,7 +4738,10 @@ function openBankruptcyProceedings(transactionDetails){
         sellHouseButton.setAttribute('houses', property.houses)
         changeSellHouseButtonText(sellHouseButton)
         buttonPanel.appendChild(sellHouseButton)
-        toggleHouseBuildButtons(property.group)
+        if (property.houses > 0){
+            toggleHouseBuildButtons(property.group)
+        }
+
 
         function changeSellHouseButtonText(button){
             button.innerHTML = button.getAttribute('houses') === '5' ? 'Sell hotel' : 'Sell house'
