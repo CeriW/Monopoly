@@ -2568,6 +2568,10 @@ function generateFullPortfolioView(player){
 
     })
      
+    if (!portfolioOutput.innerHTML){
+        portfolioOutput.innerHTML = players[player - 1].name + ' does not own any properties'
+        portfolioOutput.style.justifyContent = 'center'
+    }
 
     return portfolioOutput
 }
@@ -5242,7 +5246,6 @@ function calculatePlayerWorth(playerID){
 
             // Add the standard cost of the property
             worth += space.price
-            console.log('standard price - no buildings: ' + worth)
 
             // Note that houses and hotels are only worth half their original
             // cost (since that's what they sell for)

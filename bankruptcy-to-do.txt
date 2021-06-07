@@ -24,15 +24,15 @@ NOTE - other players should not receive money until it's established the player 
 
 - Somewhere along the line I have broken the 'Accept trade' button DONE (I think)
 
-- There seems to be some kind of infinite loop when unmortgaging properties received in a trade.
+- There seems to be some kind of infinite loop when unmortgaging properties received in a trade. Note 7/6/21 - I'm now unable to replicate this problem.
 
-- There is a NaN error on the bankruptcy screen which causes lots of things not to generate. This isn't exclusive to quick start mode.
+- There is a NaN error on the bankruptcy screen which causes lots of things not to generate. This isn't exclusive to quick start mode. DONE
 
 
 GENERAL TO DO
 
 - Return houses to bank where appropriate (need to check the rules) DONE
-- Mortgage off properties
-- Ability to sell houses
+- Mortgage off properties DONE
+- Ability to sell houses DONE
 
 - Check for winner

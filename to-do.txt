@@ -20,8 +20,6 @@ FUNCTIONALITY
 
 - Little tabs on board properties to display who the owner is.
 
-- On portfolio, say that the player owns no properties if that is the case
-
 - Ability to click on portfolio item from main board screen. Perhaps a property name tooltip on hover too.
 
 - Although the choose your own colour thing is a stretch goal, I can at least set the groundwork by setting the backgrounds with JS rather than CSS.
