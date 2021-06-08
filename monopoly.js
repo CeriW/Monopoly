@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -307,10 +307,14 @@ function generateBoard(){
         newSpace.classList.add(space.type)
 
         if (space.group){
-            newSpace.classList.add(space.group)
+            newSpace.classList.add(space.group)        
+        }
+
+        if (space.type === "property" || space.type === "station" || space.type === "utility"){
+            newSpace.innerHTML += '<div class="ownership-tag"><svg enable-background="new 0 0 45.533 44" version="1.1" viewBox="0 0 45.533 44" width="20px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><polygon points="1.5 17.427 1.5 1.5 44.033 1.5 44.033 18.429 23.265 41.748" fill="transparent"/></svg></div>'
         }
         
-        newSpace.innerHTML = '<div class="property-name">' + space.name.toUpperCase() + '</div>'
+        newSpace.innerHTML += '<div class="property-name">' + space.name.toUpperCase() + '</div>'
         newSpace.innerHTML += '<div class="property-nickname">' + space.shortName.toUpperCase() + '</div>'
 
         if (space.price){

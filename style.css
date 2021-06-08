@@ -692,6 +692,38 @@ button {
 .row > .property[houses="5"] .property-house-display > div:nth-child(n+5) {
   transform: scale(1); }
 
+/* Property ownership tags ---------------------------------------------------*/
+.ownership-tag {
+  position: absolute;
+  bottom: -12%;
+  left: 0;
+  right: 0;
+  pointer-events: none; }
+
+.ownership-tag svg {
+  width: 20px; }
+
+.ownership-tag polygon {
+  stroke-width: 3px; }
+
+#south .ownership-tag {
+  top: unset;
+  bottom: -12%;
+  transform: rotate(180deg); }
+
+#north .ownership-tag {
+  transform: rotate(180deg); }
+
+#west .ownership-tag {
+  transform: rotate(-90deg) translateY(14px);
+  transform-origin: left bottom;
+  bottom: 0; }
+
+#east .ownership-tag {
+  transform: rotate(90deg) translateY(14px);
+  transform-origin: right bottom;
+  bottom: 0; }
+
 /* Mortgaged property --------------------------------------------------------*/
 .row > div,
 .full-portfolio-item {
