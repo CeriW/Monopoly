@@ -1715,7 +1715,7 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
     }
 
     .build-house-button .maximum-number-of-buildings-reached{
-        display: block;
+        display: block !important
     }
 
     /* If we have the maximum number of buildings, this is the definitive rule.

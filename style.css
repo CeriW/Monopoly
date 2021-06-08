@@ -1528,7 +1528,7 @@ body[unmortgage-property="false"] .property-options .unmortgage-button {
   .house-visual-display[houses="5"] + .button-panel .sell-house-button .sell-house {
     display: none; }
   .house-visual-display[houses="5"] + .button-panel .build-house-button .maximum-number-of-buildings-reached {
-    display: block; }
+    display: block !important; }
   .house-visual-display[houses="5"] + .button-panel .build-house-button span:not(.maximum-number-of-buildings-reached) {
     display: none !important; }
 
