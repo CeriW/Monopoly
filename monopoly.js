@@ -1028,9 +1028,9 @@ function createPlayers(){
         
         // For now, create a random colour for each player. Eventually this will
         // be a player-chosen colour.
-        newPlayer.color = '#' + Math.floor(Math.random()*16777215).toString(16);
-        while (newPlayer.color.length < 7){
-            newPlayer.color += 'f'
+        newPlayer.colour = '#' + Math.floor(Math.random()*16777215).toString(16);
+        while (newPlayer.colour.length < 7){
+            newPlayer.colour += 'f'
         }
 
         // If the user has entered a name for this player, set the name to that.
@@ -1057,7 +1057,7 @@ function createPlayers(){
     players.forEach(function(player){
         let newToken = document.createElement('div')
         let newTokenBackground = createElement('div', 'token-background')
-        newTokenBackground.style.backgroundColor = player.color
+        newTokenBackground.style.backgroundColor = player.colour
         newToken.appendChild(newTokenBackground)
 
         newToken.classList.add('token')
@@ -1110,7 +1110,7 @@ function generatePlayerSummary(player){
     
     let playerSummaryHeader = document.createElement('div')
     playerSummaryHeader.classList.add('player-summary-header')
-    playerSummaryHeader.style.backgroundColor = player.color
+    playerSummaryHeader.style.backgroundColor = player.colour
 
     // Player's token
     let playerToken = document.createElement('div')
@@ -3518,6 +3518,8 @@ function auctionProperty(number, proceedsToAll){
             playerToken.classList.add('player-token-icon')
             playerToken.setAttribute('player', players[i].id)
             playerToken.setAttribute('token', players[i].token)
+            playerToken.style.backgroundColor = players[i].colour
+            console.log(players[i].colour)
             playerBidInterface.appendChild(playerToken)
 
             // Generate the player's name
