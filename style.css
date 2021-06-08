@@ -923,20 +923,16 @@ div[mortgaged="true"]:after {
 .token.thimble {
   background-image: url("images/tokens/thimble.svg"); }
 
-.player-bid-interface .player-token-icon[player="1"],
-.individual-player-summary[player="1"] .player-summary-header {
+.player-bid-interface .player-token-icon[player="1"] {
   background-color: yellow; }
 
-.player-bid-interface .player-token-icon[player="2"],
-.individual-player-summary[player="2"] .player-summary-header {
+.player-bid-interface .player-token-icon[player="2"] {
   background-color: cyan; }
 
-.player-bid-interface .player-token-icon[player="3"],
-.individual-player-summary[player="3"] .player-summary-header {
+.player-bid-interface .player-token-icon[player="3"] {
   background-color: yellowgreen; }
 
-.player-bid-interface .player-token-icon[player="4"],
-.individual-player-summary[player="4"] .player-summary-header {
+.player-bid-interface .player-token-icon[player="4"] {
   background-color: orange; }
 
 /*

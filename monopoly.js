@@ -1028,7 +1028,10 @@ function createPlayers(){
         
         // For now, create a random colour for each player. Eventually this will
         // be a player-chosen colour.
-        newPlayer.color = Math.floor(Math.random()*16777215).toString(16);
+        newPlayer.color = '#' + Math.floor(Math.random()*16777215).toString(16);
+        while (newPlayer.color.length < 7){
+            newPlayer.color += 'f'
+        }
 
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
@@ -1054,7 +1057,7 @@ function createPlayers(){
     players.forEach(function(player){
         let newToken = document.createElement('div')
         let newTokenBackground = createElement('div', 'token-background')
-        newTokenBackground.style.backgroundColor = '#' + player.color
+        newTokenBackground.style.backgroundColor = player.color
         newToken.appendChild(newTokenBackground)
 
         newToken.classList.add('token')
@@ -1107,6 +1110,7 @@ function generatePlayerSummary(player){
     
     let playerSummaryHeader = document.createElement('div')
     playerSummaryHeader.classList.add('player-summary-header')
+    playerSummaryHeader.style.backgroundColor = player.color
 
     // Player's token
     let playerToken = document.createElement('div')

@@ -1027,28 +1027,17 @@ div[mortgaged="true"]{
     }
 }
 
-.player-bid-interface .player-token-icon[player="1"],
-.individual-player-summary[player="1"] .player-summary-header,
-//#player1token:before
-{
-    background-color: yellow;
-}
+.player-bid-interface .player-token-icon[player="1"]{
+    background-color: yellow;}
 
-.player-bid-interface .player-token-icon[player="2"],
-.individual-player-summary[player="2"] .player-summary-header,
-//#player2token:before
-{
+.player-bid-interface .player-token-icon[player="2"]{
     background-color: cyan;}
 
-.player-bid-interface .player-token-icon[player="3"],
-.individual-player-summary[player="3"] .player-summary-header,
-//#player3token:before
-{background-color: yellowgreen;}
+.player-bid-interface .player-token-icon[player="3"]{
+    background-color: yellowgreen;}
 
-.player-bid-interface .player-token-icon[player="4"],
-.individual-player-summary[player="4"] .player-summary-header,
-//#player4token:before
-{background-color: orange;}
+.player-bid-interface .player-token-icon[player="4"]{
+    background-color: orange;}
 
 
 /*
