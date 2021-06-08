@@ -2841,6 +2841,8 @@ function displayBuildHousePanel(colour){
     colourSetOverview.classList.add('colour-set-overview')
     houseBuildPanel.appendChild(colourSetOverview)
 
+
+
     colourSet.forEach(function(property){
 
         // Generate details of the property (rent etc) for reference
@@ -2884,26 +2886,33 @@ function displayBuildHousePanel(colour){
         })
         buttonPanel.appendChild(buildHouseBtn)
 
+        
+        // Create a button to sell houses, but only if the current player is the
+        // owner. Players can build houses when it's not their turn, but cannot
+        // sell them.
+        if (colourSet[0].owner.id == turn){
+            
+            let sellHouseBtn = document.createElement('button')
+            sellHouseBtn.classList.add('sell-house-button')
 
-        // Create a button to sell houses
-        let sellHouseBtn = document.createElement('button')
-        sellHouseBtn.classList.add('sell-house-button')
+            ;['sell-house', 'sell-hotel'].forEach(function(message){
+                let innerSpan = document.createElement('span')
+                innerSpan.classList.add(message)
+                let readableMessage = message.replace(/-/g, ' ')
+                innerSpan.textContent = readableMessage
+                sellHouseBtn.appendChild(innerSpan)
+            })
 
-        ;['sell-house', 'sell-hotel'].forEach(function(message){
-            let innerSpan = document.createElement('span')
-            innerSpan.classList.add(message)
-            let readableMessage = message.replace(/-/g, ' ')
-            innerSpan.textContent = readableMessage
-            sellHouseBtn.appendChild(innerSpan)
-        })
+            sellHouseBtn.addEventListener('click', function(){
+                sellHouse(property.position)
+            })
+            buttonPanel.appendChild(sellHouseBtn)
+        }
+
+
 
          
-        //sellHouseBtn.innerText = 'Sell house'
-        //sellHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Sell hotel' : 'Sell house'
-        sellHouseBtn.addEventListener('click', function(){
-            sellHouse(property.position)
-        })
-        buttonPanel.appendChild(sellHouseBtn)
+
 
         housePanel.appendChild(buttonPanel)
 
@@ -3111,6 +3120,8 @@ function displayBuildHousePanel(colour){
 
 function toggleHouseBuildButtons(group){
 
+    console.log(group)
+
     if (group === 'utility' || group === 'train-station'){
         return
     }
@@ -3125,7 +3136,8 @@ function toggleHouseBuildButtons(group){
         colourSetHouses.push(spaces[property.position].houses)
     })
 
- 
+
+    
 
     
     // Get the highest number of houses in the set.
@@ -3171,10 +3183,6 @@ function toggleHouseBuildButtons(group){
     // If all the properties DON'T have the same number of houses...
     } else{
 
-        //console.log('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button')
-
-        //console.log(document.querySelectorAll('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="2"] + .button-panel .sell-house-button'))
-
         // Prevent building on properties that have the most number of houses
         ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
             button.classList.add('disabled-button')
@@ -3186,10 +3194,6 @@ function toggleHouseBuildButtons(group){
         })
 
 
-        /*;[].forEach.call(document.querySelectorAll('.full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button'), function(button){
-            button.classList.add('disabled-button')
-            console.log(button)
-        })*/
     }
 
     
@@ -3218,6 +3222,8 @@ function toggleHouseBuildButtons(group){
     if (players[colourSet[0].owner.id - 1].money < colourSet[0].hotelCost){
         availableActions.buildHotel = 'not-enough-money'
     }
+
+
 
 
     setAvailableActions()
