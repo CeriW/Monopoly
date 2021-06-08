@@ -1025,6 +1025,10 @@ function createPlayers(){
         let newPlayer = {money:1500, inJail: 0, properties: [], getOutCards: []}
         newPlayer.id = playerCreationPanel.getAttribute('player')
         newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
+        
+        // For now, create a random colour for each player. Eventually this will
+        // be a player-chosen colour.
+        newPlayer.color = Math.floor(Math.random()*16777215).toString(16);
 
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
@@ -1049,6 +1053,10 @@ function createPlayers(){
     // Create a token for each player
     players.forEach(function(player){
         let newToken = document.createElement('div')
+        let newTokenBackground = createElement('div', 'token-background')
+        newTokenBackground.style.backgroundColor = '#' + player.color
+        newToken.appendChild(newTokenBackground)
+
         newToken.classList.add('token')
         newToken.classList.add(player.token)
         newToken.setAttribute('id', 'player' + (player.id) + 'token')
@@ -1056,7 +1064,7 @@ function createPlayers(){
         newToken.setAttribute('area', 'south')
         newToken.setAttribute('player', player.id)
         //newToken.setAttribute('jail', false)
-        board.appendChild(newToken)   
+        board.appendChild(newToken)
     })
 
 

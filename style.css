@@ -878,7 +878,7 @@ div[mortgaged="true"]:after {
   background-repeat: no-repeat;
   background-position: 7px -2px;
   pointer-events: none; }
-  .token:before {
+  .token .token-background {
     content: '';
     width: 100%;
     height: 28px;
@@ -924,23 +924,19 @@ div[mortgaged="true"]:after {
   background-image: url("images/tokens/thimble.svg"); }
 
 .player-bid-interface .player-token-icon[player="1"],
-.individual-player-summary[player="1"] .player-summary-header,
-#player1token:before {
+.individual-player-summary[player="1"] .player-summary-header {
   background-color: yellow; }
 
 .player-bid-interface .player-token-icon[player="2"],
-.individual-player-summary[player="2"] .player-summary-header,
-#player2token:before {
+.individual-player-summary[player="2"] .player-summary-header {
   background-color: cyan; }
 
 .player-bid-interface .player-token-icon[player="3"],
-.individual-player-summary[player="3"] .player-summary-header,
-#player3token:before {
+.individual-player-summary[player="3"] .player-summary-header {
   background-color: yellowgreen; }
 
 .player-bid-interface .player-token-icon[player="4"],
-.individual-player-summary[player="4"] .player-summary-header,
-#player4token:before {
+.individual-player-summary[player="4"] .player-summary-header {
   background-color: orange; }
 
 /*
