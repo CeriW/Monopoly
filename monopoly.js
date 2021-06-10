@@ -3412,8 +3412,13 @@ function updateHouseDisplay(number){
 
 function updateOwnershipTag(position){
     let tag = document.querySelector('[position="' + position + '"] .ownership-tag')
-    tag.style.display = spaces[position].owner ? 'block' : 'none'
-    tag.querySelector('polygon').style.fill = spaces[position].owner.colour
+    if (spaces[position].owner){
+        tag.style.display = 'block'
+        tag.querySelector('polygon').style.fill = spaces[position].owner.colour
+    } else{
+        tag.style.display = 'none'
+    }
+
 }
 
 
@@ -5055,6 +5060,11 @@ function openBankruptcyProceedings(transactionDetails){
                 auctionTotal = 0
 
                 debtor.properties.forEach(function(property){
+
+                    // Remove the ownership tags. The auction code will re-add
+                    // them if someone bids and wins.
+                    spaces[property.position].owner = null
+                    updateOwnershipTag(property.position)
 
                     // Add the property to a queue to be auctioned
                     propertiesToAuction.push(spaces[property.position])
