@@ -788,6 +788,7 @@ $columnsize: 80px;
     left: 0;
     right: 0;
     pointer-events: none;
+    display: none;
 }
 
 .ownership-tag svg{
@@ -796,7 +797,7 @@ $columnsize: 80px;
 
 .ownership-tag polygon{
     //fill: red;
-    //stroke: #000;
+    stroke: #000;
     stroke-width: 3px;
 }
 

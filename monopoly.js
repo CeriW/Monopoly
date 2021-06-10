@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -1448,7 +1448,7 @@ function newGameDiceRoll(){
 // Every time money changes hands, this function should be used. This will
 // check the player has suffient money and run appropriate actions if not.
 
-// transationDetails should be an object with the following properties:
+// transactionDetails should be an object with the following properties:
 // debtorID, creditorID, amount, purchase, method
 
 // Purchase should be an array of the properties being purchased (although optional).
@@ -1503,6 +1503,7 @@ function payMoney(transactionDetails){
                 //console.log(property)
                 
                 let propertyID = property.position
+                console.log(propertyID)
 
                 //buyProperty(propertyID, players[creditorID - 1], transactionDetails.method, transactionDetails.amount)
 
@@ -1520,6 +1521,9 @@ function payMoney(transactionDetails){
                 if (creditor !== 'bank'){
                     creditor.money += property.price
                 }
+
+                updateOwnershipTag(propertyID)
+
             })
 
         } else if (debt > 0){
@@ -3136,8 +3140,6 @@ function displayBuildHousePanel(colour){
 
 function toggleHouseBuildButtons(group){
 
-    console.log(group)
-
     if (group === 'utility' || group === 'train-station'){
         return
     }
@@ -3406,6 +3408,17 @@ function updateHouseDisplay(number){
     if (houseBuildPanel){
         houseBuildPanel.setAttribute('houses', spaces[number].houses)
     }
+}
+
+
+function updateOwnershipTag(position){
+    console.log('updateOwnershipTag')
+
+    let tag = document.querySelector('[position="' + position + '"] .ownership-tag')
+    console.log(tag)
+
+    tag.style.display = spaces[position].owner ? 'block' : 'none'
+    tag.querySelector('polygon').style.fill = spaces[position].owner.colour
 }
 
 function buyProperty(number, player, method, price){

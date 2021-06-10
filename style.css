@@ -698,12 +698,14 @@ button {
   bottom: -12%;
   left: 0;
   right: 0;
-  pointer-events: none; }
+  pointer-events: none;
+  display: none; }
 
 .ownership-tag svg {
   width: 20px; }
 
 .ownership-tag polygon {
+  stroke: #000;
   stroke-width: 3px; }
 
 #south .ownership-tag {
