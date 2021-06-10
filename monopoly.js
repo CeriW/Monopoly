@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
+let quickStartGame =  true;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -5037,6 +5037,8 @@ function openBankruptcyProceedings(transactionDetails){
                     spaces[property.position].houses = 0
                     updateHouseDisplay(property.position)
                 }
+
+                
             })
 
             // Update the bank now that we've sorted the houses/hotels
@@ -5111,6 +5113,8 @@ function openBankruptcyProceedings(transactionDetails){
                     if (property.mortgaged){
                         mortgagedProperties.push(property)
                     }
+
+                    updateOwnershipTag(property.position)
                 })
 
                 // Get out of jail cards
@@ -5126,6 +5130,8 @@ function openBankruptcyProceedings(transactionDetails){
                 if (mortgagedProperties.length){
                     mortgagesAfterBankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName)
                 }
+
+                
 
             }
 
