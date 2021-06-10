@@ -1503,7 +1503,6 @@ function payMoney(transactionDetails){
                 //console.log(property)
                 
                 let propertyID = property.position
-                console.log(propertyID)
 
                 //buyProperty(propertyID, players[creditorID - 1], transactionDetails.method, transactionDetails.amount)
 
@@ -3412,14 +3411,11 @@ function updateHouseDisplay(number){
 
 
 function updateOwnershipTag(position){
-    console.log('updateOwnershipTag')
-
     let tag = document.querySelector('[position="' + position + '"] .ownership-tag')
-    console.log(tag)
-
     tag.style.display = spaces[position].owner ? 'block' : 'none'
     tag.querySelector('polygon').style.fill = spaces[position].owner.colour
 }
+
 
 function buyProperty(number, player, method, price){
     //spaces[number].owner = player
@@ -4391,6 +4387,8 @@ function negotiateTrade(e, bankruptcy){
                 if (property.mortgaged){
                     mortgageList0.push(property)
                 }
+
+                updateOwnershipTag(property.position)
             }
 
             property = tradeProposal[1][i]
@@ -4416,6 +4414,8 @@ function negotiateTrade(e, bankruptcy){
                 if (property.mortgaged){
                     mortgageList1.push(property)
                 }
+
+                updateOwnershipTag(property.position)
             } 
         }
 

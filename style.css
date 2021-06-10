@@ -706,7 +706,8 @@ button {
 
 .ownership-tag polygon {
   stroke: #000;
-  stroke-width: 3px; }
+  stroke-width: 3px;
+  transition: 0.3s; }
 
 #south .ownership-tag {
   top: unset;
