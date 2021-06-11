@@ -3116,6 +3116,7 @@ body:not(.testing-panel-enabled) #testing-panel{
     pointer-events: none;
     transition: opacity 0.2s;
     opacity: 0;
+    z-index: 2;
 
     &:before{
         content: '';

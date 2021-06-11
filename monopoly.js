@@ -3552,9 +3552,26 @@ function auctionProperty(number, proceedsToAll){
             bidInput.setAttribute('type', 'number')
             bidInput.setAttribute('placeholder', 'Your bid')
             bidInput.setAttribute('min', 10)
+            bidInput.setAttribute('max-sensible-bid', players[i].money)
             bidInput.classList.add('bid-input')
+            
             playerBidInterface.appendChild(bidInput)
-            appendTooltip(bidInput, 'hello!')
+            appendTooltip(bidInput, 'This is more money than you currently have.')
+            let tooltipWindow = bidInput.nextElementSibling
+            tooltipWindow.style.display = 'none'
+
+
+            bidInput.addEventListener('input', function(){
+
+                if (parseInt(bidInput.value) > parseInt(bidInput.getAttribute('max-sensible-bid')) ){
+                    tooltipWindow.style.display = 'block'
+                } else{
+                    tooltipWindow.style.display = 'none'
+                }
+            })
+
+
+            
 
             // Generate the buttons for players to submit their bids.
             let submitBidButton = document.createElement('button')
@@ -5347,6 +5364,7 @@ function appendTooltip(node, innerHTML){
     node.parentNode.insertBefore(newParent, node.nextElementSibling)
     newParent.appendChild(node)
     newParent.appendChild(tooltip)
+
 }
 
 
