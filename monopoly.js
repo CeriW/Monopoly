@@ -3533,7 +3533,6 @@ function auctionProperty(number, proceedsToAll){
             playerToken.setAttribute('player', players[i].id)
             playerToken.setAttribute('token', players[i].token)
             playerToken.style.backgroundColor = players[i].colour
-            console.log(players[i].colour)
             playerBidInterface.appendChild(playerToken)
 
             // Generate the player's name
@@ -3553,7 +3552,9 @@ function auctionProperty(number, proceedsToAll){
             bidInput.setAttribute('type', 'number')
             bidInput.setAttribute('placeholder', 'Your bid')
             bidInput.setAttribute('min', 10)
+            bidInput.classList.add('bid-input')
             playerBidInterface.appendChild(bidInput)
+            appendTooltip(bidInput, 'hello!')
 
             // Generate the buttons for players to submit their bids.
             let submitBidButton = document.createElement('button')
@@ -5335,6 +5336,18 @@ function addToFeed(message,type){
 }
 
 
+// TOOLTIPS ------------------------------------------------------------------//
+
+function appendTooltip(node, innerHTML){
+    
+    let tooltip = createElement('span', 'tooltip-window', innerHTML)
+    let newParent = createElement('span', node.className)
+    newParent.classList.add('tooltipped')
+    node.classList = null
+    node.parentNode.insertBefore(newParent, node.nextElementSibling)
+    newParent.appendChild(node)
+    newParent.appendChild(tooltip)
+}
 
 
 // CONFETTI ------------------------------------------------------------------//
