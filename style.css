@@ -2589,8 +2589,8 @@ body:not(.testing-panel-enabled) #testing-panel {
   background: #000;
   color: #fff;
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: calc(100% + 2px);
+  left: 50%;
   padding: 5px 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -2598,7 +2598,9 @@ body:not(.testing-panel-enabled) #testing-panel {
   pointer-events: none;
   transition: opacity 0.2s;
   opacity: 0;
-  z-index: 2; }
+  z-index: 2;
+  transform: translateX(-50%);
+  min-width: 150px; }
   .tooltip-window:before {
     content: '';
     position: absolute;
@@ -2612,6 +2614,11 @@ body:not(.testing-panel-enabled) #testing-panel {
 
 .tooltipped:hover .tooltip-window {
   opacity: 1; }
+
+.tooltip-window.warning {
+  background: #db0926; }
+  .tooltip-window.warning:before {
+    border-color: transparent transparent #db0926 transparent; }
 
 /* CONFETTI ----------------------------------------------------------------- */
 .confetti-container {

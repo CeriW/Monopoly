@@ -3107,8 +3107,8 @@ body:not(.testing-panel-enabled) #testing-panel{
     background: #000;
     color: #fff;
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: calc(100% + 2px);
+    left: 50%;
     padding: 5px 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(black, 0.3);
@@ -3117,6 +3117,8 @@ body:not(.testing-panel-enabled) #testing-panel{
     transition: opacity 0.2s;
     opacity: 0;
     z-index: 2;
+    transform: translateX(-50%);
+    min-width: 150px;
 
     &:before{
         content: '';
@@ -3135,6 +3137,14 @@ body:not(.testing-panel-enabled) #testing-panel{
     opacity: 1;
 }
 
+.tooltip-window.warning{
+    background: $red;
+    
+    &:before{
+        border-color: transparent transparent $red transparent;
+    }
+
+}
 
 
 /* CONFETTI ----------------------------------------------------------------- */

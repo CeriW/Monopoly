@@ -3556,7 +3556,7 @@ function auctionProperty(number, proceedsToAll){
             bidInput.classList.add('bid-input')
             
             playerBidInterface.appendChild(bidInput)
-            appendTooltip(bidInput, 'This is more money than you currently have.')
+            appendTooltip(bidInput, 'This is more money than you currently have.', 'warning')
             let tooltipWindow = bidInput.nextElementSibling
             tooltipWindow.style.display = 'none'
 
@@ -5355,9 +5355,12 @@ function addToFeed(message,type){
 
 // TOOLTIPS ------------------------------------------------------------------//
 
-function appendTooltip(node, innerHTML){
+function appendTooltip(node, innerHTML, type){
     
     let tooltip = createElement('span', 'tooltip-window', innerHTML)
+    if (type){
+        tooltip.classList.add(type)
+    }
     let newParent = createElement('span', node.className)
     newParent.classList.add('tooltipped')
     node.classList = null
