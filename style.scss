@@ -664,6 +664,11 @@ $columnsize: 80px;
     box-sizing: border-box;
     flex-basis: 7%;
     //font-size: 1vw;
+    cursor: pointer;
+}
+
+.row > div > div{
+    pointer-events: none;
 }
 
 #board .row > .property,
