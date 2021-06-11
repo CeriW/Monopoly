@@ -664,12 +664,20 @@ $columnsize: 80px;
     box-sizing: border-box;
     flex-basis: 7%;
     //font-size: 1vw;
+
+}
+
+.property,
+.station,
+.utility{
     cursor: pointer;
 }
 
 .row > div > div{
     pointer-events: none;
 }
+
+
 
 #board .row > .property,
 #board .row > .community-chest,

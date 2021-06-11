@@ -4,8 +4,6 @@ An incomplete list of all the developments that need to be completed
 
 FUNCTIONALITY
 
-- Bankruptcy
-
 - Declare a winner.
 
 - Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
@@ -19,6 +17,8 @@ FUNCTIONALITY
 - Cookies/local storage so you can come back to a game later.
 
 - Ability to click on portfolio item from main board screen. Perhaps a property name tooltip on hover too.
+
+- Player summaries and similar need to have white tokens/text when the colour is too dark.
 
 
 BUGS SPOTTED
