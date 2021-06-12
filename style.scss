@@ -31,8 +31,10 @@ $border: 3px solid $black;
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
 @font-face {font-family:"Kabel-Heavy";src:url("fonts/Kabel-Heavy.eot?") format("eot"),url("fonts/Kabel-Heavy.woff") format("woff"),url("fonts/Kabel-Heavy.ttf") format("truetype"),url("fonts/Kabel-Heavy.svg#Kabel-Heavy") format("svg");font-weight:normal;font-style:normal;}
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
 body{
-    font-family: 'Kabel-Heavy', sans-serif;
+    font-family: 'Kabel-Heavy', Poppins, sans-serif;
     font-size: 24px;
     min-height: 100vh;
     padding: 0;
@@ -3119,6 +3121,8 @@ body:not(.testing-panel-enabled) #testing-panel{
     z-index: 2;
     transform: translateX(-50%);
     min-width: 150px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
 
     &:before{
         content: '';

@@ -1,6 +1,7 @@
 /* Monopoly SCSS */
 /* Created by Ceri Woolway beginning October 2020 */
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
 @font-face {
   font-family: "Kabel-Heavy";
   src: url("fonts/Kabel-Heavy.eot?") format("eot"), url("fonts/Kabel-Heavy.woff") format("woff"), url("fonts/Kabel-Heavy.ttf") format("truetype"), url("fonts/Kabel-Heavy.svg#Kabel-Heavy") format("svg");
@@ -8,7 +9,7 @@
   font-style: normal; }
 
 body {
-  font-family: 'Kabel-Heavy', sans-serif;
+  font-family: 'Kabel-Heavy', Poppins, sans-serif;
   font-size: 24px;
   min-height: 100vh;
   padding: 0;
@@ -2600,7 +2601,9 @@ body:not(.testing-panel-enabled) #testing-panel {
   opacity: 0;
   z-index: 2;
   transform: translateX(-50%);
-  min-width: 150px; }
+  min-width: 150px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; }
   .tooltip-window:before {
     content: '';
     position: absolute;
