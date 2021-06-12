@@ -5368,10 +5368,12 @@ function appendTooltip(node, innerHTML, type){
     if (type){
         tooltip.classList.add(type)
     }
+
     let newParent = createElement('span')
     newParent.classList = node.classList
     newParent.classList.add('tooltipped')
     node.classList = null
+    node.style.height = '100%'
     node.parentNode.insertBefore(newParent, node.nextElementSibling)
     newParent.appendChild(node)
     newParent.appendChild(tooltip)

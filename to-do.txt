@@ -15,6 +15,7 @@ FUNCTIONALITY
 - Cookies/local storage so you can come back to a game later.
 
 - Player summaries and similar need to have white tokens/text when the colour is too dark.
+    UPDATE - For v1.0, we should just make it so that the 'random' colours are all colours which work with black. The rest of it can be a stretch goal.
 
 
 
