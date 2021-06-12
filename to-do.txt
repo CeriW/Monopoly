@@ -14,8 +14,6 @@ FUNCTIONALITY
 
 - Cookies/local storage so you can come back to a game later.
 
-- Ability to click on portfolio item from main board screen. DONE Perhaps a property name tooltip on hover too.
-
 - Player summaries and similar need to have white tokens/text when the colour is too dark.
 
 

@@ -1171,8 +1171,6 @@ body:not(.warning-open) #warning {
     text-transform: uppercase; }
   #player-summary > div {
     padding: 10px 20px; }
-  #player-summary div {
-    overflow: hidden; }
 
 .player-summary-header {
   display: grid;
@@ -2594,7 +2592,7 @@ body:not(.testing-panel-enabled) #testing-panel {
   background: #000;
   color: #fff;
   position: absolute;
-  top: calc(100% + 2px);
+  top: calc(100% + 15px);
   left: 50%;
   padding: 5px 10px;
   border-radius: 5px;
@@ -2605,9 +2603,10 @@ body:not(.testing-panel-enabled) #testing-panel {
   opacity: 0;
   z-index: 2;
   transform: translateX(-50%);
-  min-width: 150px;
+  min-width: 100px;
   font-family: 'Poppins', sans-serif;
-  font-size: 13px; }
+  font-size: 13px;
+  line-height: 1.2; }
   .tooltip-window:before {
     content: '';
     position: absolute;

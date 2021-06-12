@@ -571,7 +571,10 @@ function updatePlayerDetails(){
                 displayPropertyDetails(property.position)
             })
 
+
             updateNode.appendChild(propertyIcon)
+            appendTooltip(propertyIcon, property.name)
+
         })
 
         // Re-append the station icons so they end up together at the end.
@@ -5365,7 +5368,8 @@ function appendTooltip(node, innerHTML, type){
     if (type){
         tooltip.classList.add(type)
     }
-    let newParent = createElement('span', node.className)
+    let newParent = createElement('span')
+    newParent.classList = node.classList
     newParent.classList.add('tooltipped')
     node.classList = null
     node.parentNode.insertBefore(newParent, node.nextElementSibling)
