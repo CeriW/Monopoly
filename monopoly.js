@@ -567,6 +567,10 @@ function updatePlayerDetails(){
                 propertyIcon.classList.add(propertyName.toLowerCase())
             }
 
+            propertyIcon.addEventListener('click', function(){
+                displayPropertyDetails(property.position)
+            })
+
             updateNode.appendChild(propertyIcon)
         })
 

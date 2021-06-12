@@ -1141,6 +1141,7 @@ div[mortgaged="true"]{
     top: 1px;
     right: 3px;
     z-index: 2;
+    cursor: pointer;
 }
 
 body:not(.popup-open) #popup{
@@ -1428,6 +1429,10 @@ $jailAnimationLength: 1.5;
     background: #fff;
     min-height: 55px;
     box-sizing: border-box;
+}
+
+.property-portfolio > .property-icon{
+    cursor: pointer;
 }
 
 .property-icon{

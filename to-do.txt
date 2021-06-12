@@ -12,13 +12,13 @@ FUNCTIONALITY
     - Add a warning on small screen sizes
     - Rearrange the page for smaller screens, even if it requires wrapping. Grid will probably help with this.
 
-- Warning on auction screen if you're bidding more money than you have.
-
 - Cookies/local storage so you can come back to a game later.
 
-- Ability to click on portfolio item from main board screen. Perhaps a property name tooltip on hover too.
+- Ability to click on portfolio item from main board screen. DONE Perhaps a property name tooltip on hover too.
 
 - Player summaries and similar need to have white tokens/text when the colour is too dark.
+
+
 
 
 BUGS SPOTTED

@@ -1015,7 +1015,8 @@ div[mortgaged="true"]:after {
   position: absolute;
   top: 1px;
   right: 3px;
-  z-index: 2; }
+  z-index: 2;
+  cursor: pointer; }
 
 body:not(.popup-open) #popup {
   display: none; }
@@ -1266,6 +1267,9 @@ body:not(.warning-open) #warning {
   background: #fff;
   min-height: 55px;
   box-sizing: border-box; }
+
+.property-portfolio > .property-icon {
+  cursor: pointer; }
 
 .property-icon {
   width: 15px !important;
