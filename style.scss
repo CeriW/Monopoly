@@ -790,13 +790,13 @@ $columnsize: 80px;
 }
 
 
-.row > .property[houses="1"] .property-house-display > div:nth-child(-n+1){transform: scale(1);}
-.row > .property[houses="2"] .property-house-display > div:nth-child(-n+2){transform: scale(1);}
-.row > .property[houses="3"] .property-house-display > div:nth-child(-n+3){transform: scale(1);}
-.row > .property[houses="4"] .property-house-display > div:nth-child(-n+4){transform: scale(1);}
+#board > div.property[houses="1"] .property-house-display > div:nth-child(-n+1){transform: scale(1);}
+#board > div.property[houses="2"] .property-house-display > div:nth-child(-n+2){transform: scale(1);}
+#board > div.property[houses="3"] .property-house-display > div:nth-child(-n+3){transform: scale(1);}
+#board > div.property[houses="4"] .property-house-display > div:nth-child(-n+4){transform: scale(1);}
 
-.row > .property[houses="5"] .property-house-display > div:nth-child(-n+4){transform: scale(0);}
-.row > .property[houses="5"] .property-house-display > div:nth-child(n+5){transform: scale(1);}
+#board > div.property[houses="5"] .property-house-display > div:nth-child(-n+4){transform: scale(0);}
+#board > div.property[houses="5"] .property-house-display > div:nth-child(n+5){transform: scale(1);}
 
 
 /* Property ownership tags ---------------------------------------------------*/
