@@ -614,8 +614,12 @@ $columnsize: 80px;
 #board{
     border: $border;
     grid-area: centre-panel;
+    max-width: 896px;
 }
 
+#board > div[area][name]:not(.token){
+    position: relative;
+}
 
 
 .property,
@@ -822,23 +826,23 @@ $columnsize: 80px;
     transition: 0.3s;
 }
 
-#south .ownership-tag{
+#board > div > .ownership-tag{
     top: unset;
     bottom: -12%;
     transform: rotate(180deg);
 }
 
-#north .ownership-tag{
+#board > div[area="north"] .ownership-tag{
     transform: rotate(180deg);
 }
 
-#west .ownership-tag{
+#board > div[area="west"] .ownership-tag{
     transform: rotate(-90deg) translateY(14px);
     transform-origin: left bottom;
     bottom: 0;
 }
 
-#east .ownership-tag{
+#board > div[area="east"] .ownership-tag{
     transform: rotate(90deg) translateY(14px);
     transform-origin: right bottom;
     bottom: 0;
