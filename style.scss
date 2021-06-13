@@ -63,6 +63,17 @@ main{
     align-items: start; 
 }
 
+@media(max-width: 1200px){
+    main{
+        grid-template-columns: 225px 1fr;
+        grid-template-rows: 115px 1fr 275px;
+        grid-template-areas:
+          "bank centre-panel"
+          "feed centre-panel"
+          "feed right-panel";
+      }
+}
+
 main > div{
     min-height: 100%;
 }
@@ -584,6 +595,7 @@ $columnsize: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
+        grid-area: centre-panel;
 }
 
 #board{
@@ -593,7 +605,17 @@ $columnsize: 80px;
     grid-template-rows: $columnsize auto $columnsize;
     max-width: 896px;
     position: relative;
-    grid-area: centre-panel;
+
+}
+
+#south > div:not(.corner),
+#north > div:not(.corner){
+    width: 10%;
+}
+
+#west > div:not(.corner),
+#east > div:not(.corner){
+    height: 10%;
 }
 
 #south{
@@ -602,6 +624,8 @@ $columnsize: 80px;
 
     display: flex;
     flex-direction: row-reverse;
+
+    
 
     //display: grid;
     //grid-template-columns: auto auto auto auto auto auto auto auto auto auto $columnsize;
@@ -732,11 +756,26 @@ $columnsize: 80px;
 }
 
 #board[size="super-mini"]{
+
+    width: 100%;
+    
+    .row > .property, 
+    .row > .community-chest, 
+    .row > .special,
+    .row > .station, 
+    .row > .chance,
+    .row > .utility{
+        min-height: 20px;
+    }
+
+
     .property-price,
     .property-name{
         display: none;
     }
 }
+
+
 
 
 /* Normal property -----------------------------------------------------------*/
@@ -1364,6 +1403,12 @@ $jailAnimationLength: 1.5;
 
     div{
         //overflow: hidden;
+    }
+}
+
+@media (max-width: 1200px){
+    #player-summary{
+        flex-direction: row;
     }
 }
 
@@ -2111,6 +2156,18 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     margin: 1px;
 }
 
+@media (max-width: 1200px){
+    .bank-house-icon,
+    .bank-hotel-icon{
+        width: 15px;
+        height: 15px;
+    }
+
+    #bank-content{
+        display: initial;
+    }
+}
+
 .bank-hotel-icon{
     background-image: url('images/hotel-icon.svg');
 }
@@ -2565,6 +2622,14 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     position: relative;
     display: flex;
     align-items: center;
+}
+
+@media(max-width: 1200px){
+    #feed-content > div{
+        background-size: 18px, 32px;
+        padding-left: 50px;
+        font-size: 0.7em;
+    }
 }
 
 #feed-content > div:first-child{

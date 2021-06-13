@@ -29,6 +29,12 @@ main {
   grid-template-areas: "bank centre-panel right-panel" "feed centre-panel right-panel";
   align-items: start; }
 
+@media (max-width: 1200px) {
+  main {
+    grid-template-columns: 225px 1fr;
+    grid-template-rows: 115px 1fr 275px;
+    grid-template-areas: "bank centre-panel" "feed centre-panel" "feed right-panel"; } }
+
 main > div {
   min-height: 100%; }
 
@@ -494,7 +500,8 @@ button {
 #board-container {
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+  grid-area: centre-panel; }
 
 #board {
   border: 3px solid #000;
@@ -502,8 +509,15 @@ button {
   grid-template-columns: 80px auto 80px;
   grid-template-rows: 80px auto 80px;
   max-width: 896px;
-  position: relative;
-  grid-area: centre-panel; }
+  position: relative; }
+
+#south > div:not(.corner),
+#north > div:not(.corner) {
+  width: 10%; }
+
+#west > div:not(.corner),
+#east > div:not(.corner) {
+  height: 10%; }
 
 #south {
   grid-column: 2 / 4;
@@ -627,9 +641,18 @@ button {
 #board[size="mini"] .property-price {
   display: none; }
 
-#board[size="super-mini"] .property-price,
-#board[size="super-mini"] .property-name {
-  display: none; }
+#board[size="super-mini"] {
+  width: 100%; }
+  #board[size="super-mini"] .row > .property,
+  #board[size="super-mini"] .row > .community-chest,
+  #board[size="super-mini"] .row > .special,
+  #board[size="super-mini"] .row > .station,
+  #board[size="super-mini"] .row > .chance,
+  #board[size="super-mini"] .row > .utility {
+    min-height: 20px; }
+  #board[size="super-mini"] .property-price,
+  #board[size="super-mini"] .property-name {
+    display: none; }
 
 /* Normal property -----------------------------------------------------------*/
 .property {
@@ -1186,6 +1209,10 @@ body:not(.warning-open) #warning {
     text-transform: uppercase; }
   #player-summary > div {
     padding: 10px 20px; }
+
+@media (max-width: 1200px) {
+  #player-summary {
+    flex-direction: row; } }
 
 .player-summary-header {
   display: grid;
@@ -1813,6 +1840,14 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   background-size: contain;
   margin: 1px; }
 
+@media (max-width: 1200px) {
+  .bank-house-icon,
+  .bank-hotel-icon {
+    width: 15px;
+    height: 15px; }
+  #bank-content {
+    display: initial; } }
+
 .bank-hotel-icon {
   background-image: url("images/hotel-icon.svg"); }
 
@@ -2143,6 +2178,12 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   position: relative;
   display: flex;
   align-items: center; }
+
+@media (max-width: 1200px) {
+  #feed-content > div {
+    background-size: 18px, 32px;
+    padding-left: 50px;
+    font-size: 0.7em; } }
 
 #feed-content > div:first-child {
   animation: slideInFromLeft 0.3s linear;

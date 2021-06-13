@@ -471,16 +471,18 @@ function resizeBoard(){
 
     board.style.height = boardWidth + 'px'
 
-    //feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
+    feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
-    
-    if (boardWidth < 800 && boardWidth > 700){
+    board.style.opacity = 0
+    if (boardWidth < 700 && boardWidth > 600){
         board.setAttribute('size', 'mini')
-    } else if (boardWidth <= 700){
+    } else if (boardWidth <= 600){
         board.setAttribute('size', 'super-mini')
     } else{
         board.setAttribute('size', 'normal')
     }
+
+    board.style.opacity = 1
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 
     ;[].forEach.call(document.querySelectorAll('#board .row > div'), function(node){

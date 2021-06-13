@@ -37,6 +37,8 @@ IMPROVEMENTS
 
 - There are a lot of things that should have cursor: pointer on them.
 
+- Completely redo the board generation to use grid.
+
 
 ONGOING THINGS
 
