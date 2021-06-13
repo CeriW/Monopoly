@@ -128,30 +128,28 @@ let feedDetails = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "Get Out of Jail Free" ,                                                      type: 'getout',   value: null},
-    {description: "Grand Opera Night — Collect £50 from every player for opening night seats",  type: 'exchange', value: 50 },
-    {description: "You are assessed for street repairs – £40 per house – £115 per hotel",       type: 'repairs',  value: [40,115] },
-    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',     value: 0},
-    {description: "Bank error in your favor — Collect £200",                                    type: '+',        value: 200},
-    {description: "Doctor's fee — Pay £50",                                                     type: '-',        value: 50},
-    {description: "From sale of stock you get £50",                                             type: '+',        value: 50},
-    {description: "Go to Jail – Go directly to jail – Do not pass Go – Do not collect £200",    type: 'move',     value: 10},
-    {description: "Holiday Fund matures — Receive £100" ,                                       type: '+',        value: 100},
-    {description: "Income tax refund – Collect £20",                                            type: '+',        value: 20 },
-    {description: "It is your birthday — Collect £10",                                          type: '+',        value: 10 },
-    {description: "Life insurance matures – Collect £100",                                      type: '+',        value: 100 },
-    {description: "Pay hospital fees of £100",                                                  type: '-',        value: 100 },
-    {description: "Pay school fees of £150",                                                    type: '-',        value: 150 },
-    {description: "Receive £25 consultancy fee",                                                type: '-',        value: 25 },
-    {description: "You have won second prize in a beauty contest – Collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 }
+    {description: "You are assessed for street repairs – Pay £40 per house and £115 per hotel you own",       type: 'repairs',  value: [40,115] },
+    {description: "Doctor's fees. pay £50",                                                     type: '-',        value: 50 },
+    {description: "Life insurance matures. Collect £100",                                       type: '+',        value: 100 },
+    {description: "You have won second prize in a beauty contest – collect £10",                type: '+',        value: 10},
+    {description: "You inherit £100",                                                           type: '+',        value: 100 },
+    {description: "Advance to Go. Collect £200",                                                type: 'move',     value: 0},
+    {description: "Holiday fund matures. Collect £100" ,                                        type: '+',        value: 100},
+    {description: "Income tax refund. Collect £20",                                             type: '+',        value: 20 },
+    {description: "From sale of stock, you get £50",                                            type: '+',        value: 50},
+    {description: "Bank error in your favor. Collect £200",                                     type: '+',        value: 200},
+    {description: "Get Out of Jail Free. This card may be kept until needed, traded or sold" ,  type: 'getout',   value: null},
+    {description: "Collect £25 consultancy fee",                                                type: '-',        value: 25 },
+    {description: "School fees. Pay £50",                                                       type: '-',        value: 50 },
+    {description: "Hospital fees. Pay £100",                                                    type: '-',        value: 100 },
+    {description: "It's your birthday. Collect £10 from each player",                           type: 'exchange', value: 10 },
+    {description: "Go to Jail. Go directly to jail. Do not pass Go – Do not collect £200",    type: 'move',     value: 10},
   ]
 
 let chanceCards = 
   [
     {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
-    /*{description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
+    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
     {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
     {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
     {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
@@ -165,7 +163,7 @@ let chanceCards =
     {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
     {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
     {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }*/
+    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
   ]
 
 
