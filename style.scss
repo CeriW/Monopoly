@@ -83,8 +83,18 @@ main{
           "centre-panel centre-panel"
           "right-panel right-panel";
       }
+}
 
-      
+@media (max-width: 550px){
+    main{
+        grid-template-columns: auto;
+        grid-template-rows: min-content min-content 193px min-content;
+        grid-template-areas:
+          "centre-panel"
+          "right-panel"
+          "feed"
+          "bank";
+    }
 }
 
 main > div{
@@ -1352,6 +1362,7 @@ $jailAnimationLength: 1.5;
         flex-shrink: 1;
         flex-basis: 200px;
         max-width: 200px;
+        padding: 10px;
     }
 
     div{
@@ -1363,9 +1374,6 @@ $jailAnimationLength: 1.5;
     #player-summary{
         flex-direction: row;
 
-        & > div{
-            padding: 10px;
-        }
     }
 }
 
