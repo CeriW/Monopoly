@@ -128,42 +128,41 @@ let feedDetails = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "You are assessed for street repairs – Pay £40 per house and £115 per hotel you own",       type: 'repairs',  value: [40,115] },
-    {description: "Doctor's fees. pay £50",                                                     type: '-',        value: 50 },
-    {description: "Life insurance matures. Collect £100",                                       type: '+',        value: 100 },
+    {description: "You are assessed for street repairs – Pay £40 per house and £115 per hotel you own.",       type: 'repairs',  value: [40,115] },
+    {description: "Doctor's fees. pay £50.",                                                     type: '-',        value: 50 },
+    {description: "Life insurance matures. Collect £100.",                                       type: '+',        value: 100 },
     {description: "You have won second prize in a beauty contest – collect £10",                type: '+',        value: 10},
-    {description: "You inherit £100",                                                           type: '+',        value: 100 },
-    {description: "Advance to Go. Collect £200",                                                type: 'move',     value: 0},
-    {description: "Holiday fund matures. Collect £100" ,                                        type: '+',        value: 100},
-    {description: "Income tax refund. Collect £20",                                             type: '+',        value: 20 },
-    {description: "From sale of stock, you get £50",                                            type: '+',        value: 50},
-    {description: "Bank error in your favor. Collect £200",                                     type: '+',        value: 200},
-    {description: "Get Out of Jail Free. This card may be kept until needed, traded or sold" ,  type: 'getout',   value: null},
-    {description: "Collect £25 consultancy fee",                                                type: '-',        value: 25 },
-    {description: "School fees. Pay £50",                                                       type: '-',        value: 50 },
-    {description: "Hospital fees. Pay £100",                                                    type: '-',        value: 100 },
-    {description: "It's your birthday. Collect £10 from each player",                           type: 'exchange', value: 10 },
-    {description: "Go to Jail. Go directly to jail. Do not pass Go – Do not collect £200",    type: 'move',     value: 10},
+    {description: "You inherit £100.",                                                           type: '+',        value: 100 },
+    {description: "Advance to Go. Collect £200.",                                                type: 'move',     value: 0},
+    {description: "Holiday fund matures. Collect £100." ,                                        type: '+',        value: 100},
+    {description: "Income tax refund. Collect £20.",                                             type: '+',        value: 20 },
+    {description: "From sale of stock, you get £50.",                                            type: '+',        value: 50},
+    {description: "Bank error in your favor. Collect £200.",                                     type: '+',        value: 200},
+    {description: "Get Out of Jail Free. This card may be kept until needed, traded or sold." ,  type: 'getout',   value: null},
+    {description: "Collect £25 consultancy fee.",                                                type: '-',        value: 25 },
+    {description: "School fees. Pay £50.",                                                       type: '-',        value: 50 },
+    {description: "Hospital fees. Pay £100.",                                                    type: '-',        value: 100 },
+    {description: "It's your birthday. Collect £10 from each player.",                           type: 'exchange', value: 10 },
+    {description: "Go to Jail. Go directly to jail. Do not pass Go. Do not collect £200.",    type: 'move',     value: 10}
   ]
 
 let chanceCards = 
   [
-    {description: "You have been elected Chairman of the Board – Pay each player £50",          type: 'exchange',   value: -50 },
-    {description: "Go Back 3 Spaces",                                                           type: 'move',       value: -3 },
-    {description: "Get Out of Jail Free",                                                       type: 'getout',     value: null },
-    {description: "Advance to Go (Collect £200)",                                               type: 'move',       value: 0 },
-    {description: "Advance to Trafalgar Square — If you pass Go, collect £200",                 type: 'move',       value: 24 },
-    {description: "Advance to Pall Mall – If you pass Go, collect £200",                        type: 'move',       value: 11 },
-    {description: "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the value thrown.", type: 'move',   value: 'nearest-utility' },
-    {description: "Advance token to the nearest station and pay owner twice the rental to which he/she {he} is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", type: 'move',   value: 'nearest-station' },
-    {description: "Bank pays you dividend of £50",                                              type: '+',          value: 50 },
-    {description: "Go to Jail – Go directly to Jail – Do not pass Go, do not collect £200",     type: 'move',       value: 10 },
-    {description: "Make general repairs on all your property – For each house pay £25 – For each hotel £100",   type: 'repairs',   value: [25, 100] },
-    {description: "Pay poor tax of £15",                                                        type: '-',          value: 15 },
-    {description: "Take a trip to Marylebone Station – If you pass Go, collect £200",           type: 'move',       value: 15 },
-    {description: "Advance to Mayfair",                                                         type: 'move',       value: 39 },
-    {description: "Your building and loan matures — Collect £150",                              type: '+',          value: 150 },
-    {description: "You have won a crossword competition — Collect £100",                        type: '+',          value: 100 }
+    {description: "You have been elected Chairman of the Board. Pay each player £50.",           type: 'exchange',   value: -50 },
+    {description: "Make general repairs on all your property: For each house, pay £25. For each hotel, pay £100.",   type: 'repairs',   value: [25, 100] },
+    {description: "Get Out of Jail Free. This card may be kept until needed, traded or sold." ,  type: 'getout',     value: null},
+    {description: "Speeding fine. Pay £15.",                                                     type: '-',          value: 15 },
+    {description: "Advance to Mayfair.",                                                         type: 'move',       value: 39 },
+    {description: "ADVANCE TO THE NEAREST UTILITY. If unowned, you may buy it from the Bank. If owned, roll the  dice and pay owner a total ten times your roll.", type: 'move',   value: 'nearest-utility' },
+    {description: "Go to Jail. Go directly to jail. Do not pass Go. Do not collect £200.",       type: 'move',       value: 10},
+    {description: "Advance to Pall Mall. If you pass Go, collect £200.",                         type: 'move',       value: 11 },
+    {description: "Your building loan matures. Collect £150.",                                   type: '+',          value: 150 },
+    {description: "Advance to Go. Collect £200.",                                                 type: 'move',       value: 0 },
+    {description: "ADVANCE TO THE NEAREST STATION. If UNOWNED, you may buy it from the Bank. If OWNED, pay the owner twice the rent to which they are otherwise entitled.", type: 'move',   value: 'nearest-station' },
+    {description: "Go back three spaces.",                                                        type: 'move',       value: -3 },
+    {description: "Take a trip to Kings Cross Station. If you pass Go, collect £200.",            type: 'move',       value: 5 },
+    {description: "ADVANCE TO THE NEXT STATION. If UNOWNED, you may buy it from the Bank. If OWNED, pay the owner twice the rent to which they are otherwise entitled.", type: 'move',   value: 'nearest-station' },
+    {description: "Advance to Trafalgar Square. If you pass Go, collect £200.",                 type: 'move',        value: 24 }
   ]
 
 
