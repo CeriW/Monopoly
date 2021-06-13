@@ -471,7 +471,7 @@ function resizeBoard(){
 
     board.style.height = boardWidth + 'px'
 
-    feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
+    //feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
     
     if (boardWidth < 800 && boardWidth > 700){

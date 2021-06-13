@@ -6,8 +6,6 @@ FUNCTIONALITY
 
 - Declare a winner.
 
-- Check Chance/Community Chest cards - I got this list online but I'm sure some of them aren't from the current UK version.
-
 - I know the game isn't designed for small screens, but I can:
     - Add a warning on small screen sizes
     - Rearrange the page for smaller screens, even if it requires wrapping. Grid will probably help with this.

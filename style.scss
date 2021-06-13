@@ -45,11 +45,26 @@ body{
 main{
     padding: 15px;
     margin: 0;
-    display: flex;
+    //display: flex;
     //flex-direction: column;
-    align-items: center;
-    justify-content: space-between; 
+    //align-items: center;
+    //justify-content: space-between; 
     text-align: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+
+    display: grid; 
+    grid-template-columns: 275px 1fr 240px; 
+    grid-template-rows: 160px 1fr; 
+    gap: 20px 20px; 
+    grid-template-areas: 
+      "bank centre-panel right-panel"
+      "feed centre-panel right-panel"; 
+    align-items: start; 
+}
+
+main > div{
+    min-height: 100%;
 }
 
 button{
@@ -565,13 +580,20 @@ $tokens:
 
 $columnsize: 80px;
 
+#board-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #board{
     border: $border;
     display: grid;
     grid-template-columns: $columnsize auto $columnsize;
     grid-template-rows: $columnsize auto $columnsize;
-    max-width: 900px;
+    max-width: 896px;
     position: relative;
+    grid-area: centre-panel;
 }
 
 #south{
@@ -1328,6 +1350,7 @@ $jailAnimationLength: 1.5;
     justify-content: space-around;
     box-sizing: border-box;
     flex-basis: 250px;
+    grid-area: right-panel;
 
     h2{
         margin: 0;
@@ -2048,13 +2071,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     align-items: center;
 }
 
-/* Left panel  ---------------------------------------------------------------*/
 
-#left-panel{
-    flex-basis: 275px;
-    margin-right: 20px;
-    align-self: stretch;
-}
 
 /* Bank  ---------------------------------------------------------------------*/
 
@@ -2062,6 +2079,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     border: $border;
     background: #fff;
     margin-bottom: 10px;
+    grid-area: bank;
 }
 
 #bank-content{
@@ -2514,8 +2532,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     position: relative;
     border: $border;
     box-sizing: border-box;
+    grid-area: feed;
     
     //min-height: calc(100% - 175px);
+    height: calc(100vh - 210px);
 }
 
 #feed-title{

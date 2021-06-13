@@ -60,7 +60,6 @@
 
     <main>
 
-      <div id="left-panel">
         <div id="bank">
           <div id="bank-title">BANK</div>
           <div id="bank-content"></div>
@@ -72,23 +71,25 @@
         </div>
       </div>
 
-      <div id="board">
-        <div class="row" id="south"></div>
-        <div class="row" id="west"></div>
-        <div class="row" id="north"></div>
-        <div class="row" id="east"></div>
+      <div id="board-container">
+        <div id="board">
+          <div class="row" id="south"></div>
+          <div class="row" id="west"></div>
+          <div class="row" id="north"></div>
+          <div class="row" id="east"></div>
 
+          
+          <div id="dice-roll">
+            <div id="dice-1" class="dice"></div>
+            <span> + </span>
+            <div id="dice-2" class="dice"></div>
+            <span> = </span>
+            <div>
+              <span id="dice-total"></div>
+            <span id="doubles"></span>
+          </div>
         
-        <div id="dice-roll">
-          <div id="dice-1" class="dice"></div>
-          <span> + </span>
-          <div id="dice-2" class="dice"></div>
-          <span> = </span>
-          <div>
-            <span id="dice-total"></div>
-          <span id="doubles"></span>
         </div>
-      
       </div>
 
       <div id="player-summary"></div>
