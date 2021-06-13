@@ -613,15 +613,7 @@ $columnsize: 80px;
 
 #board{
     border: $border;
-    display: grid;
-    grid-template-columns: $columnsize auto $columnsize;
-    grid-template-rows: $columnsize auto $columnsize;
-    max-width: 896px;
-    gap: 3px 3px;
-    position: relative;
-
     grid-area: centre-panel;
-
 }
 
 
@@ -632,7 +624,7 @@ $columnsize: 80px;
     cursor: pointer;
 }
 
-.row > div > div{
+#board > div[position] > div{
     pointer-events: none;
 }
 
@@ -644,8 +636,6 @@ $columnsize: 80px;
 #board > .station,
 #board > .chance,
 #board > .utility{
-    //border-top: $border;
-    //border-left: $border;
     padding: 5px;
     text-align: center;
     font-size: 10px;
@@ -667,19 +657,6 @@ $columnsize: 80px;
 }
 
 #board[size="super-mini"]{
-
-    /*width: 100%;
-    
-    .row > .property, 
-    .row > .community-chest, 
-    .row > .special,
-    .row > .station, 
-    .row > .chance,
-    .row > .utility{
-        min-height: 20px;
-    }*/
-
-
     .property-price,
     .property-name{
         display: none;

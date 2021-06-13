@@ -511,12 +511,6 @@ button {
 
 #board {
   border: 3px solid #000;
-  display: grid;
-  grid-template-columns: 80px auto 80px;
-  grid-template-rows: 80px auto 80px;
-  max-width: 896px;
-  gap: 3px 3px;
-  position: relative;
   grid-area: centre-panel; }
 
 .property,
@@ -524,7 +518,7 @@ button {
 .utility {
   cursor: pointer; }
 
-.row > div > div {
+#board > div[position] > div {
   pointer-events: none; }
 
 #board > .property,
@@ -547,20 +541,9 @@ button {
 #board[size="mini"] .property-price {
   display: none; }
 
-#board[size="super-mini"] {
-  /*width: 100%;
-    
-    .row > .property, 
-    .row > .community-chest, 
-    .row > .special,
-    .row > .station, 
-    .row > .chance,
-    .row > .utility{
-        min-height: 20px;
-    }*/ }
-  #board[size="super-mini"] .property-price,
-  #board[size="super-mini"] .property-name {
-    display: none; }
+#board[size="super-mini"] .property-price,
+#board[size="super-mini"] .property-name {
+  display: none; }
 
 #board > div[position="1"] {
   grid-area: position-1; }

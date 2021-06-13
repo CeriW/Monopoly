@@ -2128,9 +2128,10 @@ function specialEndPositions(endPosition){
 
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
-    /*let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
+    let matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
+    //console.log(matchingProperty)
 
-    let row = matchingProperty.parentNode.getAttribute('id')
+    //let row = matchingProperty.parentNode.getAttribute('id')
     
     // The token should sit half way from the top of the property, minus half the token's height.
     let desiredTop = matchingProperty.offsetTop += ((matchingProperty.offsetHeight / 2) - (token.offsetHeight / 2))
@@ -2152,7 +2153,7 @@ function positionToken(token, position){
 
         // If the player is just visiting
         } else{
-            desiredLeft = 0
+            desiredLeft = matchingProperty.offsetLeft 
             desiredBottom = 0
             desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
             token.setAttribute('jail', false)
@@ -2195,9 +2196,9 @@ function positionToken(token, position){
     token.style.right = desiredRight + 'px'
     token.style.bottom = desiredBottom + 'px'
     token.style.Zindex = desiredZindex
-    token.setAttribute('area', row)
+    //token.setAttribute('area', row)
 
-    players[turn - 1].position = position*/
+    players[turn - 1].position = position
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
