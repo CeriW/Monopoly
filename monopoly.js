@@ -352,7 +352,8 @@ function generateBoard(){
         newSpace.setAttribute('position', positionNumber)
         positionNumber++
 
-        board.querySelector('#' + space.boardposition).appendChild(newSpace)
+        //board.querySelector('#' + space.boardposition).appendChild(newSpace)
+        board.appendChild(newSpace)
     })
 
 
@@ -469,28 +470,26 @@ function resizeBoard(){
     
     let boardWidth = board.offsetWidth
 
-    board.style.height = boardWidth + 'px'
+    //board.style.height = boardWidth + 'px'
 
-    feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
+    //feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
-    board.style.opacity = 0
-    if (boardWidth < 700 && boardWidth > 600){
+    if (boardWidth < 900 && boardWidth > 800){
         board.setAttribute('size', 'mini')
-    } else if (boardWidth <= 600){
+    } else if (boardWidth <= 800){
         board.setAttribute('size', 'super-mini')
     } else{
         board.setAttribute('size', 'normal')
     }
 
-    board.style.opacity = 1
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 
-    ;[].forEach.call(document.querySelectorAll('#board .row > div'), function(node){
+    ;[].forEach.call(document.querySelectorAll('#board > div'), function(node){
       
         let name = node.querySelector('.property-name')
         node.setAttribute('name', null)
 
-        if (name.offsetWidth < name.scrollWidth){
+        if (name && name.offsetWidth < name.scrollWidth){
             node.setAttribute('name', 'short')
         } else{
             node.setAttribute('name', 'long')
@@ -620,18 +619,18 @@ function updateBank(){
 
     // TODO - a lot of this could be done using CSS.
 
-    let houseContainer = document.createElement('div')
+    //let houseContainer = document.createElement('div')
     for (i = 1; i <= availableHouses; i++){
-        let houseIcon = createElement('div', 'bank-house-icon')
-        houseContainer.appendChild(houseIcon)
+        let houseIcon = createElement('span', 'bank-house-icon')
+        bank.appendChild(houseIcon)
     }
 
-    let hotelContainer = document.createElement('div')
+    //let hotelContainer = document.createElement('div')
     for (i = 1; i <= availableHotels; i++){
-        let hotelIcon = createElement('div', 'bank-hotel-icon')
-        hotelContainer.style.minWidth = '74px'
-        hotelContainer.style.flexBasis = '74px'
-        hotelContainer.appendChild(hotelIcon)
+        let hotelIcon = createElement('span', 'bank-hotel-icon')
+        //hotelContainer.style.minWidth = '74px'
+        //hotelContainer.style.flexBasis = '74px'
+        bank.appendChild(hotelIcon)
     }
 
     /*
@@ -652,8 +651,8 @@ function updateBank(){
 
     setAvailableActions()
 
-    bank.appendChild(houseContainer)
-    bank.appendChild(hotelContainer)
+    //bank.appendChild(houseContainer)
+    //bank.appendChild(hotelContainer)
 }
 
 // Add a class for 2 seconds. This is used in the CSS to run a suitable animation.
@@ -2129,7 +2128,7 @@ function specialEndPositions(endPosition){
 
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
-    let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
+    /*let matchingProperty = document.querySelector('#board > .row div[position="' + position + '"]')
 
     let row = matchingProperty.parentNode.getAttribute('id')
     
@@ -2198,7 +2197,7 @@ function positionToken(token, position){
     token.style.Zindex = desiredZindex
     token.setAttribute('area', row)
 
-    players[turn - 1].position = position
+    players[turn - 1].position = position*/
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
