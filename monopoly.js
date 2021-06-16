@@ -475,7 +475,7 @@ function resizeBoard(){
 
     //board.style.height = boardWidth + 'px'
 
-    //feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
+    feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
     if (boardWidth < 900 && boardWidth > 800){
         board.setAttribute('size', 'mini')
@@ -1045,7 +1045,7 @@ function createPlayers(){
         // I'm told that when any RGB value is below 70 the colour doesn't tend
         // to work well with black text on top. Therefore this code randomly
         // generates an RGB code with each value between 100 and 255
-        newPlayer.colour = 'rgb(' + Math.ceil((Math.random() * 185) + 70) + ',' + Math.ceil((Math.random() * 155) + 100) + ',' + Math.ceil((Math.random() * 185) + 70) + ')'
+        newPlayer.colour = 'rgb(' + Math.ceil((Math.random() * 185) + 100) + ',' + Math.ceil((Math.random() * 155) + 100) + ',' + Math.ceil((Math.random() * 185) + 100) + ')'
 
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
@@ -1082,6 +1082,7 @@ function createPlayers(){
         newToken.setAttribute('player', player.id)
         //newToken.setAttribute('jail', false)
         board.appendChild(newToken)
+        
     })
 
 
@@ -1096,6 +1097,7 @@ function createPlayers(){
     // The highest roll wins. If it is a tie, the tying players should roll again.
     increasePlayerTurn()
 
+
     // Position the tokens where they need to be on the board.
     // Due to the way the positionToken function works when there are multiple
     // tokens on the same space, it was necessary to move them all to 0, THEN
@@ -1106,6 +1108,7 @@ function createPlayers(){
         players[i].position = 0
         i++
     })
+    
 
     newGameDiceRoll()
 
@@ -2132,7 +2135,6 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
-    //console.log(matchingProperty)
 
     //let row = matchingProperty.parentNode.getAttribute('id')
     
@@ -5457,3 +5459,12 @@ function nonNullArrayItems(array){
     return length
 
 }
+
+
+
+
+
+
+
+
+
