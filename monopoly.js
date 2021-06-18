@@ -300,9 +300,8 @@ function generateBoard(){
         space.position = positionNumber
 
 
-        let newSpace = document.createElement('div')
+        let newSpace = createElement('div', space.type)
         newSpace.setAttribute('id', space.name.replace(/\s+/g, '-').toLowerCase())
-        newSpace.classList.add(space.type)
 
         newSpace.setAttribute('area', space.boardArea)
 
