@@ -26,6 +26,7 @@ $border: 3px solid $black;
     background: $lightgrey;
     color: rgb(143, 143, 143);
     pointer-events: none;
+    cursor: not-allowed;
 }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -860,7 +861,7 @@ $columnsize: 80px;
 
 /* Mortgaged property --------------------------------------------------------*/
 
-.row > div,
+#board > div[position],
 .full-portfolio-item{
     position: relative;
 
@@ -880,7 +881,7 @@ $columnsize: 80px;
 }
 
 .full-portfolio-item[mortgaged="true"],
-div[mortgaged="true"]{
+#board > div[mortgaged="true"]{
     &:after{
         transform: scale(1);
     }

@@ -820,10 +820,10 @@ button {
   bottom: 0; }
 
 /* Mortgaged property --------------------------------------------------------*/
-.row > div,
+#board > div[position],
 .full-portfolio-item {
   position: relative; }
-  .row > div:after,
+  #board > div[position]:after,
   .full-portfolio-item:after {
     content: '';
     width: 25px;
@@ -838,7 +838,7 @@ button {
     pointer-events: none; }
 
 .full-portfolio-item[mortgaged="true"]:after,
-div[mortgaged="true"]:after {
+#board > div[mortgaged="true"]:after {
   transform: scale(1); }
 
 .full-portfolio-item[mortgaged="true"]:after {
@@ -1503,7 +1503,8 @@ body[end-turn-available="false"] .end-turn-button {
   pointer-events: none;
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 body[get-out-of-jail="false"] .get-out-50-button,
 body[get-out-of-jail="false"] .roll-doubles-for-jail,
@@ -1524,7 +1525,8 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   display: initial;
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 /* Property overview  --------------------------------------------------------*/
 .property-overview {
@@ -1644,7 +1646,8 @@ body[build-house="false"] .colour-set-button,
 .disabled-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 body[mortgage-property="false"] .property-options .mortgage-button,
 body[unmortgage-property="false"] .property-options .unmortgage-button {
@@ -1656,7 +1659,8 @@ body[unmortgage-property="false"] .property-options .unmortgage-button {
   .house-visual-display[houses="5"] + .button-panel .build-house-button {
     background: #ccc;
     color: #8f8f8f;
-    pointer-events: none; }
+    pointer-events: none;
+    cursor: not-allowed; }
   .house-visual-display[houses="5"] + .button-panel .sell-house-button .sell-house {
     display: none; }
   .house-visual-display[houses="5"] + .button-panel .build-house-button .maximum-number-of-buildings-reached {
@@ -1702,7 +1706,8 @@ body[build-house="none-left"][build-hotel="true"]{
 body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
   body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button span:not(.no-more-houses-in-bank) {
     display: none; }
   body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button .no-more-houses-in-bank {
@@ -1717,7 +1722,8 @@ body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .buil
 body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
   body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
     display: none; }
   body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button .no-more-hotels-in-bank {
@@ -1738,7 +1744,8 @@ body[build-hotel="none-left"]{
 body[build-house="not-enough-money"] .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 body[build-house="not-enough-money"] .build-house-button span:not(.not-enough-money) {
   display: none !important; }
@@ -1749,7 +1756,8 @@ body[build-house="not-enough-money"] .not-enough-money {
 body[build-hotel="not-enough-money"] .build-hotel-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 body[build-hotel="not-enough-money"] .build-hotel-button span:not(.not-enough-money) {
   display: none !important; }
@@ -1800,12 +1808,14 @@ body[build-hotel="not-enough-money"] .not-enough-money {
 body[build-house="false"] .house-visual-display:not([houses="4"]) + .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 /* Owner details  ------------------------------------------------------------*/
 .options-panel-owner {
@@ -2393,7 +2403,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .player-bid-interface.current-winner button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 .current-bid-container {
   background: #d5e8d4;
@@ -2414,7 +2425,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .auction-screen input:invalid + button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 .player-bid-interface.current-winner {
   background: #0aa959;
@@ -2558,7 +2570,8 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   #bankruptcy-message .full-portfolio-item[mortgageable="false"] .mortgage-button {
     background: #ccc;
     color: #8f8f8f;
-    pointer-events: none; }
+    pointer-events: none;
+    cursor: not-allowed; }
 
 /* Mortgages after bankruptcy ------------------------------------------------*/
 .bankruptcy-mortgage-table > div {

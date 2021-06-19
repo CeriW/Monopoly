@@ -586,9 +586,10 @@ function updatePlayerDetails(){
         // just adding them to the end.
         updateNode.innerHTML = ''
 
-        player.properties.forEach(function(property){
+        //player.properties.forEach(function(property){
+        getPlayerPropertyList(player.id).forEach(function(property){
             let propertyIcon = document.createElement('div')
-            propertyIcon.classList.add('property-icon', property.group, player.properties.indexOf(property) )
+            propertyIcon.classList.add('property-icon', property.group, property.position )
 
             if (property.group === 'utility'){
                 let propertyName = property.name
@@ -881,7 +882,7 @@ function quickStart(){
 
         buyProperty(position, players[playerIndex], 'purchase', spaces[position].price)
         gameState[position].ownerID = playerIndex + 1
-        players[playerIndex].properties[position] = spaces[position]
+        //players[playerIndex].properties[position] = spaces[position]
 
         if (spaces[position].type === 'property'){
             gameState[position].houses = houses
@@ -1554,9 +1555,9 @@ function payMoney(transactionDetails){
                 // Actual ownership
                 gameState[propertyID].ownerID = debtor.id
                 //spaces[propertyID].owner = debtor
-                if (typeof creditor === 'object' && creditor.properties[propertyID]){
-                    delete creditor.properties[propertyID]
-                }
+                //if (typeof creditor === 'object' && creditor.properties[propertyID]){
+                  //  delete creditor.properties[propertyID]
+                //}
                 
                 //debtor.properties[propertyID] = spaces[propertyID]
                 
@@ -2548,76 +2549,75 @@ function generateFullPortfolioView(playerID){
     let stations = []
     let utilities = []
 
-    gameState.forEach(function(item){
+    //gameState.forEach(function(item){
 
+    getPlayerPropertyList(playerID).forEach(function(property){
+   
+        //players[player - 1].properties.forEach(function(property){
 
-        if (item.ownerID === playerID){    
-            //players[player - 1].properties.forEach(function(property){
+        //let property = spaces[gameState.indexOf(item)]
 
-            let property = spaces[gameState.indexOf(item)]
+        // Create a containing div to hold all the info relating to this property
+        let propertyContainer = createElement('div', 'full-portfolio-item', '', 'property', property.position)
+        propertyContainer.setAttribute('mortgaged', gameState[property.position].mortgaged)
+        propertyContainer.setAttribute('group', property.group)
 
-            // Create a containing div to hold all the info relating to this property
-            let propertyContainer = createElement('div', 'full-portfolio-item', '', 'property', property.position)
-            propertyContainer.setAttribute('mortgaged', property.mortgaged)
-            propertyContainer.setAttribute('group', property.group)
+        // Create the icon
+        let propertyIcon = createElement('div', 'property-icon')
+        propertyIcon.classList.add(property.group, property.position)
+        if (property.group === 'utility'){
+            propertyIcon.classList.add(property.name.replace(' ', '-').toLowerCase())
+        }
 
-            // Create the icon
-            let propertyIcon = createElement('div', 'property-icon')
-            propertyIcon.classList.add(property.group, property.position)
-            if (property.group === 'utility'){
-                propertyIcon.classList.add(property.name.replace(' ', '-').toLowerCase())
+        propertyContainer.appendChild(propertyIcon)
+
+        // Add the name
+        let propertyName = createElement('div', 'property-name', property.name)
+        propertyContainer.appendChild(propertyName)
+
+        // Add icons if there are houses/hotels
+        if (property.houses === 5){
+            let hotelIcon = createElement('span', 'full-portfolio-hotel')
+            propertyContainer.appendChild(hotelIcon)
+        } else{
+            for (i = 1; i <= property.houses; i++){
+                let houseIcon = createElement('span', 'full-portfolio-house')
+                propertyContainer.appendChild(houseIcon)
             }
+        }
 
-            propertyContainer.appendChild(propertyIcon)
+        // Display the value of the property
+        let value = property.price
 
-            // Add the name
-            let propertyName = createElement('div', 'property-name', property.name)
-            propertyContainer.appendChild(propertyName)
+        if (property.mortgaged){
+            value = property.price / 2
+        } else{
 
-            // Add icons if there are houses/hotels
+            // Note - in every Monopoly game I have played, the hotel cost is
+            // the same as the house cost. However, I have coded this bit this 
+            // way just in case in the future I add a different type of board
+            // where they actually are different.
             if (property.houses === 5){
-                let hotelIcon = createElement('span', 'full-portfolio-hotel')
-                propertyContainer.appendChild(hotelIcon)
-            } else{
-                for (i = 1; i <= property.houses; i++){
-                    let houseIcon = createElement('span', 'full-portfolio-house')
-                    propertyContainer.appendChild(houseIcon)
-                }
+                value += property.hotelCost + (property.houseCost * 4)
+            } else if (property.houses){
+                value += property.houses * property.houseCost
             }
+        }
 
-            // Display the value of the property
-            let value = property.price
-
-            if (property.mortgaged){
-                value = property.price / 2
-            } else{
-
-                // Note - in every Monopoly game I have played, the hotel cost is
-                // the same as the house cost. However, I have coded this bit this 
-                // way just in case in the future I add a different type of board
-                // where they actually are different.
-                if (property.houses === 5){
-                    value += property.hotelCost + (property.houseCost * 4)
-                } else if (property.houses){
-                    value += property.houses * property.houseCost
-                }
-            }
-
-            let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value)
-            propertyContainer.appendChild(valueDisplay)
+        let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value)
+        propertyContainer.appendChild(valueDisplay)
 
 
-            // If this is a station or utility, add these to an array to be looped
-            // through and added at the end of the list.
-            // Otherwise just add it to the end.
+        // If this is a station or utility, add these to an array to be looped
+        // through and added at the end of the list.
+        // Otherwise just add it to the end.
 
-            if (property.group === 'train-station'){
-                stations.push(propertyContainer)
-            } else if (property.group === 'utility'){
-                utilities.push(propertyContainer)
-            } else{
-                portfolioOutput.appendChild(propertyContainer)
-            }
+        if (property.group === 'train-station'){
+            stations.push(propertyContainer)
+        } else if (property.group === 'utility'){
+            utilities.push(propertyContainer)
+        } else{
+            portfolioOutput.appendChild(propertyContainer)
         }
     })
 
@@ -2786,6 +2786,8 @@ function displayPropertyOptions(number){
             // we need to check that they don't have houses/hotels before
             // they are able to mortgage.
 
+
+
             // If this property is already mortgaged...
             if(gameState[number].mortgaged === true){
                 availableActions.mortgageProperty = false
@@ -2873,7 +2875,7 @@ function mortgageProperty(property, bankruptcy){
     let mortgageValue = property.price / 2
 
     // Set the property as mortgaged and add this info to the feed.
-    property.mortgaged = true
+    gameState[property.position].mortgaged = true
     addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
 
     // Give the player the money if we are not dealing with bankruptcy.
@@ -2887,6 +2889,13 @@ function mortgageProperty(property, bankruptcy){
 
     // Show the property as mortgaged on the board.
     document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', true)
+
+
+    let propertyOptions = document.querySelector('.property-overview-options')
+    if (propertyOptions){
+        let mortgageMessage = createElement('div', 'mortgage-message', 'This property is mortgaged')
+        propertyOptions.appendChild(mortgageMessage)
+    }
 
     // Change what actions are appropriate
     availableActions.mortgageProperty = false
@@ -2904,7 +2913,7 @@ function displayBuildHousePanel(colour){
 
     let colourSet = getColourSet(colour)
     colourSet.forEach(function(property){
-        feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses, owner: property.owner.name})
+        feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: gameState[property.position].houses, owner: getPropertyOwnerDetails(property.position).name})
     })
 
     // Get an array of all of the properties in that colour set.
@@ -2974,7 +2983,9 @@ function displayBuildHousePanel(colour){
         // Create a button to sell houses, but only if the current player is the
         // owner. Players can build houses when it's not their turn, but cannot
         // sell them.
-        if (getPropertyOwnerDetails(colourSet[0].position).ownerID == turn){
+
+
+        if (checkPropertyOwner(colourSet[0].position) == turn){
             
             let sellHouseBtn = document.createElement('button')
             sellHouseBtn.classList.add('sell-house-button')
@@ -3296,12 +3307,14 @@ function toggleHouseBuildButtons(group){
 
     //console.log(colourSet)
 
-    if (players[colourSet[0].owner.id - 1].money < colourSet[0].houseCost){
+    let owner = getPropertyOwnerDetails(gameState[colourSet[0].position].ownerID)
+
+    if (owner.money < colourSet[0].houseCost){
         availableActions.buildHouse = 'not-enough-money'
     }
     
 
-    if (players[colourSet[0].owner.id - 1].money < colourSet[0].hotelCost){
+    if (owner.money < colourSet[0].hotelCost){
         availableActions.buildHotel = 'not-enough-money'
     }
 
@@ -3408,7 +3421,7 @@ function unmortgageProperty(property, player, multiple){
     // Half the property price, plus 10%
     let mortgageValue = Math.round((property.price / 2) * 1.1)
 
-    property.mortgaged = false
+    gameState[property.position].mortgaged = false
     //addToFeed(players[turn - 1].name + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
 
     // Take the mortgage money from the player
@@ -3434,12 +3447,16 @@ function unmortgageProperty(property, player, multiple){
     // Change what actions are appropriate. If we are dealing with a
     // post-bankruptcy so don't want to disable additional unmortgages.
 
+    let mortgageMessage = document.querySelector('.property-overview-options .mortgage-message')
+
     if (!multiple){
         availableActions.mortgageProperty = true
         availableActions.unmortgageProperty = false    
         // Clear the message
         // NOTE - This caused an error somewhere along the way, but I'm sure it was here for a reason.
-        //mortgageMessage.innerText = ''
+        if (mortgageMessage){
+            mortgageMessage.parentNode.removeChild(mortgageMessage)
+        }
     }
 
     
@@ -3478,7 +3495,7 @@ function updateHouseDisplay(number){
 
 function updateOwnershipTag(position){
     let tag = document.querySelector('[position="' + position + '"] .ownership-tag')
-    if (gameState[position].owner){
+    if (gameState[position].ownerID){
         tag.style.display = 'block'
         tag.querySelector('polygon').style.fill = getPropertyOwnerDetails(position).colour
     } else{
@@ -3801,8 +3818,10 @@ function checkColourSet(colour, player){
     // Go through the colour set to get a list of the owners of all these properties
     let owners = []
     colourSet.forEach(function(property){
-        if (property.owner){
-            owners.push(property.owner.id)
+        //if (property.owner){
+            //owners.push(property.owner.id)
+        if (gameState[property.position].ownerID){
+            owners.push(gameState[property.position].ownerID)
         } else{
             owners.push(null)
         }
@@ -3810,7 +3829,7 @@ function checkColourSet(colour, player){
 
     // Check whether all of the owners are the same as the specified player
     fullSetOwned = owners.every(function(owner){
-        return (owner === player)
+        return (owner == player)
     })
 
     return fullSetOwned
@@ -4479,7 +4498,7 @@ function negotiateTrade(e, bankruptcy){
                 //players[receiver - 1].properties[i] = spaces[i]
 
                 
-                delete players[turn - 1].properties[i]
+                //delete players[turn - 1].properties[i]
                 nameList0.push(property.name)
 
                 if (property.mortgaged){
@@ -4507,7 +4526,7 @@ function negotiateTrade(e, bankruptcy){
                 // array, rather than the possibly out of date array from the player object.
                 //players[turn - 1].properties[i] = spaces[property.position]
 
-                delete players[receiver - 1].properties[i]
+                //delete players[receiver - 1].properties[i]
                 nameList1.push(property.name)
 
                 if (property.mortgaged){
@@ -4864,7 +4883,7 @@ function openBankruptcyProceedings(transactionDetails){
 
         // Group the houses together so we can use the same CSS as sellHouse
 
-        let houseVisualDisplay = createElement('div', 'house-visual-display', '', 'houses', property.houses)
+        let houseVisualDisplay = createElement('div', 'house-visual-display', '', 'houses', gameState[property.position].houses)
         node.appendChild(houseVisualDisplay)
 
 
@@ -4890,8 +4909,8 @@ function openBankruptcyProceedings(transactionDetails){
         sellHouseButton.addEventListener('click', function(e){
             //sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
             currentDebt -= sellHouse(property.position)
-            sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', property.houses)
-            sellHouseButton.setAttribute('houses', property.houses)
+            sellHouseButton.closest('.full-portfolio-item').querySelector('.house-visual-display').setAttribute('houses', gameState[property.position].houses)
+            sellHouseButton.setAttribute('houses', gameState[property.position].houses)
             changeSellHouseButtonText(sellHouseButton)
             toggleHouseBuildButtons(property.group)
             display.innerHTML = currencySymbolSpan + currentDebt
@@ -4901,9 +4920,12 @@ function openBankruptcyProceedings(transactionDetails){
             // Check whether there are houses elsewhere in the group. This will
             // determine whether the other properties in the group can be mortgaged.
             let housesRemainingInGroup = 0
-            debtor.properties.forEach(function(soldHouseProperty){
+
+            let colourSet = getColourSet(property.group)
+            //debtor.properties.forEach(function(soldHouseProperty){
+            colourSet.forEach(function(soldHouseProperty){
                 if (soldHouseProperty.group === property.group){
-                    housesRemainingInGroup += soldHouseProperty.houses
+                    housesRemainingInGroup += gameState[soldHouseProperty.position].houses
                 }
             })
 
@@ -5119,18 +5141,23 @@ function openBankruptcyProceedings(transactionDetails){
             let feedMessage = players[debtorID - 1].name + ' has gone bankrupt to ' + creditorName + ' and is out of the game. '
             addToFeed(feedMessage, 'bankrupt')
 
-            debtor.properties.forEach(function(property){
+            let debtorProperties = getPlayerPropertyList(debtorID)
+
+            debtorProperties.forEach(function(property){
                 // If the property has houses/ hotels, return them to the bank.
                 // This happens regardless of who you're in debt to. The
                 // proceeds will be given to the creditor(s) later on.
-                if (property.houses){
-                    if (property.houses === 5){
+                if (gameState[property.position].houses){
+
+                    let houses = gameState[property.position].houses
+
+                    if (houses === 5){
                         availableHouses += 4
                         availableHotels++
                         debtor.money += (property.hotelCost / 2) + (property.houseCost * 2) 
                     } else{
-                        availableHouses += property.houses
-                        debtor.money += property.houses * (property.houseCost / 2)
+                        availableHouses += houses
+                        debtor.money += houses * (property.houseCost / 2)
                     }
 
                     gameState[property.position].houses = 0
@@ -5153,18 +5180,19 @@ function openBankruptcyProceedings(transactionDetails){
                 // multiple auctions which we may need to know the total proceeds from.
                 auctionTotal = 0
 
-                debtor.properties.forEach(function(property){
+                let debtorProperties = getPlayerPropertyList(debtorID)
+                debtorProperties.forEach(function(property){
 
                     // Remove the ownership tags. The auction code will re-add
                     // them if someone bids and wins.
-                    gameState[property.position].owner = null
+                    gameState[property.position].ownerID = null
                     updateOwnershipTag(property.position)
 
                     // Add the property to a queue to be auctioned
                     propertiesToAuction.push(spaces[property.position])
 
                     // Unmortgage the property and show it as such on the board
-                    property.mortgaged = false
+                    gameState[property.position].mortgaged = false
                     document.querySelector('div[position="' + property.position + '"]').setAttribute('mortgaged', false)
                 })
 
@@ -5365,9 +5393,21 @@ function removePlayerFromGame(playerID){
 
 // Get the object for the property owner from the players array
 function getPropertyOwnerDetails(position){
-
     return players[gameState[position].ownerID - 1]
+}
 
+
+// Get a list of all of the properties a specified player owns.
+function getPlayerPropertyList(playerID){
+    let list = []
+
+    for (i = 0; i < spaces.length; i++){
+        if (gameState[i].ownerID == playerID){
+            list.push(spaces[i])
+        }
+    }
+
+    return list
 }
 
 
@@ -5385,7 +5425,7 @@ function calculatePlayerWorth(playerID){
     worth += player.money
 
     // Properties
-    player.properties.forEach(function(property){
+    getPlayerPropertyList(playerID).forEach(function(property){
         
         // While the properties array does store a copy of the property object,
         // it is not kept up to date. We need to reference the spaces array
