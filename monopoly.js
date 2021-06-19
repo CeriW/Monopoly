@@ -220,6 +220,8 @@ let spaces =  [
     {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardArea: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
 ]
 
+let gameState = []
+
 // An empty array for now. Will be filled with player info later.
 let players = []
 
@@ -259,6 +261,10 @@ function initialisePage(){
     // I can potentially add other international boards easily in the future.
     generateBoard()
 
+    // Initialise the game state variable, which is used to store information
+    // about the current state of the game. 
+    initialiseGameState()
+
     // Shuffle both decks of cards
     shuffleArray(communityChestCards)
     shuffleArray(chanceCards)
@@ -286,6 +292,25 @@ function cardCurrency(){
 
     function replaceSymbols(card){
         card.description = card.description.replace(/£/g, currencySymbolSpan)
+    }
+}
+
+function initialiseGameState(){
+    for (i = 0; i < spaces.length; i++){
+
+        switch(spaces[i].type){
+            case 'property':
+                gameState[i] = {name: spaces[i].name, ownerID: null, houses: 0, mortgaged: false}
+                break
+            case 'utility':
+                gameState[i] = {name: spaces[i].name, ownerID: null, mortgaged: false}
+                break
+            case 'station':
+                gameState[i] = {name: spaces[i].name, ownerID: null, mortgaged: false}
+                break
+            default:
+                gameState[i] = spaces[i].name
+        }
     }
 }
 
