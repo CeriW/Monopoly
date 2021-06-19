@@ -2651,7 +2651,8 @@ function generateFullPortfolioView(playerID){
 function displayPropertyOptions(number){
     let optionsPanel = createElement('div', 'property-overview-options')
     
-    let propertyOwner = spaces[number].owner
+    let propertyOwner = getPropertyOwnerDetails(number)
+    console.log(propertyOwner)
 
     let optionsPanelInner = createElement('div', 'property-options')
     optionsPanel.appendChild(optionsPanelInner)
@@ -2683,13 +2684,14 @@ function displayPropertyOptions(number){
     } 
 
     // If this space is owned, display appropriate options.
-    else if (spaces[number].owner){
+    else if (propertyOwner){
+
         
         //optionsPanel.innerHTML = 'You own this property!<br>'
 
         optionsPanelOwner = createElement('div', 'options-panel-owner')
-        optionsPanelOwner.appendChild(createElement('div', 'token', '', 'token', spaces[number].owner.token))
-        optionsPanelOwner.appendChild(createElement('div', '', '<span class="smallText">OWNED BY</span><br>' + spaces[number].owner.name))
+        optionsPanelOwner.appendChild(createElement('div', 'token', '', 'token', propertyOwner.token))
+        optionsPanelOwner.appendChild(createElement('div', '', '<span class="smallText">OWNED BY</span><br>' + propertyOwner.name))
         optionsPanel.appendChild(optionsPanelOwner)
 
 
@@ -2702,7 +2704,7 @@ function displayPropertyOptions(number){
         // Display house building options if this is a standard property (not station or utility)
         if (propertyType === 'property'){
             // If the owner of the property owns the full colour set...
-            if (checkColourSet(colour, spaces[number].owner.id)){
+            if (checkColourSet(colour, propertyOwner.id)){
                 //availableActions.buildHouse = true
 
                 // Player may build houses/hotels.
@@ -2720,13 +2722,13 @@ function displayPropertyOptions(number){
             let stationSet = getColourSet('train-station')
             let stationCount = 0
             stationSet.forEach(function(station){
-                if (station.owner && station.owner.id === spaces[number].owner.id){
+                if (station.owner && station.ownerID === propertyOwner.id){
                     stationCount++
                 }
             })
 
             if (stationCount > 1){
-                let stationMessage = createElement('div', 'station-message', spaces[number].owner.name + ' also owns ' + (stationCount - 1) + ' other station')
+                let stationMessage = createElement('div', 'station-message', propertyOwner.name + ' also owns ' + (stationCount - 1) + ' other station')
                 if (stationCount > 2){
                     stationMessage.innerHTML += 's'
                 }
@@ -2746,7 +2748,7 @@ function displayPropertyOptions(number){
 
             // Note - I am unaware of any board that has more than two utilities. However, this WILL work with more than two even if the grammar output isn't perfect.
             if (utilityCount.length > 1){
-                let utilityMessage = createElement('div', 'utility-message', spaces[number].owner.name + ' also owns ' + utilityCount)
+                let utilityMessage = createElement('div', 'utility-message', propertyOwner.name + ' also owns ' + utilityCount)
                 optionsPanel.appendChild(utilityMessage)      
             }
         }
@@ -2754,7 +2756,7 @@ function displayPropertyOptions(number){
         // If this space has a truthy group, it must be a property, station or
         // utility, and therefore may be mortgaged.
         // It must also belong to the current player.
-        if (colour && spaces[number].owner.id == turn){
+        if (colour && propertyOwner.id == turn){
 
             // Create the mortgage button. We'll disable this and change its 
             // text even if we determine mortgaging isn't allowed on
@@ -2782,7 +2784,7 @@ function displayPropertyOptions(number){
             // they are able to mortgage.
 
             // If this property is already mortgaged...
-            if(spaces[number].mortgaged === true){
+            if(gameState[number].mortgaged === true){
                 availableActions.mortgageProperty = false
                 availableActions.unmortgageProperty = true
                 mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
@@ -2790,7 +2792,7 @@ function displayPropertyOptions(number){
                 mortgageMessage.innerText = 'This property is mortgaged.'
 
             // If the player owns the full colour set...
-            } else if(checkColourSet(colour, spaces[number].owner.id)){
+            } else if(checkColourSet(colour, gameState[number].ownerID)){
 
                 let colourSet = getColourSet(colour)
 
@@ -2896,15 +2898,22 @@ function mortgageProperty(property, bankruptcy){
 
 function displayBuildHousePanel(colour){
 
+
+    let colourSet = getColourSet(colour)
+    colourSet.forEach(function(property){
+        feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses, owner: property.owner.name})
+    })
+
     // Get an array of all of the properties in that colour set.
-    let colourSet = []
-    for (i = 0; i < spaces.length; i++){
-        let property = spaces[i]
-        if (property.group === colour){
-            colourSet.push(property)
-            feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses, owner: property.owner.name})
-        }
-    }
+    //let colourSet = []
+
+    //for (i = 0; i < spaces.length; i++){
+      //  let property = spaces[i]
+        //if (property.group === colour){
+          //  colourSet.push(property)
+            //feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses, owner: property.owner.name})
+        //}
+    //}
 
     let houseBuildPanel = document.createElement('div')
 
@@ -2932,7 +2941,7 @@ function displayBuildHousePanel(colour){
         // Create a nice little display to show how many houses are on this property
         let houseVisualDisplay = document.createElement('div')
         houseVisualDisplay.classList.add('house-visual-display')
-        houseVisualDisplay.setAttribute('houses', spaces[property.position].houses)
+        houseVisualDisplay.setAttribute('houses', gameState[property.position].houses)
         housePanel.appendChild(houseVisualDisplay)
 
         // Create a panel for the buttons to go in
@@ -2962,7 +2971,7 @@ function displayBuildHousePanel(colour){
         // Create a button to sell houses, but only if the current player is the
         // owner. Players can build houses when it's not their turn, but cannot
         // sell them.
-        if (colourSet[0].owner.id == turn){
+        if (getPropertyOwnerDetails(colourSet[0].position).ownerID == turn - 1){
             
             let sellHouseBtn = document.createElement('button')
             sellHouseBtn.classList.add('sell-house-button')
@@ -3015,8 +3024,8 @@ function displayBuildHousePanel(colour){
     
     
     function buildHouse(number){
-        let currentHousesOnProperty = spaces[number].houses
-        spaces[number].houses += 1
+        let currentHousesOnProperty = gameState[number].houses
+        gameState[number].houses += 1
 
     
         // If there are 3 or less houses, let us build a house.
@@ -3030,12 +3039,12 @@ function displayBuildHousePanel(colour){
             document.querySelector('.house-building-panel[position="' + number + '"] .button-panel .sell-house-button').classList.remove('disabled-button')
         }
     
-        payMoney({debtorID: spaces[number].owner.id, creditorID: 'bank', amount: spaces[number].houseCost})
+        payMoney({debtorID: gameState[number].ownerID, creditorID: 'bank', amount: spaces[number].houseCost})
         //players[spaces[number].owner.id - 1].money -= spaces[number].houseCost
         //updatePlayerDetails()
     
         // Update visual display to show new higher number of houses
-        document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', spaces[number].houses)
+        document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display').setAttribute('houses', gameState[number].houses)
     
         // Find the item in the feedDetails array and update the number
         feedDetails.forEach(function(property){
@@ -3086,7 +3095,7 @@ function displayBuildHousePanel(colour){
                 let newMessage = ''
 
                 // The player has built a hotel
-                if (spaces[property.position].houses === 5){
+                if (gameState[property.position].houses === 5){
                     newMessage += 'a hotel on '
                 
                 // The player has built 1 house
@@ -3761,12 +3770,19 @@ function getColourSet(colour){
     let colourSet = []
 
     for (i = 0; i < spaces.length; i++){
+
         let property = spaces[i]
         if (property.group === colour){
+
+            let currentState = gameState[i]
+
+            for (detail in currentState){
+                property[detail] = currentState[detail]
+            }
+
             colourSet.push(property)
         }
     }
-
     return colourSet
 }
 
@@ -5337,6 +5353,14 @@ function removePlayerFromGame(playerID){
 
 
   increasePlayerTurn()
+}
+
+
+// Get the object for the property owner from the players array
+function getPropertyOwnerDetails(position){
+
+    return players[gameState[position].ownerID - 1]
+
 }
 
 
