@@ -12,6 +12,8 @@ FUNCTIONALITY
 - Cookies/local storage so you can come back to a game later.
 	- This is going to involve somewhat major restructuring. My players and spaces arrays both have circular references in them, so I'm going to need to fix that before I'm able to JSON.stringify them.
 
+- Do I need getPropertyOwnerDetails() AND checkPropertyOwner()?
+
 
 
 
@@ -21,6 +23,8 @@ BUGS SPOTTED
 
 
 IMPROVEMENTS
+
+
 
 - Make the quick start functionality actually good.
 

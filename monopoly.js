@@ -176,48 +176,48 @@ let chanceCards =
 
 let spaces =  [
     {name: 'Go',                    type: 'special',            price: null,    group: 'corner',       boardArea: 'south'},
-    {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
+    {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'south'},
-    {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
+    {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50},
     {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardArea: 'south', label: 'Pay £200'},
-    {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardArea: 'south', rent:[25,50,100,200],                owner: null},
-    {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
+    {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardArea: 'south', rent:[25,50,100,200]},
+    {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'south'},
-    {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
-    {name: 'Pentonville Road',      type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[8,16,40,100,300,450,600],      houseCost: 50, hotelCost: 50, owner: null, houses: 0, mortgaged: false},
+    {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
+    {name: 'Pentonville Road',      type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[8,16,40,100,300,450,600],      houseCost: 50, hotelCost: 50},
 
     {name: 'Jail',                  type: 'special',            price: null,    group: 'corner',       boardArea: 'west'},
-    {name: 'Pall Mall',             type: 'property',           price: 140,     group: 'pink',         boardArea: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100, owner: null, houses: 0},
-    {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardArea: 'west', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null, mortgaged: false},
-    {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardArea: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
-    {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardArea: 'west', rent:[12,24,60,180,500,700,900],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
+    {name: 'Pall Mall',             type: 'property',           price: 140,     group: 'pink',         boardArea: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100},
+    {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardArea: 'west', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."]},
+    {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardArea: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100},
+    {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardArea: 'west', rent:[12,24,60,180,500,700,900],      houseCost: 100, hotelCost: 100},
     {name: 'Marylebone Station',    type: 'station',            price: 200,     group: 'train-station',boardArea: 'west', rent:[25,50,100,200],                 owner: null},
-    {name: 'Bow Street',            type: 'property',           price: 180,     group: 'orange',       boardArea: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
+    {name: 'Bow Street',            type: 'property',           price: 180,     group: 'orange',       boardArea: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'west'},
-    {name: 'Marlborough Street',    type: 'property',           price: 180,     group: 'orange',       boardArea: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
-    {name: 'Vine Street',           type: 'property',           price: 200,     group: 'orange',       boardArea: 'west', rent:[16,32,80,220,600,800,1000],     houseCost: 100, hotelCost: 100, owner: null, houses: 0, mortgaged: false},
+    {name: 'Marlborough Street',    type: 'property',           price: 180,     group: 'orange',       boardArea: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100},
+    {name: 'Vine Street',           type: 'property',           price: 200,     group: 'orange',       boardArea: 'west', rent:[16,32,80,220,600,800,1000],     houseCost: 100, hotelCost: 100},
 
     {name: 'Free Parking',          type: 'special',            price: null,    group: 'corner',       boardArea: 'north'},
-    {name: 'Strand',                type: 'property',           price: 220,     group: 'red',          boardArea: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
+    {name: 'Strand',                type: 'property',           price: 220,     group: 'red',          boardArea: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'north'},
-    {name: 'Fleet Street',          type: 'property',           price: 220,     group: 'red',          boardArea: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
-    {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardArea: 'north', rent:[20,40,100,300,750,925,1100],   houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
+    {name: 'Fleet Street',          type: 'property',           price: 220,     group: 'red',          boardArea: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150},
+    {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardArea: 'north', rent:[20,40,100,300,750,925,1100],   houseCost: 150, hotelCost: 150},
     {name: 'Fenchurch St. Station', type: 'station',            price: 200,     group: 'train-station',boardArea: 'north', rent:[25,50,100,200],                owner: null},
-    {name: 'Leicester Square',      type: 'property',           price: 220,     group: 'yellow',       boardArea: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
-    {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardArea: 'north', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."], owner: null, mortgaged: false},
-    {name: 'Coventry Street',       type: 'property',           price: 260,     group: 'yellow',       boardArea: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
-    {name: 'Piccadilly',            type: 'property',           price: 280,     group: 'yellow',       boardArea: 'north', rent:[24,48,120,360,850,1025,1200],  houseCost: 150, hotelCost: 150, owner: null, houses: 0, mortgaged: false},
+    {name: 'Leicester Square',      type: 'property',           price: 220,     group: 'yellow',       boardArea: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150},
+    {name: 'Water Works',           type: 'utility',            price: 150,     group: 'utility',      boardArea: 'north', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."]},
+    {name: 'Coventry Street',       type: 'property',           price: 260,     group: 'yellow',       boardArea: 'north', rent:[22,44,110,330,800,975,1150],   houseCost: 150, hotelCost: 150},
+    {name: 'Piccadilly',            type: 'property',           price: 280,     group: 'yellow',       boardArea: 'north', rent:[24,48,120,360,850,1025,1200],  houseCost: 150, hotelCost: 150},
     
     {name: 'Go To Jail',            type: 'special',            price: null,    group: 'corner',       boardArea: 'east'},
-    {name: 'Regent Street',         type: 'property',           price: 300,     group: 'green',        boardArea: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
-    {name: 'Oxford Street',         type: 'property',           price: 300,     group: 'green',        boardArea: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
+    {name: 'Regent Street',         type: 'property',           price: 300,     group: 'green',        boardArea: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200},
+    {name: 'Oxford Street',         type: 'property',           price: 300,     group: 'green',        boardArea: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'east'},
-    {name: 'Bond Street',           type: 'property',           price: 320,     group: 'green',        boardArea: 'east', rent:[28,56,150,450,1000,1200,1400],  houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
-    {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardArea: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250, owner: null, houses: 0, mortgaged: false},
+    {name: 'Bond Street',           type: 'property',           price: 320,     group: 'green',        boardArea: 'east', rent:[28,56,150,450,1000,1200,1400],  houseCost: 200, hotelCost: 200},
+    {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardArea: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'east'},
-    {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardArea: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
+    {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardArea: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200},
     {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardArea: 'east', label:'Pay £100'},
-    {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardArea: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200, owner: null, houses: 0, mortgaged: false},
+    {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardArea: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200},
 ]
 
 let gameState = []
@@ -256,14 +256,16 @@ function initialisePage(){
     // Generate the page where the players are determined.
     intialisePlayerCreator()
 
+    // Initialise the game state variable, which is used to store information
+    // about the current state of the game. 
+    initialiseGameState()
+
     // Generate all of the spaces on the board
     // While this could be done in the HTML, doing it based on a JS array means
     // I can potentially add other international boards easily in the future.
     generateBoard()
 
-    // Initialise the game state variable, which is used to store information
-    // about the current state of the game. 
-    initialiseGameState()
+
 
     // Shuffle both decks of cards
     shuffleArray(communityChestCards)
@@ -359,8 +361,10 @@ function generateBoard(){
         // I can't currently figure out why. I'm currently hiding the
         // unwanted ones in the CSS but it would be better if they just
         // didnt't exist in the first place.
-        if (space.houses != null){
-            newSpace.setAttribute('houses', space.houses)
+        //if (space.houses != null){
+
+        if (space.type === 'property'){
+            newSpace.setAttribute('houses', 0)
             let houseContainer = document.createElement('div')
             houseContainer.classList.add('property-house-display')
 
@@ -876,18 +880,18 @@ function quickStart(){
     function quickPropertyOwnership(houses, position, playerIndex){
 
         buyProperty(position, players[playerIndex], 'purchase', spaces[position].price)
-        spaces[position].owner = players[playerIndex]
+        gameState[position].ownerID = playerIndex + 1
         players[playerIndex].properties[position] = spaces[position]
 
         if (spaces[position].type === 'property'){
-            spaces[position].houses = houses
+            gameState[position].houses = houses
             //players[playerIndex].money -= spaces[position].houseCost * houses
             updateHouseDisplay(position)
         }
     }
 
     function quickMortgage(position, player){
-        spaces[position].mortgaged = true
+        gameState[position].mortgaged = true
         document.querySelector('div[position="' + position + '"]').setAttribute('mortgaged', true)
         players[player].money += spaces[position].price / 2
     }
@@ -902,7 +906,7 @@ function quickStart(){
 
     updatePlayerDetails()
 
-    console.clear()
+    //console.clear()
 
     //fakeRollDice(4)
 
@@ -1508,7 +1512,7 @@ function payMoney(transactionDetails){
 
     transactionDetails = transactionQueue[0]
 
-    console.log(transactionDetails)
+    //console.log(transactionDetails)
 
     // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
@@ -2425,7 +2429,7 @@ function generatePropertyDetails(number){
     // If the property is owned, set an attribute on the div we can use elsewhere.
     //let owner = spaces[number].owner
 
-    let owner = players[gameState[number].ownerID]
+    let owner = getPropertyOwnerDetails(number)
 
     if (owner){
         htmlOutput += ' player="' + owner.id + '">'
@@ -2641,7 +2645,7 @@ function generateFullPortfolioView(playerID){
     })
      
     if (!portfolioOutput.innerHTML){
-        portfolioOutput.innerHTML = players[player - 1].name + ' does not own any properties'
+        portfolioOutput.innerHTML = players[playerID - 1].name + ' does not own any properties'
         portfolioOutput.style.justifyContent = 'center'
     }
 
@@ -2652,7 +2656,6 @@ function displayPropertyOptions(number){
     let optionsPanel = createElement('div', 'property-overview-options')
     
     let propertyOwner = getPropertyOwnerDetails(number)
-    console.log(propertyOwner)
 
     let optionsPanelInner = createElement('div', 'property-options')
     optionsPanel.appendChild(optionsPanelInner)
@@ -2971,7 +2974,7 @@ function displayBuildHousePanel(colour){
         // Create a button to sell houses, but only if the current player is the
         // owner. Players can build houses when it's not their turn, but cannot
         // sell them.
-        if (getPropertyOwnerDetails(colourSet[0].position).ownerID == turn - 1){
+        if (getPropertyOwnerDetails(colourSet[0].position).ownerID == turn){
             
             let sellHouseBtn = document.createElement('button')
             sellHouseBtn.classList.add('sell-house-button')
@@ -3212,7 +3215,7 @@ function toggleHouseBuildButtons(group){
     let colourSet = getColourSet(group)
     
     colourSet.forEach(function(property){
-        colourSetHouses.push(spaces[property.position].houses)
+        colourSetHouses.push(gameState[property.position].houses)
     })
 
 
@@ -3311,7 +3314,7 @@ function toggleHouseBuildButtons(group){
 function sellHouse(number){
 
     let proceeds = 0
-    let currentHousesOnProperty = spaces[number].houses
+    let currentHousesOnProperty = gameState[number].houses
   
     // If there is a hotel
     if (currentHousesOnProperty === 5){
@@ -3320,7 +3323,7 @@ function sellHouse(number){
         if (availableHouses >= 4){
             availableHotels++
             availableHouses -= 4
-            spaces[number].houses--
+            gameState[number].houses--
             updateHouseDisplay(number)
             proceeds = spaces[number].hotelCost / 2
 
@@ -3341,7 +3344,7 @@ function sellHouse(number){
                 spaces[propertyNumber].houses = 0
   
                 // Refund the player the cost of 5 houses, halved
-                players[spaces[number].owner.id - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+                gameState[spaces[number].ownerID - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
   
                 // Return the hotel and houses to the bank
                 availableHotels++
@@ -3368,7 +3371,7 @@ function sellHouse(number){
   
     } else{
         availableHouses++
-        spaces[number].houses--
+        gameState[number].houses--
         updateHouseDisplay(number)
         toggleHouseBuildButtons(spaces[number].group)
 
@@ -3377,7 +3380,7 @@ function sellHouse(number){
     }
   
     // Players get half the value back for houses/hotels
-    players[spaces[number].owner.id - 1].money += (spaces[number].houseCost / 2)
+    players[gameState[number].ownerID - 1].money += (spaces[number].houseCost / 2)
     updatePlayerDetails()
   
     //console.log(players[spaces[number].owner.id - 1])
@@ -3423,7 +3426,7 @@ function unmortgageProperty(property, player, multiple){
         payMoney()
     }
 
-    let playerName = player ? player.name : players[turn-1].name 
+    let playerName = player ? player.name : players[turn - 1].name 
     addToFeed(playerName + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
     
     //updatePlayerDetails()
@@ -3435,7 +3438,8 @@ function unmortgageProperty(property, player, multiple){
         availableActions.mortgageProperty = true
         availableActions.unmortgageProperty = false    
         // Clear the message
-        mortgageMessage.innerText = ''
+        // NOTE - This caused an error somewhere along the way, but I'm sure it was here for a reason.
+        //mortgageMessage.innerText = ''
     }
 
     
@@ -3462,21 +3466,21 @@ function updateHouseDisplay(number){
 
     // Update the display on the board
     let property = document.querySelector('.property[position="' + number + '"]')
-    property.setAttribute('houses', spaces[number].houses)
+    property.setAttribute('houses', gameState[number].houses)
 
     // If the colour set overview is open, update the house display in the window
     let houseBuildPanel = document.querySelector('.house-building-panel[position="' + number + '"] .house-visual-display')
     if (houseBuildPanel){
-        houseBuildPanel.setAttribute('houses', spaces[number].houses)
+        houseBuildPanel.setAttribute('houses', gameState[number].houses)
     }
 }
 
 
 function updateOwnershipTag(position){
     let tag = document.querySelector('[position="' + position + '"] .ownership-tag')
-    if (spaces[position].owner){
+    if (gameState[position].owner){
         tag.style.display = 'block'
-        tag.querySelector('polygon').style.fill = spaces[position].owner.colour
+        tag.querySelector('polygon').style.fill = getPropertyOwnerDetails(position).colour
     } else{
         tag.style.display = 'none'
     }
@@ -3723,7 +3727,7 @@ function auctionProperty(number, proceedsToAll){
                 endAuction()
             } else if (currentNumberOfBidders === 0 && !currentBid){
                 addToFeed(spaces[propertyID].name + ' was available for auction but nobody bid on it.', 'auction')
-                spaces[propertyID].owner = null
+                gameState[propertyID].owner = null
                 closePopup()
                 endAuction()
             }
@@ -3841,10 +3845,10 @@ function landOnProperty(position){
     let owner = checkPropertyOwner(position) // The id of the owner
     let currentPlayer = players[turn - 1]
 
-    if (owner && owner !== currentPlayer.id){
+    if (owner && owner != currentPlayer.id){
 
         // If the property is mortgaged, the player does not need to pay rent.
-        if(spaces[position].mortgaged){
+        if(gameState[position].mortgaged){
             addToFeed(currentPlayer.name + ' landed on ' + spaces[position].name + ' but it is mortgaged. No rent is due.', 'land-on-mortgaged')
         } else{
             // Rent is due.
@@ -3903,7 +3907,7 @@ function landOnProperty(position){
             // Rent for standard properties which may have houses/hotels
             function standardPropertyRent(){
                 if (checkColourSet(spaces[position].group, owner)){
-                    let numberOfHouses = spaces[position].houses
+                    let numberOfHouses = gameState[position].houses
                 
                     // The second (index 1) entry in the rent array is the rent with
                     // a full colour set but no houses, hence the + 1 to get
@@ -3949,7 +3953,7 @@ function landOnProperty(position){
         }
 
 
-    } else if (owner && owner === currentPlayer.id){
+    } else if (owner && owner == currentPlayer.id){
         // The property is owned by the current player. Do nothing.
     } else{
         // Nobody owns this property
@@ -3961,10 +3965,10 @@ function landOnProperty(position){
 
 
 function checkPropertyOwner(position){
-    let owner = spaces[position].owner
+    let owner = gameState[position].ownerID
 
     if (owner){
-        return owner.id
+        return owner
     } else{
         return null
     }
@@ -4459,18 +4463,20 @@ function negotiateTrade(e, bankruptcy){
             
             if (property){
 
+                gameState[property.position].ownerID = players[receiver - 1].id
+
                 // Reset the property, so we're using the most up to date version
                 // from the spaces array (rather than the one from the players
                 // array which might be out of date and should only be used for
                 // constants like the name etc)
-                property = spaces[property.position]
+                //property = spaces[property.position]
 
                 // Swap the owner property to its new owner
-                property.owner = players[receiver - 1]
+                //property.owner = players[receiver - 1]
 
                 // Add the most recent version of the property from the spaces
                 // array, rather than the possibly out of date array from the player object.
-                players[receiver - 1].properties[i] = spaces[i]
+                //players[receiver - 1].properties[i] = spaces[i]
 
                 
                 delete players[turn - 1].properties[i]
@@ -4494,11 +4500,12 @@ function negotiateTrade(e, bankruptcy){
                 property = spaces[property.position]
 
                 // Swap the owner property to its new owner
-                property.owner = players[turn - 1]
+                //property.owner = players[turn - 1]
+                gameState[property.position].ownerID = players[turn - 1].id
 
                 // Add the most recent version of the property from the spaces
                 // array, rather than the possibly out of date array from the player object.
-                players[turn - 1].properties[i] = spaces[property.position]
+                //players[turn - 1].properties[i] = spaces[property.position]
 
                 delete players[receiver - 1].properties[i]
                 nameList1.push(property.name)
@@ -5126,7 +5133,7 @@ function openBankruptcyProceedings(transactionDetails){
                         debtor.money += property.houses * (property.houseCost / 2)
                     }
 
-                    spaces[property.position].houses = 0
+                    gameState[property.position].houses = 0
                     updateHouseDisplay(property.position)
                 }
 
@@ -5150,7 +5157,7 @@ function openBankruptcyProceedings(transactionDetails){
 
                     // Remove the ownership tags. The auction code will re-add
                     // them if someone bids and wins.
-                    spaces[property.position].owner = null
+                    gameState[property.position].owner = null
                     updateOwnershipTag(property.position)
 
                     // Add the property to a queue to be auctioned
@@ -5202,8 +5209,8 @@ function openBankruptcyProceedings(transactionDetails){
 
                 //Properties
                 debtor.properties.forEach(function(property){
-                    spaces[property.position].owner = players[creditorID - 1]
-                    players[creditorID - 1].properties[property.position] = spaces[property.position]
+                    gameState[property.position].ownerID = players[creditorID - 1].id
+                    //players[creditorID - 1].properties[property.position] = spaces[property.position]
 
                     // If the property is mortgaged, add it to an array. The
                     // new owner will need to choose what to do about this.
@@ -5386,7 +5393,7 @@ function calculatePlayerWorth(playerID){
         let space = spaces[property.position]
 
         // If it's mortgaged, add half the price
-        if (space.mortgaged){
+        if (gameState[property.position].mortgaged){
             worth += (space.price / 2)
 
         // If it's not mortgaged...
@@ -5399,7 +5406,7 @@ function calculatePlayerWorth(playerID){
             // cost (since that's what they sell for)
 
             // If it has a hotel
-            if (space.houses && space.houses === 5){
+            if (gameState[property.position].houses && gameState[property.position].houses === 5){
                 worth += (space.hotelCost / 2) + (space.houseCost * 2)
             }
             // If it doesn't have a hotel
