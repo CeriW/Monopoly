@@ -1548,12 +1548,13 @@ function payMoney(transactionDetails){
                 //buyProperty(propertyID, players[creditorID - 1], transactionDetails.method, transactionDetails.amount)
 
                 // Actual ownership
-                spaces[propertyID].owner = debtor
+                gameState[propertyID].ownerID = debtor.id
+                //spaces[propertyID].owner = debtor
                 if (typeof creditor === 'object' && creditor.properties[propertyID]){
                     delete creditor.properties[propertyID]
                 }
                 
-                debtor.properties[propertyID] = spaces[propertyID]
+                //debtor.properties[propertyID] = spaces[propertyID]
                 
                 // Money exchange
                 debtor.money -= property.price
