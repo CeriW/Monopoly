@@ -2423,7 +2423,10 @@ function generatePropertyDetails(number){
     let htmlOutput = '<div class="property-overview"'
 
     // If the property is owned, set an attribute on the div we can use elsewhere.
-    let owner = spaces[number].owner
+    //let owner = spaces[number].owner
+
+    let owner = players[gameState[number].ownerID]
+
     if (owner){
         htmlOutput += ' player="' + owner.id + '">'
     }   else{
