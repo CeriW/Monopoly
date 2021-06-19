@@ -2537,75 +2537,83 @@ function fullPortfolioView(e){
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview, true)
 }
 
-function generateFullPortfolioView(player){
+function generateFullPortfolioView(playerID){
+
 
     let portfolioOutput = createElement('div', 'full-portfolio')
     let stations = []
     let utilities = []
 
-    players[player - 1].properties.forEach(function(property){
+    gameState.forEach(function(item){
 
-        // Create a containing div to hold all the info relating to this property
-        let propertyContainer = createElement('div', 'full-portfolio-item', '', 'property', property.position)
-        propertyContainer.setAttribute('mortgaged', property.mortgaged)
-        propertyContainer.setAttribute('group', property.group)
 
-        // Create the icon
-        let propertyIcon = createElement('div', 'property-icon')
-        propertyIcon.classList.add(property.group, property.position)
-        if (property.group === 'utility'){
-            propertyIcon.classList.add(property.name.replace(' ', '-').toLowerCase())
-        }
+        if (item.ownerID === playerID){    
+            //players[player - 1].properties.forEach(function(property){
 
-        propertyContainer.appendChild(propertyIcon)
+            let property = spaces[gameState.indexOf(item)]
 
-        // Add the name
-        let propertyName = createElement('div', 'property-name', property.name)
-        propertyContainer.appendChild(propertyName)
+            // Create a containing div to hold all the info relating to this property
+            let propertyContainer = createElement('div', 'full-portfolio-item', '', 'property', property.position)
+            propertyContainer.setAttribute('mortgaged', property.mortgaged)
+            propertyContainer.setAttribute('group', property.group)
 
-        // Add icons if there are houses/hotels
-        if (property.houses === 5){
-            let hotelIcon = createElement('span', 'full-portfolio-hotel')
-            propertyContainer.appendChild(hotelIcon)
-        } else{
-            for (i = 1; i <= property.houses; i++){
-                let houseIcon = createElement('span', 'full-portfolio-house')
-                propertyContainer.appendChild(houseIcon)
+            // Create the icon
+            let propertyIcon = createElement('div', 'property-icon')
+            propertyIcon.classList.add(property.group, property.position)
+            if (property.group === 'utility'){
+                propertyIcon.classList.add(property.name.replace(' ', '-').toLowerCase())
             }
-        }
 
-        // Display the value of the property
-        let value = property.price
+            propertyContainer.appendChild(propertyIcon)
 
-        if (property.mortgaged){
-            value = property.price / 2
-        } else{
+            // Add the name
+            let propertyName = createElement('div', 'property-name', property.name)
+            propertyContainer.appendChild(propertyName)
 
-            // Note - in every Monopoly game I have played, the hotel cost is
-            // the same as the house cost. However, I have coded this bit this 
-            // way just in case in the future I add a different type of board
-            // where they actually are different.
+            // Add icons if there are houses/hotels
             if (property.houses === 5){
-                value += property.hotelCost + (property.houseCost * 4)
-            } else if (property.houses){
-                value += property.houses * property.houseCost
+                let hotelIcon = createElement('span', 'full-portfolio-hotel')
+                propertyContainer.appendChild(hotelIcon)
+            } else{
+                for (i = 1; i <= property.houses; i++){
+                    let houseIcon = createElement('span', 'full-portfolio-house')
+                    propertyContainer.appendChild(houseIcon)
+                }
             }
-        }
 
-        let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value)
-        propertyContainer.appendChild(valueDisplay)
+            // Display the value of the property
+            let value = property.price
+
+            if (property.mortgaged){
+                value = property.price / 2
+            } else{
+
+                // Note - in every Monopoly game I have played, the hotel cost is
+                // the same as the house cost. However, I have coded this bit this 
+                // way just in case in the future I add a different type of board
+                // where they actually are different.
+                if (property.houses === 5){
+                    value += property.hotelCost + (property.houseCost * 4)
+                } else if (property.houses){
+                    value += property.houses * property.houseCost
+                }
+            }
+
+            let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value)
+            propertyContainer.appendChild(valueDisplay)
 
 
-        // If this is a station or utility, add these to an array to be looped
-        // through and added at the end of the list.
-        // Otherwise just add it to the end.
+            // If this is a station or utility, add these to an array to be looped
+            // through and added at the end of the list.
+            // Otherwise just add it to the end.
 
-        if (property.group === 'train-station'){
-            stations.push(propertyContainer)
-        } else if (property.group === 'utility'){
-            utilities.push(propertyContainer)
-        } else{
-            portfolioOutput.appendChild(propertyContainer)
+            if (property.group === 'train-station'){
+                stations.push(propertyContainer)
+            } else if (property.group === 'utility'){
+                utilities.push(propertyContainer)
+            } else{
+                portfolioOutput.appendChild(propertyContainer)
+            }
         }
     })
 
