@@ -2523,7 +2523,7 @@ function portfolioItemPreview(e){
         displayPropertyDetails(targetProperty)
         let backButton = document.createElement('div')
         backButton.classList.add('back-button')
-        backButton.setAttribute('player', spaces[targetProperty].owner.id)
+        backButton.setAttribute('player', gameState[targetProperty].ownerID)
         document.querySelector('.property-overview').appendChild(backButton)
         backButton.addEventListener('click', fullPortfolioView)
     }
