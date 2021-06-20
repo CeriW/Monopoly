@@ -4,7 +4,7 @@
 
 // If quick start is enabled, we'll skip over the player creation screen and
 // start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  true;
+let quickStartGame =  false;
 
 let availableTokens = [
     {name: 'dog',           available: true},
@@ -247,11 +247,51 @@ let currencySymbol = '₩'
 let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol + '</span>'
 
 
+// Saved game functions ------------------------------------------------------//
+
+function checkForSavedGame(){
+
+    if (localStorage.getItem('gameState')){
+        openPopup('', 'Saved game found')
+
+        let newPopupContent = createElement('div', '', 'A previous saved game has been found. Would you like to continue?')
+        
+        let continueButton = createElement('button', '', 'Continue with saved game')
+        continueButton.addEventListener('click', loadSavedGame)
+        newPopupContent.appendChild(continueButton)
+        
+        let newGameButton = createElement('button', '', 'Start new game')
+        newGameButton.addEventListener('click', function(){
+            localStorage.clear()
+            closePopup()
+        })
+        newPopupContent.appendChild(newGameButton)
+
+        popupMessage.appendChild(newPopupContent)
+
+    }
+}
+
+function saveGame(){
+    localStorage.setItem('gameState', JSON.stringify(gameState))
+    localStorage.setItem('players', JSON.stringify(players))
+}
+
+function loadSavedGame(){
+    gameState = JSON.parse(localStorage.getItem('gameState'))
+    players = JSON.parse(localStorage.getItem('players'))
+}
+
+
+
+
 // Page setup functions ------------------------------------------------------//
 
 initialisePage()
 
 function initialisePage(){
+
+    checkForSavedGame()
 
     // Generate the page where the players are determined.
     intialisePlayerCreator()
@@ -432,6 +472,9 @@ function generateBoard(){
     }
 
 }
+
+
+
 
 function addEvents(){
 
@@ -2179,8 +2222,6 @@ function positionToken(token, position){
     let yTransform = 0
 
     let jail = players[token.getAttribute('player') - 1].inJail > 0 ? true : false
-    console.log(jail)
-
     if (position == 10){
         if (jail){
             matchingProperty = document.querySelector('#board > div[position="10"] .in-jail')
@@ -2203,8 +2244,6 @@ function positionToken(token, position){
     // Check whether there are other tokens also on this property. If so, shift
     // them about so all are visible.
     let matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="' + jail + '"]')
-    console.log(matchingTokens)
-
     let factor = (matchingTokens.length - 1) * 10
     yTransform -= factor / 2 + 5
 
