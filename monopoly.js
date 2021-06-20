@@ -2165,9 +2165,7 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
-    console.log(matchingProperty.getBoundingClientRect())
-
-    
+   
 
     token.style.gridArea = 'position-' + position
     let xTransform = (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
@@ -2179,14 +2177,32 @@ function positionToken(token, position){
     // Check whether there are other tokens also on this property. If so, shift
     // this one down a little bit.
 
-    ;[].forEach.call(document.querySelectorAll('#board > .token'), function(node){
+    let matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"]')
+    /*;[].forEach.call(document.querySelectorAll('#board > .token'), function(node){
         if (node.getAttribute('position') == position){
             yTransform += 10
         }
-    })
+    })*/
+
+    console.log(matchingTokens.length)
+
+    let factor = (matchingTokens.length - 1) * 10
+    yTransform -= factor / 2 + 5
+
+    for (i = 0; i < matchingTokens.length; i++){
+        //yTransform += (i - 1) + 10
+        //yTransform += 10
+
+        yTransform += 10
 
 
-    token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
+
+        //yTransform -= (matchingTokens.length / 2 * 10)
+        //yTransform -= ((matchingTokens.length / 2) * 10)
+        matchingTokens[i].style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
+    }
+
+    //token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
 
 
     //let row = matchingProperty.parentNode.getAttribute('id')
