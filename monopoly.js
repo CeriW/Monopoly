@@ -1109,6 +1109,7 @@ function createPlayers(){
         newToken.setAttribute('position', 0)
         newToken.setAttribute('area', 'south')
         newToken.setAttribute('player', player.id)
+        newToken.setAttribute('jail', false)
         //newToken.setAttribute('jail', false)
         board.appendChild(newToken)
         
@@ -2177,29 +2178,45 @@ function positionToken(token, position){
     // Check whether there are other tokens also on this property. If so, shift
     // this one down a little bit.
 
-    let matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"]')
-    /*;[].forEach.call(document.querySelectorAll('#board > .token'), function(node){
-        if (node.getAttribute('position') == position){
-            yTransform += 10
-        }
-    })*/
 
-    console.log(matchingTokens.length)
+    let matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"]')
 
     let factor = (matchingTokens.length - 1) * 10
     yTransform -= factor / 2 + 5
 
     for (i = 0; i < matchingTokens.length; i++){
-        //yTransform += (i - 1) + 10
-        //yTransform += 10
-
         yTransform += 10
+        //matchingTokens[i].style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
+        matchingTokens[i].style.marginLeft = xTransform + 'px'
+        matchingTokens[i].style.marginTop = yTransform + 'px'
+    }
 
+    if (position === 10){
+        // If the player is in jail
+        if (players[turn - 1].inJail !== 0){
+            //desiredLeft = matchingProperty.offsetLeft + (matchingProperty.offsetWidth - token.offsetWidth) - 5
+            //desiredTop -= 10
+            xTransform = matchingProperty.getBoundingClientRect().width / 2
+            matchingTokens[i].style.marginLeft = 0
 
+            token.setAttribute('jail', true)
 
-        //yTransform -= (matchingTokens.length / 2 * 10)
-        //yTransform -= ((matchingTokens.length / 2) * 10)
-        matchingTokens[i].style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
+        // If the player is just visiting
+        } else{
+            token.setAttribute('jail', false)
+            matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="false"]')
+            xTransform = matchingProperty.getBoundingClientRect().width / 2
+            
+            for (i = 0; i < matchingTokens.length; i++){
+                //matchingTokens[i].style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
+                matchingTokens[i].style.marginLeft = '-' + token.offsetWidth / 2 + 'px'
+                //matchingTokens[i].style.marginTop = yTransform + 'px'
+            }
+
+            //desiredLeft = matchingProperty.offsetLeft 
+            //desiredBottom = 0
+            //desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
+        }
     }
 
     //token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
