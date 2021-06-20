@@ -839,7 +839,8 @@ button {
     left: calc(50% - 10px);
     transition: 0.3s;
     transform: scale(0);
-    pointer-events: none; }
+    pointer-events: none;
+    z-index: 2; }
 
 .full-portfolio-item[mortgaged="true"]:after,
 #board > div[mortgaged="true"]:after {

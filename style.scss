@@ -878,6 +878,7 @@ $columnsize: 80px;
         transition: 0.3s;
         transform: scale(0);
         pointer-events: none;
+        z-index: 2;
     }
 }
 

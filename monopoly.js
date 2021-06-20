@@ -249,37 +249,80 @@ let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol 
 
 // Saved game functions ------------------------------------------------------//
 
-function checkForSavedGame(){
+function savedGameFound(){
 
-    if (localStorage.getItem('gameState')){
-        openPopup('', 'Saved game found')
+    openPopup('', 'Saved game found')
 
-        let newPopupContent = createElement('div', '', 'A previous saved game has been found. Would you like to continue?')
-        
-        let continueButton = createElement('button', '', 'Continue with saved game')
-        continueButton.addEventListener('click', loadSavedGame)
-        newPopupContent.appendChild(continueButton)
-        
-        let newGameButton = createElement('button', '', 'Start new game')
-        newGameButton.addEventListener('click', function(){
-            localStorage.clear()
-            closePopup()
-        })
-        newPopupContent.appendChild(newGameButton)
+    let newPopupContent = createElement('div', '', '<p>A previous saved game has been found. Would you like to continue?</p>')
+    
 
-        popupMessage.appendChild(newPopupContent)
 
-    }
+    let continueButton = createElement('button', '', 'Continue with saved game')
+    continueButton.addEventListener('click', loadSavedGame)
+    newPopupContent.appendChild(continueButton)
+    
+
+
+
+    let newGameButton = createElement('button', '', 'Start new game')
+    newGameButton.addEventListener('click', function(){
+        localStorage.clear()
+        closePopup()
+    })
+    newPopupContent.appendChild(newGameButton)
+
+
+
+    popupMessage.appendChild(newPopupContent)
 }
+
 
 function saveGame(){
     localStorage.setItem('gameState', JSON.stringify(gameState))
     localStorage.setItem('players', JSON.stringify(players))
+    localStorage.setItem('availableHouses', availableHouses)
+    localStorage.setItem('availableHotels', availableHotels)
+    localStorage.setItem('turn', turn)
 }
 
 function loadSavedGame(){
     gameState = JSON.parse(localStorage.getItem('gameState'))
     players = JSON.parse(localStorage.getItem('players'))
+    availableHouses = parseInt(localStorage.getItem('availableHouses'))
+    availableHouses = parseInt(localStorage.getItem('availableHouses'))
+    turn = parseInt(localStorage.getItem('turn'))
+
+    // Close the popup and get rid of the player creator
+    closePopup()
+    let newPlayersOverlay = document.querySelector('#new-player-overlay')
+    newPlayersOverlay.parentNode.removeChild(newPlayersOverlay)
+
+    // Generate the necessary on-page elements for each player
+    players.forEach(generatePlayerSummary)
+    generateTokens()
+
+    // Put all of the tokens in their correct places.
+    players.forEach(function(player){
+        positionToken(document.querySelector('#board > .token[position="' + player.position + '"]'), player.position)
+    })
+
+    // Note - setting this to one less and then immediately incrementing it
+    // forces the game to reset the visibilty of the buttons without the need
+    // for a separate function to handle that.
+    turn--
+    increasePlayerTurn()
+
+    updatePlayerDetails()
+
+
+    // Make sure the spaces on the board have their relevant attributes.
+    for (i = 0; i < gameState.length; i++){
+        let space = document.querySelector('#board > div.space[position="' + i + '"]')
+        let state = gameState[i]
+        space.setAttribute('mortgaged', state.mortgaged)
+        space.setAttribute('houses', state.houses)
+    }
+
 }
 
 
@@ -291,14 +334,15 @@ initialisePage()
 
 function initialisePage(){
 
-    checkForSavedGame()
+    initialiseGameState()
+
+    // Check whether a saved game exists, and act accordingly
+    if (localStorage.getItem('gameState')){
+        savedGameFound()
+    }
 
     // Generate the page where the players are determined.
     intialisePlayerCreator()
-
-    // Initialise the game state variable, which is used to store information
-    // about the current state of the game. 
-    initialiseGameState()
 
     // Generate all of the spaces on the board
     // While this could be done in the HTML, doing it based on a JS array means
@@ -368,6 +412,7 @@ function generateBoard(){
 
 
         let newSpace = createElement('div', space.type)
+        newSpace.classList.add('space')
         newSpace.setAttribute('id', space.name.replace(/\s+/g, '-').toLowerCase())
 
         newSpace.setAttribute('area', space.boardArea)
@@ -1110,7 +1155,7 @@ function createPlayers(){
 
     // Generate an object for each player, and add it to the players array
     ;[].forEach.call(document.querySelectorAll('.player-creation-panel'), function(playerCreationPanel){
-        let newPlayer = {money:1500, inJail: 0, properties: [], getOutCards: []}
+        let newPlayer = {money:1500, inJail: 0, properties: [], getOutCards: [], position: 0}
         newPlayer.id = playerCreationPanel.getAttribute('player')
         newPlayer.token = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('chosentoken')
         
@@ -1148,26 +1193,7 @@ function createPlayers(){
     players.forEach(generatePlayerSummary)
 
     // Create a token for each player
-    players.forEach(function(player){
-        let newToken = document.createElement('div')
-        let newTokenBackground = createElement('div', 'token-background')
-        newTokenBackground.style.backgroundColor = player.colour
-        newToken.appendChild(newTokenBackground)
-
-        newToken.classList.add('token')
-        newToken.classList.add(player.token)
-        newToken.setAttribute('id', 'player' + (player.id) + 'token')
-        newToken.setAttribute('position', 0)
-        newToken.setAttribute('area', 'south')
-        newToken.setAttribute('player', player.id)
-        newToken.setAttribute('jail', false)
-        //newToken.setAttribute('jail', false)
-        board.appendChild(newToken)
-        
-    })
-
-
-
+    generateTokens()
 
 
     // Remove the player select overlay once done.
@@ -1185,8 +1211,8 @@ function createPlayers(){
     // set the player's position attribute.
     let i = 0
     ;[].forEach.call(document.querySelectorAll('.token'), function(token){
-        positionToken(token, 0)
-        players[i].position = 0
+        positionToken(token, players[i].position)
+        //players[i].position = 0
         i++
     })
     
@@ -1199,6 +1225,23 @@ function createPlayers(){
 }
 
 
+function generateTokens(){
+    players.forEach(function(player){
+        let newToken = document.createElement('div')
+        let newTokenBackground = createElement('div', 'token-background')
+        newTokenBackground.style.backgroundColor = player.colour
+        newToken.appendChild(newTokenBackground)
+
+        newToken.classList.add('token')
+        newToken.classList.add(player.token)
+        newToken.setAttribute('id', 'player' + (player.id) + 'token')
+        newToken.setAttribute('position', player.position)
+        newToken.setAttribute('player', player.id)
+        let inJail = player.inJail > 0 ? true : false
+        newToken.setAttribute('jail', inJail)
+        board.appendChild(newToken)
+    })
+}
 
 function generatePlayerSummary(player){
     let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
@@ -2221,18 +2264,25 @@ function positionToken(token, position){
     let xTransform = 0
     let yTransform = 0
 
-    let jail = players[token.getAttribute('player') - 1].inJail > 0 ? true : false
+    let tokenOwner = players[token.getAttribute('player') - 1]
+    console.log(tokenOwner)
+
+
+
+    let jail = tokenOwner.inJail > 0 ? true : false
     if (position == 10){
         if (jail){
-            matchingProperty = document.querySelector('#board > div[position="10"] .in-jail')
+            matchingProperty = document.querySelector('#board > .space[position="10"] .in-jail')
             xTransform += document.querySelector('.just-visiting').offsetWidth 
         } else{
-            matchingProperty = document.querySelector('#board > div[position="10"] .just-visiting')
+            matchingProperty = document.querySelector('#board > .space[position="10"] .just-visiting')
         }
         token.setAttribute('jail', jail)
     } else{
-        matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
+        matchingProperty = document.querySelector('#board > .space[position="' + position + '"]')
     }
+
+    console.log(matchingProperty)
 
     token.style.gridArea = 'position-' + position
     xTransform += (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
@@ -2254,7 +2304,7 @@ function positionToken(token, position){
     }
 
 
-    players[turn - 1].position = position
+    tokenOwner.position = position
 }
 
 // Puts the token in jail and plays an animation. No maths is involved.
