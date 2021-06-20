@@ -2173,134 +2173,47 @@ function specialEndPositions(endPosition){
 
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
-    let matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
-   
+
+    let matchingProperty
+    let xTransform = 0
+    let yTransform = 0
+
+    let jail = players[token.getAttribute('player') - 1].inJail > 0 ? true : false
+    console.log(jail)
+
+    if (position == 10){
+        if (jail){
+            matchingProperty = document.querySelector('#board > div[position="10"] .in-jail')
+            xTransform += document.querySelector('.just-visiting').offsetWidth 
+        } else{
+            matchingProperty = document.querySelector('#board > div[position="10"] .just-visiting')
+        }
+        token.setAttribute('jail', jail)
+    } else{
+        matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
+    }
 
     token.style.gridArea = 'position-' + position
-    let xTransform = (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
-    let yTransform = (matchingProperty.getBoundingClientRect().height / 2 - (token.offsetHeight / 2)) 
+    xTransform += (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
+    yTransform += (matchingProperty.getBoundingClientRect().height / 2 - (token.offsetHeight / 2)) 
 
 
 
 
     // Check whether there are other tokens also on this property. If so, shift
-    // this one down a little bit.
-
-
-    let matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"]')
+    // them about so all are visible.
+    let matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="' + jail + '"]')
+    console.log(matchingTokens)
 
     let factor = (matchingTokens.length - 1) * 10
     yTransform -= factor / 2 + 5
 
     for (i = 0; i < matchingTokens.length; i++){
         yTransform += 10
-        //matchingTokens[i].style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
         matchingTokens[i].style.marginLeft = xTransform + 'px'
         matchingTokens[i].style.marginTop = yTransform + 'px'
     }
 
-    if (position === 10){
-        // If the player is in jail
-        if (players[turn - 1].inJail !== 0){
-            token.setAttribute('jail', true)
-            matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="true"]')
-            //xTransform = matchingProperty.getBoundingClientRect().width / 2
-            //xTransform += matchingProperty.getBoundingClientRect().width / 2
-
-            //desiredLeft = matchingProperty.offsetLeft + (matchingProperty.offsetWidth - token.offsetWidth) - 5
-            //desiredTop -= 10
-
-            for (i = 0; i < matchingTokens.length; i++){
-                matchingTokens[i].style.marginLeft = 0
-            }
-
-
-
-        // If the player is just visiting
-        } else{
-            token.setAttribute('jail', false)
-            matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="true"]')
-            xTransform = matchingProperty.getBoundingClientRect().width / 2
-            
-            for (i = 0; i < matchingTokens.length; i++){
-                matchingTokens[i].style.marginLeft = '-' + token.offsetWidth / 2 + 'px'
-            }
-
-            //desiredLeft = matchingProperty.offsetLeft 
-            //desiredBottom = 0
-            //desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
-        }
-    }
-
-    //token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
-
-
-    //let row = matchingProperty.parentNode.getAttribute('id')
-    
-    /*// The token should sit half way from the top of the property, minus half the token's height.
-    let desiredTop = matchingProperty.offsetTop += ((matchingProperty.offsetHeight / 2) - (token.offsetHeight / 2))
-
-    // The token should sit half way from the left of the property, minus half the token's width.
-    let desiredLeft = matchingProperty.offsetLeft += ((matchingProperty.offsetWidth / 2) - (token.offsetWidth / 2))
-
-    let desiredRight = matchingProperty.offsetRight
-    let desiredBottom = matchingProperty.offsetBottom
-
-
-    if (matchingProperty.getAttribute('id') === 'jail'){
-
-        // If the player is in jail
-        if (players[turn - 1].inJail !== 0){
-            desiredLeft = matchingProperty.offsetLeft + (matchingProperty.offsetWidth - token.offsetWidth) - 5
-            desiredTop -= 10
-            token.setAttribute('jail', true)
-
-        // If the player is just visiting
-        } else{
-            desiredLeft = matchingProperty.offsetLeft 
-            desiredBottom = 0
-            desiredTop = matchingProperty.offsetTop + matchingProperty.offsetHeight - token.offsetHeight
-            token.setAttribute('jail', false)
-        }
-
-
-    }
-
-    // If there are already tokens on the property, reshuffle them so they don't
-    // sit on top of each other.
-    let desiredZindex = 1
-
-    if (matchingProperty.getAttribute('id') !== 'jail'){
-        ;[].forEach.call(document.querySelectorAll('.token[position="' + position + '"]'), function(node){
-            node.style.transform = 'translateY(' + ((desiredZindex - 1) * 8) + 'px)'
-            node.style.Zindex = desiredZindex
-            desiredZindex++
-        })
-    } else{
-
-        let jailTokens = document.querySelectorAll('.token[position="10"][jail="true"]')
-        let distance = 8
-        
-        for (i = 0; i < jailTokens.length; i++){
-            let transform = 1/2 * distance * (2 * i - jailTokens.length + 1)
-
-            jailTokens[i].style.transform = 'translateY(' + transform + 'px'
-        }
-
-        let visitingTokens = document.querySelectorAll('.token[position="10"][jail="false"]')
-        for (i = 0; i < visitingTokens.length; i++){
-            visitingTokens[i].style.transform = 'translateX(' + (i * 8) + 'px'
-        }
-    }
-
-
-
-    token.style.top = desiredTop + 'px'
-    token.style.left = desiredLeft + 'px'
-    token.style.right = desiredRight + 'px'
-    token.style.bottom = desiredBottom + 'px'
-    token.style.Zindex = desiredZindex
-    //token.setAttribute('area', row)*/
 
     players[turn - 1].position = position
 }

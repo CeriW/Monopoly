@@ -1022,21 +1022,13 @@ $columnsize: 80px;
 
 /* Player tokens -------------------------------------------------------------*/
 
-// Eventually there'll be mutliple token types, with each player being able to
-// choose their token. This will do for now.
-.token{
-    //background: url('images/token.svg') center no-repeat;
-    //background-size: 35px;
-}
 
 .token{
     width: 46px;
     height: 28px;
-    //position: absolute !important;
     z-index: 2;
     background-size: 35px;
     background-repeat: no-repeat;
-    //background-position: center bottom;
     background-position: 7px -2px;
 
     
@@ -1065,6 +1057,11 @@ $columnsize: 80px;
     .token.#{$token}{
         background-image: url('images/tokens/#{$token}.svg');
     }
+}
+
+#board > .token[position="10"][jail="false"]{
+    position: relative;
+    z-index: 3;
 }
 
 /*
@@ -1520,12 +1517,10 @@ $jailAnimationLength: 1.5;
 
 .in-jail{
     grid-area: in-jail;
-    background: red;
 }
 
 .just-visiting{
     grid-area: just-visiting;
-    background: green;
 }
 
 .player-cards{

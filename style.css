@@ -1022,6 +1022,10 @@ button {
 .token.thimble {
   background-image: url("images/tokens/thimble.svg"); }
 
+#board > .token[position="10"][jail="false"] {
+  position: relative;
+  z-index: 3; }
+
 /*
 .player-bid-interface .player-token-icon[player="1"]{
     background-color: yellow;}
@@ -1429,12 +1433,10 @@ body:not(.warning-open) #warning {
   grid-template-areas: "just-visiting in-jail" "just-visiting ."; }
 
 .in-jail {
-  grid-area: in-jail;
-  background: red; }
+  grid-area: in-jail; }
 
 .just-visiting {
-  grid-area: just-visiting;
-  background: green; }
+  grid-area: just-visiting; }
 
 .player-cards {
   background: #fff;
