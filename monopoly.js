@@ -2173,8 +2173,20 @@ function positionToken(token, position){
     let xTransform = (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
     let yTransform = (matchingProperty.getBoundingClientRect().height / 2 - (token.offsetHeight / 2)) 
 
-    token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
 
+
+
+    // Check whether there are other tokens also on this property. If so, shift
+    // this one down a little bit.
+
+    ;[].forEach.call(document.querySelectorAll('#board > .token'), function(node){
+        if (node.getAttribute('position') == position){
+            yTransform += 10
+        }
+    })
+
+
+    token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
 
 
     //let row = matchingProperty.parentNode.getAttribute('id')
