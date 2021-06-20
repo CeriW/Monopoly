@@ -52,7 +52,7 @@ ONGOING THINGS
 
 STRETCH GOALS
 
-
+- Stats (graphs?)
 
 - Add a Monopoly rulebook
 	- The Monopoly wiki is really good. Include links and/or snippets from here.

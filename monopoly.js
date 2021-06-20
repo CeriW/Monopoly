@@ -89,8 +89,14 @@ let transactionQueue = []
 // to this amount so they can update it, it is a global variable.
 let currentDebt = 0
 
-
+//TODO - description
 let feedDetails = []
+
+
+// Contains an archive of all of the items which have been in the feed.
+// This will be looped through and put back into the feed when saved games
+// are loaded.
+let feedArchive = []
 
 /*
  Community chest and chance cards have a number of properties:
@@ -252,26 +258,21 @@ let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol 
 function savedGameFound(){
 
     openPopup('', 'Saved game found')
-
     let newPopupContent = createElement('div', '', '<p>A previous saved game has been found. Would you like to continue?</p>')
     
 
-
+    // Create the button to continue the game
     let continueButton = createElement('button', '', 'Continue with saved game')
     continueButton.addEventListener('click', loadSavedGame)
     newPopupContent.appendChild(continueButton)
     
-
-
-
+    // Create the button to delete the saved data and start a new game.
     let newGameButton = createElement('button', '', 'Start new game')
     newGameButton.addEventListener('click', function(){
         localStorage.clear()
         closePopup()
     })
     newPopupContent.appendChild(newGameButton)
-
-
 
     popupMessage.appendChild(newPopupContent)
 }
@@ -283,6 +284,7 @@ function saveGame(){
     localStorage.setItem('availableHouses', availableHouses)
     localStorage.setItem('availableHotels', availableHotels)
     localStorage.setItem('turn', turn)
+    localStorage.setItem('feedArchive', JSON.stringify(feedArchive))
 }
 
 function loadSavedGame(){
@@ -291,6 +293,7 @@ function loadSavedGame(){
     availableHouses = parseInt(localStorage.getItem('availableHouses'))
     availableHouses = parseInt(localStorage.getItem('availableHouses'))
     turn = parseInt(localStorage.getItem('turn'))
+    feedArchive = JSON.parse(localStorage.getItem('feedArchive'))
 
     // Close the popup and get rid of the player creator
     closePopup()
@@ -322,6 +325,15 @@ function loadSavedGame(){
         space.setAttribute('mortgaged', state.mortgaged)
         space.setAttribute('houses', state.houses)
     }
+
+    // Repopulate the feed
+    feedArchive.forEach(function(entry){
+        addToFeed(entry.message, entry.type)
+    })
+
+    addToFeed('Saved game loaded', 'save')
+
+
 
 }
 
@@ -2265,9 +2277,6 @@ function positionToken(token, position){
     let yTransform = 0
 
     let tokenOwner = players[token.getAttribute('player') - 1]
-    console.log(tokenOwner)
-
-
 
     let jail = tokenOwner.inJail > 0 ? true : false
     if (position == 10){
@@ -2281,8 +2290,6 @@ function positionToken(token, position){
     } else{
         matchingProperty = document.querySelector('#board > .space[position="' + position + '"]')
     }
-
-    console.log(matchingProperty)
 
     token.style.gridArea = 'position-' + position
     xTransform += (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
@@ -5538,13 +5545,9 @@ function calculatePlayerWorth(playerID){
 // FEED FUNCTIONS ------------------------------------------------------------//
 
 function addToFeed(message,type){
-    let newMessage = document.createElement('div')
-    newMessage.innerHTML = '<div>' + message + '</div>'
-    newMessage.classList.add(type)
-    
-    //feed.appendChild(newMessage)
-
+    let newMessage = createElement('div', type, ('<div>' + message + '</div>'))
     feed.insertBefore(newMessage, feed.firstChild)
+    feedArchive.push({message: message, type: type})
 }
 
 

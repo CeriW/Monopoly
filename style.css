@@ -2357,6 +2357,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .bankrupt {
   background-image: url("images/feed-icons/bankrupt.svg"), url("images/feed-icons/feed-circle.svg"); }
 
+.save {
+  background-image: url("images/feed-icons/save-game.svg"), url("images/feed-icons/feed-circle.svg"); }
+
 /* Auction panel  ------------------------------------------------------------*/
 .auction-screen {
   display: flex;
