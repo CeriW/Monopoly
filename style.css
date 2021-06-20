@@ -1421,6 +1421,21 @@ body:not(.warning-open) #warning {
   background-size: contain;
   color: transparent; }
 
+#jail {
+  display: grid;
+  grid-template-columns: 1fr 2.8fr;
+  grid-template-rows: 2.8fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas: "just-visiting in-jail" "just-visiting ."; }
+
+.in-jail {
+  grid-area: in-jail;
+  background: red; }
+
+.just-visiting {
+  grid-area: just-visiting;
+  background: green; }
+
 .player-cards {
   background: #fff;
   border: 3px solid #000;

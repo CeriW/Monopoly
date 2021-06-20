@@ -186,7 +186,7 @@ let spaces =  [
     {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
     {name: 'Pentonville Road',      type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[8,16,40,100,300,450,600],      houseCost: 50, hotelCost: 50},
 
-    {name: 'Jail',                  type: 'special',            price: null,    group: 'corner',       boardArea: 'west'},
+    {name: 'Jail',                  type: 'jail',               price: null,    group: 'corner',       boardArea: 'west'},
     {name: 'Pall Mall',             type: 'property',           price: 140,     group: 'pink',         boardArea: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100},
     {name: 'Electric Company',      type: 'utility',            price: 150,     group: 'utility',      boardArea: 'west', rent:["If one utility is owned, rent is 4 times amount shown on dice.", "If both utilities are owned, rent is 10 times amount shown on dice."]},
     {name: 'Whitehall',             type: 'property',           price: 140,     group: 'pink',         boardArea: 'west', rent:[10,20,50,150,450,625,750],      houseCost: 100, hotelCost: 100},
@@ -338,10 +338,17 @@ function generateBoard(){
 
         if (space.type === "property" || space.type === "station" || space.type === "utility"){
             newSpace.innerHTML += '<div class="ownership-tag"><svg enable-background="new 0 0 45.533 44" version="1.1" viewBox="0 0 45.533 44" width="20px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><polygon points="1.5 17.427 1.5 1.5 44.033 1.5 44.033 18.429 23.265 41.748" fill="transparent"/></svg></div>'
+        } else if (space.type === 'jail'){
+
+            newSpace.appendChild(createElement('div', 'just-visiting'))
+            newSpace.appendChild(createElement('div', 'in-jail'))
         }
         
-        newSpace.innerHTML += '<div class="property-name">' + space.name.toUpperCase() + '</div>'
-        newSpace.innerHTML += '<div class="property-nickname">' + space.shortName.toUpperCase() + '</div>'
+        if (space.type !== 'special' && space.type !== 'jail'){
+            newSpace.innerHTML += '<div class="property-name">' + space.name.toUpperCase() + '</div>'
+            newSpace.innerHTML += '<div class="property-nickname">' + space.shortName.toUpperCase() + '</div>'
+        }
+
 
         if (space.price){
             newSpace.innerHTML += '<div class="property-price">' + currencySymbolSpan + space.price + '</div>'
@@ -375,6 +382,7 @@ function generateBoard(){
 
             newSpace.appendChild(houseContainer)
         }
+
 
         
 
@@ -2194,23 +2202,28 @@ function positionToken(token, position){
     if (position === 10){
         // If the player is in jail
         if (players[turn - 1].inJail !== 0){
+            token.setAttribute('jail', true)
+            matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="true"]')
+            //xTransform = matchingProperty.getBoundingClientRect().width / 2
+            //xTransform += matchingProperty.getBoundingClientRect().width / 2
+
             //desiredLeft = matchingProperty.offsetLeft + (matchingProperty.offsetWidth - token.offsetWidth) - 5
             //desiredTop -= 10
-            xTransform = matchingProperty.getBoundingClientRect().width / 2
-            matchingTokens[i].style.marginLeft = 0
 
-            token.setAttribute('jail', true)
+            for (i = 0; i < matchingTokens.length; i++){
+                matchingTokens[i].style.marginLeft = 0
+            }
+
+
 
         // If the player is just visiting
         } else{
             token.setAttribute('jail', false)
-            matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="false"]')
+            matchingTokens = document.querySelectorAll('#board > .token[position="' + position + '"][jail="true"]')
             xTransform = matchingProperty.getBoundingClientRect().width / 2
             
             for (i = 0; i < matchingTokens.length; i++){
-                //matchingTokens[i].style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
                 matchingTokens[i].style.marginLeft = '-' + token.offsetWidth / 2 + 'px'
-                //matchingTokens[i].style.marginTop = yTransform + 'px'
             }
 
             //desiredLeft = matchingProperty.offsetLeft 
