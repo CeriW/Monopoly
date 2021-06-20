@@ -26,13 +26,12 @@ $border: 3px solid $black;
     background: $lightgrey;
     color: rgb(143, 143, 143);
     pointer-events: none;
-    cursor: not-allowed;
 }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
 @font-face {font-family:"Kabel-Heavy";src:url("fonts/Kabel-Heavy.eot?") format("eot"),url("fonts/Kabel-Heavy.woff") format("woff"),url("fonts/Kabel-Heavy.ttf") format("truetype"),url("fonts/Kabel-Heavy.svg#Kabel-Heavy") format("svg");font-weight:normal;font-style:normal;}
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
 
 body{
     font-family: 'Kabel-Heavy', Poppins, sans-serif;
@@ -494,6 +493,7 @@ $tokens:
 ; 
 
 @each $token in $tokens{
+    .saved-game-summary .token[token="#{$token}"],
     .bankruptcy-title .token[token="#{$token}"],
     .options-panel-owner .token[token="#{$token}"],
     .token-option-#{$token},
@@ -611,7 +611,57 @@ $tokens:
     }
 }
 
-/* BOARD --------------------------------------------------------------------- */
+
+/* SAVED GAME SCREEN  ------------------------------------------------------- */
+
+.saved-game-found{
+
+    button{
+        margin: 5px;
+        min-width: 250px;
+    }
+}
+
+.saved-game-summary{
+    margin-top: 30px;
+    //display: flex;
+    //justify-content: center;
+    //flex-wrap: wrap;
+}
+
+.saved-game-summary > div{
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0 20px;
+    grid-template-areas:
+      "token name"
+      "token money"
+      "token properties";
+      text-align: left;
+      margin: 3px;
+      padding: 10px;
+
+    .token {
+        grid-area: token;
+        width: auto;
+        height: auto;
+        background-position: center;
+    }
+
+    & > div:not(.name){
+        font-size: 18px;
+    }
+
+    .name { grid-area: name;}
+    .money { grid-area: money; }
+    .properties { grid-area: properties; }
+}
+
+
+
+
+/* BOARD -------------------------------------------------------------------- */
 
 $columnsize: 80px;
 
@@ -1632,7 +1682,6 @@ $jailAnimationLength: 1.5;
 
 body[dice-roll-available="false"] .roll-dice-button,
 body[end-turn-available="false"] .end-turn-button{
-    pointer-events: none;
     @include disabledButton()
 }
 

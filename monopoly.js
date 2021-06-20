@@ -232,7 +232,7 @@ let gameState = []
 let players = []
 
 // The maximum number of players allowed in the game.
-let minNumberOfPlayers = 4
+let minNumberOfPlayers = 2
 let maxNumberOfPlayers = 15
 
 let availableActions = {
@@ -258,7 +258,7 @@ let currencySymbolSpan = '<span class="currencySymbol">&nbsp;' + currencySymbol 
 function savedGameFound(){
 
     openPopup('', 'Saved game found')
-    let newPopupContent = createElement('div', '', '<p>A previous saved game has been found. Would you like to continue?</p>')
+    let newPopupContent = createElement('div', 'saved-game-found', '<p>A previous saved game has been found. Would you like to continue?</p>')
     
 
     // Create the button to continue the game
@@ -273,6 +273,36 @@ function savedGameFound(){
         closePopup()
     })
     newPopupContent.appendChild(newGameButton)
+
+    // Generate some details about the game
+    let gameSummary = createElement('div', 'saved-game-summary')
+    let savedPlayerDetails = JSON.parse(localStorage.getItem('players'))
+    let savedGameState = JSON.parse(localStorage.getItem('gameState'))
+    console.log(savedPlayerDetails)
+    console.log(savedGameState)
+
+    savedPlayerDetails.forEach(function(player){
+        let newDetail = createElement('div')
+        newDetail.style.backgroundColor = player.colour
+        newDetail.appendChild(createElement('div', 'token', '', 'token', player.token))
+        newDetail.appendChild(createElement('div', 'name', player.name))
+        newDetail.appendChild(createElement('div', 'money', '<b>Money</b>: ' + player.money))
+
+        let propertyCount = 0
+        savedGameState.forEach(function(item){
+            if (item.owner && item.owner == player.id){
+                propertyCount++
+            }
+        })
+        newDetail.appendChild(createElement('div', 'properties', 'Properties: ' + propertyCount))
+
+
+        gameSummary.appendChild(newDetail)
+
+
+    })
+
+    newPopupContent.appendChild(gameSummary)
 
     popupMessage.appendChild(newPopupContent)
 }
@@ -596,11 +626,7 @@ function addEvents(){
     // When the window is resized, put the tokens back where they belong.
     // While the game isn't really designed to be run in small windows, this is
     // a small touch that makes it slightly better,
-    window.addEventListener('resize', function(){
-        ;[].forEach.call(document.querySelectorAll('.token'), function(token){
-            positionToken(token, token.getAttribute('position'))
-        })
-    })
+
 }
 
 function resizeBoard(){
@@ -1252,6 +1278,12 @@ function generateTokens(){
         let inJail = player.inJail > 0 ? true : false
         newToken.setAttribute('jail', inJail)
         board.appendChild(newToken)
+    })
+
+    window.addEventListener('resize', function(){
+        ;[].forEach.call(document.querySelectorAll('.token'), function(token){
+            positionToken(token, token.getAttribute('position'))
+        })
     })
 }
 

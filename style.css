@@ -1,7 +1,7 @@
 /* Monopoly SCSS */
 /* Created by Ceri Woolway beginning October 2020 */
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
 @font-face {
   font-family: "Kabel-Heavy";
   src: url("fonts/Kabel-Heavy.eot?") format("eot"), url("fonts/Kabel-Heavy.woff") format("woff"), url("fonts/Kabel-Heavy.ttf") format("truetype"), url("fonts/Kabel-Heavy.svg#Kabel-Heavy") format("svg");
@@ -363,66 +363,77 @@ button {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
 
+.saved-game-summary .token[token="dog"],
 .bankruptcy-title .token[token="dog"],
 .options-panel-owner .token[token="dog"],
 .token-option-dog,
 .token-selector-chosen-indicator[chosentoken="dog"] {
   background-image: url("images/tokens/dog.svg"); }
 
+.saved-game-summary .token[token="iron"],
 .bankruptcy-title .token[token="iron"],
 .options-panel-owner .token[token="iron"],
 .token-option-iron,
 .token-selector-chosen-indicator[chosentoken="iron"] {
   background-image: url("images/tokens/iron.svg"); }
 
+.saved-game-summary .token[token="thimble"],
 .bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
 .token-option-thimble,
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
 
+.saved-game-summary .token[token="car"],
 .bankruptcy-title .token[token="car"],
 .options-panel-owner .token[token="car"],
 .token-option-car,
 .token-selector-chosen-indicator[chosentoken="car"] {
   background-image: url("images/tokens/car.svg"); }
 
+.saved-game-summary .token[token="battleship"],
 .bankruptcy-title .token[token="battleship"],
 .options-panel-owner .token[token="battleship"],
 .token-option-battleship,
 .token-selector-chosen-indicator[chosentoken="battleship"] {
   background-image: url("images/tokens/battleship.svg"); }
 
+.saved-game-summary .token[token="hat"],
 .bankruptcy-title .token[token="hat"],
 .options-panel-owner .token[token="hat"],
 .token-option-hat,
 .token-selector-chosen-indicator[chosentoken="hat"] {
   background-image: url("images/tokens/hat.svg"); }
 
+.saved-game-summary .token[token="penguin"],
 .bankruptcy-title .token[token="penguin"],
 .options-panel-owner .token[token="penguin"],
 .token-option-penguin,
 .token-selector-chosen-indicator[chosentoken="penguin"] {
   background-image: url("images/tokens/penguin.svg"); }
 
+.saved-game-summary .token[token="dinosaur"],
 .bankruptcy-title .token[token="dinosaur"],
 .options-panel-owner .token[token="dinosaur"],
 .token-option-dinosaur,
 .token-selector-chosen-indicator[chosentoken="dinosaur"] {
   background-image: url("images/tokens/dinosaur.svg"); }
 
+.saved-game-summary .token[token="cat"],
 .bankruptcy-title .token[token="cat"],
 .options-panel-owner .token[token="cat"],
 .token-option-cat,
 .token-selector-chosen-indicator[chosentoken="cat"] {
   background-image: url("images/tokens/cat.svg"); }
 
+.saved-game-summary .token[token="ducky"],
 .bankruptcy-title .token[token="ducky"],
 .options-panel-owner .token[token="ducky"],
 .token-option-ducky,
 .token-selector-chosen-indicator[chosentoken="ducky"] {
   background-image: url("images/tokens/ducky.svg"); }
 
+.saved-game-summary .token[token="thimble"],
 .bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
 .token-option-thimble,
@@ -508,7 +519,38 @@ button {
     background: #0aa959;
     color: #fff; }
 
-/* BOARD --------------------------------------------------------------------- */
+/* SAVED GAME SCREEN  ------------------------------------------------------- */
+.saved-game-found button {
+  margin: 5px;
+  min-width: 250px; }
+
+.saved-game-summary {
+  margin-top: 30px; }
+
+.saved-game-summary > div {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 0 20px;
+  grid-template-areas: "token name" "token money" "token properties";
+  text-align: left;
+  margin: 3px;
+  padding: 10px; }
+  .saved-game-summary > div .token {
+    grid-area: token;
+    width: auto;
+    height: auto;
+    background-position: center; }
+  .saved-game-summary > div > div:not(.name) {
+    font-size: 18px; }
+  .saved-game-summary > div .name {
+    grid-area: name; }
+  .saved-game-summary > div .money {
+    grid-area: money; }
+  .saved-game-summary > div .properties {
+    grid-area: properties; }
+
+/* BOARD -------------------------------------------------------------------- */
 #board-container {
   display: flex;
   align-items: center;
@@ -1523,11 +1565,9 @@ body:not(.warning-open) #warning {
 
 body[dice-roll-available="false"] .roll-dice-button,
 body[end-turn-available="false"] .end-turn-button {
-  pointer-events: none;
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 body[get-out-of-jail="false"] .get-out-50-button,
 body[get-out-of-jail="false"] .roll-doubles-for-jail,
@@ -1548,8 +1588,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
   display: initial;
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 /* Property overview  --------------------------------------------------------*/
 .property-overview {
@@ -1669,8 +1708,7 @@ body[build-house="false"] .colour-set-button,
 .disabled-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 body[mortgage-property="false"] .property-options .mortgage-button,
 body[unmortgage-property="false"] .property-options .unmortgage-button {
@@ -1682,8 +1720,7 @@ body[unmortgage-property="false"] .property-options .unmortgage-button {
   .house-visual-display[houses="5"] + .button-panel .build-house-button {
     background: #ccc;
     color: #8f8f8f;
-    pointer-events: none;
-    cursor: not-allowed; }
+    pointer-events: none; }
   .house-visual-display[houses="5"] + .button-panel .sell-house-button .sell-house {
     display: none; }
   .house-visual-display[houses="5"] + .button-panel .build-house-button .maximum-number-of-buildings-reached {
@@ -1729,8 +1766,7 @@ body[build-house="none-left"][build-hotel="true"]{
 body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
   body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button span:not(.no-more-houses-in-bank) {
     display: none; }
   body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button .no-more-houses-in-bank {
@@ -1745,8 +1781,7 @@ body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .buil
 body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
   body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
     display: none; }
   body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button .no-more-hotels-in-bank {
@@ -1767,8 +1802,7 @@ body[build-hotel="none-left"]{
 body[build-house="not-enough-money"] .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 body[build-house="not-enough-money"] .build-house-button span:not(.not-enough-money) {
   display: none !important; }
@@ -1779,8 +1813,7 @@ body[build-house="not-enough-money"] .not-enough-money {
 body[build-hotel="not-enough-money"] .build-hotel-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 body[build-hotel="not-enough-money"] .build-hotel-button span:not(.not-enough-money) {
   display: none !important; }
@@ -1831,14 +1864,12 @@ body[build-hotel="not-enough-money"] .not-enough-money {
 body[build-house="false"] .house-visual-display:not([houses="4"]) + .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 /* Owner details  ------------------------------------------------------------*/
 .options-panel-owner {
@@ -2429,8 +2460,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .player-bid-interface.current-winner button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 .current-bid-container {
   background: #d5e8d4;
@@ -2451,8 +2481,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .auction-screen input:invalid + button {
   background: #ccc;
   color: #8f8f8f;
-  pointer-events: none;
-  cursor: not-allowed; }
+  pointer-events: none; }
 
 .player-bid-interface.current-winner {
   background: #0aa959;
@@ -2596,8 +2625,7 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   #bankruptcy-message .full-portfolio-item[mortgageable="false"] .mortgage-button {
     background: #ccc;
     color: #8f8f8f;
-    pointer-events: none;
-    cursor: not-allowed; }
+    pointer-events: none; }
 
 /* Mortgages after bankruptcy ------------------------------------------------*/
 .bankruptcy-mortgage-table > div {
