@@ -681,7 +681,7 @@ $columnsize: 80px;
 
 
 
-@for $i from 1 through 40 {
+@for $i from 0 through 40 {
 
     #board > div[position="#{$i}"]{
         grid-area: position-#{$i};
@@ -690,6 +690,7 @@ $columnsize: 80px;
 
 #board > div[position]{
     font-size: 10px;
+    position: relative;
 }
 
 
@@ -1031,12 +1032,13 @@ $columnsize: 80px;
 .token{
     width: 46px;
     height: 28px;
-    position: absolute !important;
+    //position: absolute !important;
     z-index: 2;
     background-size: 35px;
     background-repeat: no-repeat;
     //background-position: center bottom;
     background-position: 7px -2px;
+
     
     // TODO - removing pointer events on this lets clicks get through to the
     // space underneath which can then trigger a click event. There is
@@ -1100,7 +1102,7 @@ $columnsize: 80px;
 /* Due to the way the JS calculates the correct position for the token and the 
    side the borders end up on, there are slightly irregularities. Likely
    not even noticeable but it bothers me otherwise */
-.token[area="south"]{
+/*.token[area="south"]{
     margin-left: 2px;
 }
 
@@ -1110,7 +1112,7 @@ $columnsize: 80px;
 
 .token[area="west"]{
     margin-left: -3px;
-}
+}*/
 
 
 

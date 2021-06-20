@@ -2165,10 +2165,21 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
     let matchingProperty = document.querySelector('#board > div[position="' + position + '"]')
+    console.log(matchingProperty.getBoundingClientRect())
+
+    
+
+    token.style.gridArea = 'position-' + position
+    let xTransform = (matchingProperty.getBoundingClientRect().width / 2 - (token.offsetWidth / 2)) 
+    let yTransform = (matchingProperty.getBoundingClientRect().height / 2 - (token.offsetHeight / 2)) 
+
+    token.style.transform = 'translate(' + xTransform + 'px, ' + yTransform + 'px)'
+
+
 
     //let row = matchingProperty.parentNode.getAttribute('id')
     
-    // The token should sit half way from the top of the property, minus half the token's height.
+    /*// The token should sit half way from the top of the property, minus half the token's height.
     let desiredTop = matchingProperty.offsetTop += ((matchingProperty.offsetHeight / 2) - (token.offsetHeight / 2))
 
     // The token should sit half way from the left of the property, minus half the token's width.
@@ -2231,7 +2242,7 @@ function positionToken(token, position){
     token.style.right = desiredRight + 'px'
     token.style.bottom = desiredBottom + 'px'
     token.style.Zindex = desiredZindex
-    //token.setAttribute('area', row)
+    //token.setAttribute('area', row)*/
 
     players[turn - 1].position = position
 }

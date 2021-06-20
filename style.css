@@ -555,6 +555,9 @@ button {
 #board[size="super-mini"] .property-name {
   display: none; }
 
+#board > div[position="0"] {
+  grid-area: position-0; }
+
 #board > div[position="1"] {
   grid-area: position-1; }
 
@@ -676,7 +679,8 @@ button {
   grid-area: position-40; }
 
 #board > div[position] {
-  font-size: 10px; }
+  font-size: 10px;
+  position: relative; }
 
 #board {
   display: grid;
@@ -968,7 +972,6 @@ button {
 .token {
   width: 46px;
   height: 28px;
-  position: absolute !important;
   z-index: 2;
   background-size: 35px;
   background-repeat: no-repeat;
@@ -1052,15 +1055,17 @@ button {
 /* Due to the way the JS calculates the correct position for the token and the 
    side the borders end up on, there are slightly irregularities. Likely
    not even noticeable but it bothers me otherwise */
-.token[area="south"] {
-  margin-left: 2px; }
+/*.token[area="south"]{
+    margin-left: 2px;
+}
 
-.token[area="north"] {
-  margin-left: -3px; }
+.token[area="north"]{
+    margin-left: -3px;
+}
 
-.token[area="west"] {
-  margin-left: -3px; }
-
+.token[area="west"]{
+    margin-left: -3px;
+}*/
 /* Popup ---------------------------------------------------------------------*/
 #popup {
   position: fixed;
