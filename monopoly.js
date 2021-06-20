@@ -278,8 +278,6 @@ function savedGameFound(){
     let gameSummary = createElement('div', 'saved-game-summary')
     let savedPlayerDetails = JSON.parse(localStorage.getItem('players'))
     let savedGameState = JSON.parse(localStorage.getItem('gameState'))
-    console.log(savedPlayerDetails)
-    console.log(savedGameState)
 
     savedPlayerDetails.forEach(function(player){
         let newDetail = createElement('div')
@@ -290,7 +288,7 @@ function savedGameFound(){
 
         let propertyCount = 0
         savedGameState.forEach(function(item){
-            if (item.owner && item.owner == player.id){
+            if (item.ownerID && item.ownerID == player.id){
                 propertyCount++
             }
         })
