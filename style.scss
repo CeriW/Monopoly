@@ -157,6 +157,8 @@ button{
     padding: 4px 10px;
     transition: opacity 0.3s;
     opacity: 0;
+    z-index: 101;
+    pointer-events: none;
 
     img{
         margin-right: 10px;

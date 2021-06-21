@@ -315,6 +315,7 @@ function saveGame(){
     localStorage.setItem('availableHotels', availableHotels)
     localStorage.setItem('turn', turn)
     localStorage.setItem('feedArchive', JSON.stringify(feedArchive))
+    localStorage.setItem('availableActions', JSON.stringify(availableActions))
 
     saveIndicator.style.opacity = 1
     window.setTimeout(function(){
@@ -330,6 +331,9 @@ function loadSavedGame(){
     availableHouses = parseInt(localStorage.getItem('availableHouses'))
     turn = parseInt(localStorage.getItem('turn'))
     feedArchive = JSON.parse(localStorage.getItem('feedArchive'))
+    availableActions = JSON.parse(localStorage.getItem('availableActions'))
+
+    setAvailableActions()
 
     // Close the popup and get rid of the player creator
     closePopup()
@@ -567,9 +571,20 @@ function generateBoard(){
 }
 
 
+function closeWindow(){
+    return 'hey'
+}
 
 
 function addEvents(){
+
+
+    window.addEventListener('beforeunload', function (e) {
+        // Cancel the event
+        e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+        // Chrome requires returnValue to be set
+        e.returnValue = '';
+      });
 
 
     // Close the popup when the close button is clicked,

@@ -97,7 +97,9 @@ button {
   width: auto;
   padding: 4px 10px;
   transition: opacity 0.3s;
-  opacity: 0; }
+  opacity: 0;
+  z-index: 101;
+  pointer-events: none; }
   #save-indicator img {
     margin-right: 10px;
     animation: saveAnimation 1.5s linear infinite; }
