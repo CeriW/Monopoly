@@ -10,9 +10,9 @@ FUNCTIONALITY
     - Add a warning on small screen sizes
 
 - Cookies/local storage so you can come back to a game later.
-	- This is going to involve somewhat major restructuring. My players and spaces arrays both have circular references in them, so I'm going to need to fix that before I'm able to JSON.stringify them.
-	- Preview of the game state in the question window
 	- Little animation so players know when the game is being saved?
+	- Periodic save game
+	- Manual save game
 
 - Do I need getPropertyOwnerDetails() AND checkPropertyOwner()?
 
@@ -22,6 +22,9 @@ FUNCTIONALITY
 BUGS SPOTTED
 
 - Player 1 declared bankruptcy. Player 4 goes bankrupt after winning a resulting auction. When I clicked 'initiate trade', the trade was for player 2?
+
+- Fix overflowing player names on main board screen
+
 
 
 IMPROVEMENTS
@@ -51,6 +54,9 @@ ONGOING THINGS
 
 
 STRETCH GOALS
+
+- Play time counter
+	- Store this info in the saved game and show on load
 
 - Stats (graphs?)
 

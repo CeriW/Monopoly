@@ -36,6 +36,8 @@ const warningTitle = document.querySelector('#warning-title')
 const bankruptcyMessage = document.querySelector('#bankruptcy-message')
 const bankruptcyTitle = document.querySelector('#bankruptcy-title')
 
+const saveIndicator = document.querySelector('#save-indicator')
+
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
 let turn = 0
@@ -313,6 +315,12 @@ function saveGame(){
     localStorage.setItem('availableHotels', availableHotels)
     localStorage.setItem('turn', turn)
     localStorage.setItem('feedArchive', JSON.stringify(feedArchive))
+
+    saveIndicator.style.opacity = 1
+    window.setTimeout(function(){
+        saveIndicator.style.opacity = 0
+    }, 1500)
+
 }
 
 function loadSavedGame(){
@@ -1245,12 +1253,17 @@ function createPlayers(){
     // Due to the way the positionToken function works when there are multiple
     // tokens on the same space, it was necessary to move them all to 0, THEN
     // set the player's position attribute.
-    let i = 0
+    
+    players.forEach(function(player){
+        positionToken(document.querySelector('#board > .token[player="' + player.id + '"]'), player.position)
+    })
+    
+    /*let i = 0
     ;[].forEach.call(document.querySelectorAll('.token'), function(token){
         positionToken(token, players[i].position)
         //players[i].position = 0
         i++
-    })
+    })*/
     
 
     newGameDiceRoll()
@@ -2520,6 +2533,8 @@ function increasePlayerTurn(){
     
     // TODO - check whether this is being run twice?
     checkJail()
+
+    saveGame()
 }
 
 // PROPERTY FUNCTIONS --------------------------------------------------------//

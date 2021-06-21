@@ -85,6 +85,29 @@ button {
 .smallText {
   font-size: 0.7em; }
 
+/* SAVE INDICATOR ------------------------------------------------------------*/
+#save-indicator {
+  background: #fff;
+  font-size: 18px;
+  position: fixed;
+  right: 111px;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  width: auto;
+  padding: 4px 10px;
+  transition: opacity 0.3s;
+  opacity: 0; }
+  #save-indicator img {
+    margin-right: 10px;
+    animation: saveAnimation 1.5s linear infinite; }
+
+@keyframes saveAnimation {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
 /* ABOUT -------------------------------------------------------------------- */
 #about-link {
   position: fixed;
