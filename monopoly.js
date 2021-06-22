@@ -452,13 +452,13 @@ function initialiseGameState(){
 
         switch(spaces[i].type){
             case 'property':
-                gameState[i] = {name: spaces[i].name, ownerID: null, houses: 0, mortgaged: false}
+                gameState[i] = {ownerID: null, houses: 0, mortgaged: false}
                 break
             case 'utility':
-                gameState[i] = {name: spaces[i].name, ownerID: null, mortgaged: false}
+                gameState[i] = {ownerID: null, mortgaged: false}
                 break
             case 'station':
-                gameState[i] = {name: spaces[i].name, ownerID: null, mortgaged: false}
+                gameState[i] = {ownerID: null, mortgaged: false}
                 break
             default:
                 gameState[i] = spaces[i].name
@@ -2195,6 +2195,15 @@ function rollDice(){
             //goToJail()
             doublesCount = 0
     }
+
+    let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
+    sound.setAttribute('src', 'sounds/dice-roll-1.mp3')
+    sound.setAttribute('autoplay', '')
+    document.body.appendChild(sound)
+
+    window.setTimeout(function(){
+        sound.parentNode.removeChild(sound)
+    }, 3000)
 }
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//

@@ -15,6 +15,7 @@ FUNCTIONALITY
 
 - Do I need getPropertyOwnerDetails() AND checkPropertyOwner()?
 
+- Visual improvements
 
 
 BUGS SPOTTED
