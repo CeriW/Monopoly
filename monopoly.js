@@ -371,7 +371,15 @@ function loadSavedGame(){
         addToFeed(entry.message, entry.type)
     })
 
+    // Colour the ownership tags
+    for (i = 0; i < spaces.length; i++){
+        if (document.querySelector('#board > .space[position="' + i + '"] .ownership-tag')){
+            updateOwnershipTag(i)
+        }
+    }
+
     addToFeed('Saved game loaded', 'save')
+
 
 
 
@@ -580,10 +588,12 @@ function addEvents(){
 
 
     window.addEventListener('beforeunload', function (e) {
+        saveGame()
         // Cancel the event
         e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
         // Chrome requires returnValue to be set
         e.returnValue = '';
+
       });
 
 
