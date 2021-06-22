@@ -2196,14 +2196,9 @@ function rollDice(){
             doublesCount = 0
     }
 
-    let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
-    sound.setAttribute('src', 'sounds/dice-roll-1.mp3')
-    sound.setAttribute('autoplay', '')
-    document.body.appendChild(sound)
 
-    window.setTimeout(function(){
-        sound.parentNode.removeChild(sound)
-    }, 3000)
+
+    playSound('dice-roll', 4)
 }
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//
@@ -5691,6 +5686,27 @@ function createConfetti(){
     }
   }
   
+
+// SOUND EFFECTS -------------------------------------------------------------//
+
+function playSound(fileName, randomFactor){
+
+
+    let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
+    
+    if (randomFactor){
+        sound.setAttribute('src', 'sounds/' + fileName + '-' + (Math.ceil(Math.random() * randomFactor)) + '.mp3')
+    } else{
+        sound.setAttribute('src', 'sounds/' + fileName + '.mp3')
+    }
+
+    sound.setAttribute('autoplay', '')
+    document.body.appendChild(sound)
+
+    window.setTimeout(function(){
+        sound.parentNode.removeChild(sound)
+    }, 3000)
+}
 
 // ELEMENT CREATION  ---------------------------------------------------------//
 
