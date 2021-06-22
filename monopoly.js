@@ -333,7 +333,6 @@ function loadSavedGame(){
     feedArchive = JSON.parse(localStorage.getItem('feedArchive'))
     availableActions = JSON.parse(localStorage.getItem('availableActions'))
 
-    setAvailableActions()
 
     // Close the popup and get rid of the player creator
     closePopup()
@@ -352,8 +351,8 @@ function loadSavedGame(){
     // Note - setting this to one less and then immediately incrementing it
     // forces the game to reset the visibilty of the buttons without the need
     // for a separate function to handle that.
-    turn--
-    increasePlayerTurn()
+    //turn--
+    //increasePlayerTurn()
 
     updatePlayerDetails()
 
@@ -377,6 +376,11 @@ function loadSavedGame(){
             updateOwnershipTag(i)
         }
     }
+
+    // Make sure the appropriate action buttons are shown for the
+    // appropriate players.
+    setAvailableActions()
+    toggleCurrentPlayerButtons()
 
     addToFeed('Saved game loaded', 'save')
 
@@ -2546,6 +2550,15 @@ function increasePlayerTurn(){
     availableActions.endTurn = false
     document.body.setAttribute('turn', 'player' + turn)
 
+    toggleCurrentPlayerButtons()
+    
+    // TODO - check whether this is being run twice?
+    checkJail()
+
+    saveGame()
+}
+
+function toggleCurrentPlayerButtons(){
     // Move where the class of 'currentPlayer' sits. This allows buttons to be
     // enabled and disabled in the CSS.
     let currentPlayer = document.querySelector('.current-player-summary')
@@ -2555,11 +2568,6 @@ function increasePlayerTurn(){
     }
 
     document.querySelector('.individual-player-summary[player="' + turn + '"]').classList.add('current-player-summary')
-    
-    // TODO - check whether this is being run twice?
-    checkJail()
-
-    saveGame()
 }
 
 // PROPERTY FUNCTIONS --------------------------------------------------------//

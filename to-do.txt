@@ -10,9 +10,8 @@ FUNCTIONALITY
     - Add a warning on small screen sizes
 
 - Cookies/local storage so you can come back to a game later.
-	- Little animation so players know when the game is being saved?
-	- Periodic save game
 	- Manual save game
+	- It would probably be better to combine it all into one massive localStorage item than have loads of them.
 
 - Do I need getPropertyOwnerDetails() AND checkPropertyOwner()?
 

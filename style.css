@@ -472,7 +472,7 @@ button {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 100;
+  z-index: 102;
   background: #d5e8d4 url("images/dice-screen-background.svg") right center no-repeat;
   background-size: auto 75vh;
   color: #000;
@@ -1332,7 +1332,6 @@ body:not(.warning-open) #warning {
     font-size: 1.1em;
     text-transform: uppercase; }
   #player-summary > div {
-    flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 200px;
     max-width: 200px;
