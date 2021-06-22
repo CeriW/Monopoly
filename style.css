@@ -86,17 +86,21 @@ button {
   font-size: 0.7em; }
 
 /* SAVE INDICATOR ------------------------------------------------------------*/
-#save-indicator {
+#save-block {
   background: #fff;
   font-size: 18px;
   position: fixed;
-  right: 111px;
-  bottom: 0;
+  right: 109px;
+  bottom: 0; }
+  #save-block > div,
+  #save-block button {
+    padding: 4px 10px;
+    transition: opacity 0.3s; }
+
+#save-indicator {
   display: flex;
   align-items: center;
   width: auto;
-  padding: 4px 10px;
-  transition: opacity 0.3s;
   opacity: 0;
   z-index: 101;
   pointer-events: none; }
@@ -110,6 +114,24 @@ button {
   to {
     transform: rotate(360deg); } }
 
+#save-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  font-size: 18px;
+  background: #fff;
+  color: #000;
+  transition: 0.3s;
+  display: flex;
+  align-items: center; }
+  #save-button img {
+    margin-right: 10px; }
+  #save-button:hover {
+    background-color: #eee; }
+
 /* ABOUT -------------------------------------------------------------------- */
 #about-link {
   position: fixed;
@@ -120,7 +142,7 @@ button {
   background: #000 url("images/about/question-mark.svg") calc(100% - 5px) center no-repeat;
   background-size: 25px;
   color: #fff;
-  font-size: 0.8em; }
+  font-size: 18px; }
 
 #about {
   position: fixed;

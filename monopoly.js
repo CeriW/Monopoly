@@ -37,6 +37,7 @@ const bankruptcyMessage = document.querySelector('#bankruptcy-message')
 const bankruptcyTitle = document.querySelector('#bankruptcy-title')
 
 const saveIndicator = document.querySelector('#save-indicator')
+const saveButton = document.querySelector('#save-button')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -314,13 +315,18 @@ function saveGame(){
     localStorage.setItem('availableHouses', availableHouses)
     localStorage.setItem('availableHotels', availableHotels)
     localStorage.setItem('turn', turn)
-    localStorage.setItem('feedArchive', JSON.stringify(feedArchive))
     localStorage.setItem('availableActions', JSON.stringify(availableActions))
 
     saveIndicator.style.opacity = 1
+    saveButton.style.opacity = 0;
+    saveButton.style.pointerEvents = 'none'
+
     window.setTimeout(function(){
         saveIndicator.style.opacity = 0
+        saveButton.style.opacity = 1;
+        saveButton.style.pointerEvents = 'all'
     }, 1500)
+    
 
 }
 
@@ -365,10 +371,6 @@ function loadSavedGame(){
         space.setAttribute('houses', state.houses)
     }
 
-    // Repopulate the feed
-    feedArchive.forEach(function(entry){
-        addToFeed(entry.message, entry.type)
-    })
 
     // Colour the ownership tags
     for (i = 0; i < spaces.length; i++){
@@ -5625,7 +5627,6 @@ function calculatePlayerWorth(playerID){
 function addToFeed(message,type){
     let newMessage = createElement('div', type, ('<div>' + message + '</div>'))
     feed.insertBefore(newMessage, feed.firstChild)
-    feedArchive.push({message: message, type: type})
 }
 
 
