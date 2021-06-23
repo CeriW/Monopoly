@@ -2198,7 +2198,7 @@ function rollDice(){
 
 
 
-    playSound('dice-roll', 4)
+    playSound('dice-roll')
 }
 
 // TOKEN FUNCTIONS -----------------------------------------------------------//
@@ -5689,17 +5689,21 @@ function createConfetti(){
 
 // SOUND EFFECTS -------------------------------------------------------------//
 
-function playSound(fileName, randomFactor){
+function playSound(type){
 
+    let numberOfAvailableFiles = 1
 
-    let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
-    
-    if (randomFactor){
-        sound.setAttribute('src', 'sounds/' + fileName + '-' + (Math.ceil(Math.random() * randomFactor)) + '.mp3')
-    } else{
-        sound.setAttribute('src', 'sounds/' + fileName + '.mp3')
+    switch(type){
+        case 'dice-roll':
+            numberOfAvailableFiles = 5
+            break
+        default:
+            numberOfAvailableFiles = 1
     }
 
+    let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
+    sound.setAttribute('src', 'sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
+    console.log('sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
     sound.setAttribute('autoplay', '')
     document.body.appendChild(sound)
 
