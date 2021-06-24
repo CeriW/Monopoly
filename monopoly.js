@@ -2204,7 +2204,8 @@ function rollDice(){
 function moveToken(total){
 
     // The token we wish to move
-    let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
+    //let token = document.querySelector('#' + document.body.getAttribute('turn') + 'token')
+    let token = document.querySelector('#board > .token[player="' + turn + '"]')
 
     // The position the token is currently at
     let startPosition = parseInt(token.getAttribute('position'))
