@@ -13,8 +13,6 @@ FUNCTIONALITY
 	- It would probably be better to combine it all into one massive localStorage item than have loads of them.
 	- Store the correct order of the chance/CC cards WITHOUT storing the entire list.
 
-- Do I need getPropertyOwnerDetails() AND checkPropertyOwner()?
-
 - Visual improvements
 
 

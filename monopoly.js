@@ -382,13 +382,10 @@ function loadSavedGame(){
     // Make sure the appropriate action buttons are shown for the
     // appropriate players.
     setAvailableActions()
+
     toggleCurrentPlayerButtons()
 
     addToFeed('Saved game loaded', 'save')
-
-
-
-
 }
 
 
@@ -3147,7 +3144,7 @@ function displayBuildHousePanel(colour){
         // sell them.
 
 
-        if (checkPropertyOwner(colourSet[0].position) == turn){
+        if (getPropertyOwnerDetails(colourSet[0].position).id == turn){
             
             let sellHouseBtn = document.createElement('button')
             sellHouseBtn.classList.add('sell-house-button')
@@ -4023,7 +4020,7 @@ function checkMortgagesInColourSet(colour){
 
 function landOnProperty(position){
 
-    let owner = checkPropertyOwner(position) // The id of the owner
+    let owner = getPropertyOwnerDetails(position).id // The id of the owner
     let currentPlayer = players[turn - 1]
 
     if (owner && owner != currentPlayer.id){
@@ -4144,17 +4141,6 @@ function landOnProperty(position){
     }
 }
 
-
-function checkPropertyOwner(position){
-    let owner = gameState[position].ownerID
-
-    if (owner){
-        return owner
-    } else{
-        return null
-    }
-
-}
 
 // TRADING FUNCTIONS ---------------------------------------------------------//
 
@@ -5703,7 +5689,6 @@ function playSound(type){
 
     let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
     sound.setAttribute('src', 'sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
-    console.log('sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
     sound.setAttribute('autoplay', '')
     document.body.appendChild(sound)
 
