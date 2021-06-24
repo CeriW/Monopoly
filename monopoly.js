@@ -683,7 +683,7 @@ function resizeBoard(){
 
     //feed.parentElement.style.height = (board.offsetHeight + 155) + 'px'
 
-    ;[].forEach.call(document.querySelectorAll('#board > div'), function(node){
+    ;[].forEach.call(document.querySelectorAll('#board > .space'), function(node){
       
         let name = node.querySelector('.property-name')
         node.setAttribute('name', null)
@@ -1320,7 +1320,7 @@ function generateTokens(){
     })
 
     window.addEventListener('resize', function(){
-        ;[].forEach.call(document.querySelectorAll('.token'), function(token){
+        ;[].forEach.call(document.querySelectorAll('#board > .token'), function(token){
             positionToken(token, token.getAttribute('position'))
         })
     })
@@ -2348,7 +2348,7 @@ function specialEndPositions(endPosition){
 // Puts the token where you want it to be visually using CSS. No maths is involved.
 function positionToken(token, position){
 
-    let matchingProperty
+    let matchingProperty // This is determined further down
     let xTransform = 0
     let yTransform = 0
 
