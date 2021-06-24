@@ -22,6 +22,8 @@ BUGS SPOTTED
 
 - Feed entry for going to jail not working?
 
+- Feed is way too high on small screens.
+
 
 IMPROVEMENTS
 

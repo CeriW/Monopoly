@@ -2224,6 +2224,7 @@ function moveToken(total){
     if (endPosition === 30){
         // TODO - we should animate the token even if we're going to jail.
         goToJail(token)
+        addToFeed(players[turn-1].name + ' landed on \'Go To Jail\'.', 'go-to-jail')
     } else{
 
         let i = startPosition
@@ -4021,10 +4022,10 @@ function checkMortgagesInColourSet(colour){
 
 function landOnProperty(position){
 
-    let owner = getPropertyOwnerDetails(position).id // The id of the owner
+    let owner = getPropertyOwnerDetails(position)
     let currentPlayer = players[turn - 1]
 
-    if (owner && owner != currentPlayer.id){
+    if (owner && owner.id != currentPlayer.id){
 
         // If the property is mortgaged, the player does not need to pay rent.
         if(gameState[position].mortgaged){
