@@ -1827,6 +1827,7 @@ function drawCard(type){
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
             addToFeed(players[turn - 1].name + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card', 'money-plus')
+            playSound('kerching')
             break
         case '-':
             // A card where the player has to surrender money to the bank
@@ -1835,7 +1836,7 @@ function drawCard(type){
             payMoney(transactionDetails)
             //players[turn - 1].money -= chosenCard.value
             addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
-
+            playSound('fail')
             break
         case 'getout':
             // TODO
@@ -1851,6 +1852,8 @@ function drawCard(type){
             // Remove this card from its list so it can't be drawn
             // again until it is used.
             cardList.pop()
+
+            playSound('get-out-of-jail-free')
 
 
 
@@ -1925,6 +1928,7 @@ function drawCard(type){
         case 'move':
             // TODO
             cardBasedMovement(chosenCard, type)
+            playSound('move')
             break
         }
 
@@ -2487,6 +2491,8 @@ function getOutOfJail(method){
                 document.querySelector('.current-player-summary .player-cards').setAttribute('cards', false)
             }
 
+            playSound('get-out-of-jail-free')
+
             break
         case 'doubles':
             // Note - you do not get to roll again after rolling doubles to get out of jail
@@ -2503,7 +2509,6 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
-    
   
   }
 
@@ -4050,7 +4055,7 @@ function landOnProperty(position){
             switch (spaces[position].type){
                 case 'property':
                     standardPropertyRent()
-                    playSound('kerching')
+                    playSound('coins')
                     break
                 case 'utility':
                     utilityRent()
@@ -5703,17 +5708,21 @@ function playSound(type){
     let numberOfAvailableFiles = 1
 
     switch(type){
+        case 'fail':
+            numberOfAvailableFiles = 5
+            break
         case 'dice-roll':
             numberOfAvailableFiles = 4
             break
         case 'kerching':
+        case 'coins':
+        case 'fail':
+        case 'move':
             numberOfAvailableFiles = 3
             break
         case 'just-visiting':
             numberOfAvailableFiles = 2
             break
-        default:
-            numberOfAvailableFiles = 1
     }
 
     let sound = createElement('audio', '', '', 'type', 'audio/mpeg')

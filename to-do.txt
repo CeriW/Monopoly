@@ -22,6 +22,8 @@ BUGS SPOTTED
 
 - Feed is way too high on small screens.
 
+- At one point I had 4 get out cards in play.
+
 
 IMPROVEMENTS
 
