@@ -1684,8 +1684,6 @@ function newGameDiceRoll(){
 
 function payMoney(transactionDetails){
 
-    console.log(transactionDetails)
-
     // Check whether we're dealing with a list of transactions or just one
     if (transactionDetails && typeof(transactionDetails === 'object')){
         transactionQueue.push(transactionDetails)
@@ -2413,6 +2411,8 @@ function goToJail(token){
     window.setTimeout(function(){
         document.body.classList.remove('jailAnimation')
     }, 3000)
+
+    playSound('jail')
 }
 
 // GET OUT OF JAIL -----------------------------------------------------------//
@@ -4025,7 +4025,6 @@ function checkMortgagesInColourSet(colour){
 function landOnProperty(position){
 
     let owner = getPropertyOwnerDetails(position)
-    console.log(owner)
     let currentPlayer = players[turn - 1]
 
     if (owner && owner !== currentPlayer){
@@ -4149,6 +4148,14 @@ function landOnProperty(position){
     switch (spaces[position].type){
         case 'station':
             playSound('train')
+            break
+        case 'utility':
+            if (spaces[position].name === 'Electric Company'){
+                playSound('electric-company')
+                break
+            } else if (spaces[position].name === 'Water Works'){
+                playSound('water-works')
+            }
     }
 }
 
@@ -5691,7 +5698,7 @@ function playSound(type){
 
     switch(type){
         case 'dice-roll':
-            numberOfAvailableFiles = 5
+            numberOfAvailableFiles = 4
             break
         default:
             numberOfAvailableFiles = 1
@@ -5705,7 +5712,7 @@ function playSound(type){
 
     window.setTimeout(function(){
         sound.parentNode.removeChild(sound)
-    }, 3000)
+    }, 10000)
 }
 
 // ELEMENT CREATION  ---------------------------------------------------------//
