@@ -2326,6 +2326,7 @@ function specialEndPositions(endPosition){
             payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
             //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
+            playSound('fail')
             break
         case 38:
             // Super tax
@@ -2333,9 +2334,11 @@ function specialEndPositions(endPosition){
             addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
             //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
             payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
+            playSound('fail')
             break
         case 0:
             // Go
+            break
         case 10:
             playSound('just-visiting')
             break
@@ -5718,6 +5721,7 @@ function playSound(type){
         case 'coins':
         case 'fail':
         case 'move':
+        case 'train':
             numberOfAvailableFiles = 3
             break
         case 'just-visiting':
