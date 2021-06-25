@@ -1919,6 +1919,8 @@ function drawCard(type){
 
             if (totalRepairCost > 0){
                 repairMessage += ' and spent ' + currencySymbolSpan + totalRepairCost + ' repairing their properties'
+                playSound('repairs')
+
             } else{
                 repairMessage += ' requiring them to make general repairs to their properties, but they don\'t have any buildings'
             }
@@ -3246,10 +3248,14 @@ function displayBuildHousePanel(colour){
         updateHouseDisplay(number)
         toggleHouseBuildButtons(spaces[number].group)
         updateBank()
+
+        playSound('construction')
     }
 
     document.querySelector('#popup-close').addEventListener('click', runHouseBuildingFeedMessage, {once: true})
     document.addEventListener('keydown', runHouseBuildingFeedMessage)
+
+    
 
     function runHouseBuildingFeedMessage(e){
         // If it's a keydown event, check whether it's the escape key.
@@ -5724,6 +5730,8 @@ function playSound(type){
         case 'train':
             numberOfAvailableFiles = 3
             break
+        case 'repairs':
+        case 'construction':
         case 'just-visiting':
             numberOfAvailableFiles = 2
             break
