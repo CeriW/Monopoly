@@ -4025,7 +4025,7 @@ function landOnProperty(position){
     let owner = getPropertyOwnerDetails(position)
     let currentPlayer = players[turn - 1]
 
-    if (owner && owner.id != currentPlayer.id){
+    if (owner === currentPlayer){
 
         // If the property is mortgaged, the player does not need to pay rent.
         if(gameState[position].mortgaged){
@@ -4049,6 +4049,7 @@ function landOnProperty(position){
                     break
                 case 'station':
                     stationRent()
+                    playSound('train')
             }
             
             
@@ -5679,6 +5680,7 @@ function createConfetti(){
 
 function playSound(type){
 
+
     let numberOfAvailableFiles = 1
 
     switch(type){
@@ -5693,6 +5695,7 @@ function playSound(type){
     sound.setAttribute('src', 'sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
     sound.setAttribute('autoplay', '')
     document.body.appendChild(sound)
+    console.log('sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
 
     window.setTimeout(function(){
         sound.parentNode.removeChild(sound)
