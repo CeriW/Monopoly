@@ -2333,6 +2333,8 @@ function specialEndPositions(endPosition){
         case 0:
             // Go
         case 10:
+            playSound('just-visiting')
+            break
             // Jail
         case 20:
             // Free parking
@@ -2415,7 +2417,7 @@ function goToJail(token){
         document.body.classList.remove('jailAnimation')
     }, 3000)
 
-    playSound('jail')
+    playSound('go-to-jail')
 }
 
 // GET OUT OF JAIL -----------------------------------------------------------//
@@ -5706,6 +5708,9 @@ function playSound(type){
             break
         case 'kerching':
             numberOfAvailableFiles = 3
+            break
+        case 'just-visiting':
+            numberOfAvailableFiles = 2
             break
         default:
             numberOfAvailableFiles = 1
