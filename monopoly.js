@@ -2331,9 +2331,12 @@ function specialEndPositions(endPosition){
             payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
             break
         case 0:
+            // Go
         case 10:
+            // Jail
         case 20:
-            // Go, Jail and Free Parking. Do nothing.
+            // Free parking
+            playSound('free-parking')
             // The £200 for passing go is dealt with elsewhere in the code.
             break
 
@@ -4045,6 +4048,7 @@ function landOnProperty(position){
             switch (spaces[position].type){
                 case 'property':
                     standardPropertyRent()
+                    playSound('kerching')
                     break
                 case 'utility':
                     utilityRent()
@@ -5699,6 +5703,9 @@ function playSound(type){
     switch(type){
         case 'dice-roll':
             numberOfAvailableFiles = 4
+            break
+        case 'kerching':
+            numberOfAvailableFiles = 3
             break
         default:
             numberOfAvailableFiles = 1
