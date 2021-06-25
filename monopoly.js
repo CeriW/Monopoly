@@ -1684,6 +1684,8 @@ function newGameDiceRoll(){
 
 function payMoney(transactionDetails){
 
+    console.log(transactionDetails)
+
     // Check whether we're dealing with a list of transactions or just one
     if (transactionDetails && typeof(transactionDetails === 'object')){
         transactionQueue.push(transactionDetails)
@@ -1696,6 +1698,8 @@ function payMoney(transactionDetails){
     // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
     creditor = typeof transactionDetails.creditorID === 'string' ? transactionDetails.creditorID : players[transactionDetails.creditorID - 1]
+
+    //console.log(creditor)
 
     let debt = 0
 
@@ -2290,9 +2294,7 @@ function moveToken(total){
                     window.clearInterval(myInterval)
                     specialEndPositions(endPosition)
                 }
-    
-                //console.log('i=' + i + ' endPosition = ' + endPosition)
-    
+       
     
             }, 100)
         }
@@ -4023,9 +4025,10 @@ function checkMortgagesInColourSet(colour){
 function landOnProperty(position){
 
     let owner = getPropertyOwnerDetails(position)
+    console.log(owner)
     let currentPlayer = players[turn - 1]
 
-    if (owner === currentPlayer){
+    if (owner && owner !== currentPlayer){
 
         // If the property is mortgaged, the player does not need to pay rent.
         if(gameState[position].mortgaged){
@@ -4049,7 +4052,6 @@ function landOnProperty(position){
                     break
                 case 'station':
                     stationRent()
-                    playSound('train')
             }
             
             
@@ -4072,13 +4074,13 @@ function landOnProperty(position){
             }*/
 
 
-            payMoney({debtorID: players[turn - 1].id, creditorID: owner, amount: rentAmount, method: 'rent'})
+            payMoney({debtorID: players[turn - 1].id, creditorID: owner.id, amount: rentAmount, method: 'rent'})
 
             //players[owner - 1].money += rentAmount
             //currentPlayer.money -= rentAmount
 
             let feedMessage = currentPlayer.money > rentAmount
-                            ? currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent'
+                            ? currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner.id - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent'
                             : currentPlayer.name + ' landed on ' + spaces[position].name + ' but does not have ' + currencySymbolSpan + rentAmount + ' to pay rent.'
             addToFeed(feedMessage, 'rent')
 
@@ -4117,8 +4119,10 @@ function landOnProperty(position){
                 // Go back through the array to get a list of the owners of all these properties
                 let owners = []
                 stationSet.forEach(function(property){
-                    if (property.owner){
-                        owners.push(property.owner.id)
+
+                    let propertyPosition = property.position
+                    if (gameState[propertyPosition].ownerID){
+                        owners.push(gameState[propertyPosition].ownerID)
                     }
                 })
             
@@ -4133,14 +4137,18 @@ function landOnProperty(position){
             }
         }
 
-
-    } else if (owner && owner == currentPlayer.id){
+    } else if (owner === currentPlayer){
         // The property is owned by the current player. Do nothing.
     } else{
         // Nobody owns this property
         availableActions.closePopup = false
         setAvailableActions()
         displayPropertyDetails(position)
+    }
+
+    switch (spaces[position].type){
+        case 'station':
+            playSound('train')
     }
 }
 
@@ -4263,8 +4271,6 @@ function initiateTrade(bankruptcy){
 }
 
 function negotiateTrade(e, bankruptcy){
-
-    console.log(bankruptcy)
 
     let receiver = e.target.parentNode.getAttribute('player')
     let currentPlayerInControl = true
