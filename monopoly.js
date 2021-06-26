@@ -1130,7 +1130,12 @@ function intialisePlayerCreator(){
 
         // Create an input for the player to choose their colour
         let colourPicker = createElement('input', 'colour-picker', null, 'type', 'color')
-        colourPicker.setAttribute('value', randomColours[Math.floor(Math.random() * randomColours.length)])
+        let randomColour = randomColours[Math.floor(Math.random() * randomColours.length)]
+        colourPicker.setAttribute('value', randomColour)
+        tokenSelectorChosenIndicator.style.backgroundColor = randomColour
+        colourPicker.addEventListener('change', function(e){
+            e.target.previousElementSibling.children[0].style.backgroundColor = e.target.value
+        })
         newPanel.appendChild(colourPicker)
 
         // Create a name input
