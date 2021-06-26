@@ -27,8 +27,6 @@ BUGS SPOTTED
 
 IMPROVEMENTS
 
-
-
 - Make the quick start functionality actually good.
 
 - Refactor all the things with player specific IDs to have player attributes instead.

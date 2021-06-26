@@ -1340,7 +1340,6 @@ function generateTokens(){
 
         newToken.classList.add('token')
         newToken.classList.add(player.token)
-        newToken.setAttribute('id', 'player' + (player.id) + 'token')
         newToken.setAttribute('position', player.position)
         newToken.setAttribute('player', player.id)
         let inJail = player.inJail > 0 ? true : false
@@ -1987,12 +1986,12 @@ function getReadableCardName(type){
 // Calculations depending on exactly what type of 'move' card has been drawn.
 function cardBasedMovement(chosenCard, type){
 
-    let currentPosition = parseInt(document.querySelector('#player' + turn  + 'token').getAttribute('position'))
+    let currentPosition = parseInt(document.querySelector('#board > .token[player="' + turn + '"]').getAttribute('position'))
 
     switch (chosenCard.value){
         // Go to jail
         case 10:
-            goToJail(document.querySelector('#player' + turn + 'token'))
+            goToJail(document.querySelector('#board > .token[player="' + turn + '"]'))
             addToFeed(players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card and went to jail!', 'go-to-jail')
             break
         
@@ -2000,7 +1999,7 @@ function cardBasedMovement(chosenCard, type){
         case 0:
             // The moveToken function works with the number of spaces to move, rather than a position to move to.
             // Therefore a little maths is required.
-            let endTotal = 40 - document.querySelector('#player' + turn  + 'token').getAttribute('position')
+            let endTotal = 40 - document.querySelector('#board > .token[player="' + turn + '"]').getAttribute('position')
             moveToken(endTotal)
             addToFeed(getCardMovementFeedMessage(0), 'advance')
             break
@@ -2541,7 +2540,7 @@ function getOutOfJail(method){
     
     availableActions.getOutOfJail = false
 
-    document.querySelector('#player' + turn + 'token').setAttribute('jail', false)
+    document.querySelector('#board > .token[player="' + turn + '"]').setAttribute('jail', false)
 
     player.inJail = 0
     setAvailableActions()
