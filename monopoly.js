@@ -748,7 +748,7 @@ function updatePlayerDetails(){
     players.forEach(function(player){
 
         // MONEY
-        let updateNode = document.querySelector('#player-' + player.id + '-money')
+        let updateNode = document.querySelector('.player-money[player="' + player.id + '"]')
         let oldValue = updateNode.textContent
         oldValue = parseInt(oldValue.replace(/\D/g, ''))
         let newValue = player.money
@@ -774,7 +774,7 @@ function updatePlayerDetails(){
         }
 
         // PROPERTIES       
-        updateNode = document.querySelector('#player-' + player.id + '-properties')
+        updateNode = document.querySelector('.player-properties[player="' + player.id + '"]')
         
         // Clear the existing properties so we can start again. This has the
         // benefit of ensuring all colour groups end up together rather than
@@ -1378,7 +1378,9 @@ function generatePlayerSummary(player){
 
     // Player's money
     let playerMoney = document.createElement('div')
-    playerMoney.setAttribute('id', 'player-' + player.id + '-money')
+    playerMoney.classList.add('player-money')
+    //playerMoney.setAttribute('id', 'player-' + player.id + '-money')
+    playerMoney.setAttribute('player', player.id)
     playerMoney.innerHTML = currencySymbolSpan + player.money
     playerSummaryHeader.appendChild(playerMoney)
 
@@ -1401,7 +1403,8 @@ function generatePlayerSummary(player){
     newSummary.appendChild(playerPortfolioTitle)
 
     let playerPortfolio = document.createElement('div')
-    playerPortfolio.setAttribute('id', 'player-' + player.id + '-properties')
+    //playerPortfolio.setAttribute('id', 'player-' + player.id + '-properties')
+    playerPortfolio.setAttribute('player', player.id)
     playerPortfolio.classList.add('property-portfolio')
     playerPortfolio.addEventListener('click', portfolioItemPreview)
 
@@ -3839,6 +3842,7 @@ function auctionProperty(number, proceedsToAll){
             // Generate the player's money
             let playerMoney = document.createElement('div')
             playerMoney.classList.add('player-money')
+            playerMoney.setAttribute('player', player.id)
             playerMoney.innerHTML = currencySymbolSpan + players[i].money
             playerBidInterface.appendChild(playerMoney)
 
