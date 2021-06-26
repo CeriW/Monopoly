@@ -150,9 +150,23 @@
       </div>
     </div>
 
+    <div id="bottom-bar">
+      <form>
+        <input type="checkbox" id='SFX-checkbox' checked>
+        <label for="SFX-checkbox">Sound effects</label>
+      </form>
+      <div id="save-block">
+        <div id="save-indicator">
+          <img src="images/saving.svg" width="25" height="25">
+          SAVING...
+        </div>
+        <button id="save-button" onclick="saveGame()"><img src="images/feed-icons/save-game.svg" width="25" height="25"> SAVE</button>
+      </div>
+      <div id="about-link" onclick="aboutToggle()">ABOUT</div>
+
+    </div>
 
 
-    <div id="about-link" onclick="aboutToggle()">ABOUT</div>
     <div id="about" class="hidden">
       <div>
         <img id="about-close" src="images/close-black.svg" onclick="aboutToggle()">
@@ -187,17 +201,12 @@
 
         <a href=”https://www.zapsplat.com”>Sound effects obtained from zapsplat.com</a>
         <a href="https://mixkit.co/">https://mixkit.co/</a>
+        https://epicstockmedia.com/product/dice-sfx-party/
       </div>
 
     </div>
 
-    <div id="save-block">
-      <div id="save-indicator">
-        <img src="images/saving.svg" width="25" height="25">
-        SAVING...
-      </div>
-      <button id="save-button" onclick="saveGame()"><img src="images/feed-icons/save-game.svg" width="25" height="25"> SAVE</button>
-    </div>
+    
     <script src="monopoly.js"></script>
   </body>
 </html>

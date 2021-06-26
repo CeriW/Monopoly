@@ -85,13 +85,19 @@ button {
 .smallText {
   font-size: 0.7em; }
 
+/* BOTTOM BAR ----------------------------------------------------------------*/
+#bottom-bar {
+  background: #fff;
+  /*position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;*/ }
+
 /* SAVE INDICATOR ------------------------------------------------------------*/
 #save-block {
   background: #fff;
   font-size: 18px;
-  position: fixed;
-  right: 109px;
-  bottom: 0; }
+  position: relative; }
   #save-block > div,
   #save-block button {
     padding: 4px 10px;
@@ -134,15 +140,12 @@ button {
 
 /* ABOUT -------------------------------------------------------------------- */
 #about-link {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  z-index: 101;
   padding: 5px 40px 5px 10px;
   background: #000 url("images/about/question-mark.svg") calc(100% - 5px) center no-repeat;
   background-size: 25px;
   color: #fff;
-  font-size: 18px; }
+  font-size: 18px;
+  cursor: pointer; }
 
 #about {
   position: fixed;

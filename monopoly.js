@@ -43,6 +43,8 @@ const saveButton = document.querySelector('#save-button')
 // Since the function starts with a ++ we'll initialise as 0
 let turn = 0
 
+// Whether sound effects are on by default
+let SFX = true
 
 // Dice related elements
 let doublesCount = 0
@@ -661,6 +663,10 @@ function addEvents(){
     // While the game isn't really designed to be run in small windows, this is
     // a small touch that makes it slightly better,
 
+    document.querySelector('#SFX-checkbox').addEventListener('change', function(){
+        SFX = !SFX
+    })
+
 }
 
 function resizeBoard(){
@@ -1184,8 +1190,10 @@ function intialisePlayerCreator(){
 
                     // Set an attribute on the chosen indicator to show what token has been chosen.
                     tokenSelectorChosenIndicator.setAttribute('chosentoken', clickedOption.getAttribute('token'))
+
+                    console.log(clickedOption.getAttribute('token'))
                     
-                    // Determind what the old chosen one was and reset its availability.                    
+                    // Determine what the old chosen one was and reset its availability.                    
                     let oldSelectedOption = availableTokenChoices.previousElementSibling.getAttribute('chosentokenid')
                     availableTokens[oldSelectedOption].available = true
                     tokenSelectorChosenIndicator.setAttribute('chosentokenid', clickedOption.getAttribute('id'))
@@ -1564,6 +1572,8 @@ function newGameDiceRoll(){
             diceRolls[playerWhoIsRolling - 1] = roll1 + roll2
 
             i++
+
+            playSound('dice-roll')
         }
 
 
@@ -3725,7 +3735,7 @@ function buyProperty(number, player, method, price){
 
     payMoney({debtorID: player.id, creditorID: 'bank', purchase: [property]})
 
-
+    playSound('kerching')
 
     
 }
@@ -5712,40 +5722,41 @@ function createConfetti(){
 // SOUND EFFECTS -------------------------------------------------------------//
 
 function playSound(type){
+    if (SFX){
+        let numberOfAvailableFiles = 1
 
-
-    let numberOfAvailableFiles = 1
-
-    switch(type){
-        case 'fail':
-            numberOfAvailableFiles = 5
-            break
-        case 'dice-roll':
-            numberOfAvailableFiles = 4
-            break
-        case 'kerching':
-        case 'coins':
-        case 'fail':
-        case 'move':
-        case 'train':
-            numberOfAvailableFiles = 3
-            break
-        case 'repairs':
-        case 'construction':
-        case 'just-visiting':
-            numberOfAvailableFiles = 2
-            break
+        switch(type){
+            case 'fail':
+                numberOfAvailableFiles = 5
+                break
+            case 'dice-roll':
+                numberOfAvailableFiles = 4
+                break
+            case 'construction':
+            case 'kerching':
+            case 'coins':
+            case 'fail':
+            case 'move':
+            case 'train':
+                numberOfAvailableFiles = 3
+                break
+            case 'repairs':
+    
+            case 'just-visiting':
+                numberOfAvailableFiles = 2
+                break
+        }
+    
+        let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
+        sound.setAttribute('src', 'sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
+        sound.setAttribute('autoplay', '')
+        document.body.appendChild(sound)
+        console.log('sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
+    
+        window.setTimeout(function(){
+            sound.parentNode.removeChild(sound)
+        }, 10000)
     }
-
-    let sound = createElement('audio', '', '', 'type', 'audio/mpeg')
-    sound.setAttribute('src', 'sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
-    sound.setAttribute('autoplay', '')
-    document.body.appendChild(sound)
-    console.log('sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
-
-    window.setTimeout(function(){
-        sound.parentNode.removeChild(sound)
-    }, 10000)
 }
 
 // ELEMENT CREATION  ---------------------------------------------------------//
