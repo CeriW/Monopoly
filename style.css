@@ -273,7 +273,7 @@ button {
   .player-creation-panel h2 {
     font-size: 1em;
     margin-bottom: 10px; }
-  .player-creation-panel input {
+  .player-creation-panel input[type="text"] {
     text-align: center;
     border: none;
     border-bottom: 1px solid #000;

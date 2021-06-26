@@ -33,8 +33,6 @@ IMPROVEMENTS
 
 - Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
 
-- Super tax and income tax should probably have costs in their spaces entry, rather than being hard coded to 100/200
-
 - There are a lot of things that should have cursor: pointer on them.
 
 
@@ -66,8 +64,6 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 
 - Tooltips on appropriate items
 
-- More tokens https://monopoly.fandom.com/wiki/Tokens
-
 - Multiple international/theme boards
 
 - Use geolocation to determine where players are based, and offer the most closest version of the game (eg. UK, US etc)
@@ -83,6 +79,6 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - Income Tax to have the option for 10% rather than just £200
 
 
-RIDICULOUSLY STRETCH GOALS
+COMPLETELY FRIVOLOUS STUFF
 
-- Make the playtime clock actually represent the number of hours/minutes.
+- More tokens https://monopoly.fandom.com/wiki/Tokens

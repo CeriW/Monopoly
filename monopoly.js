@@ -1006,6 +1006,21 @@ function fakeRollDice(fakeTotal){
 
 function intialisePlayerCreator(){
 
+    // A list of hex codes which can be chosen from random to set as the
+    // default for the colour pickers. While I could generate colours completely
+    // randomly, this defaults them to sensible, complementary colours.
+    let randomColours = [
+        '#ED1C24', //red
+        '#F16521', //orange
+        '#FFDD17', //yellow
+        '#8CC63E', //lime
+        '#00A550', //green
+        '#00ADEF', //cyan
+        '#213F99', //blue
+        '#7E3F98', //purple
+        '#ED2A7B'  //magenta
+    ]
+
     shuffleArray(availableTokens)
     
     // Create the 'Add player' button
@@ -1049,7 +1064,6 @@ function intialisePlayerCreator(){
 
         // Create a nice title
         newPanel.appendChild(createElement('h2', null, 'PLAYER ' + playerID))
-
 
         // Create a token selector
         let tokenSelector = createElement('div', 'token-selector')
@@ -1114,11 +1128,15 @@ function intialisePlayerCreator(){
         // Add the token selector to the new player panel
         newPanel.appendChild(tokenSelector)
 
+        // Create an input for the player to choose their colour
+        let colourPicker = createElement('input', 'colour-picker', null, 'type', 'color')
+        colourPicker.setAttribute('value', randomColours[Math.floor(Math.random() * randomColours.length)])
+        newPanel.appendChild(colourPicker)
 
         // Create a name input
-        newPanel.appendChild(createElement('input', 'player-name-input', null, 'placeholder', 'player name'))
-
-
+        let playerNameInput = createElement('input', 'player-name-input', null, 'placeholder', 'player name')
+        playerNameInput.setAttribute('type', 'text')
+        newPanel.appendChild(playerNameInput)
 
         // Insert this new player panel before the add player button
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
