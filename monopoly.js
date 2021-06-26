@@ -2,10 +2,6 @@
 
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
-// If quick start is enabled, we'll skip over the player creation screen and
-// start the game immediately with 2 default players. Ideal for testing.
-let quickStartGame =  false;
-
 let availableTokens = [
     {name: 'dog',           available: true},
     {name: 'thimble',       available: true},
@@ -436,11 +432,6 @@ function initialisePage(){
     // Initialise the bank
     updateBank()
 
-    // If quick start is enabled, skip over the player creation and dice
-    // rolling functionality.
-    if(quickStartGame){
-        quickStart()
-    }
 }
 
 function cardCurrency(){
@@ -1003,104 +994,6 @@ function fakeRollDice(fakeTotal){
             //goToJail()
             doublesCount = 0
     }
-}
-
-
-// Note - all of this function is a teeny bit messy and could probably be improved.
-// However it is intended as a quick fix to make testing easier, not to be
-// an actual game feature.
-function quickStart(){
-    
-    createPlayers()
-
-    players.forEach(function(player){
-        player.money = 10000
-    })
-
-    let newPlayerDiceRoll = document.querySelector('.new-game-dice-roll')
-    newPlayerDiceRoll.parentNode.removeChild(newPlayerDiceRoll)
-
-
-    let player = 0
-    quickPropertyOwnership(4,1,player)
-    quickPropertyOwnership(3,3,player)
-    quickPropertyOwnership(0,6,player)
-    quickPropertyOwnership(0,12,player)
-    quickPropertyOwnership(0,27,player)
-    //quickMortgage(6, player)
-    //quickMortgage(12, player)
-
-    communityChestCards.forEach(function(card){
-        if (card.description === 'Get Out of Jail Free'){
-            communityChestCards.unshift(card)
-        }
-    })
-
-
-    player = 1
-    quickPropertyOwnership(0,5,player)
-    quickPropertyOwnership(0,15,player)
-    quickPropertyOwnership(0,25,player)
-    quickPropertyOwnership(0,35,player)
-    quickPropertyOwnership(0,21,player)
-
-    quickMortgage(5, player)
-    quickMortgage(25, player)
-    quickMortgage(21, player)
-
-
-    player = 2
-    quickPropertyOwnership(4,37,player)
-    quickPropertyOwnership(5,39,player)
-    quickPropertyOwnership(4,19,player)
-    quickPropertyOwnership(5,18,player)
-    quickPropertyOwnership(4,16,player)
-
-
-    player = 3
-    //quickPropertyOwnership(4,31,player)
-    //quickPropertyOwnership(5,32,player)
-    //quickPropertyOwnership(4,34,player)
-    //quickPropertyOwnership(0,28,player)
-    //quickMortgage(28, player)
-
-    addToFeed('Quick start mode initiated')
-
-
-    function quickPropertyOwnership(houses, position, playerIndex){
-
-        buyProperty(position, players[playerIndex], 'purchase', spaces[position].price)
-        gameState[position].ownerID = playerIndex + 1
-        //players[playerIndex].properties[position] = spaces[position]
-
-        if (spaces[position].type === 'property'){
-            gameState[position].houses = houses
-            //players[playerIndex].money -= spaces[position].houseCost * houses
-            updateHouseDisplay(position)
-        }
-    }
-
-    function quickMortgage(position, player){
-        gameState[position].mortgaged = true
-        document.querySelector('div[position="' + position + '"]').setAttribute('mortgaged', true)
-        players[player].money += spaces[position].price / 2
-    }
-
-
-    // Instant bankruptcy
-    //players[0].money = -1
-
-    players.forEach(function(player){
-        player.money = 1
-    })
-
-    updatePlayerDetails()
-
-    //console.clear()
-
-    //fakeRollDice(4)
-
-    
 }
 
 
