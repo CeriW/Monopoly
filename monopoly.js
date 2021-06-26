@@ -287,6 +287,7 @@ function savedGameFound(){
     savedPlayerDetails.forEach(function(player){
         let newDetail = createElement('div')
         newDetail.style.backgroundColor = player.colour
+        newDetail.setAttribute('best-token-colour', player.bestTokenColour)
         newDetail.appendChild(createElement('div', 'token', '', 'token', player.token))
         newDetail.appendChild(createElement('div', 'name', player.name))
         newDetail.appendChild(createElement('div', 'money', '<b>Money</b>: ' + player.money))
@@ -1132,11 +1133,64 @@ function intialisePlayerCreator(){
         let colourPicker = createElement('input', 'colour-picker', null, 'type', 'color')
         let randomColour = randomColours[Math.floor(Math.random() * randomColours.length)]
         colourPicker.setAttribute('value', randomColour)
+        tokenSelectorChosenIndicator.setAttribute('best-token-colour', lightOrDark(randomColour))
         tokenSelectorChosenIndicator.style.backgroundColor = randomColour
         colourPicker.addEventListener('change', function(e){
             e.target.previousElementSibling.children[0].style.backgroundColor = e.target.value
+            e.target.previousElementSibling.children[0].setAttribute('best-token-colour', lightOrDark(e.target.value))
         })
         newPanel.appendChild(colourPicker)
+
+
+
+        // Credit to https://awik.io/determine-color-bright-dark-using-javascript/
+        function lightOrDark(colour) {
+
+            // Variables for red, green, blue values
+            let r
+            let g
+            let b
+            let hsp
+            
+            // Check the format of the colour, HEX or RGB?
+            if (colour.match(/^rgb/)) {
+        
+                // If RGB --> store the red, green, blue values in separate variables
+                colour = colour.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+                
+                r = colour[1]
+                g = colour[2]
+                b = colour[3]
+            } 
+            else {
+                
+                // If hex --> Convert it to RGB: http://gist.github.com/983661
+                colour = +("0x" + colour.slice(1).replace( 
+                colour.length < 5 && /./g, '$&$&'))
+        
+                r = colour >> 16
+                g = colour >> 8 & 255
+                b = colour & 255
+            }
+            
+            // HSP equation from http://alienryderflex.com/hsp.html
+            hsp = Math.sqrt(
+            0.299 * (r * r) +
+            0.587 * (g * g) +
+            0.114 * (b * b)
+            );
+        
+            // Using the HSP value, determine whether the colour is light or dark
+            if (hsp>127.5) {
+        
+                return 'dark'
+            } 
+            else {
+        
+                return 'light'
+            }
+        }
+        
 
         // Create a name input
         let playerNameInput = createElement('input', 'player-name-input', null, 'placeholder', 'player name')
@@ -1171,6 +1225,8 @@ function createPlayers(){
         //}
 
         newPlayer.colour = playerCreationPanel.querySelector('input[type="color"]').value
+        newPlayer.bestTokenColour = playerCreationPanel.querySelector('.token-selector-chosen-indicator').getAttribute('best-token-colour')
+
 
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
@@ -1235,6 +1291,7 @@ function generateTokens(){
         let newToken = createElement('div', 'token', null, 'position', player.position)
         let newTokenBackground = createElement('div', 'token-background')
         newTokenBackground.style.backgroundColor = player.colour
+        newToken.setAttribute('best-token-colour', player.bestTokenColour)
         newToken.appendChild(newTokenBackground)
 
         newToken.classList.add(player.token)
@@ -1254,7 +1311,7 @@ function generateTokens(){
 function generatePlayerSummary(player){
     let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
     
-    let playerSummaryHeader = createElement('div','player-summary-header')
+    let playerSummaryHeader = createElement('div','player-summary-header', null, 'best-token-colour', player.bestTokenColour)
     playerSummaryHeader.style.backgroundColor = player.colour
 
     // Player's token

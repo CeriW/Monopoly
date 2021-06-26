@@ -582,6 +582,11 @@ $tokens:
     .token-selector-chosen-indicator[chosentoken="#{$token}"]{
         background-image: url('images/tokens/#{$token}.svg');
     }
+
+    .saved-game-summary [best-token-colour="light"] .token[token="#{$token}"],
+    .token-selector-chosen-indicator[chosentoken="#{$token}"][best-token-colour="light"]{
+        background-image: url('images/tokens/#{$token}-light.svg');
+    }
 }
 
 /* NEW GAME DICE ROLL ------------------------------------------------------- */
@@ -733,6 +738,10 @@ $tokens:
 
     & > div:not(.name){
         font-size: 18px;
+    }
+
+    &[best-token-colour="light"]{
+        color: #fff;
     }
 
     .name { grid-area: name;}
@@ -1178,7 +1187,7 @@ $columnsize: 80px;
         top: 0;
         bottom: 0;
         left: calc(50% - 23px);
-        mix-blend-mode: multiply;
+        mix-blend-mode: color;
         border-radius: 25px;
         border: 2px solid #000;
     }
@@ -1189,6 +1198,10 @@ $columnsize: 80px;
 @each $token in $tokens{
     .token.#{$token}{
         background-image: url('images/tokens/#{$token}.svg');
+    }
+
+    .token.#{$token}[best-token-colour="light"]{
+        background-image: url('images/tokens/#{$token}-light.svg');
     }
 }
 
@@ -1549,6 +1562,10 @@ $jailAnimationLength: 1.5;
             transition: 0.4s;
         }
     }
+
+    &[best-token-colour="light"]{
+        color: #fff;
+    }
 }
 
 #player-summary > div[inJail="true"] .player-token-icon:after{
@@ -1558,7 +1575,10 @@ $jailAnimationLength: 1.5;
 @each $token in $tokens{
     .player-token-icon[token="#{$token}"]{
         background-image: url('images/tokens/#{$token}.svg');
-        
+    }
+
+    [best-token-colour="light"] .player-token-icon[token="#{$token}"]{
+        background-image: url('images/tokens/#{$token}-light.svg');
     }
 }
 
