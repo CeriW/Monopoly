@@ -1170,10 +1170,7 @@ function createPlayers(){
             //newPlayer.colour += 'f'
         //}
 
-        // I'm told that when any RGB value is below 70 the colour doesn't tend
-        // to work well with black text on top. Therefore this code randomly
-        // generates an RGB code with each value between 100 and 255
-        newPlayer.colour = 'rgb(' + Math.ceil((Math.random() * 185) + 100) + ',' + Math.ceil((Math.random() * 155) + 100) + ',' + Math.ceil((Math.random() * 185) + 100) + ')'
+        newPlayer.colour = playerCreationPanel.querySelector('input[type="color"]').value
 
         // If the user has entered a name for this player, set the name to that.
         // Otherwise just call them Player 1/2/3/4 as appropriate.
