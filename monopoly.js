@@ -39,12 +39,16 @@ const bankruptcyTitle = document.querySelector('#bankruptcy-title')
 const saveIndicator = document.querySelector('#save-indicator')
 const saveButton = document.querySelector('#save-button')
 
+const playTimeIndicator = document.querySelector('#play-time-counter')
+
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
 let turn = 0
 
 // Whether sound effects are on by default
 let SFX = true
+
+let playTime = 0
 
 // Dice related elements
 let doublesCount = 0
@@ -318,6 +322,8 @@ function saveGame(){
     localStorage.setItem('availableHotels', availableHotels)
     localStorage.setItem('turn', turn)
     localStorage.setItem('availableActions', JSON.stringify(availableActions))
+    localStorage.setItem('playTime', playTime)
+
 
     saveIndicator.style.opacity = 1
     saveButton.style.opacity = 0;
@@ -340,7 +346,7 @@ function loadSavedGame(){
     turn = parseInt(localStorage.getItem('turn'))
     feedArchive = JSON.parse(localStorage.getItem('feedArchive'))
     availableActions = JSON.parse(localStorage.getItem('availableActions'))
-
+    playTime = parseInt(localStorage.getItem('playTime'))
 
     // Close the popup and get rid of the player creator
     closePopup()
@@ -592,6 +598,7 @@ function closeWindow(){
 function addEvents(){
 
 
+    // Warn players they may lose unsaved progress if they leave.
     window.addEventListener('beforeunload', function (e) {
         saveGame()
         // Cancel the event
@@ -634,8 +641,6 @@ function addEvents(){
                 }
 
                 break
-
-
         }
     })
     
@@ -659,13 +664,29 @@ function addEvents(){
     addTestingEvents()
     
 
-    // When the window is resized, put the tokens back where they belong.
-    // While the game isn't really designed to be run in small windows, this is
-    // a small touch that makes it slightly better,
-
     document.querySelector('#SFX-checkbox').addEventListener('change', function(){
         SFX = !SFX
     })
+
+    window.setInterval(function(){
+        playTime++
+
+        var hours = Math.floor(playTime /3600);
+        var minutes = Math.floor((playTime - hours * 3600) / 60);
+        var seconds = playTime - (hours * 3600 + minutes * 60);
+
+        function leadingZero(number){
+            if (number < 10){
+                return '0' + number
+            } else{
+                return(number)
+            }
+        }
+
+        playTimeIndicator.textContent = hours +':' + leadingZero(minutes) + ':' + leadingZero(seconds)
+
+    }, 1000)
+
 
 }
 

@@ -40,6 +40,7 @@ body{
     padding: 0;
     margin: 0;
     background: $lightgreen;
+    overflow-x: hidden;
 }
 
 main{
@@ -151,13 +152,31 @@ button{
     left: 0;
     right: 0;
     bottom: 0;*/
+
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
+
+#play-time{
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+    padding: 5px;
+
+    *{
+        margin-right: 6px;
+    }
+}
+
 
 /* SAVE INDICATOR ------------------------------------------------------------*/
 
 #save-block{
     background: #fff;
-    font-size: 18px;
+
     position: relative;
 
     & > div,

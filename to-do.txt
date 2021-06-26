@@ -53,9 +53,6 @@ ONGOING THINGS
 
 STRETCH GOALS
 
-- Play time counter
-	- Store this info in the saved game and show on load
-
 - Stats (graphs?)
 
 - Add a Monopoly rulebook
@@ -90,3 +87,8 @@ https://stackoverflow.com/questions/40253697/how-to-create-a-color-picker-in-htm
 - Sound effects
 
 - Income Tax to have the option for 10% rather than just £200
+
+
+RIDICULOUSLY STRETCH GOALS
+
+- Make the playtime clock actually represent the number of hours/minutes.

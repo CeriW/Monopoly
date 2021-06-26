@@ -14,7 +14,8 @@ body {
   min-height: 100vh;
   padding: 0;
   margin: 0;
-  background: #d5e8d4; }
+  background: #d5e8d4;
+  overflow-x: hidden; }
 
 main {
   padding: 15px;
@@ -91,12 +92,24 @@ button {
   /*position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;*/ }
+    bottom: 0;*/
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; }
+
+#play-time {
+  display: flex;
+  align-items: center;
+  min-width: 200px;
+  padding: 5px; }
+  #play-time * {
+    margin-right: 6px; }
 
 /* SAVE INDICATOR ------------------------------------------------------------*/
 #save-block {
   background: #fff;
-  font-size: 18px;
   position: relative; }
   #save-block > div,
   #save-block button {
