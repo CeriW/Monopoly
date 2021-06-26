@@ -190,7 +190,7 @@ let spaces =  [
     {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'south'},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50},
-    {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardArea: 'south', label: 'Pay £200'},
+    {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardArea: 'south', label: 'Pay £200', tax:200},
     {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardArea: 'south', rent:[25,50,100,200]},
     {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'south'},
@@ -227,7 +227,7 @@ let spaces =  [
     {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardArea: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250},
     {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'east'},
     {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardArea: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200},
-    {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardArea: 'east', label:'Pay £100'},
+    {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardArea: 'east', label:'Pay £100', tax:100},
     {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardArea: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200},
 ]
 
@@ -483,6 +483,11 @@ function generateBoard(){
             newSpace.classList.add(space.group)        
         }
 
+        if (space.tax){
+            newSpace.innerHTML += '<div class="property-name">' + space.name.toUpperCase() + '</div>'
+            newSpace.setAttribute('tax', space.tax)
+        }
+
         if (space.type === "property" || space.type === "station" || space.type === "utility"){
             newSpace.innerHTML += '<div class="ownership-tag"><svg enable-background="new 0 0 45.533 44" version="1.1" viewBox="0 0 45.533 44" width="20px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><polygon points="1.5 17.427 1.5 1.5 44.033 1.5 44.033 18.429 23.265 41.748" fill="transparent"/></svg></div>'
         } else if (space.type === 'jail'){
@@ -509,6 +514,8 @@ function generateBoard(){
 
             newSpace.innerHTML += '<div class="space-label">' + labelText + '</div>'
         }
+
+
 
 
         // TODO - this generates the house display for spaces it shouldn't and 
@@ -734,8 +741,6 @@ function setAvailableActions(){
 function updatePlayerDetails(){
 
     players.forEach(function(player){
-
-        console.log(player.id)
 
         // MONEY
         let updateNode = document.querySelector('.player-money[player="' + player.id + '"]')
@@ -1322,16 +1327,21 @@ function newGameDiceRoll(){
     // but will change if multiple players roll the joint highest roll
     let numberOfPlayersToRoll = players.length
 
+    let diceRollScreen = createElement('div', 'new-game-dice-roll')
+
     // Create a new screen to display all this info
-    document.body.appendChild(createElement('div', 'new-game-dice-roll'))
+    document.body.appendChild(diceRollScreen)
 
     // Create a heading
     diceRollScreen.appendChild(createElement('h2', null, 'Roll to see which player goes first'))
 
-    diceRollScreen.appendChild(createElement('div', 'dice-roll-container'))
+
+    let diceRollContainer = createElement('div', 'dice-roll-container')
+    diceRollScreen.appendChild(diceRollContainer)
 
     // Create an area for the winner to be announced
-    diceRollScreen.appendChild(createElement('div', 'winner-annoucement'))
+    let winnerAnnouncement = createElement('div', 'winner-annoucement')
+    diceRollScreen.appendChild(winnerAnnouncement)
 
     // Generate the dice roll functionality for each player
     players.forEach(function(player){
@@ -1359,7 +1369,7 @@ function newGameDiceRoll(){
 
         diceContainer.appendChild(createElement('span', null, ' = '))
 
-        diceContainer.appendChild(document.createElement('span', 'total'))
+        diceContainer.appendChild(createElement('span', 'total'))
 
         diceRollBox.appendChild(diceContainer)
 
@@ -2180,18 +2190,15 @@ function specialEndPositions(endPosition){
             break
         case 4:
             // Income tax
-            //players[turn - 1].money -= 200
-            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
-            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '200 income tax', 'money-minus')
-            //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: spaces[4].tax})
+            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + spaces[4].tax + ' income tax', 'money-minus')
             playSound('fail')
             break
         case 38:
             // Super tax
-            players[turn - 1].money -= 100
-            addToFeed(players[turn-1].name + currencySymbolSpan + ' paid 100 super tax', 'money-minus')
-            //updatePlayerDetails({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 100})
-            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: 200})
+            players[turn - 1].money -= spaces[38].tax
+            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + spaces[38].tax + ' super tax', 'money-minus')
+            payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: spaces[38].tax})
             playSound('fail')
             break
         case 0:
