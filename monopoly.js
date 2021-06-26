@@ -528,8 +528,7 @@ function generateBoard(){
 
         if (space.type === 'property'){
             newSpace.setAttribute('houses', 0)
-            let houseContainer = document.createElement('div')
-            houseContainer.classList.add('property-house-display')
+            let houseContainer = createElement('div', 'property-house-display')
 
             for (i = 0; i <5; i++){
                 let newHouse = document.createElement('div')
@@ -743,9 +742,9 @@ function setAvailableActions(){
 // This will trigger a nice animation.
 function updatePlayerDetails(){
 
-
-
     players.forEach(function(player){
+
+        console.log(player.id)
 
         // MONEY
         let updateNode = document.querySelector('.player-money[player="' + player.id + '"]')
@@ -774,7 +773,7 @@ function updatePlayerDetails(){
         }
 
         // PROPERTIES       
-        updateNode = document.querySelector('.player-properties[player="' + player.id + '"]')
+        updateNode = document.querySelector('.property-portfolio[player="' + player.id + '"]')
         
         // Clear the existing properties so we can start again. This has the
         // benefit of ensuring all colour groups end up together rather than
@@ -783,8 +782,10 @@ function updatePlayerDetails(){
 
         //player.properties.forEach(function(property){
         getPlayerPropertyList(player.id).forEach(function(property){
-            let propertyIcon = document.createElement('div')
-            propertyIcon.classList.add('property-icon', property.group, property.position )
+            let propertyIcon = createElement('div', 'property-icon')
+            propertyIcon.classList.add(property.group, property.position )
+
+
 
             if (property.group === 'utility'){
                 let propertyName = property.name
@@ -821,8 +822,7 @@ function updatePlayerDetails(){
             updateNode.setAttribute('cards', false)
         } else{
             player.getOutCards.forEach(function(card){
-                let cardIcon = createElement('div', 'player-card-icon', null, 'card-number', player.getOutCards.indexOf(card))
-                updateNode.appendChild(cardIcon)
+                updateNode.appendChild(createElement('div', 'player-card-icon', null, 'card-number', player.getOutCards.indexOf(card)))
             })
 
             updateNode.setAttribute('cards', true)
@@ -846,18 +846,12 @@ function updateBank(){
 
     // TODO - a lot of this could be done using CSS.
 
-    //let houseContainer = document.createElement('div')
     for (i = 1; i <= availableHouses; i++){
-        let houseIcon = createElement('span', 'bank-house-icon')
-        bank.appendChild(houseIcon)
+        bank.appendChild(createElement('span', 'bank-house-icon'))
     }
 
-    //let hotelContainer = document.createElement('div')
     for (i = 1; i <= availableHotels; i++){
-        let hotelIcon = createElement('span', 'bank-hotel-icon')
-        //hotelContainer.style.minWidth = '74px'
-        //hotelContainer.style.flexBasis = '74px'
-        bank.appendChild(hotelIcon)
+        bank.appendChild(createElement('span', 'bank-hotel-icon'))
     }
 
     /*
@@ -1117,10 +1111,9 @@ function intialisePlayerCreator(){
     shuffleArray(availableTokens)
     
     // Create the 'Add player' button
-    let addPlayer = document.createElement('div')
-    addPlayer.classList.add('add-player-button')
+    let addPlayer = createElement('div', 'add-player-button')
     addPlayer.textContent = 'ADD PLAYER'
-    let icon = document.createElement('img')
+    let icon = createElement('img')
     icon.src = 'images/plus.svg'
     addPlayer.appendChild(icon)
     playerCreator.appendChild(addPlayer)
@@ -1154,24 +1147,17 @@ function intialisePlayerCreator(){
 
 
     function createPlayerCreationPanel(playerID){
-        let newPanel = document.createElement('div')
-        newPanel.classList.add('player-creation-panel')
-        newPanel.setAttribute('player', playerID)
+        let newPanel = createElement('div', 'player-creation-panel', '', 'player', playerID)
 
         // Create a nice title
-        let title = document.createElement('h2')
-        title.textContent = 'PLAYER ' + playerID
-        newPanel.appendChild(title)
+        newPanel.appendChild(createElement('h2', null, 'PLAYER ' + playerID))
 
 
         // Create a token selector
-        let tokenSelector = document.createElement('div')
-        tokenSelector.classList.add('token-selector')
+        let tokenSelector = createElement('div', 'token-selector')
 
         // Create a div at the top of the selector to display the chosen one
-        let tokenSelectorChosenIndicator = document.createElement('div')
-        tokenSelectorChosenIndicator.classList.add('token-selector-chosen-indicator')
-        tokenSelectorChosenIndicator.setAttribute('chosenToken', availableTokens[playerID - 1].name)
+        let tokenSelectorChosenIndicator = createElement('div', 'token-selector-chosen-indicator', null, 'chosenToken', availableTokens[playerID - 1].name)
         tokenSelectorChosenIndicator.setAttribute('chosenTokenID', (playerID - 1))
         tokenSelectorChosenIndicator.classList.add('token-option', 'token-option-' + availableTokens[playerID - 1].name)
         availableTokens[playerID - 1].available = false
@@ -1188,14 +1174,12 @@ function intialisePlayerCreator(){
                 alreadyDisplayingTokenChoicesPanel.parentNode.removeChild(alreadyDisplayingTokenChoicesPanel)
             }
 
-            let availableTokenChoices = document.createElement('div')
-            availableTokenChoices.classList.add('available-token-choices')
+            let availableTokenChoices = createElement('div', 'available-token-choices')
             
             availableTokens.forEach(function(token){
                 if (token.available === true){
-                    let tokenOption = document.createElement('div')
-                    tokenOption.classList.add('token-option', 'token-option-' + token.name)
-                    tokenOption.setAttribute('token', token.name)
+                    let tokenOption = createElement('div', 'token-option', null, 'token', token.name)
+                    tokenOption.classList.add('token-option-' + token.name)
                     tokenOption.setAttribute('id', availableTokens.indexOf(token))
                     availableTokenChoices.appendChild(tokenOption)
                 }
@@ -1234,10 +1218,7 @@ function intialisePlayerCreator(){
 
 
         // Create a name input
-        let name = document.createElement('input')
-        name.classList.add('player-name-input')
-        name.setAttribute('placeholder', 'player name')
-        newPanel.appendChild(name)
+        newPanel.appendChild(createElement('input', 'player-name-input', null, 'placeholder', 'player name'))
 
 
 
@@ -1333,14 +1314,12 @@ function createPlayers(){
 
 function generateTokens(){
     players.forEach(function(player){
-        let newToken = document.createElement('div')
+        let newToken = createElement('div', 'token', null, 'position', player.position)
         let newTokenBackground = createElement('div', 'token-background')
         newTokenBackground.style.backgroundColor = player.colour
         newToken.appendChild(newTokenBackground)
 
-        newToken.classList.add('token')
         newToken.classList.add(player.token)
-        newToken.setAttribute('position', player.position)
         newToken.setAttribute('player', player.id)
         let inJail = player.inJail > 0 ? true : false
         newToken.setAttribute('jail', inJail)
@@ -1356,33 +1335,18 @@ function generateTokens(){
 
 function generatePlayerSummary(player){
     let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
-    //let newSummary = document.createElement('div')
-    //newSummary.setAttribute('id', 'player' + player.id + 'summary')
-
     
-    let playerSummaryHeader = document.createElement('div')
-    playerSummaryHeader.classList.add('player-summary-header')
+    let playerSummaryHeader = createElement('div','player-summary-header')
     playerSummaryHeader.style.backgroundColor = player.colour
 
     // Player's token
-    let playerToken = document.createElement('div')
-    playerToken.classList.add('player-token-icon')
-    playerToken.setAttribute('token', player.token)
-    playerSummaryHeader.appendChild(playerToken)
-
+    playerSummaryHeader.appendChild(createElement('div', 'player-token-icon', null, 'token', player.token))
 
     // Player's name
-    let title = document.createElement('h2')
-    title.innerText = player.name
-    playerSummaryHeader.appendChild(title)
+    playerSummaryHeader.appendChild(createElement('h2', null, player.name))
 
     // Player's money
-    let playerMoney = document.createElement('div')
-    playerMoney.classList.add('player-money')
-    //playerMoney.setAttribute('id', 'player-' + player.id + '-money')
-    playerMoney.setAttribute('player', player.id)
-    playerMoney.innerHTML = currencySymbolSpan + player.money
-    playerSummaryHeader.appendChild(playerMoney)
+    playerSummaryHeader.appendChild(createElement('div', 'player-money', currencySymbolSpan + player.money, 'player', player.id))
 
     newSummary.appendChild(playerSummaryHeader)
     
@@ -1395,56 +1359,46 @@ function generatePlayerSummary(player){
 
 
     // PROPERTIES
-    let playerPortfolioTitle = document.createElement('span')
-    playerPortfolioTitle.setAttribute('player', player.id)
-    playerPortfolioTitle.addEventListener('click', fullPortfolioView)
-    playerPortfolioTitle.innerText = 'Property portfolio⯈'
+    let playerPortfolioTitle = createElement('span', null, 'Property portfolio⯈', 'player', player.id)
     playerPortfolioTitle.classList.add('property-portfolio-title')
+    playerPortfolioTitle.addEventListener('click', fullPortfolioView)
     newSummary.appendChild(playerPortfolioTitle)
 
-    let playerPortfolio = document.createElement('div')
-    //playerPortfolio.setAttribute('id', 'player-' + player.id + '-properties')
-    playerPortfolio.setAttribute('player', player.id)
-    playerPortfolio.classList.add('property-portfolio')
+    let playerPortfolio = createElement('div', 'property-portfolio', null, 'player', player.id)
     playerPortfolio.addEventListener('click', portfolioItemPreview)
 
     newSummary.appendChild(playerPortfolio)
 
 
     // GET OUT CARDS    
-    let playerCards = createElement('div', 'player-cards', null, 'cards', false)
-    newSummary.appendChild(playerCards)
+    newSummary.appendChild(createElement('div', 'player-cards', null, 'cards', false))
 
     // TODO - much of this could probably be achieved much more simply with a loop
 
     // Create the buttons that allow players to end their turns.
     // CSS will be used to only show this for the player whose turn it is.
-    let newEndTurnButton = document.createElement('button')
-    newEndTurnButton.innerText = 'End turn'
-    newEndTurnButton.classList.add('end-turn-button', 'player-action-button')
+    let newEndTurnButton = createElement('button', 'end-turn-button', 'End turn')
+    newEndTurnButton.classList.add('player-action-button')
     newEndTurnButton.addEventListener('click', increasePlayerTurn)
 
 
     // Create the buttons that allow players to roll the dice.
-    let newRollDiceButton = document.createElement('button')
-    newRollDiceButton.innerText = 'Roll dice'
-    newRollDiceButton.classList.add('roll-dice-button', 'player-action-button')
+    let newRollDiceButton = createElement('button', 'roll-dice-button', 'Roll dice')
+    newRollDiceButton.classList.add('player-action-button')
     newRollDiceButton.addEventListener('click', rollDice)
 
     
     // Create the "Pay £50 to get out of jail" buttons
-    let newGetOut50Button = document.createElement('button')
-    newGetOut50Button.innerHTML = 'Pay ' + currencySymbolSpan + '50 to get out of jail'
-    newGetOut50Button.classList.add('get-out-50-button', 'player-action-button')
+    let newGetOut50Button = createElement('button', 'get-out-50-button', 'Pay ' + currencySymbolSpan + '50 to get out of jail')
+    newGetOut50Button.classList.add('player-action-button')
     newGetOut50Button.addEventListener('click', function(){getOutOfJail('pay')})
 
     // Create the "Roll doubles to get out of jail" buttons
-    let newRollDoublesForJailButton = document.createElement('button')
-    newRollDoublesForJailButton.innerText = "Roll doubles to get out of jail"
-    newRollDoublesForJailButton.classList.add('roll-doubles-for-jail', 'player-action-button')
+    let newRollDoublesForJailButton = createElement('button', 'roll-doubles-for-jail', 'Roll doubles to get out of jail')
+    newRollDoublesForJailButton.classList.add('player-action-button')
     newRollDoublesForJailButton.addEventListener('click', rollDoublesForJail)
 
-    let newCardOutOfJailButton = createElement('button', 'card-out-of-jail-button', 'Use a get out of jail free card', null, null)
+    let newCardOutOfJailButton = createElement('button', 'card-out-of-jail-button', 'Use a get out of jail free card')
     newCardOutOfJailButton.classList.add('player-action-button')
     newCardOutOfJailButton.addEventListener('click', function(){
         getOutOfJail('card')
@@ -1476,73 +1430,50 @@ function newGameDiceRoll(){
     let numberOfPlayersToRoll = players.length
 
     // Create a new screen to display all this info
-    let diceRollScreen = document.createElement('div')
-    diceRollScreen.classList.add('new-game-dice-roll')
-    document.body.appendChild(diceRollScreen)
+    document.body.appendChild(createElement('div', 'new-game-dice-roll'))
 
     // Create a heading
-    let heading = document.createElement('h2')
-    heading.textContent = "Roll to see which player goes first"
-    diceRollScreen.appendChild(heading)
+    diceRollScreen.appendChild(createElement('h2', null, 'Roll to see which player goes first'))
 
-    let diceRollContainer = document.createElement('div')
-    diceRollContainer.classList.add('dice-roll-container')
-    diceRollScreen.appendChild(diceRollContainer)
+    diceRollScreen.appendChild(createElement('div', 'dice-roll-container'))
 
     // Create an area for the winner to be announced
-    let winnerAnnouncement = document.createElement('div')
-    winnerAnnouncement.classList.add('winner-annoucement')
-    diceRollScreen.appendChild(winnerAnnouncement)
+    diceRollScreen.appendChild(createElement('div', 'winner-annoucement'))
 
     // Generate the dice roll functionality for each player
     players.forEach(function(player){
         // Container
-        let diceRollBox = document.createElement('div')
-        diceRollBox.classList.add('new-player-dice-roll')
-        diceRollBox.setAttribute('player', player.id)
+        let diceRollBox = createElement('div', 'new-player-dice-roll', null, 'player', player.id)
         
         // Token
         let playerToken = document.createElement('img')
         playerToken.src = 'images/tokens/' + player.token + '.svg'
         diceRollBox.appendChild(playerToken)
         
-        let playerName = document.createElement('h3')
-        playerName.textContent = player.name
-        diceRollBox.appendChild(playerName)
-        //diceRollBox.textContent = player.name
+        diceRollBox.appendChild(createElement('h3', null, player.name))
 
-        let diceContainer = document.createElement('div')
-        diceContainer.classList.add('dice-container')
+        let diceContainer = createElement('div', 'dice-container')
 
+        let dice1 = createElement('span', 'dice')
+        dice1.classList.add('dice-1')
+        diceContainer.appendChild(dice1)
 
-            let dice1 = document.createElement('span')
-            dice1.classList.add('dice', 'dice-1')
-            diceContainer.appendChild(dice1)
+        diceContainer.appendChild(createElement('span', null, ' + '))
 
-            let plus = document.createElement('span')
-            plus.textContent = ' + '
-            diceContainer.appendChild(plus)
+        let dice2 = createElement('span', 'dice')
+        dice2.classList.add('dice-2')
+        diceContainer.appendChild(dice2)
 
-            let dice2 = document.createElement('span')
-            dice2.classList.add('dice', 'dice-2')
-            diceContainer.appendChild(dice2)
+        diceContainer.appendChild(createElement('span', null, ' = '))
 
-            let equals = document.createElement('span')
-            equals.textContent = ' = '
-            diceContainer.appendChild(equals)
-
-            let total = document.createElement('span')
-            total.classList.add('total')
-            diceContainer.appendChild(total)
-
+        diceContainer.appendChild(document.createElement('span', 'total'))
 
         diceRollBox.appendChild(diceContainer)
 
         diceRollContainer.appendChild(diceRollBox)
     })
 
-    let diceRollButton = document.createElement('button')
-    diceRollButton.textContent = 'Roll dice'
+    let diceRollButton = createElement('button', null, 'Roll dice')
 
     // Run the dice roll on all non-losing players
     diceRollButton.addEventListener('click', newPlayerDiceRoll)
@@ -1846,8 +1777,7 @@ function drawCard(type){
 
 
 
-    let innerCardMessage = createElement('div', '', chosenCard.description)
-    cardMessage.appendChild(innerCardMessage)
+    cardMessage.appendChild(createElement('div', '', chosenCard.description))
     openPopup('', (type === "community-chest") ? 'Community Chest' : 'Chance')
     popupMessage.appendChild(cardMessage)
 
@@ -2737,9 +2667,7 @@ function portfolioItemPreview(e){
     if (target){
         let targetProperty = target.getAttribute('property')
         displayPropertyDetails(targetProperty)
-        let backButton = document.createElement('div')
-        backButton.classList.add('back-button')
-        backButton.setAttribute('player', gameState[targetProperty].ownerID)
+        let backButton = createElement('div', 'back-button', null, 'player', gameState[targetProperty].ownerID)
         document.querySelector('.property-overview').appendChild(backButton)
         backButton.addEventListener('click', fullPortfolioView)
     }
@@ -2747,7 +2675,6 @@ function portfolioItemPreview(e){
 
 function fullPortfolioView(e){
     let player = (e.type === 'keydown') ? document.querySelector('.property-overview').getAttribute('player') :  e.target.getAttribute('player')
-    //let portfolioOutput = generateFullPortfolioView(player)
     openPopup('', players[player - 1].name + '\'s property portfolio')
     popupMessage.appendChild(generateFullPortfolioView(player))
     document.querySelector('.full-portfolio').addEventListener('click', portfolioItemPreview, true)
@@ -2783,17 +2710,14 @@ function generateFullPortfolioView(playerID){
         propertyContainer.appendChild(propertyIcon)
 
         // Add the name
-        let propertyName = createElement('div', 'property-name', property.name)
-        propertyContainer.appendChild(propertyName)
+        propertyContainer.appendChild(createElement('div', 'property-name', property.name))
 
         // Add icons if there are houses/hotels
         if (property.houses === 5){
-            let hotelIcon = createElement('span', 'full-portfolio-hotel')
-            propertyContainer.appendChild(hotelIcon)
+            propertyContainer.appendChild(createElement('span', 'full-portfolio-hotel'))
         } else{
             for (i = 1; i <= property.houses; i++){
-                let houseIcon = createElement('span', 'full-portfolio-house')
-                propertyContainer.appendChild(houseIcon)
+                propertyContainer.appendChild(createElement('span', 'full-portfolio-house'))
             }
         }
 
@@ -2815,9 +2739,7 @@ function generateFullPortfolioView(playerID){
             }
         }
 
-        let valueDisplay = createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value)
-        propertyContainer.appendChild(valueDisplay)
-
+        propertyContainer.appendChild(createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value))
 
         // If this is a station or utility, add these to an array to be looped
         // through and added at the end of the list.
@@ -2876,8 +2798,7 @@ function displayPropertyOptions(number){
         if (players[turn - 1].position === number){
 
             // Buy property elements
-            let buyButton = document.createElement('button')
-            buyButton.innerText = 'Buy this property'
+            let buyButton = createElement('button', null, 'Buy this property')
             buyButton.addEventListener('click', function(){
                 buyProperty(number, players[turn - 1], 'purchase', null)
             })
@@ -2885,8 +2806,7 @@ function displayPropertyOptions(number){
 
 
             // Auction property elements
-            let auctionButton = document.createElement('button')
-            auctionButton.innerText = 'Go to auction'
+            let auctionButton = createElement('button', null, 'Go to auction')
             auctionButton.addEventListener('click', function(){
                 auctionProperty(number)
             })
@@ -2922,9 +2842,7 @@ function displayPropertyOptions(number){
                 //availableActions.buildHouse = true
 
                 // Player may build houses/hotels.
-                let colourSetButton = document.createElement('button')
-                colourSetButton.classList.add('colour-set-button')
-                colourSetButton.innerText = 'Manage colour set'
+                let colourSetButton = createElement('button', 'colour-set-button', 'Manage colour set')
                 colourSetButton.addEventListener('click', function(){
                     displayBuildHousePanel(colour)
                 })
@@ -3003,9 +2921,7 @@ function displayPropertyOptions(number){
             if(gameState[number].mortgaged === true){
                 availableActions.mortgageProperty = false
                 availableActions.unmortgageProperty = true
-                mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
-                optionsPanel.appendChild(mortgageMessage)
-                mortgageMessage.innerText = 'This property is mortgaged.'
+                optionsPanel.appendChild(createElement('div', 'mortgage-message', 'This property is mortgaged.'))
 
             // If the player owns the full colour set...
             } else if(checkColourSet(colour, gameState[number].ownerID)){
@@ -3027,9 +2943,7 @@ function displayPropertyOptions(number){
                     availableActions.unmortgageProperty = false    // This property shouldn't be able to be mortgaged in the first place, but this will hide the button.
                     availableActions.buildHouse = true
                     availableActions.buildHotel = true
-                    mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
-                    optionsPanel.appendChild(mortgageMessage)
-                    mortgageMessage.innerText = 'You may not mortgage this while any properties in the colour set have houses or hotels.'
+                    optionsPanel.appendChild(createElement('div', 'mortgage-message', 'You may not mortgage this while any properties in the colour set have houses or hotels.'))
                 } else{
                     // There are no houses on this colour set. Enable both
                     // mortgaging and building.
@@ -3043,9 +2957,7 @@ function displayPropertyOptions(number){
                 if (checkMortgagesInColourSet(colour)){
                     availableActions.buildHouse = false
                     availableActions.buildHotel = false
-                    mortgageMessage = createElement('div', 'mortgage-message', '', null, null)
-                    optionsPanel.appendChild(mortgageMessage)
-                    mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
+                    optionsPanel.appendChild(createElement('div', 'mortgage-message', 'You may not build houses while properties in this colour set are mortgaged.'))
                 }
 
    
@@ -3104,8 +3016,7 @@ function mortgageProperty(property, bankruptcy){
 
     let propertyOptions = document.querySelector('.property-overview-options')
     if (propertyOptions){
-        let mortgageMessage = createElement('div', 'mortgage-message', 'This property is mortgaged')
-        propertyOptions.appendChild(mortgageMessage)
+        propertyOptions.appendChild(createElement('div', 'mortgage-message', 'This property is mortgaged'))
     }
 
     // Change what actions are appropriate
@@ -3127,64 +3038,33 @@ function displayBuildHousePanel(colour){
         feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: gameState[property.position].houses, owner: getPropertyOwnerDetails(property.position).name})
     })
 
-    // Get an array of all of the properties in that colour set.
-    //let colourSet = []
-
-    //for (i = 0; i < spaces.length; i++){
-      //  let property = spaces[i]
-        //if (property.group === colour){
-          //  colourSet.push(property)
-            //feedDetails.push({name: property.name, position: property.position, newBuildings:0, originalBuildings: property.houses, owner: property.owner.name})
-        //}
-    //}
-
     let houseBuildPanel = document.createElement('div')
 
     // Create a div to show an overview of the properties in this colour set
-    let colourSetOverview = document.createElement('div')
-    colourSetOverview.classList.add('colour-set-overview')
+    let colourSetOverview = createElement('div', 'colour-set-overview')
     houseBuildPanel.appendChild(colourSetOverview)
-
-
 
     colourSet.forEach(function(property){
 
         // Generate details of the property (rent etc) for reference
-        let setItemDetails = document.createElement('div')
-        setItemDetails.classList.add('property-overview')
-        setItemDetails.innerHTML += generateRentTable(property.position)
-        colourSetOverview.appendChild(setItemDetails)
+        colourSetOverview.appendChild(createElement('div', 'property-overview', generateRentTable(property.position)))
 
         // Generate house building buttons
-        let housePanel = document.createElement('div')
-        housePanel.classList.add('house-building-panel')
-        housePanel.setAttribute('position', property.position)
-        setItemDetails.appendChild(housePanel)
+        setItemDetails.appendChild(createElement('div', 'house-building-panel', null, 'position', property.position))
 
         // Create a nice little display to show how many houses are on this property
-        let houseVisualDisplay = document.createElement('div')
-        houseVisualDisplay.classList.add('house-visual-display')
-        houseVisualDisplay.setAttribute('houses', gameState[property.position].houses)
-        housePanel.appendChild(houseVisualDisplay)
+        housePanel.appendChild(createElement('div', 'house-visual-display', null, 'houses', gameState[property.position].houses))
 
         // Create a panel for the buttons to go in
-        let buttonPanel = document.createElement('div')
-        buttonPanel.classList.add('button-panel')
+        let buttonPanel = createElement('div', 'button-panel')
 
         // Create a button to build houses
-        let buildHouseBtn = document.createElement('button')
-        buildHouseBtn.classList.add('build-house-button')
+        let buildHouseBtn = document.createElement('button', 'build-house-button')
 
         ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'not-enough-money', 'maximum-number-of-buildings-reached'].forEach(function(message){
-            let innerSpan = document.createElement('span')
-            innerSpan.classList.add(message)
-            let readableMessage = message.replace(/-/g, ' ')
-            innerSpan.textContent = readableMessage
-            buildHouseBtn.appendChild(innerSpan)
+            buildHouseBtn.appendChild(createElement('span', message, message.replace(/-/g, ' ')))
         })
 
-        //buildHouseBtn.innerText = 'Build house'
-        //buildHouseBtn.textContent = (spaces[property.position].houses === 4) ? 'Build hotel' : 'Build house'
         buildHouseBtn.addEventListener('click', function(){
             buildHouse(property.position) 
         })
@@ -3198,20 +3078,16 @@ function displayBuildHousePanel(colour){
 
         if (getPropertyOwnerDetails(colourSet[0].position).id == turn){
             
-            let sellHouseBtn = document.createElement('button')
-            sellHouseBtn.classList.add('sell-house-button')
+            let sellHouseBtn = createElement('button', 'sell-house-button')
 
             ;['sell-house', 'sell-hotel'].forEach(function(message){
-                let innerSpan = document.createElement('span')
-                innerSpan.classList.add(message)
-                let readableMessage = message.replace(/-/g, ' ')
-                innerSpan.textContent = readableMessage
-                sellHouseBtn.appendChild(innerSpan)
+                sellHouseBtn.appendChild(createElement('span', message, message.replace(/-/g, ' ')))
             })
 
             sellHouseBtn.addEventListener('click', function(){
                 sellHouse(property.position)
             })
+
             buttonPanel.appendChild(sellHouseBtn)
         }
 
@@ -3775,45 +3651,28 @@ function auctionProperty(number, proceedsToAll){
     let currentNumberOfBidders = nonNullArrayItems(players)
 
 
-    let auctionScreen = document.createElement('div')
-    auctionScreen.classList.add('auction-screen')
+    let auctionScreen = createElement('div', 'auction-screen')
 
     // Generate the rent table so players can see what they're buying
-    let auctionRentTable = document.createElement('div')
-    auctionRentTable.classList.add('auction-rent-table')
-    auctionRentTable.innerHTML += generatePropertyDetails(propertyID)
-    auctionScreen.appendChild(auctionRentTable)
+    auctionScreen.appendChild(createElement('div', 'auction-rent-table', generatePropertyDetails(propertyID)))
 
     // Generate the areas for players to bid on the property
-    let auctionBidArea = document.createElement('div')
-    auctionBidArea.classList.add('auction-bidding-area')
+    let auctionBidArea = createElement('div', 'auction-bidding-area')
 
     // Generate the auction heading
-    let auctionHeading = document.createElement('h2')
-    auctionHeading.classList.add('auction-heading')
-    auctionHeading.textContent = 'Auction'
-    auctionBidArea.appendChild(auctionHeading)
+    auctionBidArea.appendChild(createElement('h2', 'auction-heading', 'Auction'))
 
     // Generate an area to show the current bid
 
-    let currentBidContainer = document.createElement('div')
-    currentBidContainer.classList.add('current-bid-container')
+    let currentBidContainer = createElement('div', 'current-bid-container')
 
-    let currentBidHeading = document.createElement('h3')
-    currentBidHeading.textContent = 'Current bid:'
-    currentBidHeading.classList.add('current-bid-heading')
-    currentBidContainer.appendChild(currentBidHeading)
+    currentBidContainer.appendChild(createElement('h3', 'current-bid-heading', 'Current bid:'))
 
-    let currentBidAmount = document.createElement('div')
-    currentBidAmount.classList.add('current-bid-amount')
-    currentBidAmount.innerHTML = currencySymbolSpan + currentBid
-    currentBidContainer.appendChild(currentBidAmount)
-
+    currentBidContainer.appendChild(createElement('div', 'current-bid-amount', currencySymbolSpan + currentBid))
 
     auctionBidArea.appendChild(currentBidContainer)
 
-    let playerBidInterfacesContainer = document.createElement('div')
-    playerBidInterfacesContainer.classList.add('player-bid-interfaces-container')
+    let playerBidInterfacesContainer = createElement('div', 'player-bid-interfaces-container')
 
     for(i = 0; i < players.length; i++){
 
@@ -3821,38 +3680,25 @@ function auctionProperty(number, proceedsToAll){
         if (players[i]){
 
             // The container for this player's interface
-            let playerBidInterface = document.createElement('div')
-            playerBidInterface.classList.add('player-bid-interface')
-            playerBidInterface.setAttribute('player', players[i].id)
+            let playerBidInterface = createElement('div', 'player-bid-interface', null, 'player', players[i].id)
             
             // Generate the player's token
-            let playerToken = document.createElement('div')
-            playerToken.classList.add('player-token-icon')
-            playerToken.setAttribute('player', players[i].id)
+            let playerToken = createElement('div', 'player-token-icon', null, 'player', players[i].id)
             playerToken.setAttribute('token', players[i].token)
             playerToken.style.backgroundColor = players[i].colour
             playerBidInterface.appendChild(playerToken)
 
             // Generate the player's name
-            let playerHeading = document.createElement('h3')
-            playerHeading.classList.add('player-heading')
-            playerHeading.textContent = players[i].name
-            playerBidInterface.appendChild(playerHeading)
+            playerBidInterface.appendChild(createElement('h3', 'player-heading', players[i].name))
 
             // Generate the player's money
-            let playerMoney = document.createElement('div')
-            playerMoney.classList.add('player-money')
-            playerMoney.setAttribute('player', player.id)
-            playerMoney.innerHTML = currencySymbolSpan + players[i].money
-            playerBidInterface.appendChild(playerMoney)
+            playerBidInterface.appendChild(createElement('div', 'player-money', currencySymbolSpan + players[i].money, 'player', player.id))
 
             // Generate the input field for the player's bid.
-            let bidInput = document.createElement('input')
-            bidInput.setAttribute('type', 'number')
+            let bidInput = createElement('input', 'bid-input', null, 'type', 'number')
             bidInput.setAttribute('placeholder', 'Your bid')
             bidInput.setAttribute('min', 10)
             bidInput.setAttribute('max-sensible-bid', players[i].money)
-            bidInput.classList.add('bid-input')
             
             playerBidInterface.appendChild(bidInput)
             appendTooltip(bidInput, 'This is more money than you currently have.', 'warning')
@@ -3873,17 +3719,10 @@ function auctionProperty(number, proceedsToAll){
             
 
             // Generate the buttons for players to submit their bids.
-            let submitBidButton = document.createElement('button')
-            submitBidButton.textContent = 'Bid'
-            submitBidButton.classList.add('bid-button')
-            playerBidInterface.appendChild(submitBidButton)
+            playerBidInterface.appendChild(createElement('button', 'bid-button', 'Bid'))
 
             // Generate the buttons for players to abstain from bidding
-            let abstainButton = document.createElement('button')
-            abstainButton.textContent = 'Withdraw'
-            abstainButton.classList.add('abstain-button')
-            playerBidInterface.appendChild(abstainButton)
-
+            playerBidInterface.appendChild(createElement('button', 'abstain-button', 'Withdraw'))
 
             // Add an event listener to the panel so we can run various events
             playerBidInterface.addEventListener('click', bidOnProperty)
@@ -4223,10 +4062,7 @@ function landOnProperty(position){
 
 function initiateTrade(bankruptcy){
 
-
-    let tradeWindow = document.createElement('div')
-    tradeWindow.classList.add('trade-summary-window')
-
+    let tradeWindow = createElement('div', 'trade-summary-window')
 
     // Summary for the player initiating the trade
 
@@ -4400,9 +4236,7 @@ function negotiateTrade(e, bankruptcy){
     let proposalHTML = 'Money to trade: ' + currencySymbolSpan
 
 
-    let currentPlayerMoneyProposal = document.createElement('div')
-    currentPlayerMoneyProposal.classList.add('money-proposal-container')
-    currentPlayerMoneyProposal.innerHTML = proposalHTML
+    let currentPlayerMoneyProposal = createElement('div', 'money-proposal-container', proposalHTML)
     let input = document.createElement('input')
     input.setAttribute('class', 'money-proposal')
     input.setAttribute('placeholder', 'money')
@@ -4422,12 +4256,8 @@ function negotiateTrade(e, bankruptcy){
     currentPlayerSummary.insertBefore(currentPlayerMoneyProposal, currentPlayerSummary.querySelector('.player-identity').nextElementSibling)
 
 
-    let otherPlayerMoneyProposal = document.createElement('div')
-    otherPlayerMoneyProposal.classList.add('money-proposal-container')
-    otherPlayerMoneyProposal.innerHTML = proposalHTML
-    input = document.createElement('input')
-    input.setAttribute('class', 'money-proposal')
-    input.setAttribute('placeholder', 'money')
+    let otherPlayerMoneyProposal = createElement('div', 'money-proposal-container', proposalHTML)
+    input = createElement('input', 'money-proposal', null, 'placeholder', 'money')
     input.setAttribute('type', 'number')
     input.setAttribute('min', '1')
     input.setAttribute('max', players[receiver-1].money)
@@ -5714,16 +5544,14 @@ function appendTooltip(node, innerHTML, type){
 // CONFETTI ------------------------------------------------------------------//
 
 function createConfetti(){
-    let confettiContainer = document.createElement('div')
-    confettiContainer.classList.add('confetti-container')
+    let confettiContainer = createElement('div', 'confetti-container')
     document.body.appendChild(confettiContainer)
     
     let confettiParticleCount = window.innerWidth / 10
     
     
     for (i=0; i < confettiParticleCount; i++){
-      let particle = document.createElement('div')
-      particle.classList.add('particle')
+      let particle = createElement('div', 'particle')
       let particleInner = document.createElement('div')
       particle.appendChild(particleInner)
       

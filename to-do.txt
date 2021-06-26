@@ -29,8 +29,6 @@ IMPROVEMENTS
 
 - Make the quick start functionality actually good.
 
-- Refactor all the things with player specific IDs to have player attributes instead.
-
 - Reorder the readme so it's in alphabetical order
 
 - update the code throughout to use the createElement function
