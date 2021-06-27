@@ -298,6 +298,27 @@ button {
     margin-top: 15px;
     width: 35px; }
 
+.player-creation-panel input[type="color"] {
+  width: 25px;
+  height: 29px;
+  border: none;
+  position: absolute;
+  left: calc(50% - 36px);
+  bottom: -7px;
+  background: none;
+  padding: 0; }
+  .player-creation-panel input[type="color"]:after {
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("images/paintbrush.svg") center no-repeat;
+    background-size: 70%;
+    position: absolute; }
+  .player-creation-panel input[type="color"][best-token-colour="light"]:after {
+    background-image: url("images/paintbrush-light.svg"); }
+
 .flyover {
   width: 55px;
   height: 55px;

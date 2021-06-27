@@ -1134,12 +1134,14 @@ function intialisePlayerCreator(){
         let randomColour = randomColours[Math.floor(Math.random() * randomColours.length)]
         colourPicker.setAttribute('value', randomColour)
         tokenSelectorChosenIndicator.setAttribute('best-token-colour', lightOrDark(randomColour))
+        colourPicker.setAttribute('best-token-colour', lightOrDark(randomColour))
         tokenSelectorChosenIndicator.style.backgroundColor = randomColour
         colourPicker.addEventListener('change', function(e){
-            e.target.previousElementSibling.children[0].style.backgroundColor = e.target.value
-            e.target.previousElementSibling.children[0].setAttribute('best-token-colour', lightOrDark(e.target.value))
+            e.target.previousElementSibling.style.backgroundColor = e.target.value
+            e.target.previousElementSibling.setAttribute('best-token-colour', lightOrDark(e.target.value))
+            e.target.setAttribute('best-token-colour', lightOrDark(e.target.value))
         })
-        newPanel.appendChild(colourPicker)
+        tokenSelector.appendChild(colourPicker)
 
 
 
