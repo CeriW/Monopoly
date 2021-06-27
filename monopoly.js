@@ -2808,9 +2808,10 @@ function displayPropertyOptions(number){
         
         //optionsPanel.innerHTML = 'You own this property!<br>'
 
-        optionsPanelOwner = createElement('div', 'options-panel-owner')
-        optionsPanelOwner.appendChild(createElement('div', 'token', '', 'token', propertyOwner.token))
+        optionsPanelOwner = createElement('div', 'options-panel-owner', '', 'best-token-colour', propertyOwner.bestTokenColour)
+        optionsPanelOwner.appendChild(createElement('div', 'token', null, 'token', propertyOwner.token))
         optionsPanelOwner.appendChild(createElement('div', '', '<span class="smallText">OWNED BY</span><br>' + propertyOwner.name))
+        optionsPanelOwner.style.backgroundColor = propertyOwner.colour
         optionsPanel.appendChild(optionsPanelOwner)
 
 

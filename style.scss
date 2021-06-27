@@ -609,6 +609,7 @@ $tokens:
         background-image: url('images/tokens/#{$token}.svg');
     }
 
+    .options-panel-owner[best-token-colour="light"] .token[token="#{$token}"],
     .saved-game-summary [best-token-colour="light"] .token[token="#{$token}"],
     .token-selector-chosen-indicator[chosentoken="#{$token}"][best-token-colour="light"]{
         background-image: url('images/tokens/#{$token}-light.svg');
@@ -2219,6 +2220,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .options-panel-owner .token{
     position: relative;
     margin-bottom: 10px;
+}
+
+.options-panel-owner[best-token-colour="light"]{
+    color: #fff;
 }
 
 

@@ -454,6 +454,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="dog"] {
   background-image: url("images/tokens/dog.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="dog"],
 .saved-game-summary [best-token-colour="light"] .token[token="dog"],
 .token-selector-chosen-indicator[chosentoken="dog"][best-token-colour="light"] {
   background-image: url("images/tokens/dog-light.svg"); }
@@ -465,6 +466,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="iron"] {
   background-image: url("images/tokens/iron.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="iron"],
 .saved-game-summary [best-token-colour="light"] .token[token="iron"],
 .token-selector-chosen-indicator[chosentoken="iron"][best-token-colour="light"] {
   background-image: url("images/tokens/iron-light.svg"); }
@@ -476,6 +478,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="thimble"],
 .saved-game-summary [best-token-colour="light"] .token[token="thimble"],
 .token-selector-chosen-indicator[chosentoken="thimble"][best-token-colour="light"] {
   background-image: url("images/tokens/thimble-light.svg"); }
@@ -487,6 +490,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="car"] {
   background-image: url("images/tokens/car.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="car"],
 .saved-game-summary [best-token-colour="light"] .token[token="car"],
 .token-selector-chosen-indicator[chosentoken="car"][best-token-colour="light"] {
   background-image: url("images/tokens/car-light.svg"); }
@@ -498,6 +502,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="battleship"] {
   background-image: url("images/tokens/battleship.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="battleship"],
 .saved-game-summary [best-token-colour="light"] .token[token="battleship"],
 .token-selector-chosen-indicator[chosentoken="battleship"][best-token-colour="light"] {
   background-image: url("images/tokens/battleship-light.svg"); }
@@ -509,6 +514,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="hat"] {
   background-image: url("images/tokens/hat.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="hat"],
 .saved-game-summary [best-token-colour="light"] .token[token="hat"],
 .token-selector-chosen-indicator[chosentoken="hat"][best-token-colour="light"] {
   background-image: url("images/tokens/hat-light.svg"); }
@@ -520,6 +526,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="penguin"] {
   background-image: url("images/tokens/penguin.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="penguin"],
 .saved-game-summary [best-token-colour="light"] .token[token="penguin"],
 .token-selector-chosen-indicator[chosentoken="penguin"][best-token-colour="light"] {
   background-image: url("images/tokens/penguin-light.svg"); }
@@ -531,6 +538,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="dinosaur"] {
   background-image: url("images/tokens/dinosaur.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="dinosaur"],
 .saved-game-summary [best-token-colour="light"] .token[token="dinosaur"],
 .token-selector-chosen-indicator[chosentoken="dinosaur"][best-token-colour="light"] {
   background-image: url("images/tokens/dinosaur-light.svg"); }
@@ -542,6 +550,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="cat"] {
   background-image: url("images/tokens/cat.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="cat"],
 .saved-game-summary [best-token-colour="light"] .token[token="cat"],
 .token-selector-chosen-indicator[chosentoken="cat"][best-token-colour="light"] {
   background-image: url("images/tokens/cat-light.svg"); }
@@ -553,6 +562,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="ducky"] {
   background-image: url("images/tokens/ducky.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="ducky"],
 .saved-game-summary [best-token-colour="light"] .token[token="ducky"],
 .token-selector-chosen-indicator[chosentoken="ducky"][best-token-colour="light"] {
   background-image: url("images/tokens/ducky-light.svg"); }
@@ -564,6 +574,7 @@ button {
 .token-selector-chosen-indicator[chosentoken="thimble"] {
   background-image: url("images/tokens/thimble.svg"); }
 
+.options-panel-owner[best-token-colour="light"] .token[token="thimble"],
 .saved-game-summary [best-token-colour="light"] .token[token="thimble"],
 .token-selector-chosen-indicator[chosentoken="thimble"][best-token-colour="light"] {
   background-image: url("images/tokens/thimble-light.svg"); }
@@ -2084,6 +2095,9 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .options-panel-owner .token {
   position: relative;
   margin-bottom: 10px; }
+
+.options-panel-owner[best-token-colour="light"] {
+  color: #fff; }
 
 .property-overview-options {
   background: #ececec;
