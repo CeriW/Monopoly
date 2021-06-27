@@ -673,11 +673,15 @@ $tokens:
     transition: 0.3s;
 
     img{
-        max-width: 50px;
+        max-width: 72px;
         grid-row: 1 / 1;
         grid-column: 1 / 5;
         float: none;
-        margin: 0 auto;
+        margin: 0 auto 10px;
+        border: 1px solid #dbdbdb;
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 50%;
     }
 
     h3{

@@ -1145,53 +1145,7 @@ function intialisePlayerCreator(){
 
 
 
-        // Credit to https://awik.io/determine-color-bright-dark-using-javascript/
-        function lightOrDark(colour) {
-
-            // Variables for red, green, blue values
-            let r
-            let g
-            let b
-            let hsp
-            
-            // Check the format of the colour, HEX or RGB?
-            if (colour.match(/^rgb/)) {
         
-                // If RGB --> store the red, green, blue values in separate variables
-                colour = colour.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
-                
-                r = colour[1]
-                g = colour[2]
-                b = colour[3]
-            } 
-            else {
-                
-                // If hex --> Convert it to RGB: http://gist.github.com/983661
-                colour = +("0x" + colour.slice(1).replace( 
-                colour.length < 5 && /./g, '$&$&'))
-        
-                r = colour >> 16
-                g = colour >> 8 & 255
-                b = colour & 255
-            }
-            
-            // HSP equation from http://alienryderflex.com/hsp.html
-            hsp = Math.sqrt(
-            0.299 * (r * r) +
-            0.587 * (g * g) +
-            0.114 * (b * b)
-            );
-        
-            // Using the HSP value, determine whether the colour is light or dark
-            if (hsp>127.5) {
-        
-                return 'dark'
-            } 
-            else {
-        
-                return 'light'
-            }
-        }
         
 
         // Create a name input
@@ -1202,9 +1156,54 @@ function intialisePlayerCreator(){
         // Insert this new player panel before the add player button
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
+}
 
+// Credit to https://awik.io/determine-color-bright-dark-using-javascript/
+function lightOrDark(colour) {
 
+    // Variables for red, green, blue values
+    let r
+    let g
+    let b
+    let hsp
     
+    // Check the format of the colour, HEX or RGB?
+    if (colour.match(/^rgb/)) {
+
+        // If RGB --> store the red, green, blue values in separate variables
+        colour = colour.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+        
+        r = colour[1]
+        g = colour[2]
+        b = colour[3]
+    } 
+    else {
+        
+        // If hex --> Convert it to RGB: http://gist.github.com/983661
+        colour = +("0x" + colour.slice(1).replace( 
+        colour.length < 5 && /./g, '$&$&'))
+
+        r = colour >> 16
+        g = colour >> 8 & 255
+        b = colour & 255
+    }
+    
+    // HSP equation from http://alienryderflex.com/hsp.html
+    hsp = Math.sqrt(
+    0.299 * (r * r) +
+    0.587 * (g * g) +
+    0.114 * (b * b)
+    );
+
+    // Using the HSP value, determine whether the colour is light or dark
+    if (hsp>127.5) {
+
+        return 'dark'
+    } 
+    else {
+
+        return 'light'
+    }
 }
 
 
@@ -1424,12 +1423,19 @@ function newGameDiceRoll(){
 
     // Generate the dice roll functionality for each player
     players.forEach(function(player){
+
         // Container
         let diceRollBox = createElement('div', 'new-player-dice-roll', null, 'player', player.id)
         
         // Token
         let playerToken = document.createElement('img')
-        playerToken.src = 'images/tokens/' + player.token + '.svg'
+        playerToken.style.backgroundColor = player.colour
+        if (lightOrDark(player.colour) === 'light'){
+            playerToken.src = 'images/tokens/' + player.token + '-light.svg'
+        } else{
+            playerToken.src = 'images/tokens/' + player.token + '.svg'
+        }
+
         diceRollBox.appendChild(playerToken)
         
         diceRollBox.appendChild(createElement('h3', null, player.name))

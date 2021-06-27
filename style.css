@@ -613,11 +613,15 @@ button {
   margin: 10px;
   transition: 0.3s; }
   .new-player-dice-roll img {
-    max-width: 50px;
+    max-width: 72px;
     grid-row: 1 / 1;
     grid-column: 1 / 5;
     float: none;
-    margin: 0 auto; }
+    margin: 0 auto 10px;
+    border: 1px solid #dbdbdb;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 50%; }
   .new-player-dice-roll h3 {
     margin: 0 0 20px;
     font-size: 1em;
