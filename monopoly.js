@@ -3671,6 +3671,7 @@ function auctionProperty(number, proceedsToAll){
             // Generate the player's token
             let playerToken = createElement('div', 'player-token-icon', null, 'player', players[i].id)
             playerToken.setAttribute('token', players[i].token)
+            playerToken.setAttribute('best-token-colour', lightOrDark(players[i].bestTokenColour))
             playerToken.style.backgroundColor = players[i].colour
             playerBidInterface.appendChild(playerToken)
 
@@ -3678,7 +3679,7 @@ function auctionProperty(number, proceedsToAll){
             playerBidInterface.appendChild(createElement('h3', 'player-heading', players[i].name))
 
             // Generate the player's money
-            playerBidInterface.appendChild(createElement('div', 'player-money', currencySymbolSpan + players[i].money, 'player', player.id))
+            playerBidInterface.appendChild(createElement('div', 'player-money', currencySymbolSpan + players[i].money, 'player', players[i].id))
 
             // Generate the input field for the player's bid.
             let bidInput = createElement('input', 'bid-input', null, 'type', 'number')

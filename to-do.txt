@@ -26,6 +26,8 @@ BUGS SPOTTED
 
 - Tokens are getting generated with mortgaged attributes
 
+- You can get out of having to buy/auction a property by reloading the game. The property remains unsold.
+
 
 IMPROVEMENTS
 
