@@ -3013,6 +3013,8 @@ function mortgageProperty(property, bankruptcy){
 
     setAvailableActions()
 
+    playSound('mortgage')
+
     return mortgageValue
 }     
 
@@ -5594,7 +5596,7 @@ function playSound(type){
     
         window.setTimeout(function(){
             sound.parentNode.removeChild(sound)
-        }, 10000)
+        }, 5000)
     }
 }
 
