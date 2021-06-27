@@ -234,6 +234,7 @@ let spaces =  [
     {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardArea: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200},
 ]
 
+// TODO
 let gameState = []
 
 // An empty array for now. Will be filled with player info later.
@@ -324,6 +325,8 @@ function saveGame(){
     localStorage.setItem('availableActions', JSON.stringify(availableActions))
     localStorage.setItem('playTime', playTime)
     localStorage.setItem('totalDiceRolls', totalDiceRolls)
+    localStorage.setItem('chanceCards', JSON.stringify(chanceCards))
+    localStorage.setItem('communityChestCards', JSON.stringify(communityChestCards))
 
     saveIndicator.style.opacity = 1
     saveButton.style.opacity = 0;
@@ -345,6 +348,9 @@ function loadSavedGame(){
     feedArchive = JSON.parse(localStorage.getItem('feedArchive'))
     availableActions = JSON.parse(localStorage.getItem('availableActions'))
     playTime = parseInt(localStorage.getItem('playTime'))
+    chanceCards = JSON.parse(localStorage.getItem('chanceCards'))
+    communityChestCards = JSON.parse(localStorage.getItem('communityChestCards'))
+    totalDiceRolls = parseInt(localStorage.getItem('totalDiceRolls'))
 
     // Close the popup and get rid of the player creator
     closePopup()
@@ -417,8 +423,6 @@ function initialisePage(){
     // While this could be done in the HTML, doing it based on a JS array means
     // I can potentially add other international boards easily in the future.
     generateBoard()
-
-
 
     // Shuffle both decks of cards
     shuffleArray(communityChestCards)
@@ -1111,7 +1115,7 @@ function intialisePlayerCreator(){
                     console.log(clickedOption.getAttribute('token'))
                     
                     // Determine what the old chosen one was and reset its availability.                    
-                    let oldSelectedOption = availableTokenChoices.previousElementSibling.getAttribute('chosentokenid')
+                    let oldSelectedOption = availableTokenChoices.previousElementSibling.previousElementSibling.getAttribute('chosentokenid')
                     availableTokens[oldSelectedOption].available = true
                     tokenSelectorChosenIndicator.setAttribute('chosentokenid', clickedOption.getAttribute('id'))
                     
@@ -1380,6 +1384,7 @@ function generatePlayerSummary(player){
     })
 
     let newTradeButton = createElement('button', 'player-action-button', 'Initiate trade', '', '')
+    newTradeButton.classList.add('initiate-trade')
     newTradeButton.addEventListener('click', function(){
         initiateTrade(false)
     })
@@ -5560,7 +5565,11 @@ function declareGameWinner(){
     document.querySelector('#total-play-time span').innerHTML = generateReadablePlayTime()
     document.querySelector('#total-dice-rolls span').innerHTML = totalDiceRolls
 
+    // Social media sharing
     document.querySelector('#winner-screen').appendChild(generateSocialMediaSharing())
+
+    playSound('toot')
+    playSound('cheer')
 
     localStorage.clear()
 

@@ -5,10 +5,10 @@
 	 width="256px" height="256px" viewBox="0 0 256 256" enable-background="new 0 0 256 256" xml:space="preserve">
 <rect x="27.396" y="164.074" fill="#FFFFFF" width="205.805" height="22.886"/>
 <g>
-	<path fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-miterlimit="10" d="M63,172.643c0,0,1.006-31.562-1.678-38.021
+	<path fill="none" stroke="#FFFFFF" stroke-width="14" stroke-miterlimit="10" d="M63,172.643c0,0,1.006-31.562-1.678-38.021
 		c-2.685-6.465-25.469-58.555,1.863-58.555s69.614,0,69.614,0"/>
-	<path fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-miterlimit="10" d="M190.583,172.641
-		c0,0-1.006-31.561,1.679-38.021c2.686-6.464,25.471-58.554-1.861-58.554s-69.614,0-69.614,0"/>
+	<path fill="none" stroke="#FFFFFF" stroke-width="14" stroke-miterlimit="10" d="M190.583,172.641c0,0-1.006-31.561,1.679-38.021
+		c2.686-6.464,25.471-58.554-1.861-58.554s-69.613,0-69.613,0"/>
 </g>
 <path fill="#FFFFFF" d="M181.381,76.065c0,6.092-2.857,11.032-6.38,11.032H81c-3.524,0-6.381-4.939-6.381-11.032l0,0
 	c0-6.093,2.857-11.032,6.381-11.032h94C178.523,65.033,181.381,69.972,181.381,76.065L181.381,76.065z"/>

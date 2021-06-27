@@ -1,7 +1,11 @@
 /* Monopoly SCSS */
 /* Created by Ceri Woolway beginning October 2020 */
-/* @font-face kit by Fonts2u (https://fonts2u.com) */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
+#about-close,
+.property-portfolio-title {
+  cursor: pointer; }
+
+/* @font-face kit by Fonts2u (https://fonts2u.com) */
 @font-face {
   font-family: "Kabel-Heavy";
   src: url("fonts/Kabel-Heavy.eot?") format("eot"), url("fonts/Kabel-Heavy.woff") format("woff"), url("fonts/Kabel-Heavy.ttf") format("truetype"), url("fonts/Kabel-Heavy.svg#Kabel-Heavy") format("svg");
@@ -21,7 +25,6 @@ main {
   padding: 15px;
   margin: 0;
   text-align: center;
-  min-height: 100vh;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 275px 1fr min-content;
@@ -62,7 +65,10 @@ button {
   font-size: 0.6em;
   cursor: pointer;
   border: none;
-  border-radius: 0; }
+  border-radius: 0;
+  transition: background-color 0.3s; }
+  button:hover {
+    background-color: #222; }
 
 *:focus {
   outline: none; }
@@ -1763,9 +1769,26 @@ body:not(.warning-open) #warning {
 
 body[dice-roll-available="false"] .roll-dice-button,
 body[end-turn-available="false"] .end-turn-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
+
+.roll-dice-button {
+  background-image: url("images/button-icons/roll-dice.svg");
+  background-size: auto 40px;
+  background-position: center 10px;
+  background-repeat: no-repeat;
+  padding-top: 60px; }
+
+.initiate-trade {
+  background-image: url("images/button-icons/trade.svg");
+  background-size: auto 40px;
+  background-position: center 10px;
+  background-repeat: no-repeat;
+  padding-top: 60px; }
+
+.end-turn-button {
+  width: 100%; }
 
 body[get-out-of-jail="false"] .get-out-50-button,
 body[get-out-of-jail="false"] .roll-doubles-for-jail,
@@ -1784,7 +1807,7 @@ body[card-out-of-jail="false"][get-out-of-jail="true"] .current-player-summary .
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail {
   pointer-events: none;
   display: initial;
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -1904,7 +1927,7 @@ body[build-house="false"] .build-house-button,
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,
 body[build-house="false"] .colour-set-button,
 .disabled-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -1916,7 +1939,7 @@ body[unmortgage-property="false"] .property-options .unmortgage-button {
   /* If we have the maximum number of buildings, this is the definitive rule.
        we do not care whether there are still hotels in the bank */ }
   .house-visual-display[houses="5"] + .button-panel .build-house-button {
-    background: #ccc;
+    background-color: #ccc;
     color: #8f8f8f;
     pointer-events: none; }
   .house-visual-display[houses="5"] + .button-panel .sell-house-button .sell-house {
@@ -1962,7 +1985,7 @@ body[build-house="none-left"][build-hotel="true"]{
     }
 }*/
 body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
   body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button span:not(.no-more-houses-in-bank) {
@@ -1977,7 +2000,7 @@ body[build-hotel="true"] .house-visual-display[houses="4"] + .button-panel .buil
   display: block; }
 
 body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
   body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank) {
@@ -1998,7 +2021,7 @@ body[build-hotel="none-left"]{
     }
 }*/
 body[build-house="not-enough-money"] .build-house-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -2009,7 +2032,7 @@ body[build-house="not-enough-money"] .not-enough-money {
   display: block; }
 
 body[build-hotel="not-enough-money"] .build-hotel-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -2060,12 +2083,12 @@ body[build-hotel="not-enough-money"] .not-enough-money {
     font-size: 80%; }
 
 body[build-house="false"] .house-visual-display:not([houses="4"]) + .build-house-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
 body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -2472,7 +2495,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   border: 3px solid #000;
   box-sizing: border-box;
   grid-area: feed;
-  height: calc(100vh - 210px); }
+  height: calc(100vh - 270px); }
 
 #feed-title {
   position: absolute;
@@ -2502,7 +2525,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 @media (max-width: 1400px) {
   #feed {
-    height: calc(100vh - 228px); }
+    height: calc(100vh - 300px); }
   #feed-content > div {
     background-size: 18px, 32px;
     padding-left: 50px;
@@ -2659,7 +2682,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     grid-row: 1 / 1; }
 
 .player-bid-interface.current-winner button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -2680,7 +2703,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
   color: #fff; }
 
 .auction-screen input:invalid + button {
-  background: #ccc;
+  background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
 
@@ -2824,7 +2847,7 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   #bankruptcy-message .full-portfolio-item .portfolio-item-value {
     margin-left: 10px; }
   #bankruptcy-message .full-portfolio-item[mortgageable="false"] .mortgage-button {
-    background: #ccc;
+    background-color: #ccc;
     color: #8f8f8f;
     pointer-events: none; }
 

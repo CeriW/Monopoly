@@ -23,9 +23,15 @@ $border: 3px solid $black;
 
 // TODO - do something more stylised with this.
 @mixin disabledButton{
-    background: $lightgrey;
+    background-color: $lightgrey;
     color: rgb(143, 143, 143);
     pointer-events: none;
+}
+
+// Cursor
+#about-close,
+.property-portfolio-title{
+    cursor: pointer;
 }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -51,7 +57,7 @@ main{
     //align-items: center;
     //justify-content: space-between; 
     text-align: center;
-    min-height: 100vh;
+    //min-height: 100vh;
     box-sizing: border-box;
 
     display: grid; 
@@ -114,6 +120,11 @@ button{
     cursor: pointer;
     border: none;
     border-radius: 0;
+    transition: background-color 0.3s;
+
+    &:hover{
+        background-color: #222;
+    }
 }
 
 *:focus{
@@ -1795,6 +1806,26 @@ body[end-turn-available="false"] .end-turn-button{
     @include disabledButton()
 }
 
+.roll-dice-button{
+    background-image: url('images/button-icons/roll-dice.svg');
+    background-size: auto 40px;
+    background-position: center 10px;
+    background-repeat: no-repeat;
+    padding-top: 60px;
+}
+
+.initiate-trade{
+    background-image: url('images/button-icons/trade.svg');
+    background-size: auto 40px;
+    background-position: center 10px;
+    background-repeat: no-repeat;
+    padding-top: 60px;
+}
+
+.end-turn-button{
+    width: 100%;
+}
+
 // I added loads of specificity to this rule and still had to use important.
 // TODO - maybe revisit this
 body[get-out-of-jail="false"]{
@@ -2747,8 +2778,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     box-sizing: border-box;
     grid-area: feed;
     
-    //min-height: calc(100% - 175px);
-    height: calc(100vh - 210px);
+    //height: calc(100vh - 210px);
+    height: calc(100vh - 270px);
 }
 
 #feed-title{
@@ -2783,7 +2814,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 @media(max-width: 1400px){
 
     #feed{
-        height: calc(100vh - 228px);
+        //height: calc(100vh - 228px);
+        height: calc(100vh - 300px);
     }
 
     #feed-content > div{

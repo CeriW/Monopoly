@@ -4,22 +4,12 @@ An incomplete list of all the developments that need to be completed
 
 FUNCTIONALITY
 
-- Cookies/local storage so you can come back to a game later.
-	- It would probably be better to combine it all into one massive localStorage item than have loads of them.
-	- Store the correct order of the chance/CC cards WITHOUT storing the entire list.
-
 - Visual improvements
 
 
 BUGS SPOTTED
 
 - Player 1 declared bankruptcy. Player 4 goes bankrupt after winning a resulting auction. When I clicked 'initiate trade', the trade was for player 2?
-
-- Feed is way too high on small screens.
-
-- At one point I had 4 get out cards in play. - NOTE - I've since realised this is probably a result of not saving the list of cards for when the game is reloaded.
-
-- Fix light iron icon
 
 - Check that money is changing hands properly for cards and rent and bankruptcy etc.
 
@@ -42,6 +32,8 @@ ONGOING THINGS
 
 THINGS TO DO AT THE VERY END
 
+- It would probably be better to combine it all into one massive localStorage item than have loads of them.
+
 - Need to update the share to twitter code
 
 - Reorder the readme so it's in alphabetical order
@@ -49,8 +41,6 @@ THINGS TO DO AT THE VERY END
 
 
 STRETCH GOALS
-
-- Stats (graphs?)
 
 - Add a Monopoly rulebook
 	- The Monopoly wiki is really good. Include links and/or snippets from here.
@@ -70,11 +60,7 @@ STRETCH GOALS
 
 - Use geolocation to determine where players are based, and offer the most closest version of the game (eg. UK, US etc)
 
-- JSON parsing for space/cards
-
 - Use a weather API to display appropriate weather over the welcome screen.
-
-- Share on social media when you win
 
 - Sound effects
 
@@ -87,4 +73,11 @@ COMPLETELY FRIVOLOUS STUFF
 
 - More tokens https://monopoly.fandom.com/wiki/Tokens
 
+- Stats (graphs?)
 
+
+AFTER GO LIVE
+
+- JSON parsing for space/cards
+
+	
