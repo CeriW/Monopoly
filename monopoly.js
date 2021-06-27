@@ -44,7 +44,10 @@ let turn = 0
 // Whether sound effects are on by default
 let SFX = true
 
+
+// Statistics which are used later
 let playTime = 0
+let totalDiceRolls = 0
 
 // Dice related elements
 let doublesCount = 0
@@ -320,7 +323,7 @@ function saveGame(){
     localStorage.setItem('turn', turn)
     localStorage.setItem('availableActions', JSON.stringify(availableActions))
     localStorage.setItem('playTime', playTime)
-
+    localStorage.setItem('totalDiceRolls', totalDiceRolls)
 
     saveIndicator.style.opacity = 1
     saveButton.style.opacity = 0;
@@ -332,6 +335,7 @@ function saveGame(){
         saveButton.style.pointerEvents = 'all'
     }, 1500)
     
+    console.log('game saved')
 
 }
 
@@ -598,7 +602,6 @@ function addEvents(){
 
     // Warn players they may lose unsaved progress if they leave.
     window.addEventListener('beforeunload', function (e) {
-        saveGame()
         // Cancel the event
         e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
         // Chrome requires returnValue to be set
@@ -668,24 +671,23 @@ function addEvents(){
 
     window.setInterval(function(){
         playTime++
-
-        var hours = Math.floor(playTime /3600);
-        var minutes = Math.floor((playTime - hours * 3600) / 60);
-        var seconds = playTime - (hours * 3600 + minutes * 60);
-
-        function leadingZero(number){
-            if (number < 10){
-                return '0' + number
-            } else{
-                return(number)
-            }
-        }
-
-        playTimeIndicator.textContent = hours +':' + leadingZero(minutes) + ':' + leadingZero(seconds)
-
+        playTimeIndicator.textContent = generateReadablePlayTime()
     }, 1000)
+}
 
+function generateReadablePlayTime(){
+    var hours = Math.floor(playTime /3600);
+    var minutes = Math.floor((playTime - hours * 3600) / 60);
+    var seconds = playTime - (hours * 3600 + minutes * 60);
+    return hours +':' + leadingZero(minutes) + ':' + leadingZero(seconds)
 
+    function leadingZero(number){
+        if (number < 10){
+            return '0' + number
+        } else{
+            return(number)
+        }
+    }
 }
 
 function resizeBoard(){
@@ -1790,7 +1792,6 @@ function drawCard(type){
             playSound('fail')
             break
         case 'getout':
-            // TODO
             addToFeed(players[turn - 1].name + ' drew a \'get out of jail free\' card. It may be kept until needed, traded or sold.', 'get-out-card')
 
             // Keep a record of what card type this is, so we can return it
@@ -2152,7 +2153,7 @@ function rollDice(){
             doublesCount = 0
     }
 
-
+    totalDiceRolls++
 
     playSound('dice-roll')
 }
@@ -5149,7 +5150,14 @@ function openBankruptcyProceedings(transactionDetails){
 
         // Confirm bankruptcy button
         let confirmButton = createElement('button', '', 'Confirm bankruptcy')
-        confirmButton.addEventListener('click', confirmBankruptcy)
+        confirmButton.addEventListener('click', function(){
+            if (nonNullArrayItems(players) === 2){
+                delete players[debtorID - 1]
+                declareGameWinner()
+            } else{
+                confirmBankruptcy()
+            }
+        })
         
         warningContent.appendChild(confirmButton)
 
@@ -5160,8 +5168,6 @@ function openBankruptcyProceedings(transactionDetails){
 
 
         warningMessage.appendChild(warningContent)
-
-        
 
 
         function confirmBankruptcy(){
@@ -5529,6 +5535,40 @@ function appendTooltip(node, innerHTML, type){
 
 }
 
+// WINNING  ------------------------------------------------------------------//
+
+function declareGameWinner(){
+    closePopup()
+    closeWarning()
+    availableActions.bankruptcyProceedings = false
+    setAvailableActions()
+    createConfetti()
+    document.body.classList.add('winner')
+
+    document.querySelector('#game-winner-name').innerHTML += winningName()
+      
+
+    function winningName(){
+        let name = ''
+        players.forEach(function(player){
+            if (player){
+                name = player.name
+            }
+        })
+
+        return name
+    }
+
+    // Generate some game stats
+    document.querySelector('#total-play-time span').innerHTML = generateReadablePlayTime()
+    document.querySelector('#total-dice-rolls span').innerHTML = totalDiceRolls
+
+    document.querySelector('#winner-screen').appendChild(generateSocialMediaSharing())
+
+    localStorage.clear()
+
+}
+
 
 // CONFETTI ------------------------------------------------------------------//
 
@@ -5600,6 +5640,43 @@ function playSound(type){
     }
 }
 
+
+// SOCIAL MEDIA --------------------------------------------------------------//
+
+function generateSocialMediaSharing(){
+
+    let socialArea = createElement('div', 'social-media-sharing', 'Share on social media:')
+    let twitterButton = createElement('span', null, '<img src="images/social/twitter.svg" width="35" height="35"><span>Share on Twitter</span>')
+    let facebookButton = createElement('span', null, '<img src="images/social/facebook.svg" width="35" height="35"><span>Share on Facebook</span>')
+
+    // Social media
+    twitterButton.addEventListener('click', ShareToTwitter)
+    facebookButton.addEventListener('click', ShareToFacebook)
+
+    socialArea.appendChild(twitterButton)
+    socialArea.appendChild(facebookButton)
+
+    return socialArea
+}
+
+// Borrowed from https://jagathishsaravanan.medium.com/adding-share-functionality-to-your-website-with-javascript-2b7d2b62f09e
+var text = encodeURIComponent("Follow JavaScript Jeep form Amazing JavaScript Tutorial");
+var url = "https://medium.com/@jagathishsaravanan/"; 
+var user_id = "jagathish1123";
+var hash_tags = "JS,JavaScript,100DaysOfCode,Programming";
+var params = "menubar=no,toolbar=no,status=no,width=570,height=570"; // for window
+
+function ShareToTwitter(){
+    let Shareurl = `https://twitter.com/intent/tweet?url=${url}&text=${text}&via=${user_id}&hashtags=${hash_tags}`;
+    window.open(Shareurl,"NewWindow" , params);
+}
+
+function ShareToFacebook() {
+    let shareUrl = `http://www.facebook.com/sharer/sharer.php?u=${url}`;
+    window.open(shareUrl,"NewWindow" , params);  
+}
+
+
 // ELEMENT CREATION  ---------------------------------------------------------//
 
 function createElement(elementType, elementClass, elementHTML, elementAttribute, elementAttributeValue){
@@ -5636,12 +5713,5 @@ function nonNullArrayItems(array){
     return length
 
 }
-
-
-
-
-
-
-
 
 

@@ -3049,7 +3049,7 @@ body:not(.testing-panel-enabled) #testing-panel {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 101;
+  z-index: 201;
   pointer-events: none;
   transition: 1s; }
 
@@ -3146,6 +3146,70 @@ body:not(.testing-panel-enabled) #testing-panel {
 
 .confetti-container .particle:nth-child(5n - 4) {
   animation-duration: 20s; }
+
+/* Winner screen -------------------------------------------------------------*/
+#winner-screen {
+  position: fixed;
+  background: #d5e8d4;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  text-align: center;
+  display: none;
+  opacity: 0;
+  transition: 0.4s; }
+
+#winning-bunting {
+  text-align: left; }
+  #winning-bunting img {
+    max-width: 750px; }
+  #winning-bunting img:nth-child(2) {
+    position: absolute;
+    right: 0;
+    top: 0; }
+
+body.winner #winner-screen {
+  display: block;
+  opacity: 1; }
+
+body.winner #winning-bunting img {
+  animation: slideDown 0.7s ease-out both; }
+
+body.winner #winning-bunting img:last-child {
+  animation-delay: 0.3s; }
+
+#game-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  #game-stats h3 {
+    margin: 5px 0; }
+  #game-stats > div {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 5px; }
+
+#winner-screen-content {
+  padding: 30px; }
+
+.social-media-sharing {
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; }
+  .social-media-sharing img {
+    margin-right: 10px; }
+  .social-media-sharing > span {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0 5px 25px; }
 
 /* General purpose animations ------------------------------------------------*/
 @keyframes fadeIn {

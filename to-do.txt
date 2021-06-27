@@ -4,8 +4,6 @@ An incomplete list of all the developments that need to be completed
 
 FUNCTIONALITY
 
-- Declare a winner.
-
 - I know the game isn't designed for small screens, but I can:
     - Add a warning on small screen sizes
 
@@ -22,18 +20,20 @@ BUGS SPOTTED
 
 - Feed is way too high on small screens.
 
-- At one point I had 4 get out cards in play.
-
-- Tokens are getting generated with mortgaged attributes
+- At one point I had 4 get out cards in play. - NOTE - I've since realised this is probably a result of not saving the list of cards for when the game is reloaded.
 
 - You can get out of having to buy/auction a property by reloading the game. The property remains unsold.
+
+- Need to get the tokens to not widen the spaces they're in on the board.
+
+- Fix light iron icon
+
+- Check that money is changing hands properly for cards and rent and bankruptcy etc.
 
 
 IMPROVEMENTS
 
 - Make the quick start functionality actually good.
-
-- Reorder the readme so it's in alphabetical order
 
 - Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
 
@@ -45,6 +45,14 @@ ONGOING THINGS
 - Better testing options
 
 - Consider what other keyboard shortcuts might be available.
+
+
+THINGS TO DO AT THE VERY END
+
+- Need to update the share to twitter code
+
+- Reorder the readme so it's in alphabetical order
+
 
 
 STRETCH GOALS
@@ -79,7 +87,11 @@ STRETCH GOALS
 
 - Income Tax to have the option for 10% rather than just £200
 
+- Dark mode
+
 
 COMPLETELY FRIVOLOUS STUFF
 
 - More tokens https://monopoly.fandom.com/wiki/Tokens
+
+
