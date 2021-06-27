@@ -1035,7 +1035,7 @@ $columnsize: 80px;
 
 /* Mortgaged property --------------------------------------------------------*/
 
-#board > div[position],
+#board > .space,
 .full-portfolio-item{
     position: relative;
 
@@ -1147,6 +1147,8 @@ $columnsize: 80px;
     border: $border;
     border-radius: 5px;
     background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 @for $i from 1 through 6 {
@@ -1196,6 +1198,11 @@ $columnsize: 80px;
 
 /* Player tokens -------------------------------------------------------------*/
 
+#board > .token{
+    transform: translate(-24px, -14px);
+    width: 0;
+    height: 0;
+}
 
 .token{
     width: 46px;
@@ -1205,20 +1212,35 @@ $columnsize: 80px;
     background-repeat: no-repeat;
     background-position: 7px -2px;
 
+
     
     // TODO - removing pointer events on this lets clicks get through to the
     // space underneath which can then trigger a click event. There is
     // probably a better way of doing this though.
     pointer-events: none;
 
+    &:before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 46px;
+        height: 28px;
+        //background: rgba(white, 0.5);
+        background-size: 35px;
+        background-repeat: no-repeat;
+        background-position: 7px -2px;
+    }
+
     .token-background{
         content: '';
-        width: 100%;
+        width: 46px;
         height: 28px;
         position: absolute;
         top: 0;
         bottom: 0;
-        left: calc(50% - 23px);
+        //left: calc(50% - 23px);
+        left: 0;
         mix-blend-mode: color;
         border-radius: 25px;
         border: 2px solid #000;
@@ -1228,11 +1250,11 @@ $columnsize: 80px;
 
 
 @each $token in $tokens{
-    .token.#{$token}{
+    .token.#{$token}:before{
         background-image: url('images/tokens/#{$token}.svg');
     }
 
-    .token.#{$token}[best-token-colour="light"]{
+    .token.#{$token}[best-token-colour="light"]:before{
         background-image: url('images/tokens/#{$token}-light.svg');
     }
 }
@@ -1241,57 +1263,6 @@ $columnsize: 80px;
     position: relative;
     z-index: 3;
 }
-
-/*
-.player-bid-interface .player-token-icon[player="1"]{
-    background-color: yellow;}
-
-.player-bid-interface .player-token-icon[player="2"]{
-    background-color: cyan;}
-
-.player-bid-interface .player-token-icon[player="3"]{
-    background-color: yellowgreen;}
-
-.player-bid-interface .player-token-icon[player="4"]{
-    background-color: orange;}
-*/
-
-/*
-#player1token{
-    background-position: left bottom;
-}
-
-#player2token{
-    background-position: 33% bottom;
-}
-
-#player3token{
-    background-position: 66% bottom;
-}
-
-#player4token{
-    background-position: right bottom;
-}
-*/
-
-/* Due to the way the JS calculates the correct position for the token and the 
-   side the borders end up on, there are slightly irregularities. Likely
-   not even noticeable but it bothers me otherwise */
-/*.token[area="south"]{
-    margin-left: 2px;
-}
-
-.token[area="north"]{
-    margin-left: -3px;
-}
-
-.token[area="west"]{
-    margin-left: -3px;
-}*/
-
-
-
-
 
 
 /* Popup ---------------------------------------------------------------------*/

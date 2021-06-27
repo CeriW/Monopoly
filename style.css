@@ -1022,10 +1022,10 @@ button {
   bottom: 0; }
 
 /* Mortgaged property --------------------------------------------------------*/
-#board > div[position],
+#board > .space,
 .full-portfolio-item {
   position: relative; }
-  #board > div[position]:after,
+  #board > .space:after,
   .full-portfolio-item:after {
     content: '';
     width: 25px;
@@ -1113,7 +1113,9 @@ button {
   background: #fff;
   border: 3px solid #000;
   border-radius: 5px;
-  background-size: contain; }
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat; }
 
 .dice-roll-1,
 .dice[roll="1"] {
@@ -1168,6 +1170,11 @@ button {
   background-color: #0aa959; }
 
 /* Player tokens -------------------------------------------------------------*/
+#board > .token {
+  transform: translate(-24px, -14px);
+  width: 0;
+  height: 0; }
+
 .token {
   width: 46px;
   height: 28px;
@@ -1176,132 +1183,98 @@ button {
   background-repeat: no-repeat;
   background-position: 7px -2px;
   pointer-events: none; }
+  .token:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 46px;
+    height: 28px;
+    background-size: 35px;
+    background-repeat: no-repeat;
+    background-position: 7px -2px; }
   .token .token-background {
     content: '';
-    width: 100%;
+    width: 46px;
     height: 28px;
     position: absolute;
     top: 0;
     bottom: 0;
-    left: calc(50% - 23px);
+    left: 0;
     mix-blend-mode: color;
     border-radius: 25px;
     border: 2px solid #000; }
 
-.token.dog {
+.token.dog:before {
   background-image: url("images/tokens/dog.svg"); }
 
-.token.dog[best-token-colour="light"] {
+.token.dog[best-token-colour="light"]:before {
   background-image: url("images/tokens/dog-light.svg"); }
 
-.token.iron {
+.token.iron:before {
   background-image: url("images/tokens/iron.svg"); }
 
-.token.iron[best-token-colour="light"] {
+.token.iron[best-token-colour="light"]:before {
   background-image: url("images/tokens/iron-light.svg"); }
 
-.token.thimble {
+.token.thimble:before {
   background-image: url("images/tokens/thimble.svg"); }
 
-.token.thimble[best-token-colour="light"] {
+.token.thimble[best-token-colour="light"]:before {
   background-image: url("images/tokens/thimble-light.svg"); }
 
-.token.car {
+.token.car:before {
   background-image: url("images/tokens/car.svg"); }
 
-.token.car[best-token-colour="light"] {
+.token.car[best-token-colour="light"]:before {
   background-image: url("images/tokens/car-light.svg"); }
 
-.token.battleship {
+.token.battleship:before {
   background-image: url("images/tokens/battleship.svg"); }
 
-.token.battleship[best-token-colour="light"] {
+.token.battleship[best-token-colour="light"]:before {
   background-image: url("images/tokens/battleship-light.svg"); }
 
-.token.hat {
+.token.hat:before {
   background-image: url("images/tokens/hat.svg"); }
 
-.token.hat[best-token-colour="light"] {
+.token.hat[best-token-colour="light"]:before {
   background-image: url("images/tokens/hat-light.svg"); }
 
-.token.penguin {
+.token.penguin:before {
   background-image: url("images/tokens/penguin.svg"); }
 
-.token.penguin[best-token-colour="light"] {
+.token.penguin[best-token-colour="light"]:before {
   background-image: url("images/tokens/penguin-light.svg"); }
 
-.token.dinosaur {
+.token.dinosaur:before {
   background-image: url("images/tokens/dinosaur.svg"); }
 
-.token.dinosaur[best-token-colour="light"] {
+.token.dinosaur[best-token-colour="light"]:before {
   background-image: url("images/tokens/dinosaur-light.svg"); }
 
-.token.cat {
+.token.cat:before {
   background-image: url("images/tokens/cat.svg"); }
 
-.token.cat[best-token-colour="light"] {
+.token.cat[best-token-colour="light"]:before {
   background-image: url("images/tokens/cat-light.svg"); }
 
-.token.ducky {
+.token.ducky:before {
   background-image: url("images/tokens/ducky.svg"); }
 
-.token.ducky[best-token-colour="light"] {
+.token.ducky[best-token-colour="light"]:before {
   background-image: url("images/tokens/ducky-light.svg"); }
 
-.token.thimble {
+.token.thimble:before {
   background-image: url("images/tokens/thimble.svg"); }
 
-.token.thimble[best-token-colour="light"] {
+.token.thimble[best-token-colour="light"]:before {
   background-image: url("images/tokens/thimble-light.svg"); }
 
 #board > .token[position="10"][jail="false"] {
   position: relative;
   z-index: 3; }
 
-/*
-.player-bid-interface .player-token-icon[player="1"]{
-    background-color: yellow;}
-
-.player-bid-interface .player-token-icon[player="2"]{
-    background-color: cyan;}
-
-.player-bid-interface .player-token-icon[player="3"]{
-    background-color: yellowgreen;}
-
-.player-bid-interface .player-token-icon[player="4"]{
-    background-color: orange;}
-*/
-/*
-#player1token{
-    background-position: left bottom;
-}
-
-#player2token{
-    background-position: 33% bottom;
-}
-
-#player3token{
-    background-position: 66% bottom;
-}
-
-#player4token{
-    background-position: right bottom;
-}
-*/
-/* Due to the way the JS calculates the correct position for the token and the 
-   side the borders end up on, there are slightly irregularities. Likely
-   not even noticeable but it bothers me otherwise */
-/*.token[area="south"]{
-    margin-left: 2px;
-}
-
-.token[area="north"]{
-    margin-left: -3px;
-}
-
-.token[area="west"]{
-    margin-left: -3px;
-}*/
 /* Popup ---------------------------------------------------------------------*/
 #popup {
   position: fixed;

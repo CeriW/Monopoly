@@ -334,9 +334,6 @@ function saveGame(){
         saveButton.style.opacity = 1;
         saveButton.style.pointerEvents = 'all'
     }, 1500)
-    
-    console.log('game saved')
-
 }
 
 function loadSavedGame(){
@@ -698,7 +695,7 @@ function resizeBoard(){
 
     //board.style.height = boardWidth + 'px'
 
-    feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
+    //feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
     if (boardWidth < 900 && boardWidth > 800){
         board.setAttribute('size', 'mini')

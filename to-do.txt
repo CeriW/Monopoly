@@ -4,9 +4,6 @@ An incomplete list of all the developments that need to be completed
 
 FUNCTIONALITY
 
-- I know the game isn't designed for small screens, but I can:
-    - Add a warning on small screen sizes
-
 - Cookies/local storage so you can come back to a game later.
 	- It would probably be better to combine it all into one massive localStorage item than have loads of them.
 	- Store the correct order of the chance/CC cards WITHOUT storing the entire list.
@@ -21,10 +18,6 @@ BUGS SPOTTED
 - Feed is way too high on small screens.
 
 - At one point I had 4 get out cards in play. - NOTE - I've since realised this is probably a result of not saving the list of cards for when the game is reloaded.
-
-- You can get out of having to buy/auction a property by reloading the game. The property remains unsold.
-
-- Need to get the tokens to not widen the spaces they're in on the board.
 
 - Fix light iron icon
 
