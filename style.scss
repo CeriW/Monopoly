@@ -2898,14 +2898,24 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 /* Auction panel  ------------------------------------------------------------*/
 
 .auction-screen{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr; 
+    gap: 0px 20px; 
+    grid-template-areas: 
+      "rent-table bid-options";
+      
+    .auction-rent-table{
+        grid-area: rent-table;
+    }
+      
+    .auction-bidding-area{
+        max-width: 400px;
+        grid-area: bid-options;
+    }
 }
 
-.auction-bidding-area{
-    max-width: 400px;
-}
+
 
 .auction-heading{
     background: #000 url('images/auction-white.svg') 10px center no-repeat;
@@ -2919,7 +2929,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .player-bid-interface{
     transition: 0.3s;
     display: grid;
-    grid-template-columns: 50px 50px 75px 100px;
+    grid-template-columns: 50px 50px 75px 130px;
     grid-template-rows: auto auto;
     grid-row-gap: 10px;
     grid-column-gap: 5px;
@@ -3015,6 +3025,21 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     color: #fff;
 }
 
+.bid-button{
+    background-image: url('images/button-icons/bid.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 40px;
+}
+
+.abstain-button{
+    background-image: url('images/button-icons/exit.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 40px;
+}
 
 /* Bankruptcy ----------------------------------------------------------------*/
 

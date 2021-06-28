@@ -3659,7 +3659,8 @@ function auctionProperty(number, proceedsToAll){
 
     currentBidContainer.appendChild(createElement('h3', 'current-bid-heading', 'Current bid:'))
 
-    currentBidContainer.appendChild(createElement('div', 'current-bid-amount', currencySymbolSpan + currentBid))
+    let currentBidAmount = createElement('div', 'current-bid-amount', currencySymbolSpan + currentBid)
+    currentBidContainer.appendChild(currentBidAmount)
 
     auctionBidArea.appendChild(currentBidContainer)
 
