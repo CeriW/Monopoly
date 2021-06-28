@@ -1993,7 +1993,7 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
 }
 
 body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,    // Build house button on properties with 4 houses when build-hotels is false
-body[build-house = "false"] .build-house-button,                                                    // Build house button When build-house is false
+body[build-house = "false"] .build-house-button,                                                    // Build house button when build-house is false
 .house-visual-display[houses="0"] + .button-panel .sell-house-button,                               // Sell house button when property doesn't have houses
 body[build-house="false"] .colour-set-button,
 .disabled-button{                                                                                   // General disabled buttons
@@ -2026,8 +2026,8 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
 }
 
 // Mortgage property
-.property-options .mortgage-button,
-.property-options .unmortgage-button{
+.mortgage-button,
+.unmortgage-button{
     background-image: url('images/button-icons/mortgage.svg');
     background-position: 10px center;
     background-repeat: no-repeat;
@@ -2087,29 +2087,6 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
 }
 
 
-
-
-// If there are no houses in the bank
-/*body[build-house="none-left"]{
-    .no-more-houses-in-bank{
-        display: block;
-    }
-
-    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-houses-in-bank){
-        display: none !important;
-    }
-
-    .build-house-button span:not(.no-more-houses-in-bank){
-        display: none !important;
-    }
-}
-
-body[build-house="none-left"][build-hotel="true"]{
-    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.build-hotel){
-        //display: none;
-    }
-}*/
-
 // No houses in bank, and the property doesn't have 4 houses (which would mean
 // they'd be looking to build a hotel)
 body[build-house="none-left"] .house-visual-display:not([houses="4"]) + .button-panel .build-house-button{
@@ -2150,18 +2127,6 @@ body[build-hotel="none-left"] .house-visual-display[houses="4"] + .button-panel 
     }
 }
 
-/*// If there are no hotels in the bank
-body[build-hotel="none-left"]{
-    .house-visual-display[houses="4"] + .button-panel .no-more-hotels-in-bank{
-        display: block;
-        @include disabledButton()
-    }
-
-
-    .house-visual-display[houses="4"] + .button-panel .build-house-button span:not(.no-more-hotels-in-bank){
-        display: none;
-    }
-}*/
 
 // If the player does not have enough mmoney
 body[build-house="not-enough-money"]{
@@ -3192,31 +3157,10 @@ body[bankruptcy-proceedings = "false"] #bankruptcy{
     }
 }
 
-/*
-.get-out-of-bankruptcy-table{
-    border-bottom: 1px solid $lightgrey;
-    grid-area: Functions;
-
-    .get-out-of-bankruptcy-table-entry{
-        padding: 10px 0;
-        border-top: 1px solid $lightgrey;
-        text-align: left;
-
-        .property-icon{
-            margin-right: 20px;
-        }
-
-        .house-visual-display{
-            width: 130px;
-            height: 25px;
-        }
-    }
-}*/
-
 
 #bankruptcy-message .full-portfolio-item {
     display: grid;
-    grid-template-columns: 19px 1fr min-content min-content 220px;
+    grid-template-columns: 19px 1fr min-content min-content 270px;
     grid-template-rows: 1fr;
     gap: 0px 10px;
     grid-template-areas:

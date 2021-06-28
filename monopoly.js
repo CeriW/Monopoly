@@ -1854,10 +1854,10 @@ function drawCard(type){
 
                 // This is the current player's property. Let's figure out how many houses/hotels we have.
                 if(space.owner && space.owner.id == turn){
-                    if (space.houses === 5){
+                    if (gameState[property.position].houses === 5){
                         numberOfHotels += 1
                     } else if (space.houses > 0){
-                        numberOfHouses += space.houses
+                        numberOfHouses += gameState[property.position].houses
                     }
                 }
             })
@@ -2701,10 +2701,10 @@ function generateFullPortfolioView(playerID){
         propertyContainer.appendChild(createElement('div', 'property-name', property.name))
 
         // Add icons if there are houses/hotels
-        if (property.houses === 5){
+        if (gameState[property.position].houses === 5){
             propertyContainer.appendChild(createElement('span', 'full-portfolio-hotel'))
         } else{
-            for (i = 1; i <= property.houses; i++){
+            for (i = 1; i <= gameState[property.position].houses; i++){
                 propertyContainer.appendChild(createElement('span', 'full-portfolio-house'))
             }
         }
@@ -2720,10 +2720,10 @@ function generateFullPortfolioView(playerID){
             // the same as the house cost. However, I have coded this bit this 
             // way just in case in the future I add a different type of board
             // where they actually are different.
-            if (property.houses === 5){
+            if (gameState[property.position].houses === 5){
                 value += property.hotelCost + (property.houseCost * 4)
-            } else if (property.houses){
-                value += property.houses * property.houseCost
+            } else if (gameState[property.position].houses){
+                value += gameState[property.position].houses * property.houseCost
             }
         }
 
@@ -2920,7 +2920,7 @@ function displayPropertyOptions(number){
                 // Check whether there are houses anywhere on this colour set.
                 let housesPresent = false
                 colourSet.forEach(function(property){
-                    if(property.houses > 0){
+                    if(gameState[property.position].houses > 0){
                         housesPresent = true
                     }
                 })
@@ -3038,10 +3038,10 @@ function displayBuildHousePanel(colour){
     colourSet.forEach(function(property){
 
         // Generate details of the property (rent etc) for reference
-        colourSetOverview.appendChild(createElement('div', 'property-overview', generateRentTable(property.position)))
+        let setItemDetails = colourSetOverview.appendChild(createElement('div', 'property-overview', generateRentTable(property.position)))
 
         // Generate house building buttons
-        setItemDetails.appendChild(createElement('div', 'house-building-panel', null, 'position', property.position))
+        let housePanel = setItemDetails.appendChild(createElement('div', 'house-building-panel', null, 'position', property.position))
 
         // Create a nice little display to show how many houses are on this property
         housePanel.appendChild(createElement('div', 'house-visual-display', null, 'houses', gameState[property.position].houses))
@@ -3050,7 +3050,7 @@ function displayBuildHousePanel(colour){
         let buttonPanel = createElement('div', 'button-panel')
 
         // Create a button to build houses
-        let buildHouseBtn = document.createElement('button', 'build-house-button')
+        let buildHouseBtn = createElement('button', 'build-house-button')
 
         ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'not-enough-money', 'maximum-number-of-buildings-reached'].forEach(function(message){
             buildHouseBtn.appendChild(createElement('span', message, message.replace(/-/g, ' ')))
@@ -3311,8 +3311,7 @@ function toggleHouseBuildButtons(group){
         colourSetHouses.push(gameState[property.position].houses)
     })
 
-
-    
+    console.log(colourSetHouses)
 
     
     // Get the highest number of houses in the set.
@@ -3359,9 +3358,12 @@ function toggleHouseBuildButtons(group){
     } else{
 
         // Prevent building on properties that have the most number of houses
+        //;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
         ;[].forEach.call(document.querySelectorAll('.house-visual-display[houses="' + highestNumberOfHouses + '"] + .button-panel .build-house-button' ), function(button){
             button.classList.add('disabled-button')
         })
+
+        
 
         // Prevent selling buildings on properties that have the least
         ;[].forEach.call(document.querySelectorAll('.colour-set-overview .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button, .full-portfolio-item[group="' + group + '"] .house-visual-display[houses="' + lowestNumberOfHouses + '"] + .button-panel .sell-house-button'), function(button){
@@ -3389,7 +3391,7 @@ function toggleHouseBuildButtons(group){
 
     //console.log(colourSet)
 
-    let owner = getPropertyOwnerDetails(gameState[colourSet[0].position].ownerID)
+    let owner = getPropertyOwnerDetails(colourSet[0].position)
 
     if (owner.money < colourSet[0].houseCost){
         availableActions.buildHouse = 'not-enough-money'
@@ -3436,10 +3438,10 @@ function sellHouse(number){
                 let propertyNumber = property.position
   
                 // Reset the number of houses to 0
-                spaces[propertyNumber].houses = 0
+                gameState[propertyNumber].houses = 0
   
                 // Refund the player the cost of 5 houses, halved
-                gameState[spaces[number].ownerID - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
+                gameState[spaces[propertyNumber].ownerID - 1].money -= ((spaces[propertyNumber].houseCost / 2) * 5)
   
                 // Return the hotel and houses to the bank
                 availableHotels++
@@ -4403,7 +4405,7 @@ function negotiateTrade(e, bankruptcy){
                 let confirmation = false
 
                 colourSet.forEach(function(tradeProperty){
-                    if (tradeProperty.houses > 0){
+                    if (gameState[tradeProperty.position].houses > 0){
                         confirmation = true
                     }
                 })
@@ -4935,10 +4937,10 @@ function openBankruptcyProceedings(transactionDetails){
         // Sell houses button -------------------*/
 
         let sellHouseButton = createElement('button', 'sell-house-button', 'Sell house', 'group', property.group)
-        sellHouseButton.setAttribute('houses', property.houses)
+        sellHouseButton.setAttribute('houses', gameState[property.position].houses)
         changeSellHouseButtonText(sellHouseButton)
         buttonPanel.appendChild(sellHouseButton)
-        if (property.houses > 0){
+        if (gameState[property.position].houses > 0){
             toggleHouseBuildButtons(property.group)
         }
 
@@ -4990,7 +4992,7 @@ function openBankruptcyProceedings(transactionDetails){
         let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
 
         // If the property is already mortgaged, disable this button
-        if (property.mortgaged){
+        if (gameState[property.position].mortgaged){
             mortgageButton.classList.add('disabled-button')
             mortgageButton.innerHTML = 'Already mortgaged'
         }
@@ -5496,8 +5498,8 @@ function calculatePlayerWorth(playerID){
                 worth += (space.hotelCost / 2) + (space.houseCost * 2)
             }
             // If it doesn't have a hotel
-            else if (space.houses){
-                worth += ((space.houseCost * space.houses) / 2)
+            else if (gameState[property.position].houses){
+                worth += ((space.houseCost * gameState[property.position].houses) / 2)
             }
 
         }
