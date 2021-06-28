@@ -18,8 +18,6 @@ IMPROVEMENTS
 
 - Make the quick start functionality actually good.
 
-- Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
-
 - There are a lot of things that should have cursor: pointer on them.
 
 
@@ -38,6 +36,8 @@ THINGS TO DO AT THE VERY END
 
 - Reorder the readme so it's in alphabetical order
 
+- Are there any events where I should be using the 'this' keyword? 'this' refers to the event owner.
+
 
 
 STRETCH GOALS
@@ -49,8 +49,6 @@ STRETCH GOALS
 	- Revisit the trade with mortgages window. There's a wall of text with rules in it.
 
 - House rules? (e.g. free parking)
-
-- Player summaries and similar need to have white tokens/text when the colour is too dark.
 
 - Quick game modes (see original rulebook)
 

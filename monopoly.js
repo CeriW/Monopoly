@@ -2786,7 +2786,7 @@ function displayPropertyOptions(number){
         if (players[turn - 1].position === number){
 
             // Buy property elements
-            let buyButton = createElement('button', null, 'Buy this property')
+            let buyButton = createElement('button', 'buy-property', 'Buy this property')
             buyButton.addEventListener('click', function(){
                 buyProperty(number, players[turn - 1], 'purchase', null)
             })
@@ -2794,7 +2794,7 @@ function displayPropertyOptions(number){
 
 
             // Auction property elements
-            let auctionButton = createElement('button', null, 'Go to auction')
+            let auctionButton = createElement('button', 'auction-property', 'Go to auction')
             auctionButton.addEventListener('click', function(){
                 auctionProperty(number)
             })

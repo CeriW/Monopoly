@@ -1935,6 +1935,20 @@ body[mortgage-property="false"] .property-options .mortgage-button,
 body[unmortgage-property="false"] .property-options .unmortgage-button {
   display: none; }
 
+.property-options .buy-property {
+  background-image: url("images/button-icons/buy-property.svg");
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 27px;
+  padding-left: 50px; }
+
+.property-options .auction-property {
+  background-image: url("images/button-icons/auction.svg");
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 27px;
+  padding-left: 50px; }
+
 .house-visual-display[houses="5"] + .button-panel {
   /* If we have the maximum number of buildings, this is the definitive rule.
        we do not care whether there are still hotels in the bank */ }
@@ -2108,11 +2122,14 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 
 .property-overview-options {
   background: #ececec;
-  margin-top: 20px;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr auto auto;
-  grid-template-areas: "owner property-options" "owner message" "owner message"; }
+  grid-template-areas: "owner property-options" "owner message" "owner message";
+  width: calc(100% + 40px);
+  margin-bottom: -20px;
+  margin-left: -20px;
+  margin-top: 20px; }
 
 .options-panel-owner {
   grid-area: owner;

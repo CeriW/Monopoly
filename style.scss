@@ -2005,6 +2005,26 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
     display: none;
 }
 
+// Buy property
+
+.property-options .buy-property{
+    background-image: url('images/button-icons/buy-property.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
+}
+
+// Auction property
+
+.property-options .auction-property{
+    background-image: url('images/button-icons/auction.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
+}
+
 // Properties with hotels
 .house-visual-display[houses="5"] + .button-panel{
     
@@ -2233,7 +2253,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
 .property-overview-options {
     //border: $border;
     background: #ececec;
-    margin-top: 20px;
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr auto auto;
@@ -2241,6 +2260,10 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       "owner property-options"
       "owner message"
       "owner message";
+    width: calc(100% + 40px);
+    margin-bottom: -20px;
+    margin-left: -20px;
+    margin-top: 20px;
 }
 
 
