@@ -2025,6 +2025,17 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
     padding-left: 50px;
 }
 
+// Mortgage property
+.property-options .mortgage-button,
+.property-options .unmortgage-button{
+    background-image: url('images/button-icons/mortgage.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 45px;
+}
+
+
 // Properties with hotels
 .house-visual-display[houses="5"] + .button-panel{
     
@@ -2260,9 +2271,6 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
       "owner property-options"
       "owner message"
       "owner message";
-    width: calc(100% + 40px);
-    margin-bottom: -20px;
-    margin-left: -20px;
     margin-top: 20px;
 }
 
