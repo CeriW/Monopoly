@@ -28,9 +28,10 @@ $border: 3px solid $black;
     pointer-events: none;
 }
 
-// Cursor
+// Pointer
 #about-close,
-.property-portfolio-title{
+.property-portfolio-title,
+.full-portfolio-item{
     cursor: pointer;
 }
 
@@ -1737,6 +1738,7 @@ $jailAnimationLength: 1.5;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: 100%;
 }
 
 .full-portfolio-item{
@@ -1746,6 +1748,7 @@ $jailAnimationLength: 1.5;
     transition: 0.2s;
     flex-wrap: wrap;
     margin-bottom: 5px;
+    padding: 5px;
 
     & > div{
         margin: 0 0 0 10px;
@@ -2715,7 +2718,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         background: url('images/tick.svg') center no-repeat;
         background-size: contain;
         pointer-events: none;
-        z-index: 2;
+        z-index: 3;
     }
 
 

@@ -4769,7 +4769,7 @@ function negotiateTrade(e, bankruptcy){
                     let unmortgageButton = createElement('button', '', 'Unmortgage for ' + currencySymbolSpan +  unmortgageCost, '', '')
                     
                     unmortgageButton.addEventListener('click', function(){
-                        unmortgageProperty(property, players[property.owner.id - 1])
+                        unmortgageProperty(property, players[gameState[property.position].owner.id - 1])
                         unmortgageButton.classList.add('disabled-button')
                         unmortgageButton.innerHTML = 'Unmortgaged for ' + currencySymbolSpan + unmortgageCost
                         entry.removeChild(keepMortgageButton)

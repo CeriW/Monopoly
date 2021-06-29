@@ -2,7 +2,8 @@
 /* Created by Ceri Woolway beginning October 2020 */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
 #about-close,
-.property-portfolio-title {
+.property-portfolio-title,
+.full-portfolio-item {
   cursor: pointer; }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -1718,7 +1719,8 @@ body:not(.warning-open) #warning {
 .full-portfolio {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; }
+  justify-content: space-between;
+  width: 100%; }
 
 .full-portfolio-item {
   display: flex;
@@ -1726,7 +1728,8 @@ body:not(.warning-open) #warning {
   width: 360px;
   transition: 0.2s;
   flex-wrap: wrap;
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+  padding: 5px; }
   .full-portfolio-item > div {
     margin: 0 0 0 10px; }
   .full-portfolio-item .portfolio-item-value {
@@ -2451,7 +2454,7 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     background: url("images/tick.svg") center no-repeat;
     background-size: contain;
     pointer-events: none;
-    z-index: 2; }
+    z-index: 3; }
   .trade-negotiations-window .money-proposal-container {
     margin-top: 15px;
     margin-bottom: 20px; }
