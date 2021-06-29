@@ -1296,7 +1296,7 @@ $columnsize: 80px;
     background: #fff;
     border: $border;
 
-    width: 800px;
+    width: 900px;
     max-width: 100%;
     position: relative;
     text-align: center;
@@ -1862,6 +1862,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
     max-width: 294px;
     float: none;
     margin: 0 auto;
+    padding: 10px 20px;
 }
 
 .property-overview-title{
@@ -1885,7 +1886,7 @@ body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-ja
 .property-overview-color{
     padding: 20px;
     border: 2px solid $black;
-    display: inline-block;
+    //display: inline-block;
     min-width: 250px;
 }
 
@@ -1988,8 +1989,38 @@ $colours: brown, lightblue, pink, orange, red, yellow, green, darkblue;
 
 /* Property overview  --------------------------------------------------------*/
 
+.colour-set-button{
+    background-image: url('images/button-icons/manage-colour-set.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
+}
+
+.house-building-panel .button-panel{
+    display: flex;
+    flex-direction: column;
+
+    button{
+        width: 100%;
+    }
+}
+
 .build-house-button{
-    max-width: 170px;
+    //max-width: 170px;
+    background-image: url('images/button-icons/build-house.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
+}
+
+.sell-house-button{
+    background-image: url('images/button-icons/sell-house.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
 }
 
 body[build-hotel="false"] .house-visual-display[houses="4"] + .button-panel .build-house-button,    // Build house button on properties with 4 houses when build-hotels is false
