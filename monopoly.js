@@ -3540,10 +3540,10 @@ function unmortgageProperty(property, player, multiple){
         }
     }
 
-    
+
     // If there are still other mortgaged properties in this set,
     // prevent the player from building.
-    if (checkMortgagesInColourSet(property.colour)){
+    if (checkMortgagesInColourSet(property.group)){
         mortgageMessage.innerText = 'You may not build houses while properties in this colour set are mortgaged.'
     } else{
         availableActions.buildHouse = true
