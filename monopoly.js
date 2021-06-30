@@ -3981,7 +3981,9 @@ function landOnProperty(position){
 
             // Rent for standard properties which may have houses/hotels
             function standardPropertyRent(){
-                if (checkColourSet(spaces[position].group, owner)){
+
+                console.log(owner)
+                if (checkColourSet(spaces[position].group, owner.id)){
                     let numberOfHouses = gameState[position].houses
                 
                     // The second (index 1) entry in the rent array is the rent with
