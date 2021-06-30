@@ -142,7 +142,7 @@ let feedArchive = []
 // All of the possible community chest cards
 let communityChestCards = 
   [
-    {description: "You are assessed for street repairs – Pay £40 per house and £115 per hotel you own.",       type: 'repairs',  value: [40,115] },
+    /*{description: "You are assessed for street repairs – Pay £40 per house and £115 per hotel you own.",       type: 'repairs',  value: [40,115] },
     {description: "Doctor's fees. pay £50.",                                                     type: '-',        value: 50 },
     {description: "Life insurance matures. Collect £100.",                                       type: '+',        value: 100 },
     {description: "You have won second prize in a beauty contest – collect £10",                type: '+',        value: 10},
@@ -155,9 +155,9 @@ let communityChestCards =
     {description: "Get Out of Jail Free. This card may be kept until needed, traded or sold." ,  type: 'getout',   value: null},
     {description: "Collect £25 consultancy fee.",                                                type: '-',        value: 25 },
     {description: "School fees. Pay £50.",                                                       type: '-',        value: 50 },
-    {description: "Hospital fees. Pay £100.",                                                    type: '-',        value: 100 },
+    {description: "Hospital fees. Pay £100.",                                                    type: '-',        value: 100 },*/
     {description: "It's your birthday. Collect £10 from each player.",                           type: 'exchange', value: 10 },
-    {description: "Go to Jail. Go directly to jail. Do not pass Go. Do not collect £200.",    type: 'move',     value: 10}
+    /*{description: "Go to Jail. Go directly to jail. Do not pass Go. Do not collect £200.",    type: 'move',     value: 10}*/
   ]
 
 let chanceCards = 
@@ -1647,13 +1647,13 @@ function payMoney(transactionDetails){
 
     transactionDetails = transactionQueue[0]
 
-    //console.log(transactionDetails)
+    console.log(transactionDetails)
 
     // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
     creditor = typeof transactionDetails.creditorID === 'string' ? transactionDetails.creditorID : players[transactionDetails.creditorID - 1]
 
-    //console.log(creditor)
+    console.log(creditor)
 
     let debt = 0
 
@@ -1725,7 +1725,10 @@ function payMoney(transactionDetails){
 
                 // Otherwise if it is a debt to anyone else but the bank...
                 } else if (creditor !== 'bank'){
-                    creditor.money += debt
+                    //creditor.money += debt
+                    players[transactionDetails.creditorID - 1].money += debt
+                    console.log('hey')
+                    console.log(creditor)
                 }
     
             
