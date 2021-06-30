@@ -13,8 +13,6 @@ BUGS SPOTTED
 
 - Check that money is changing hands properly for cards and rent and bankruptcy etc.
 
-- "Player 1 has built 1 house on Old Kent Road, 1 house on Whitechapel Road, 1 house on Old Kent Road, 1 house on Whitechapel Road, 1 house on Whitechapel Road & 1 house on Whitechapel Road"
-
 - When you unmortgage a property it lets you build houses, even if there are still mortgages elsewhere in the set.
 
 

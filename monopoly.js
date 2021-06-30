@@ -2053,14 +2053,10 @@ function closePopup(){
     document.body.classList.remove('popup-open')
     availableActions.closePopup = true
     setAvailableActions()
-    
+
     // Reset the build house available action. We'll recheck whether it's
     // appropriate when the window is next opened.
     //availableActions.buildHouse = false
-
-
-    
-
 }
 
 // TODO - there's at least one instance in this project where I'd had to hack
@@ -3026,6 +3022,7 @@ function mortgageProperty(property, bankruptcy){
 
 function displayBuildHousePanel(colour){
 
+    feedDetails = []
 
     let colourSet = getColourSet(colour)
     colourSet.forEach(function(property){
@@ -3314,9 +3311,6 @@ function toggleHouseBuildButtons(group){
         colourSetHouses.push(gameState[property.position].houses)
     })
 
-    console.log(colourSetHouses)
-
-    
     // Get the highest number of houses in the set.
     let highestNumberOfHouses = Math.max(...colourSetHouses)
     let lowestNumberOfHouses = Math.min(...colourSetHouses)
@@ -3981,8 +3975,6 @@ function landOnProperty(position){
 
             // Rent for standard properties which may have houses/hotels
             function standardPropertyRent(){
-
-                console.log(owner)
                 if (checkColourSet(spaces[position].group, owner.id)){
                     let numberOfHouses = gameState[position].houses
                 
