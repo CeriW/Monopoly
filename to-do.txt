@@ -11,7 +11,7 @@ BUGS SPOTTED
 
 - Player 1 declared bankruptcy. Player 4 goes bankrupt after winning a resulting auction. When I clicked 'initiate trade', the trade was for player 2?
 
-- Check that money is changing hands properly for cards and rent and bankruptcy etc.
+- Fix the player money testing
 
 
 IMPROVEMENTS
