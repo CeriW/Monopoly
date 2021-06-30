@@ -18,6 +18,7 @@ BUGS SPOTTED
 - When you unmortgage a property it lets you build houses, even if there are still mortgages elsewhere in the set.
 
 
+
 IMPROVEMENTS
 
 - Make the quick start functionality actually good.

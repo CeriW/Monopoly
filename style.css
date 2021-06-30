@@ -2832,6 +2832,8 @@ body[bankruptcy-proceedings="false"] #bankruptcy {
   grid-area: Functions; }
   #bankruptcy-message .full-portfolio .full-portfolio-item {
     width: 100%; }
+  #bankruptcy-message .full-portfolio .property-name {
+    white-space: normal; }
   #bankruptcy-message .full-portfolio .house-visual-display {
     height: 26px;
     width: 110px; }
