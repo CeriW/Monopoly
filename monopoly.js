@@ -2284,7 +2284,6 @@ function specialEndPositions(endPosition){
             break
         case 38:
             // Super tax
-            players[turn - 1].money -= spaces[38].tax
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + spaces[38].tax + ' super tax', 'money-minus')
             payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: spaces[38].tax})
             playSound('fail')

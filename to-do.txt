@@ -25,6 +25,8 @@ IMPROVEMENTS
 
 - There are a lot of things that should have cursor: pointer on them.
 
+- More colours for tokens
+
 
 ONGOING THINGS
 
