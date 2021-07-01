@@ -5617,11 +5617,11 @@ function playSound(type){
         let numberOfAvailableFiles = 1
 
         switch(type){
+            case 'dice-roll':
+                numberOfAvailableFiles = 22
+                break
             case 'fail':
                 numberOfAvailableFiles = 5
-                break
-            case 'dice-roll':
-                numberOfAvailableFiles = 4
                 break
             case 'construction':
             case 'kerching':
