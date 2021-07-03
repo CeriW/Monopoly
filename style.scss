@@ -31,7 +31,8 @@ $border: 3px solid $black;
 // Pointer
 #about-close,
 .property-portfolio-title,
-.full-portfolio-item{
+.full-portfolio-item,
+#testing-close{
     cursor: pointer;
 }
 
@@ -3386,11 +3387,11 @@ body:not(.testing-panel-enabled) #testing-panel{
     display: flex;
 }
 
-#testing-panel > div{
+#testing-panel > *{
     margin-right: 20px;
     text-align: center;
-    min-width: 250px;
-    flex-basis: 280px;
+    //min-width: 250px;
+    //flex-basis: 280px;
 }
 
 
@@ -3473,6 +3474,16 @@ body:not(.testing-panel-enabled) #testing-panel{
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex-basis: 280px;
+}
+
+#testing-close{
+    display: flex;
+    align-items: center;
+
+    img{
+        margin-right: 20px;
+    }
 }
 
 

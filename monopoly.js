@@ -908,6 +908,12 @@ function addTestingEvents(){
     testingToggle.addEventListener('change', function(){
         document.body.classList.toggle('testing-panel-enabled')
     })
+
+    let testingClose = document.querySelector('#testing-close')
+    testingClose.addEventListener('click', function(){
+        document.body.classList.remove('testing-panel-enabled')
+        testingToggle.checked = false
+    })
     
     let fakeDiceRollForm = document.querySelector('form#fake-dice-roll-form')
     fakeDiceRollForm.addEventListener('submit', function(e){

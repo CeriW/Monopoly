@@ -3,7 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
 #about-close,
 .property-portfolio-title,
-.full-portfolio-item {
+.full-portfolio-item,
+#testing-close {
   cursor: pointer; }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -2981,11 +2982,9 @@ body:not(.testing-panel-enabled) #testing-panel {
   justify-content: space-around;
   display: flex; }
 
-#testing-panel > div {
+#testing-panel > * {
   margin-right: 20px;
-  text-align: center;
-  min-width: 250px;
-  flex-basis: 280px; }
+  text-align: center; }
 
 #testing-panel button {
   background: #db0926;
@@ -3046,7 +3045,14 @@ body:not(.testing-panel-enabled) #testing-panel {
 #test-save {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  flex-basis: 280px; }
+
+#testing-close {
+  display: flex;
   align-items: center; }
+  #testing-close img {
+    margin-right: 20px; }
 
 /* TOOLTIPS ----------------------------------------------------------------- */
 /* The item which has a tooltip applied to it */
