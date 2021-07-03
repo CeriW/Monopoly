@@ -289,25 +289,25 @@ function savedGameFound(){
     let savedGameState = JSON.parse(localStorage.getItem('gameState'))
 
     savedPlayerDetails.forEach(function(player){
-        let newDetail = createElement('div')
-        newDetail.style.backgroundColor = player.colour
-        newDetail.setAttribute('best-token-colour', player.bestTokenColour)
-        newDetail.appendChild(createElement('div', 'token', '', 'token', player.token))
-        newDetail.appendChild(createElement('div', 'name', player.name))
-        newDetail.appendChild(createElement('div', 'money', '<b>Money</b>: ' + player.money))
-
-        let propertyCount = 0
-        savedGameState.forEach(function(item){
-            if (item.ownerID && item.ownerID == player.id){
-                propertyCount++
-            }
-        })
-        newDetail.appendChild(createElement('div', 'properties', 'Properties: ' + propertyCount))
-
-
-        gameSummary.appendChild(newDetail)
-
-
+        if (player){
+            let newDetail = createElement('div')
+            newDetail.style.backgroundColor = player.colour
+            newDetail.setAttribute('best-token-colour', player.bestTokenColour)
+            newDetail.appendChild(createElement('div', 'token', '', 'token', player.token))
+            newDetail.appendChild(createElement('div', 'name', player.name))
+            newDetail.appendChild(createElement('div', 'money', '<b>Money</b>: ' + player.money))
+    
+            let propertyCount = 0
+            savedGameState.forEach(function(item){
+                if (item.ownerID && item.ownerID == player.id){
+                    propertyCount++
+                }
+            })
+            newDetail.appendChild(createElement('div', 'properties', 'Properties: ' + propertyCount))
+    
+    
+            gameSummary.appendChild(newDetail)
+        }
     })
 
     newPopupContent.appendChild(gameSummary)
@@ -363,7 +363,9 @@ function loadSavedGame(){
 
     // Put all of the tokens in their correct places.
     players.forEach(function(player){
-        positionToken(document.querySelector('#board > .token[position="' + player.position + '"]'), player.position)
+        if (player){
+            positionToken(document.querySelector('#board > .token[position="' + player.position + '"]'), player.position)
+        }
     })
 
     // Note - setting this to one less and then immediately incrementing it
@@ -748,94 +750,97 @@ function updatePlayerDetails(){
 
     players.forEach(function(player){
 
-        // MONEY
-        let updateNode = document.querySelector('.player-money[player="' + player.id + '"]')
-        let oldValue = updateNode.textContent
-        oldValue = parseInt(oldValue.replace(/\D/g, ''))
-        let newValue = player.money
-    
-        // If the values have changed, animate it based on whether it's a good/bad change
-        if (oldValue > newValue){
-            animateUpdate(updateNode, 'bad')
-        }else if (oldValue < newValue){
-            animateUpdate(updateNode, 'good')
-        }
-
-        updateNode.innerHTML = currencySymbolSpan + player.money
-
-
+        if (player){
+            // MONEY
+            let updateNode = document.querySelector('.player-money[player="' + player.id + '"]')
+            let oldValue = updateNode.textContent
+            oldValue = parseInt(oldValue.replace(/\D/g, ''))
+            let newValue = player.money
         
-
-        // JAIL
-        updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"]')
-        if (player.inJail !== 0){
-            updateNode.setAttribute('inJail', true)
-        } else{
-            updateNode.setAttribute('inJail', false)
-        }
-
-        // PROPERTIES       
-        updateNode = document.querySelector('.property-portfolio[player="' + player.id + '"]')
-        
-        // Clear the existing properties so we can start again. This has the
-        // benefit of ensuring all colour groups end up together rather than
-        // just adding them to the end.
-        updateNode.innerHTML = ''
-
-        //player.properties.forEach(function(property){
-        getPlayerPropertyList(player.id).forEach(function(property){
-            let propertyIcon = createElement('div', 'property-icon')
-            propertyIcon.classList.add(property.group, property.position )
-
-
-
-            if (property.group === 'utility'){
-                let propertyName = property.name
-                propertyName = propertyName.replace(/\s/g, '-')
-                propertyIcon.classList.add(propertyName.toLowerCase())
+            // If the values have changed, animate it based on whether it's a good/bad change
+            if (oldValue > newValue){
+                animateUpdate(updateNode, 'bad')
+            }else if (oldValue < newValue){
+                animateUpdate(updateNode, 'good')
             }
 
-            propertyIcon.addEventListener('click', function(){
-                displayPropertyDetails(property.position)
+            updateNode.innerHTML = currencySymbolSpan + player.money
+
+
+            
+
+            // JAIL
+            updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"]')
+            if (player.inJail !== 0){
+                updateNode.setAttribute('inJail', true)
+            } else{
+                updateNode.setAttribute('inJail', false)
+            }
+
+            // PROPERTIES       
+            updateNode = document.querySelector('.property-portfolio[player="' + player.id + '"]')
+            
+            // Clear the existing properties so we can start again. This has the
+            // benefit of ensuring all colour groups end up together rather than
+            // just adding them to the end.
+            updateNode.innerHTML = ''
+
+            //player.properties.forEach(function(property){
+            getPlayerPropertyList(player.id).forEach(function(property){
+                let propertyIcon = createElement('div', 'property-icon')
+                propertyIcon.classList.add(property.group, property.position )
+
+
+
+                if (property.group === 'utility'){
+                    let propertyName = property.name
+                    propertyName = propertyName.replace(/\s/g, '-')
+                    propertyIcon.classList.add(propertyName.toLowerCase())
+                }
+
+                propertyIcon.addEventListener('click', function(){
+                    displayPropertyDetails(property.position)
+                })
+
+
+                updateNode.appendChild(propertyIcon)
+                appendTooltip(propertyIcon, property.name)
+
             })
 
-
-            updateNode.appendChild(propertyIcon)
-            appendTooltip(propertyIcon, property.name)
-
-        })
-
-        // Re-append the station icons so they end up together at the end.
-        ;[].forEach.call(updateNode.querySelectorAll('.train-station'), function(node){
-            updateNode.appendChild(node)
-        })
-
-        // Re-append the utility icons so they end up together at the end
-        // and with appropriate classes
-        ;[].forEach.call(updateNode.querySelectorAll('.utility'), function(node){
-            updateNode.appendChild(node)
-        })
-
-        // GET OUT OF JAIL CARDS
-        updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"] .player-cards')
-        updateNode.innerHTML = ''
-
-        if (player.getOutCards.length === 0){
-            updateNode.setAttribute('cards', false)
-        } else{
-            player.getOutCards.forEach(function(card){
-                updateNode.appendChild(createElement('div', 'player-card-icon', null, 'card-number', player.getOutCards.indexOf(card)))
+            // Re-append the station icons so they end up together at the end.
+            ;[].forEach.call(updateNode.querySelectorAll('.train-station'), function(node){
+                updateNode.appendChild(node)
             })
 
-            updateNode.setAttribute('cards', true)
+            // Re-append the utility icons so they end up together at the end
+            // and with appropriate classes
+            ;[].forEach.call(updateNode.querySelectorAll('.utility'), function(node){
+                updateNode.appendChild(node)
+            })
+
+            // GET OUT OF JAIL CARDS
+            updateNode = document.querySelector('.individual-player-summary[player="' + player.id + '"] .player-cards')
+            updateNode.innerHTML = ''
+
+            if (player.getOutCards.length === 0){
+                updateNode.setAttribute('cards', false)
+            } else{
+                player.getOutCards.forEach(function(card){
+                    updateNode.appendChild(createElement('div', 'player-card-icon', null, 'card-number', player.getOutCards.indexOf(card)))
+                })
+
+                updateNode.setAttribute('cards', true)
+            }
+
+            // If the player has no money, open bankruptcy proceedings
+            /*if (player.money < 0 && transactionDetails){
+                availableActions.bankruptcyProceedings = true
+                setAvailableActions()
+                openBankruptcyProceedings(transactionDetails)
+            }*/
         }
 
-        // If the player has no money, open bankruptcy proceedings
-        /*if (player.money < 0 && transactionDetails){
-            availableActions.bankruptcyProceedings = true
-            setAvailableActions()
-            openBankruptcyProceedings(transactionDetails)
-        }*/
 
     })
 
@@ -922,27 +927,28 @@ function addTestingEvents(){
 function fakePlayerMoney(){
     let fakeMoneyPanel = document.querySelector('#fake-player-money')
     players.forEach(function(player){
-        let form = createElement('form', '', '', '', '')
-        let label = createElement('label', '', player.name, '', '')
-        let input = createElement('input', '', '', 'type', 'number')
-        input.setAttribute('step', 1)
-        form.appendChild(label)
-        form.appendChild(input)
-        fakeMoneyPanel.appendChild(form)
 
-        input.addEventListener('input', function(){
-            let newMoney = parseInt(input.value)
-            if (newMoney){
-                player.money = newMoney
-            }
-            updatePlayerDetails()
-
-            window.setTimeout(function(){
-                input.value = ''
-            }, 1300)
-        })
-
-
+        if (player){
+            let form = createElement('form', '', '', '', '')
+            let label = createElement('label', '', player.name, '', '')
+            let input = createElement('input', '', '', 'type', 'number')
+            input.setAttribute('step', 1)
+            form.appendChild(label)
+            form.appendChild(input)
+            fakeMoneyPanel.appendChild(form)
+    
+            input.addEventListener('input', function(){
+                let newMoney = parseInt(input.value)
+                if (newMoney){
+                    player.money = newMoney
+                }
+                updatePlayerDetails()
+    
+                window.setTimeout(function(){
+                    input.value = ''
+                }, 1300)
+            })
+        }
     })
 }
 
@@ -1293,18 +1299,21 @@ function createPlayers(){
 
 
 function generateTokens(){
-    players.forEach(function(player){
-        let newToken = createElement('div', 'token', null, 'position', player.position)
-        let newTokenBackground = createElement('div', 'token-background')
-        newTokenBackground.style.backgroundColor = player.colour
-        newToken.setAttribute('best-token-colour', player.bestTokenColour)
-        newToken.appendChild(newTokenBackground)
 
-        newToken.classList.add(player.token)
-        newToken.setAttribute('player', player.id)
-        let inJail = player.inJail > 0 ? true : false
-        newToken.setAttribute('jail', inJail)
-        board.appendChild(newToken)
+    players.forEach(function(player){
+        if (player){
+            let newToken = createElement('div', 'token', null, 'position', player.position)
+            let newTokenBackground = createElement('div', 'token-background')
+            newTokenBackground.style.backgroundColor = player.colour
+            newToken.setAttribute('best-token-colour', player.bestTokenColour)
+            newToken.appendChild(newTokenBackground)
+    
+            newToken.classList.add(player.token)
+            newToken.setAttribute('player', player.id)
+            let inJail = player.inJail > 0 ? true : false
+            newToken.setAttribute('jail', inJail)
+            board.appendChild(newToken)
+        }
     })
 
     window.addEventListener('resize', function(){
@@ -1315,91 +1324,97 @@ function generateTokens(){
 }
 
 function generatePlayerSummary(player){
-    let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
+
+
+    if (player){
+        let newSummary = createElement('div', 'individual-player-summary', '', 'player', player.id)
     
-    let playerSummaryHeader = createElement('div','player-summary-header', null, 'best-token-colour', player.bestTokenColour)
-    playerSummaryHeader.style.backgroundColor = player.colour
-
-    // Player's token
-    playerSummaryHeader.appendChild(createElement('div', 'player-token-icon', null, 'token', player.token))
-
-    // Player's name
-    playerSummaryHeader.appendChild(createElement('h2', null, player.name))
-
-    // Player's money
-    playerSummaryHeader.appendChild(createElement('div', 'player-money', currencySymbolSpan + player.money, 'player', player.id))
-
-    newSummary.appendChild(playerSummaryHeader)
+        let playerSummaryHeader = createElement('div','player-summary-header', null, 'best-token-colour', player.bestTokenColour)
+        playerSummaryHeader.style.backgroundColor = player.colour
     
-
-    // Note - this was originally done with a loop.
-    // Eventually it became the case that I didn't want all of the player values
-    // to display in the summary, and I wanted different ones to display differently.
-    // The code below creates a more streamlined interface, even if the JS
-    // isn't as simple as it could be.
-
-
-    // PROPERTIES
-    let playerPortfolioTitle = createElement('span', null, 'Property portfolio⯈', 'player', player.id)
-    playerPortfolioTitle.classList.add('property-portfolio-title')
-    playerPortfolioTitle.addEventListener('click', fullPortfolioView)
-    newSummary.appendChild(playerPortfolioTitle)
-
-    let playerPortfolio = createElement('div', 'property-portfolio', null, 'player', player.id)
-    playerPortfolio.addEventListener('click', portfolioItemPreview)
-
-    newSummary.appendChild(playerPortfolio)
-
-
-    // GET OUT CARDS    
-    newSummary.appendChild(createElement('div', 'player-cards', null, 'cards', false))
-
-    // TODO - much of this could probably be achieved much more simply with a loop
-
-    // Create the buttons that allow players to end their turns.
-    // CSS will be used to only show this for the player whose turn it is.
-    let newEndTurnButton = createElement('button', 'end-turn-button', 'End turn')
-    newEndTurnButton.classList.add('player-action-button')
-    newEndTurnButton.addEventListener('click', increasePlayerTurn)
-
-
-    // Create the buttons that allow players to roll the dice.
-    let newRollDiceButton = createElement('button', 'roll-dice-button', 'Roll dice')
-    newRollDiceButton.classList.add('player-action-button')
-    newRollDiceButton.addEventListener('click', rollDice)
+        // Player's token
+        playerSummaryHeader.appendChild(createElement('div', 'player-token-icon', null, 'token', player.token))
+    
+        // Player's name
+        playerSummaryHeader.appendChild(createElement('h2', null, player.name))
+    
+        // Player's money
+        playerSummaryHeader.appendChild(createElement('div', 'player-money', currencySymbolSpan + player.money, 'player', player.id))
+    
+        newSummary.appendChild(playerSummaryHeader)
+        
+    
+        // Note - this was originally done with a loop.
+        // Eventually it became the case that I didn't want all of the player values
+        // to display in the summary, and I wanted different ones to display differently.
+        // The code below creates a more streamlined interface, even if the JS
+        // isn't as simple as it could be.
+    
+    
+        // PROPERTIES
+        let playerPortfolioTitle = createElement('span', null, 'Property portfolio⯈', 'player', player.id)
+        playerPortfolioTitle.classList.add('property-portfolio-title')
+        playerPortfolioTitle.addEventListener('click', fullPortfolioView)
+        newSummary.appendChild(playerPortfolioTitle)
+    
+        let playerPortfolio = createElement('div', 'property-portfolio', null, 'player', player.id)
+        playerPortfolio.addEventListener('click', portfolioItemPreview)
+    
+        newSummary.appendChild(playerPortfolio)
+    
+    
+        // GET OUT CARDS    
+        newSummary.appendChild(createElement('div', 'player-cards', null, 'cards', false))
+    
+        // TODO - much of this could probably be achieved much more simply with a loop
+    
+        // Create the buttons that allow players to end their turns.
+        // CSS will be used to only show this for the player whose turn it is.
+        let newEndTurnButton = createElement('button', 'end-turn-button', 'End turn')
+        newEndTurnButton.classList.add('player-action-button')
+        newEndTurnButton.addEventListener('click', increasePlayerTurn)
+    
+    
+        // Create the buttons that allow players to roll the dice.
+        let newRollDiceButton = createElement('button', 'roll-dice-button', 'Roll dice')
+        newRollDiceButton.classList.add('player-action-button')
+        newRollDiceButton.addEventListener('click', rollDice)
+    
+        
+        // Create the "Pay £50 to get out of jail" buttons
+        let newGetOut50Button = createElement('button', 'get-out-50-button', 'Pay ' + currencySymbolSpan + '50 to get out of jail')
+        newGetOut50Button.classList.add('player-action-button')
+        newGetOut50Button.addEventListener('click', function(){getOutOfJail('pay')})
+    
+        // Create the "Roll doubles to get out of jail" buttons
+        let newRollDoublesForJailButton = createElement('button', 'roll-doubles-for-jail', 'Roll doubles to get out of jail')
+        newRollDoublesForJailButton.classList.add('player-action-button')
+        newRollDoublesForJailButton.addEventListener('click', rollDoublesForJail)
+    
+        let newCardOutOfJailButton = createElement('button', 'card-out-of-jail-button', 'Use a get out of jail free card')
+        newCardOutOfJailButton.classList.add('player-action-button')
+        newCardOutOfJailButton.addEventListener('click', function(){
+            getOutOfJail('card')
+        })
+    
+        let newTradeButton = createElement('button', 'player-action-button', 'Initiate trade', '', '')
+        newTradeButton.classList.add('initiate-trade')
+        newTradeButton.addEventListener('click', function(){
+            initiateTrade(false)
+        })
+    
+        // Append all these new elements to the relevant player summary
+        newSummary.appendChild(newGetOut50Button)
+        newSummary.appendChild(newRollDoublesForJailButton)
+        newSummary.appendChild(newCardOutOfJailButton)
+        newSummary.appendChild(newRollDiceButton)
+        newSummary.appendChild(newTradeButton)
+        newSummary.appendChild(newEndTurnButton)
+        playerSummary.appendChild(newSummary)
+    
+    }
 
     
-    // Create the "Pay £50 to get out of jail" buttons
-    let newGetOut50Button = createElement('button', 'get-out-50-button', 'Pay ' + currencySymbolSpan + '50 to get out of jail')
-    newGetOut50Button.classList.add('player-action-button')
-    newGetOut50Button.addEventListener('click', function(){getOutOfJail('pay')})
-
-    // Create the "Roll doubles to get out of jail" buttons
-    let newRollDoublesForJailButton = createElement('button', 'roll-doubles-for-jail', 'Roll doubles to get out of jail')
-    newRollDoublesForJailButton.classList.add('player-action-button')
-    newRollDoublesForJailButton.addEventListener('click', rollDoublesForJail)
-
-    let newCardOutOfJailButton = createElement('button', 'card-out-of-jail-button', 'Use a get out of jail free card')
-    newCardOutOfJailButton.classList.add('player-action-button')
-    newCardOutOfJailButton.addEventListener('click', function(){
-        getOutOfJail('card')
-    })
-
-    let newTradeButton = createElement('button', 'player-action-button', 'Initiate trade', '', '')
-    newTradeButton.classList.add('initiate-trade')
-    newTradeButton.addEventListener('click', function(){
-        initiateTrade(false)
-    })
-
-    // Append all these new elements to the relevant player summary
-    newSummary.appendChild(newGetOut50Button)
-    newSummary.appendChild(newRollDoublesForJailButton)
-    newSummary.appendChild(newCardOutOfJailButton)
-    newSummary.appendChild(newRollDiceButton)
-    newSummary.appendChild(newTradeButton)
-    newSummary.appendChild(newEndTurnButton)
-    playerSummary.appendChild(newSummary)
-
 }
 
 function newGameDiceRoll(){

@@ -1,0 +1,4 @@
+THINGS I'VE LEARNED
+For an eventual writeup afterward
+
+- Undefined entries in the players array after bankruptcy. It works and isn't worth going back and refactoring but it's not ideal on reflection and there's probably a better way of going about it in hindsight.
