@@ -9,7 +9,11 @@ FUNCTIONALITY
 
 BUGS SPOTTED
 
-- Player 1 declared bankruptcy. Player 4 goes bankrupt after winning a resulting auction. When I clicked 'initiate trade', the trade was for player 2?
+- Check whether the local storage is okay and not going to throw an error before loading the screen.
+
+- It's possible to roll twice on your turn if you click the button again before the token has finished moving.
+
+- Local storage working after a player goes bankrupt?
 
 
 IMPROVEMENTS

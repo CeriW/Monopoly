@@ -1642,20 +1642,22 @@ function newGameDiceRoll(){
 
 function payMoney(transactionDetails){
 
+
+
     // Check whether we're dealing with a list of transactions or just one
     if (transactionDetails && typeof(transactionDetails === 'object')){
         transactionQueue.push(transactionDetails)
     }
 
+    console.log(transactionQueue)
+
     transactionDetails = transactionQueue[0]
 
-    console.log(transactionDetails)
+    //console.log(transactionDetails)
 
     // Set up a bunch of variables we'll use throughout this process.
     debtor = players[transactionDetails.debtorID - 1]
     creditor = typeof transactionDetails.creditorID === 'string' ? transactionDetails.creditorID : players[transactionDetails.creditorID - 1]
-
-    console.log(creditor)
 
     let debt = 0
 
@@ -4056,7 +4058,15 @@ function landOnProperty(position){
 // will indicate that we need to update the bankruptcy display once a trade
 // has been accepted. 
 
-function initiateTrade(bankruptcy){
+// If debtorID is supplied, this will initiate a trade for the specified player
+// rather than the player whose turn it currently is. This is applicable for
+// a specific edge case where players can go bankrupt when it's not their turn.
+
+function initiateTrade(bankruptcy, debtorID){
+
+    let initiator = debtorID ? players[debtorID - 1] : players[turn - 1]
+
+    console.log(initiator)
 
     let tradeWindow = createElement('div', 'trade-summary-window')
 
@@ -4068,19 +4078,19 @@ function initiateTrade(bankruptcy){
     currentPlayerSummary.appendChild(playerIdentity)
 
     // Token
-    playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn-1].token))
+    playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', initiator.token))
 
     // Name
-    playerIdentity.appendChild(createElement('h2', '', players[turn-1].name, '', ''))
+    playerIdentity.appendChild(createElement('h2', '', initiator.name, '', ''))
 
     // Money
-    playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan +  players[turn-1].money, '', ''))
+    playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan +  initiator.money, '', ''))
 
     // Portfolio
     currentPlayerSummary.appendChild(createElement('h3', '', 'YOU HAVE:', '', ''))
     
     let currentPlayerPortfolio = createElement('div', 'current-player-portfolio', '', '', '')
-    currentPlayerPortfolio.appendChild(generateFullPortfolioView(turn))
+    currentPlayerPortfolio.appendChild(generateFullPortfolioView(initiator.id))
     if (!currentPlayerPortfolio.querySelector('.full-portfolio').innerHTML){
         currentPlayerPortfolio.querySelector('.full-portfolio').innerHTML = 'You do not have any properties to trade.'
     }
@@ -4093,7 +4103,7 @@ function initiateTrade(bankruptcy){
         currentPlayerPortfolio.appendChild(playerCards)
 
         players[turn-1].getOutCards.forEach(function(card){
-            playerCards.appendChild(createElement('div', 'player-card-icon', '', 'card-number', players[turn - 1].getOutCards.indexOf(card)))
+            playerCards.appendChild(createElement('div', 'player-card-icon', '', 'card-number', initiator.getOutCards.indexOf(card)))
         })
     }
 
@@ -4112,7 +4122,7 @@ function initiateTrade(bankruptcy){
 
     i = 0
     players.forEach(function(player){
-        if (player !== players[turn - 1]){
+        if (player !== initiator){
             let summary = createElement('div', 'other-player-summary', '' , 'player', player.id)
             let playerIdentity = createElement('div', 'player-identity')
             playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
@@ -5133,7 +5143,7 @@ function openBankruptcyProceedings(transactionDetails){
     // Generate the trade button
     let tradeButton = createElement('button', '', 'Initiate trade')
     tradeButton.addEventListener('click', function(){
-        initiateTrade(true)
+        initiateTrade(true, debtorID)
     })
     bankruptcyMessage.appendChild(tradeButton)
 
