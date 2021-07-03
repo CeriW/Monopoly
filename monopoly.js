@@ -37,12 +37,15 @@ const saveIndicator = document.querySelector('#save-indicator')
 
 const playTimeIndicator = document.querySelector('#play-time-counter')
 
+const musicVolumeIndicator = document.querySelector('#music-volume')
+
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
 let turn = 0
 
 // Whether sound effects are on by default
 let SFX = true
+let music = true
 
 
 // Statistics which are used later
@@ -403,6 +406,8 @@ function loadSavedGame(){
     fakePlayerMoney()
 
     addToFeed('Saved game loaded', 'save')
+
+    playMusic()
 }
 
 
@@ -448,7 +453,6 @@ function initialisePage(){
 
     // Initialise the bank
     updateBank()
-
 }
 
 function cardCurrency(){
@@ -678,9 +682,14 @@ function addEvents(){
     
 
     let SFXcheckbox = document.querySelector('#SFX-checkbox')
+    SFXcheckbox.setAttribute('checked', true)
     SFXcheckbox.addEventListener('change', function(e){
         SFX = !SFX
         SFXcheckbox.setAttribute('checked', SFX)
+    })
+
+    musicVolumeIndicator.addEventListener('input', function(e){
+        changeMusicVolume()
     })
 
     window.setInterval(function(){
@@ -1186,6 +1195,8 @@ function intialisePlayerCreator(){
         // Insert this new player panel before the add player button
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
+
+
 }
 
 // Credit to https://awik.io/determine-color-bright-dark-using-javascript/
@@ -1238,6 +1249,9 @@ function lightOrDark(colour) {
 
 
 function createPlayers(){
+
+    playMusic()
+
     let newPlayersOverlay = document.querySelector('#new-player-overlay')
 
 
@@ -5682,12 +5696,30 @@ function playSound(type){
         sound.setAttribute('src', 'sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
         sound.setAttribute('autoplay', '')
         document.body.appendChild(sound)
-        console.log('sounds/' + type + '-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
     
         window.setTimeout(function(){
             sound.parentNode.removeChild(sound)
         }, 5000)
     }
+}
+
+function playMusic(){
+
+    let numberOfAvailableFiles = 1
+
+    if (music){
+        let tune = createElement('audio', 'music-audio', '', 'type', 'audio/mpeg')
+        tune.volume = musicVolumeIndicator.value / 100
+        tune.setAttribute('src', 'music/music-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
+        tune.setAttribute('autoplay', '')
+        document.body.appendChild(tune)
+    }
+}
+
+function changeMusicVolume(){
+    ;[].forEach.call(document.querySelectorAll('.music-audio'), function(node){
+        node.volume = musicVolumeIndicator.value / 100
+    })
 }
 
 
