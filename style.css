@@ -4,7 +4,8 @@
 #about-close,
 .property-portfolio-title,
 .full-portfolio-item,
-#testing-close {
+#testing-close,
+#bottom-bar form * {
   cursor: pointer; }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -111,6 +112,22 @@ button {
     font-size: 18px;
     display: flex;
     align-items: center; }
+  #bottom-bar input[type="checkbox"] {
+    position: relative; }
+    #bottom-bar input[type="checkbox"]:before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border: 1px solid #000;
+      background: #fff; }
+    #bottom-bar input[type="checkbox"][checked="true"]:before {
+      background: #fff url("images/tick.svg") center no-repeat;
+      background-size: contain; }
+  #bottom-bar > form label {
+    padding-left: 10px; }
 
 #play-time {
   display: flex;
@@ -2975,7 +2992,7 @@ body[close-popup="false"] #popup-close{
   justify-content: space-around;
   align-items: flex-start; }
 
-body:not(.testing-panel-enabled) #testing-panel {
+body[testing-panel="false"] #testing-panel {
   margin-bottom: -100%; }
 
 #testing-toggle-panel {
@@ -3042,12 +3059,14 @@ body:not(.testing-panel-enabled) #testing-panel {
   float: right;
   margin-left: 10px; }
 
+/* Saving -------------------------------*/
 #test-save {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-basis: 280px; }
 
+/* Closing -----------------------------*/
 #testing-close {
   display: flex;
   align-items: center; }

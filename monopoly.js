@@ -255,7 +255,8 @@ let availableActions = {
     mortgageProperty: false,
     unmortgageProperty: false,
     closePopup: true,
-    bankruptcyProceedings: false
+    bankruptcyProceedings: false,
+    testingPanelEnabled: false
 }
 
 let currencySymbol = '₩'
@@ -676,8 +677,10 @@ function addEvents(){
     addTestingEvents()
     
 
-    document.querySelector('#SFX-checkbox').addEventListener('change', function(){
+    let SFXcheckbox = document.querySelector('#SFX-checkbox')
+    SFXcheckbox.addEventListener('change', function(e){
         SFX = !SFX
+        SFXcheckbox.setAttribute('checked', SFX)
     })
 
     window.setInterval(function(){
@@ -747,6 +750,7 @@ function setAvailableActions(){
     document.body.setAttribute('unmortgage-property', availableActions.unmortgageProperty)
     document.body.setAttribute('close-popup', availableActions.closePopup)
     document.body.setAttribute('bankruptcy-proceedings', availableActions.bankruptcyProceedings)
+    document.body.setAttribute('testing-panel', availableActions.testingPanelEnabled)
 }
 
 
@@ -906,13 +910,16 @@ function addTestingEvents(){
     
     let testingToggle = document.querySelector('#testing-toggle')
     testingToggle.addEventListener('change', function(){
-        document.body.classList.toggle('testing-panel-enabled')
+        availableActions.testingPanelEnabled = !availableActions.testingPanelEnabled
+        testingToggle.setAttribute('checked', availableActions.testingPanelEnabled)
+        setAvailableActions()
     })
 
     let testingClose = document.querySelector('#testing-close')
     testingClose.addEventListener('click', function(){
-        document.body.classList.remove('testing-panel-enabled')
-        testingToggle.checked = false
+        availableActions.testingPanelEnabled = !availableActions.testingPanelEnabled
+        testingToggle.setAttribute('checked', availableActions.testingPanelEnabled)
+        setAvailableActions()
     })
     
     let fakeDiceRollForm = document.querySelector('form#fake-dice-roll-form')
