@@ -15,48 +15,8 @@
 
   <body>
 
-    <div id="testing-toggle-panel" style="font-size: 18px;">Testing options: <input id="testing-toggle" type="checkbox"></input></div>
-    <div id="testing-panel">
-
-      <div id="fake-dice-panel">
-        <div class="testing-panel-title"><img src="images/testing-panel/dice.svg" width="30" height="30">Dice functions</div>
-        <form id="fake-dice-roll-form">
-          <input id="fake-dice-roll-total" placeholder="Custom fake dice roll" size="17" autocomplete="off"</input>
-          <button id="fake-dice-roll-total-button" type="submit">Fake dice roll</button>
-          <!--<button id="fake-dice-roll-button">Fake dice</button>-->
-        </form>
-
-        <div id="fake-dice-roll-dice-panel">
-          <div onclick="fakeRollDice(1)">1</div>
-          <div onclick="fakeRollDice(2)">2</div>
-          <div onclick="fakeRollDice(3)">3</div>
-          <div onclick="fakeRollDice(4)">4</div>
-          <div onclick="fakeRollDice(5)">5</div>
-          <div onclick="fakeRollDice(6)">6</div>
-          <div onclick="fakeRollDice(7)">7</div>
-          <div onclick="fakeRollDice(8)">8</div>
-          <div onclick="fakeRollDice(9)">9</div>
-          <div onclick="fakeRollDice(10)">10</div>
-          <div onclick="fakeRollDice(11)">11</div>
-          <div onclick="fakeRollDice(12)">12</div>
-        </div>
-      </div>
-
-      <div id="fake-player-money">
-        <div class="testing-panel-title"><img src="images/testing-panel/piggy-bank.svg" width="30" height="30">Player money</div>
-      </div>
-
-      <div>
-        Available houses
-        <input id="available-houses-test" placeholder="32"></input>
-      </div>
-
-      <div>
-        Available hotels
-        <input id="available-hotels-test" placeholder="12"></input>
-      </div>
-
-    </div>
+    
+    
 
 
 
@@ -165,9 +125,65 @@
           <img src="images/saving.svg" width="25" height="25">
           SAVING...
         </div>
-        <button id="save-button" onclick="saveGame()"><img src="images/feed-icons/save-game.svg" width="25" height="25"> SAVE</button>
+        <!--<button id="save-button" onclick="saveGame()"><img src="images/feed-icons/save-game.svg" width="25" height="25"> SAVE</button>-->
       </div>
+
+      <form id="testing-toggle-panel" style="font-size: 18px;">
+        <input id="testing-toggle" type="checkbox"></input>
+        <label for="testing-toggle">TESTING OPTIONS:</label> 
+      </form>
+
       <div id="about-link" onclick="aboutToggle()">ABOUT</div>
+
+      <div id="testing-panel">
+        <div id="fake-dice-panel">
+          <div class="testing-panel-title"><img src="images/testing-panel/dice.svg" width="30" height="30">Dice functions</div>
+          <form id="fake-dice-roll-form">
+            <input id="fake-dice-roll-total" placeholder="Custom fake dice roll" size="17" autocomplete="off"</input>
+            <button id="fake-dice-roll-total-button" type="submit">Fake dice roll</button>
+            <!--<button id="fake-dice-roll-button">Fake dice</button>-->
+          </form>
+  
+          <div id="fake-dice-roll-dice-panel">
+            <div onclick="fakeRollDice(1)">1</div>
+            <div onclick="fakeRollDice(2)">2</div>
+            <div onclick="fakeRollDice(3)">3</div>
+            <div onclick="fakeRollDice(4)">4</div>
+            <div onclick="fakeRollDice(5)">5</div>
+            <div onclick="fakeRollDice(6)">6</div>
+            <div onclick="fakeRollDice(7)">7</div>
+            <div onclick="fakeRollDice(8)">8</div>
+            <div onclick="fakeRollDice(9)">9</div>
+            <div onclick="fakeRollDice(10)">10</div>
+            <div onclick="fakeRollDice(11)">11</div>
+            <div onclick="fakeRollDice(12)">12</div>
+          </div>
+        </div>
+  
+        <div id="fake-player-money">
+          <div class="testing-panel-title"><img src="images/testing-panel/piggy-bank.svg" width="30" height="30">Player money</div>
+        </div>
+  
+        <div id="buildings-test">
+          <div class="testing-panel-title"><img src="images/testing-panel/house.svg" width="30" height="30">Buildings</div>
+          <form>
+            <label for="available-houses-test">Available houses</label>
+            <input id="available-houses-test" placeholder="32"></input>
+          </form>
+    
+          <form>
+            <label for="available-hotels-test">Available hotels</label>
+            <input id="available-hotels-test" placeholder="12"></input>
+          </form>
+        </div>
+
+        <div id="test-save">
+          <button class="save-button" onclick="saveGame()"><img src="images/feed-icons/save-game.svg" width="25" height="25">SAVE</button>
+          <span>Warning - this may not work entirely as expected when saving in the middle of a player's turn.</span>
+        </div>
+        <span>Esc to close</span>
+
+      </div>
 
     </div>
 

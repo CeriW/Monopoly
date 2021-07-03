@@ -33,7 +33,7 @@ const bankruptcyMessage = document.querySelector('#bankruptcy-message')
 const bankruptcyTitle = document.querySelector('#bankruptcy-title')
 
 const saveIndicator = document.querySelector('#save-indicator')
-const saveButton = document.querySelector('#save-button')
+//const saveButton = document.querySelector('#save-button')
 
 const playTimeIndicator = document.querySelector('#play-time-counter')
 
@@ -268,20 +268,7 @@ function savedGameFound(){
 
     openPopup('', 'Saved game found')
     let newPopupContent = createElement('div', 'saved-game-found', '<p>A previous saved game has been found. Would you like to continue?</p>')
-    
 
-    // Create the button to continue the game
-    let continueButton = createElement('button', '', 'Continue with saved game')
-    continueButton.addEventListener('click', loadSavedGame)
-    newPopupContent.appendChild(continueButton)
-    
-    // Create the button to delete the saved data and start a new game.
-    let newGameButton = createElement('button', '', 'Start new game')
-    newGameButton.addEventListener('click', function(){
-        localStorage.clear()
-        closePopup()
-    })
-    newPopupContent.appendChild(newGameButton)
 
     // Generate some details about the game
     let gameSummary = createElement('div', 'saved-game-summary')
@@ -312,6 +299,19 @@ function savedGameFound(){
 
     newPopupContent.appendChild(gameSummary)
 
+    // Create the button to continue the game
+    let continueButton = createElement('button', 'load-saved-game', 'Continue with saved game')
+    continueButton.addEventListener('click', loadSavedGame)
+    newPopupContent.appendChild(continueButton)
+    
+    // Create the button to delete the saved data and start a new game.
+    let newGameButton = createElement('button', 'start-new-game', 'Start new game')
+    newGameButton.addEventListener('click', function(){
+        localStorage.clear()
+        closePopup()
+    })
+    newPopupContent.appendChild(newGameButton)
+
     popupMessage.appendChild(newPopupContent)
 }
 
@@ -329,13 +329,13 @@ function saveGame(){
     localStorage.setItem('communityChestCards', JSON.stringify(communityChestCards))
 
     saveIndicator.style.opacity = 1
-    saveButton.style.opacity = 0;
-    saveButton.style.pointerEvents = 'none'
+    //saveButton.style.opacity = 0;
+    //saveButton.style.pointerEvents = 'none'
 
     window.setTimeout(function(){
         saveIndicator.style.opacity = 0
-        saveButton.style.opacity = 1;
-        saveButton.style.pointerEvents = 'all'
+        //saveButton.style.opacity = 1;
+        //saveButton.style.pointerEvents = 'all'
     }, 1500)
 }
 

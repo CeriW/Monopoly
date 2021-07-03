@@ -96,15 +96,20 @@ button {
 /* BOTTOM BAR ----------------------------------------------------------------*/
 #bottom-bar {
   background: #fff;
-  /*position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;*/
-  font-size: 18px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center; }
+  align-items: stretch;
+  flex-wrap: wrap;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 99; }
+  #bottom-bar > *:not(#testing-panel) {
+    font-size: 18px;
+    display: flex;
+    align-items: center; }
 
 #play-time {
   display: flex;
@@ -681,22 +686,28 @@ button {
     color: #fff; }
 
 /* SAVED GAME SCREEN  ------------------------------------------------------- */
-.saved-game-found button {
-  margin: 5px;
-  min-width: 250px; }
+.saved-game-found {
+  width: 100%; }
+  .saved-game-found button {
+    margin: 3px;
+    min-width: 280px; }
 
 .saved-game-summary {
-  margin-top: 30px; }
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; }
 
 .saved-game-summary > div {
   display: grid;
   grid-template-columns: 50px 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: min-content min-content min-content;
   gap: 0 20px;
   grid-template-areas: "token name" "token money" "token properties";
   text-align: left;
   margin: 3px;
-  padding: 10px; }
+  padding: 10px;
+  flex-basis: 260px; }
   .saved-game-summary > div .token {
     grid-area: token;
     width: auto;
@@ -712,6 +723,20 @@ button {
     grid-area: money; }
   .saved-game-summary > div .properties {
     grid-area: properties; }
+
+button.load-saved-game {
+  background-image: url("images/button-icons/save.svg");
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 27px;
+  padding-left: 50px; }
+
+button.start-new-game {
+  background-image: url("images/button-icons/start-new-game.svg");
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 27px;
+  padding-left: 50px; }
 
 /* BOARD -------------------------------------------------------------------- */
 #board-container {
@@ -2937,35 +2962,30 @@ body[close-popup="false"] #popup-close{
   padding: 0 !important; }
 
 /* Testing panel -------------------------------------------------------------*/
-#testing-panel,
-#testing-toggle-panel {
+#testing-panel {
+  padding: 20px;
   background: #000;
   color: #fff;
-  padding: 10px; }
-
-#testing-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 999;
-  padding: 20px; }
+  width: 100%;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start; }
 
 body:not(.testing-panel-enabled) #testing-panel {
-  display: none; }
+  margin-bottom: -100%; }
 
 #testing-toggle-panel {
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1000;
   justify-content: space-around;
   display: flex; }
 
 #testing-panel > div {
   margin-right: 20px;
   text-align: center;
-  float: left; }
+  min-width: 250px;
+  flex-basis: 280px; }
 
 #testing-panel button {
   background: #db0926;
@@ -2986,6 +3006,13 @@ body:not(.testing-panel-enabled) #testing-panel {
   .testing-panel-title img {
     margin-right: 15px; }
 
+.save-button {
+  display: flex;
+  align-items: center;
+  font-size: initial; }
+  .save-button img {
+    margin-right: 10px; }
+
 /* Dice -----------------------------------*/
 #fake-dice-panel {
   max-width: 280px; }
@@ -3004,14 +3031,22 @@ body:not(.testing-panel-enabled) #testing-panel {
   #fake-dice-roll-dice-panel > div:hover {
     background: rgba(255, 255, 255, 0.2); }
 
-/* Money ----------------------------------*/
+/* Money, buildings-----------------------*/
+#buildings-test form,
 #fake-player-money form {
   margin-top: 3px;
   text-align: left; }
 
+#buildings-test input,
 #fake-player-money input {
   width: 70px;
-  float: right; }
+  float: right;
+  margin-left: 10px; }
+
+#test-save {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
 
 /* TOOLTIPS ----------------------------------------------------------------- */
 /* The item which has a tooltip applied to it */
