@@ -417,7 +417,13 @@ function initialisePage(){
 
     // Check whether a saved game exists, and act accordingly
     if (localStorage.getItem('gameState')){
-        savedGameFound()
+        try{
+            savedGameFound()
+        }
+        catch{
+            localStorage.clear()
+            closePopup()
+        }
     }
 
     // Generate the page where the players are determined.
@@ -1657,14 +1663,10 @@ function newGameDiceRoll(){
 
 function payMoney(transactionDetails){
 
-
-
     // Check whether we're dealing with a list of transactions or just one
     if (transactionDetails && typeof(transactionDetails === 'object')){
         transactionQueue.push(transactionDetails)
     }
-
-    console.log(transactionQueue)
 
     transactionDetails = transactionQueue[0]
 

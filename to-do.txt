@@ -9,11 +9,7 @@ FUNCTIONALITY
 
 BUGS SPOTTED
 
-- Check whether the local storage is okay and not going to throw an error before loading the screen.
-
 - It's possible to roll twice on your turn if you click the button again before the token has finished moving.
-
-- Local storage working after a player goes bankrupt?
 
 
 IMPROVEMENTS
