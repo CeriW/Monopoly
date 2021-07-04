@@ -1930,6 +1930,7 @@ function drawCard(type){
 
             } else{
                 repairMessage += ' requiring them to make general repairs to their properties, but they don\'t have any buildings'
+                playSound('sly-laugh')
             }
 
             addToFeed(repairMessage, 'repairs')
@@ -3866,7 +3867,7 @@ function auctionProperty(number, proceedsToAll){
                 updatePlayerDetails()
             }
 
-            playSound('gavel')
+
         }
 
 
@@ -3878,6 +3879,8 @@ function auctionProperty(number, proceedsToAll){
             if (propertiesToAuction[0]){
                 auctionProperty()
             }
+
+            playSound('gavel')
         }
 
     
@@ -4116,8 +4119,6 @@ function initiateTrade(bankruptcy, debtorID){
 
     let initiator = debtorID ? players[debtorID - 1] : players[turn - 1]
 
-    console.log(initiator)
-
     let tradeWindow = createElement('div', 'trade-summary-window')
 
     // Summary for the player initiating the trade
@@ -4125,10 +4126,15 @@ function initiateTrade(bankruptcy, debtorID){
     let currentPlayerSummary = createElement('div', 'current-player-summary', '', '', '')
 
     let playerIdentity = createElement('div', 'player-identity')
+    playerIdentity.style.backgroundColor = initiator.colour
+    playerIdentity.setAttribute('best-token-colour', lightOrDark(initiator.colour))
     currentPlayerSummary.appendChild(playerIdentity)
 
     // Token
-    playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', initiator.token))
+    let token = createElement('div', 'player-token-icon', '', 'token', initiator.token)
+    token.style.backgroundColor = initiator.colour
+    playerIdentity.appendChild(token)
+    //playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', initiator.token))
 
     // Name
     playerIdentity.appendChild(createElement('h2', '', initiator.name, '', ''))
@@ -4178,6 +4184,8 @@ function initiateTrade(bankruptcy, debtorID){
             playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
             playerIdentity.appendChild(createElement('h3', '', player.name, '', ''))
             playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan + player.money, '', ''))
+            playerIdentity.style.backgroundColor = player.colour
+            playerIdentity.setAttribute('best-token-colour', lightOrDark(player.colour))
             summary.appendChild(playerIdentity)
 
 
@@ -4279,7 +4287,7 @@ function negotiateTrade(e, bankruptcy){
     })
     tradeNegotiationsWindow.appendChild(counterOfferButton)
 
-    let rejectTradeButton = createElement('button', '', 'Reject trade', '', '')
+    let rejectTradeButton = createElement('button', 'reject-trade', 'Reject trade', '', '')
     rejectTradeButton.addEventListener('click', function(){
         // REJECT TRADE
         closePopup()
@@ -5692,9 +5700,9 @@ function playSound(type){
                 numberOfAvailableFiles = 3
                 break
             case 'repairs':
-    
             case 'just-visiting':
             case 'gavel':
+            case 'sly-laugh':
                 numberOfAvailableFiles = 2
                 break
         }
