@@ -5728,10 +5728,12 @@ function playMusic(){
 
                 // Get rid of the music once it's done and start a new tune
                 window.setTimeout(function(){
-                    if (tune){
-                        tune.parentNode.removeChild(tune)
+                    let musicPlaying = document.querySelector('.music-audio')
+                    if (musicPlaying){
+                        musicPlaying.parentNode.removeChild(musicPlaying)
                         playMusic()
                     }
+                //}, 3000)
                 }, (tune.duration * 1000) + 1000)
 
             }
