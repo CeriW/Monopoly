@@ -38,6 +38,7 @@ const saveIndicator = document.querySelector('#save-indicator')
 const playTimeIndicator = document.querySelector('#play-time-counter')
 
 const musicVolumeIndicator = document.querySelector('#music-volume')
+const musicToggle = document.querySelector('#music-on-off')
 
 // Stores which player's turn it is.
 // Since the function starts with a ++ we'll initialise as 0
@@ -680,6 +681,7 @@ function addEvents(){
 
     addTestingEvents()
     
+    musicToggle.addEventListener('change', toggleMusic)
 
     let SFXcheckbox = document.querySelector('#SFX-checkbox')
     SFXcheckbox.setAttribute('checked', true)
@@ -5720,6 +5722,25 @@ function changeMusicVolume(){
     ;[].forEach.call(document.querySelectorAll('.music-audio'), function(node){
         node.volume = musicVolumeIndicator.value / 100
     })
+}
+
+function toggleMusic(){
+    musicToggle.setAttribute('checked', musicToggle.checked)
+    music = musicToggle.checked
+
+    if (!music){
+        ;[].forEach.call(document.querySelectorAll('.music-audio'), function(node){
+            let myInterval = window.setInterval(function(){
+                if (node.volume > 0.05){
+                    node.volume -= 0.05
+                } else{
+                    clearInterval(myInterval)
+                }
+            }, 100)
+        })
+    } else{
+        playMusic()
+    }
 }
 
 
