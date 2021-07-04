@@ -5711,10 +5711,18 @@ function playMusic(){
 
     if (music){
         let tune = createElement('audio', 'music-audio', '', 'type', 'audio/mpeg')
-        tune.volume = musicVolumeIndicator.value / 100
+        //tune.volume = musicVolumeIndicator.value / 100
+
         tune.setAttribute('src', 'music/music-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
         tune.setAttribute('autoplay', '')
         document.body.appendChild(tune)
+
+        tune.volume = 0
+        let myInterval = window.setInterval(function(){
+            if (tune.volume < musicVolumeIndicator.value / 100){
+                tune.volume += 0.01
+            }
+        },50)
     }
 }
 
@@ -5735,6 +5743,7 @@ function toggleMusic(){
                     node.volume -= 0.05
                 } else{
                     clearInterval(myInterval)
+                    node.parentNode.removeChild(node)
                 }
             }, 100)
         })
