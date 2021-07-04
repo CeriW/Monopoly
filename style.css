@@ -137,6 +137,10 @@ button {
   #play-time * {
     margin-right: 6px; }
 
+/* MUSIC ---------------------------------------------------------------------*/
+#music input {
+  margin-left: 10px; }
+
 /* SAVE INDICATOR ------------------------------------------------------------*/
 #save-block {
   background: #fff;

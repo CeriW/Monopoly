@@ -5707,7 +5707,7 @@ function playSound(type){
 
 function playMusic(){
 
-    let numberOfAvailableFiles = 1
+    let numberOfAvailableFiles = 11
 
     if (music){
         let tune = createElement('audio', 'music-audio', '', 'type', 'audio/mpeg')
@@ -5716,15 +5716,33 @@ function playMusic(){
         tune.setAttribute('src', 'music/music-' + (Math.ceil(Math.random() * numberOfAvailableFiles)) + '.mp3')
         tune.setAttribute('autoplay', '')
         document.body.appendChild(tune)
+        
 
+        // Fade the music in until it's the volume on the slider.
         tune.volume = 0
         let myInterval = window.setInterval(function(){
             if (tune.volume < musicVolumeIndicator.value / 100){
                 tune.volume += 0.01
+            } else{
+                clearInterval(myInterval)
+
+                // Get rid of the music once it's done and start a new tune
+                window.setTimeout(function(){
+                    if (tune){
+                        tune.parentNode.removeChild(tune)
+                        playMusic()
+                    }
+                }, (tune.duration * 1000) + 1000)
+
             }
         },50)
     }
 }
+
+
+
+
+
 
 function changeMusicVolume(){
     ;[].forEach.call(document.querySelectorAll('.music-audio'), function(node){
@@ -5747,9 +5765,15 @@ function toggleMusic(){
                 }
             }, 100)
         })
+
+        musicVolumeIndicator.setAttribute('disabled', true)
+
     } else{
-        playMusic()
+        playMusic() 
+        musicVolumeIndicator.removeAttribute('disabled')
     }
+
+
 }
 
 
