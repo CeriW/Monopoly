@@ -4233,6 +4233,8 @@ function initiateTrade(bankruptcy, debtorID){
 
 function negotiateTrade(e, bankruptcy){
 
+    playSound('initiate-trade')
+
     let receiver = e.target.parentNode.getAttribute('player')
     let currentPlayerInControl = true
 
@@ -4264,6 +4266,8 @@ function negotiateTrade(e, bankruptcy){
         currentPlayerInControl = !currentPlayerInControl
         tradeNegotiationsWindow.setAttribute('trade-status', 'proposed')
         availableActions.closePopup = false
+
+        playSound('propose-trade')
     })
 
     tradeNegotiationsWindow.appendChild(proposeTradeButton)
@@ -4284,6 +4288,8 @@ function negotiateTrade(e, bankruptcy){
         } else{
             popupTitle.innerHTML = players[receiver - 1].name + ' is making a counter offer'
         }
+
+        playSound('counter-offer')
     })
     tradeNegotiationsWindow.appendChild(counterOfferButton)
 
@@ -4292,6 +4298,7 @@ function negotiateTrade(e, bankruptcy){
         // REJECT TRADE
         closePopup()
         addToFeed(players[turn - 1].name + ' proposed a trade with ' + players[receiver - 1].name + ' but it was rejected.', 'trade-rejected')
+        playSound('reject-trade')
     })
     tradeNegotiationsWindow.appendChild(rejectTradeButton)
 
@@ -4570,6 +4577,8 @@ function negotiateTrade(e, bankruptcy){
     }
 
     function acceptTrade(){
+
+        playSound('accept-trade')
 
         // Properties the current player has traded away.
         // Will be used in the generation of the feed message.
@@ -5703,6 +5712,7 @@ function playSound(type){
             case 'just-visiting':
             case 'gavel':
             case 'sly-laugh':
+            case 'initiate-trade':
                 numberOfAvailableFiles = 2
                 break
         }
