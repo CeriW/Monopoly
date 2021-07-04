@@ -3683,6 +3683,8 @@ function buyProperty(number, player, method, price){
 
 function auctionProperty(number, proceedsToAll){
 
+    playSound('auction-room')
+
     if (number){
         propertiesToAuction.push(spaces[number])
     }
@@ -3863,6 +3865,8 @@ function auctionProperty(number, proceedsToAll){
                 })
                 updatePlayerDetails()
             }
+
+            playSound('gavel')
         }
 
 
@@ -5690,6 +5694,7 @@ function playSound(type){
             case 'repairs':
     
             case 'just-visiting':
+            case 'gavel':
                 numberOfAvailableFiles = 2
                 break
         }
