@@ -423,11 +423,16 @@ function initialisePage(){
     initialiseGameState()
 
     // Check whether a saved game exists, and act accordingly
+    // try/catch is used as players may have an outdated version of the game
+    // files in their local storage, which could potentially break the game.
     if (localStorage.getItem('gameState')){
         try{
             savedGameFound()
         }
         catch{
+            // TO DO - players should get a warning and the game should attempt
+            // to load as best as it can if it finds an outdated version in 
+            // local storage.
             localStorage.clear()
             closePopup()
         }
@@ -440,6 +445,8 @@ function initialisePage(){
     // While this could be done in the HTML, doing it based on a JS array means
     // I can potentially add other international boards easily in the future.
     generateBoard()
+
+
 
     // Shuffle both decks of cards
     shuffleArray(communityChestCards)
@@ -454,6 +461,10 @@ function initialisePage(){
 
     // Initialise the bank
     updateBank()
+
+    // Add some padding to the bottom of the page to account for the fixed
+    //bottom bar
+    bodyPadding()
 }
 
 function cardCurrency(){
@@ -500,6 +511,8 @@ function generateBoard(){
         newSpace.setAttribute('id', space.name.replace(/\s+/g, '-').toLowerCase())
 
         newSpace.setAttribute('area', space.boardArea)
+
+        
 
         if (space.group){
             newSpace.classList.add(space.group)        
@@ -559,6 +572,7 @@ function generateBoard(){
         }
 
 
+
         
 
         // Add a position number to each property.
@@ -568,6 +582,8 @@ function generateBoard(){
 
         //board.querySelector('#' + space.boardArea).appendChild(newSpace)
         board.appendChild(newSpace)
+
+        appendTooltip(newSpace, space.name)
     })
 
 
@@ -641,7 +657,7 @@ function addEvents(){
 
             case 'Escape':
 
-                document.querySelector('#testing-toggle').checked = false
+                document.querySelector('#testing-toggle').setAttribute('checked', false)
                 availableActions.testingPanelEnabled = false
                 setAvailableActions()
                 document.querySelector('#about').classList.add('hidden')
@@ -677,9 +693,10 @@ function addEvents(){
     // availableActions object, rather than every time someone clicks.
     window.addEventListener('click', setAvailableActions)
 
-    // Ensure the board's height is always the same as its width,
-    // so it is always square
-    window.addEventListener('resize', resizeBoard)
+    window.addEventListener('resize', function(){
+        resizeBoard()
+        bodyPadding()
+    })
 
     addTestingEvents()
     
@@ -715,6 +732,15 @@ function generateReadablePlayTime(){
             return(number)
         }
     }
+}
+
+// Add an appropriate amount of padding to the bottom of the body to 
+// offset the fixed bottom bar
+function bodyPadding(){
+
+    let newHeight = document.querySelector('#bottom-bar').offsetHeight - document.querySelector('#testing-panel').offsetHeight
+
+    document.body.style.paddingBottom = newHeight + 10 + 'px'
 }
 
 function resizeBoard(){
@@ -5622,15 +5648,21 @@ function appendTooltip(node, innerHTML, type){
         tooltip.classList.add(type)
     }
 
-    let newParent = createElement('span')
-    newParent.classList = node.classList
+
+    let newParent = node.cloneNode()
+    newParent.innerHTML = null
+    //newParent.children.forEach(function(child){
+        //newParent.removeChild(child)
+    //})
+
+
+    node.parentNode.insertBefore(newParent, node)
     newParent.classList.add('tooltipped')
     node.classList = null
     node.style.height = '100%'
     node.parentNode.insertBefore(newParent, node.nextElementSibling)
     newParent.appendChild(node)
     newParent.appendChild(tooltip)
-
 }
 
 // WINNING  ------------------------------------------------------------------//

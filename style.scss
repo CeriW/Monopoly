@@ -182,6 +182,7 @@ button{
         font-size: 18px;
         display: flex;
         align-items: center;
+        margin: 0 5px;
     }
 
     input[type="checkbox"]{
@@ -918,6 +919,10 @@ $columnsize: 80px;
     }
 }
 
+#board:not([size="super-mini"]) > .tooltipped .tooltip-window{
+    display: none;
+}
+
 
 
 
@@ -1137,35 +1142,35 @@ $columnsize: 80px;
 /* Special property ----------------------------------------------------------*/
 
 .community-chest{
-    background: url('images/community-chest.svg') center no-repeat;
+    background: $lightgreen url('images/community-chest.svg') center no-repeat;
     background-position: center bottom;
     background-size: 50px;
 }
 
 .station{
-    background: url('images/station.svg') center calc(100% - 2px) no-repeat;
+    background: $lightgreen url('images/station.svg') center calc(100% - 2px) no-repeat;
     background-size: 40px;
 }
 
 .chance{
-    background: url('images/chance.svg') center calc(100% - 6px) no-repeat;
+    background: $lightgreen url('images/chance.svg') center calc(100% - 6px) no-repeat;
     background-size: 50px;
 }
 
 #free-parking{
-    background: url('images/free-parking.svg') center no-repeat;
+    background: $lightgreen url('images/free-parking.svg') center no-repeat;
     background-size: contain;
     color: transparent;
 }
 
 #go-to-jail{
-    background: url('images/go-to-jail.svg') center no-repeat;
+    background: $lightgreen url('images/go-to-jail.svg') center no-repeat;
     background-size: contain;
     color: transparent;
 }
 
 #electric-company{
-    background: url('images/electric-company.svg') center 60% no-repeat;
+    background: $lightgreen url('images/electric-company.svg') center 60% no-repeat;
     background-size: 35%;
     display: flex;
     flex-direction: column;
@@ -1173,7 +1178,7 @@ $columnsize: 80px;
 }
 
 #water-works{
-    background: url('images/water-works.svg') center 60% no-repeat;
+    background: $lightgreen url('images/water-works.svg') center 60% no-repeat;
     background-size: 35%;
     display: flex;
     flex-direction: column;
@@ -1181,7 +1186,7 @@ $columnsize: 80px;
 }
 
 #super-tax{
-    background: url('images/super-tax.svg') center no-repeat;
+    background: $lightgreen url('images/super-tax.svg') center no-repeat;
     background-size: 60%;
     display: flex;
     flex-direction: column;
@@ -1189,7 +1194,7 @@ $columnsize: 80px;
 }
 
 #income-tax{
-    background: url('images/income-tax.svg') center no-repeat;
+    background: $lightgreen url('images/income-tax.svg') center no-repeat;
     background-size: 22%;
     display: flex;
     flex-direction: column;
@@ -3454,7 +3459,7 @@ body[close-popup="false"] #popup-close{
     background: $black;
     color: #fff;
     width: 100%;
-    transition: 0.5s;
+    transition: margin 0.5s;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -3463,7 +3468,7 @@ body[close-popup="false"] #popup-close{
 }
 
 body[testing-panel="false"] #testing-panel{
-    //display: none;
+    display: none;
     margin-bottom: -100%;
 }
 
@@ -3477,7 +3482,8 @@ body[testing-panel="false"] #testing-panel{
 }
 
 #testing-panel > *{
-    margin-right: 20px;
+    margin: 20px;
+    //margin-right: 20px;
     text-align: center;
     //min-width: 250px;
     //flex-basis: 280px;
@@ -3600,7 +3606,7 @@ body[testing-panel="false"] #testing-panel{
     pointer-events: none;
     transition: opacity 0.2s;
     opacity: 0;
-    z-index: 2;
+    z-index: 3;
     transform: translateX(-50%);
     min-width: 100px;
     font-family: 'Poppins', sans-serif;
