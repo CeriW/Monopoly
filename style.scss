@@ -2124,6 +2124,10 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
     padding-left: 45px;
 }
 
+.unmortgage-button{
+    background-image: url('images/button-icons/unmortgage.svg');
+}
+
 
 // Properties with hotels
 .house-visual-display[houses="5"] + .button-panel{
@@ -2869,20 +2873,26 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
     }
 
     button{
-        min-width: 200px;
+        min-width: 240px;
         margin-left: 5px;
     }
 }
 
 .trade-mortage-warning{
 
+    .trade-mortgage-list{
+        margin-top: 40px;
+    }
+
     .player-name{
         text-align: left;
         display: flex;
         align-items: center;
         font-size: 1.5em;
-        border-bottom: $border;
-        padding: 20px 0 10px;
+        //border-bottom: $border;
+        //padding: 20px 0 10px;
+        border: $border;
+        padding: 5px;
         margin-bottom: 15px;
     }
 
@@ -2891,8 +2901,8 @@ body[build-hotel="false"] .house-visual-display[houses="4"] + .build-house-butto
         height: 40px;
         background-size: contain;
         //border: $border;
-        border: 1px solid #d3d3d3;
-        border-radius: 30px;
+        //border: 1px solid #d3d3d3;
+        //border-radius: 30px;
         background-position: center;
         background-repeat: no-repeat;
         margin-right: 20px;

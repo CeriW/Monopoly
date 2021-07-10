@@ -635,13 +635,15 @@ function addEvents(){
     window.addEventListener('keydown', function(e){
         let key = e.key
 
+
         switch (key){
 
 
             case 'Escape':
 
                 document.querySelector('#testing-toggle').checked = false
-                document.body.classList.remove('testing-panel-enabled')
+                availableActions.testingPanelEnabled = false
+                setAvailableActions()
                 document.querySelector('#about').classList.add('hidden')
 
                 if (document.body.getAttribute('close-popup') === 'true') {
@@ -4793,7 +4795,13 @@ function negotiateTrade(e, bankruptcy){
                 let column = createElement('div', 'trade-mortgage-list')
 
                 let playerName = createElement('div', 'player-name')
-                playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn - 1].token))
+                playerName.style.backgroundColor = players[turn - 1].colour
+                playerName.setAttribute('best-token-colour', lightOrDark(players[turn - 1].colour))
+                let tokenA = createElement('div', 'player-token-icon', '', 'token', players[turn - 1].token)
+                //tokenA.style.backgroundColor = players[turn - 1].colour
+                //tokenA.setAttribute('best-token-colour', lightOrDark(players[turn - 1].colour))
+                playerName.appendChild(tokenA)
+                //playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[turn - 1].token))
                 playerName.appendChild(createElement('div', '', players[turn-1].name))
                 column.appendChild(playerName)
 
@@ -4806,7 +4814,14 @@ function negotiateTrade(e, bankruptcy){
                 let column = createElement('div', 'trade-mortgage-list')
 
                 let playerName = createElement('div', 'player-name')
-                playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[receiver - 1].token))
+                playerName.style.backgroundColor = players[receiver - 1].colour
+                playerName.setAttribute('best-token-colour', lightOrDark(players[receiver - 1].colour))
+                
+                let tokenB = createElement('div', 'player-token-icon', '', 'token', players[receiver - 1].token)
+                //tokenB.style.backgroundColor = players[receiver - 1].colour
+                //tokenB.setAttribute('best-token-colour', lightOrDark(players[receiver - 1].colour))
+                playerName.appendChild(tokenB)
+                //playerName.appendChild(createElement('div', 'player-token-icon', '', 'token', players[receiver - 1].token))
                 playerName.appendChild(createElement('div', '', players[receiver - 1].name))
                 column.appendChild(playerName)
 
@@ -4844,7 +4859,7 @@ function negotiateTrade(e, bankruptcy){
                     entry.appendChild(name)
     
                     let unmortgageCost = Math.floor((property.price / 2) * 1.1)
-                    let unmortgageButton = createElement('button', '', 'Unmortgage for ' + currencySymbolSpan +  unmortgageCost, '', '')
+                    let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage for ' + currencySymbolSpan +  unmortgageCost, '', '')
                     
                     unmortgageButton.addEventListener('click', function(){
                         unmortgageProperty(property, players[gameState[property.position].ownerID - 1])
@@ -4856,7 +4871,7 @@ function negotiateTrade(e, bankruptcy){
                     entry.appendChild(unmortgageButton)
                     
                     let keepMortgageCost = Math.floor((property.price / 2) / 10)
-                    let keepMortgageButton = createElement('button', '', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost)
+                    let keepMortgageButton = createElement('button', 'mortgage-button', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost)
                     keepMortgageButton.addEventListener('click', function(){
                         keepMortgageButton.innerHTML = 'Mortgage kept for ' + currencySymbolSpan + keepMortgageCost
                         keepMortgageButton.classList.add('disabled-button')
