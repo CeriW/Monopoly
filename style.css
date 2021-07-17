@@ -313,7 +313,9 @@ body:not([about-panel="true"]) #about {
   border-radius: 10px;
   margin: 10px;
   min-width: 200px;
-  animation: zoomIn 0.5s both; }
+  animation: zoomIn 0.5s both;
+  position: relative;
+  z-index: 2; }
   .player-creation-panel h2 {
     font-size: 1em;
     margin-bottom: 10px; }
@@ -1881,7 +1883,7 @@ body[get-out-of-jail="true"] .current-player-summary .roll-doubles-for-jail {
 body[get-out-of-jail="true"] .current-player-summary .roll-dice-button {
   display: none; }
 
-body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail {
+body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .current-player-summary .roll-doubles-for-jail {
   pointer-events: none;
   display: initial;
   background-color: #ccc;
@@ -2091,14 +2093,14 @@ body[unmortgage-property="false"] .property-options .unmortgage-button {
     pointer-events: none; }
   .house-visual-display[houses="5"] + .button-panel .sell-house-button .sell-house {
     display: none; }
-  .house-visual-display[houses="5"] + .button-panel .build-house-button .maximum-number-of-buildings-reached {
+  .house-visual-display[houses="5"] + .button-panel .build-house-button .max-buildings-reached {
     display: block !important; }
-  .house-visual-display[houses="5"] + .button-panel .build-house-button span:not(.maximum-number-of-buildings-reached) {
+  .house-visual-display[houses="5"] + .button-panel .build-house-button span:not(.max-buildings-reached) {
     display: none !important; }
 
 .house-visual-display:not([houses="5"]) + .button-panel .build-house-button .build-hotel,
 .house-visual-display:not([houses="5"]) + .button-panel .sell-house-button .sell-hotel,
-.house-visual-display:not([houses="5"]) + .button-panel .build-house-button .maximum-number-of-buildings-reached {
+.house-visual-display:not([houses="5"]) + .button-panel .build-house-button .max-buildings-reached {
   display: none; }
 
 .house-visual-display[houses="4"] + .button-panel .build-house-button .build-hotel {

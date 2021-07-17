@@ -433,6 +433,8 @@ body:not([about-panel="true"]) #about{
     margin: 10px;
     min-width: 200px;
     animation: zoomIn 0.5s both;
+    position: relative;
+    z-index: 2;
 
     h2{
         font-size: 1em;
@@ -1940,7 +1942,7 @@ body[get-out-of-jail="true"] .current-player-summary{
 }
 
 //body[card-out-of-jail="false"][get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button,
-body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail{
+body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .current-player-summary .roll-doubles-for-jail{
     pointer-events: none;
     display: initial;
     @include disabledButton()
@@ -2206,13 +2208,13 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
         display: none;
     }
 
-    .build-house-button .maximum-number-of-buildings-reached{
+    .build-house-button .max-buildings-reached{
         display: block !important
     }
 
     /* If we have the maximum number of buildings, this is the definitive rule.
        we do not care whether there are still hotels in the bank */
-    .build-house-button span:not(.maximum-number-of-buildings-reached){
+    .build-house-button span:not(.max-buildings-reached){
         display: none !important;
     }
 }
@@ -2222,7 +2224,7 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
 
     .build-house-button .build-hotel,
     .sell-house-button .sell-hotel,
-    .build-house-button .maximum-number-of-buildings-reached{
+    .build-house-button .max-buildings-reached{
         display: none;
     }
 }

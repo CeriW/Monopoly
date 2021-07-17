@@ -3,16 +3,16 @@
 // VARIABLE DECLARATIONS -----------------------------------------------------//
 
 let availableTokens = [
-    {name: 'dog',           available: true},
-    {name: 'thimble',       available: true},
-    {name: 'hat',           available: true},
-    {name: 'car',           available: true},
-    {name: 'battleship',    available: true},
-    {name: 'iron',          available: true},
-    {name: 'penguin',       available: true},
-    {name: 'dinosaur',      available: true},
-    {name: 'cat',           available: true},
-    {name: 'ducky',         available: true},
+    {name: 'dog',           available: true,    soundEffect: true},
+    {name: 'thimble',       available: true,    soundEffect: false},
+    {name: 'hat',           available: true,    soundEffect: false},
+    {name: 'car',           available: true,    soundEffect: true},
+    {name: 'battleship',    available: true,    soundEffect: true},
+    {name: 'iron',          available: true,    soundEffect: false},
+    {name: 'penguin',       available: true,    soundEffect: true},
+    {name: 'dinosaur',      available: true,    soundEffect: true},
+    {name: 'cat',           available: true,    soundEffect: true},
+    {name: 'ducky',         available: true,    soundEffect: true},
 ]
 
 
@@ -314,7 +314,7 @@ function savedGameFound(){
     let newGameButton = createElement('button', 'start-new-game', 'Start new game')
     newGameButton.addEventListener('click', function(){
         // TODO - deleting the player's existing save game is really not good.
-        // Need some better error handling.
+        // Need some better error handling
         localStorage.clear()
         closePopup()
         playSound('ping')
@@ -1185,8 +1185,6 @@ function intialisePlayerCreator(){
 
                     // Set an attribute on the chosen indicator to show what token has been chosen.
                     tokenSelectorChosenIndicator.setAttribute('chosentoken', clickedOption.getAttribute('token'))
-
-                    console.log(clickedOption.getAttribute('token'))
                     
                     // Determine what the old chosen one was and reset its availability.                    
                     let oldSelectedOption = availableTokenChoices.previousElementSibling.previousElementSibling.getAttribute('chosentokenid')
@@ -1198,6 +1196,23 @@ function intialisePlayerCreator(){
 
                     // Close the window
                     availableTokenChoices.parentNode.removeChild(availableTokenChoices)
+
+
+
+                    
+                    // Check whether the token has an associated sound effect or
+                    // if we should play something generic.
+                    let tokenObject = availableTokens.find(function(token){
+                        if (token.name === clickedOption.getAttribute('token')){
+                            return token
+                        }
+                    })
+
+                    if (tokenObject.soundEffect){
+                        playSound('token-' + tokenObject.name)
+                    } else{
+                        playSound('token-generic')
+                    }               
                 }
 
             })
@@ -2513,6 +2528,7 @@ function getOutOfJail(method){
             payMoney({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
             availableActions.rollDice = true
             addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
+            playSound('coins')
             break
         case 'card':
             //TODO
@@ -2546,6 +2562,7 @@ function getOutOfJail(method){
             addToFeed(players[turn-1].name + ' rolled doubles and got out of jail', 'doubles-out-of-jail')
             diceContainer.className = "successful-jail-roll"
             diceDoubles.innerText = "Success!"
+            playSound('happy')
             break
     }
 
@@ -3145,7 +3162,7 @@ function displayBuildHousePanel(colour){
         // Create a button to build houses
         let buildHouseBtn = createElement('button', 'build-house-button')
 
-        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'not-enough-money', 'maximum-number-of-buildings-reached'].forEach(function(message){
+        ;['build-house', 'build-hotel', 'no-more-houses-in-bank', 'no-more-hotels-in-bank', 'not-enough-money', 'max-buildings-reached'].forEach(function(message){
             buildHouseBtn.appendChild(createElement('span', message, message.replace(/-/g, ' ')))
         })
 
@@ -5761,6 +5778,7 @@ function playSound(type){
                 numberOfAvailableFiles = 22
                 break
             case 'fail':
+            case 'token-generic':
                 numberOfAvailableFiles = 5
                 break
             case 'construction':
