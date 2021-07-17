@@ -313,8 +313,11 @@ function savedGameFound(){
     // Create the button to delete the saved data and start a new game.
     let newGameButton = createElement('button', 'start-new-game', 'Start new game')
     newGameButton.addEventListener('click', function(){
+        // TODO - deleting the player's existing save game is really not good.
+        // Need some better error handling.
         localStorage.clear()
         closePopup()
+        playSound('ping')
     })
     newPopupContent.appendChild(newGameButton)
 
@@ -410,6 +413,7 @@ function loadSavedGame(){
     addToFeed('Saved game loaded', 'save')
 
     playMusic()
+    playSound('ping')
 }
 
 
@@ -2487,7 +2491,7 @@ function rollDoublesForJail(){
         //diceDoubles.innerText = "Failure! You have " + (3 - players[turn - 1].inJail + ' attempt' + 's remaining')
 
         let remainingAttempts = 3 - players[turn - 1].inJail
-        let attemptPluralisation = remainingAttempts > 1 ? 'attempts' : 'attempt'
+        let attemptPluralisation = remainingAttempts !== 1 ? 'attempts' : 'attempt'
         diceDoubles.innerText = `Failure! You have ${remainingAttempts} ${attemptPluralisation} remaining`
 
         availableActions.rollDice = false
@@ -3870,6 +3874,8 @@ function auctionProperty(number, proceedsToAll){
                 node.setAttribute('min', (currentBid + 1))
                 node.value = ''
             })
+
+            playSound('ping')
         
         // If an abstain button has been clicked...
         } else if (e.target.classList.contains('abstain-button')){
@@ -5763,6 +5769,7 @@ function playSound(type){
             case 'fail':
             case 'move':
             case 'train':
+            case 'ping':
                 numberOfAvailableFiles = 3
                 break
             case 'repairs':
