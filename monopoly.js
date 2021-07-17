@@ -2484,7 +2484,12 @@ function rollDoublesForJail(){
         // Note - feed is updated in the GetOutOfJail function
     } else{
         //diceContainer.className = "failed-jail-roll"
-        diceDoubles.innerText = "Failure! You have " + (3 - players[turn - 1].inJail + ' attempts remaining')
+        //diceDoubles.innerText = "Failure! You have " + (3 - players[turn - 1].inJail + ' attempt' + 's remaining')
+
+        let remainingAttempts = 3 - players[turn - 1].inJail
+        let attemptPluralisation = remainingAttempts > 1 ? 'attempts' : 'attempt'
+        diceDoubles.innerText = `Failure! You have ${remainingAttempts} ${attemptPluralisation} remaining`
+
         availableActions.rollDice = false
         availableActions.endTurn = true
         availableActions.getOutOfJail = false

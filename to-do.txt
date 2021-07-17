@@ -20,6 +20,8 @@ IMPROVEMENTS
 
 - More colours for tokens
 
+- There are a lot of things that should be using template literals.
+
 
 ONGOING THINGS
 
