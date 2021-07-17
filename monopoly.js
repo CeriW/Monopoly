@@ -1117,6 +1117,8 @@ function intialisePlayerCreator(){
         if (currentNumberOfPlayers === maxNumberOfPlayers){
             playerCreator.removeChild(addPlayer)
         }
+
+        playSound('token-generic')
     })
 
     
@@ -1195,24 +1197,10 @@ function intialisePlayerCreator(){
                     availableTokens[clickedOption.getAttribute('id')].available = false
 
                     // Close the window
-                    availableTokenChoices.parentNode.removeChild(availableTokenChoices)
+                    availableTokenChoices.parentNode.removeChild(availableTokenChoices)                    
 
-
-
-                    
-                    // Check whether the token has an associated sound effect or
-                    // if we should play something generic.
-                    let tokenObject = availableTokens.find(function(token){
-                        if (token.name === clickedOption.getAttribute('token')){
-                            return token
-                        }
-                    })
-
-                    if (tokenObject.soundEffect){
-                        playSound('token-' + tokenObject.name)
-                    } else{
-                        playSound('token-generic')
-                    }               
+                    playTokenSoundEffect(clickedOption.getAttribute('token'))
+                
                 }
 
             })
@@ -1248,9 +1236,24 @@ function intialisePlayerCreator(){
         // Insert this new player panel before the add player button
         playerCreator.insertBefore(newPanel, playerCreator.lastChild)
     }
-
-
 }
+
+// Check whether the token has an associated sound effect or
+// if we should play something generic.
+function playTokenSoundEffect(tokenName){
+    let tokenObject = availableTokens.find(function(token){
+        if (token.name === tokenName){
+            return token
+        }
+    })
+
+    if (tokenObject.soundEffect){
+        playSound('token-' + tokenObject.name)
+    } else{
+        playSound('token-generic')
+    }    
+}
+
 
 // Credit to https://awik.io/determine-color-bright-dark-using-javascript/
 function lightOrDark(colour) {
@@ -1419,8 +1422,11 @@ function generatePlayerSummary(player){
         playerSummaryHeader.style.backgroundColor = player.colour
     
         // Player's token
-        playerSummaryHeader.appendChild(createElement('div', 'player-token-icon', null, 'token', player.token))
-    
+        let playerToken = playerSummaryHeader.appendChild(createElement('div', 'player-token-icon', null, 'token', player.token))
+        playerToken.addEventListener('click', function(node){
+            playTokenSoundEffect(player.token)
+        })
+
         // Player's name
         playerSummaryHeader.appendChild(createElement('h2', null, player.name))
     
@@ -5778,6 +5784,8 @@ function playSound(type){
                 numberOfAvailableFiles = 22
                 break
             case 'fail':
+                numberOfAvailableFiles = 5
+                break
             case 'token-generic':
                 numberOfAvailableFiles = 5
                 break
