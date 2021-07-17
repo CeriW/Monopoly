@@ -66,6 +66,8 @@ STRETCH GOALS
 
 - Dark mode
 
+- If the game fails to load, create a log which can be sent to me. 
+
 
 COMPLETELY FRIVOLOUS STUFF
 

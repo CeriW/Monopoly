@@ -1081,6 +1081,9 @@ button.start-new-game {
   transform-origin: right bottom;
   bottom: 0; }
 
+#board > div[area="south"] .ownership-tag {
+  transform: rotate(180deg); }
+
 /* Mortgaged property --------------------------------------------------------*/
 #board > .space,
 .full-portfolio-item {
@@ -1721,12 +1724,10 @@ body:not(.warning-open) #warning {
 .property-icon.water-works {
   background: url("images/water-works.svg") center no-repeat; }
 
-#jail {
+#board > #jail > div {
   background: #d5e8d4 url("images/jail.svg") right top no-repeat;
   background-size: contain;
-  color: transparent; }
-
-#jail {
+  color: transparent;
   display: grid;
   grid-template-columns: 1fr 2.8fr;
   grid-template-rows: 2.8fr 1fr;
@@ -1842,6 +1843,14 @@ body[end-turn-available="false"] .end-turn-button {
   background-repeat: no-repeat;
   padding-top: 60px; }
 
+body[get-out-of-jail="true"] .initiate-trade {
+  width: 100%;
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 27px;
+  padding-left: 50px;
+  padding-top: 10px; }
+
 .end-turn-button {
   width: 100%; }
 
@@ -1850,21 +1859,50 @@ body[get-out-of-jail="false"] .roll-doubles-for-jail,
 body[get-out-of-jail="false"] .card-out-of-jail-button {
   display: none !important; }
 
+.roll-doubles-for-jail,
+.get-out-50-button {
+  max-width: 50%;
+  background-size: auto 40px;
+  background-position: center 10px;
+  background-repeat: no-repeat;
+  padding-top: 60px;
+  min-height: 140px;
+  float: left; }
+
 body[get-out-of-jail="true"] .current-player-summary .get-out-50-button,
-body[get-out-of-jail="true"] .current-player-summary .roll-doubles-for-jail,
-body[get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button {
+body[get-out-of-jail="true"] .current-player-summary .roll-doubles-for-jail {
   display: initial !important; }
 
 body[get-out-of-jail="true"] .current-player-summary .roll-dice-button {
   display: none; }
 
-body[card-out-of-jail="false"][get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button,
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail {
   pointer-events: none;
   display: initial;
   background-color: #ccc;
   color: #8f8f8f;
   pointer-events: none; }
+
+body[card-out-of-jail="false"] .card-out-of-jail-button {
+  display: none; }
+
+.get-out-50-button {
+  background-image: url("images/button-icons/get-out-50.svg"); }
+
+.roll-doubles-for-jail {
+  background-image: url("images/button-icons/doubles.svg"); }
+
+.card-out-of-jail-button {
+  background-color: #0aa959;
+  background-image: url("images/button-icons/get-out-card.svg");
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 27px;
+  padding-left: 50px; }
+
+.get-out-50-button,
+.roll-doubles-for-jail {
+  background-color: #c40821; }
 
 /* Property overview  --------------------------------------------------------*/
 .property-overview {

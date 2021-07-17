@@ -1105,6 +1105,10 @@ $columnsize: 80px;
     bottom: 0;
 }
 
+#board > div[area="south"] .ownership-tag{
+    transform: rotate(180deg);
+}
+
 /* Mortgaged property --------------------------------------------------------*/
 
 #board > .space,
@@ -1731,13 +1735,12 @@ $jailAnimationLength: 1.5;
 .property-icon.electric-company{background: url('images/electric-company.svg') center no-repeat;}
 .property-icon.water-works{background: url('images/water-works.svg') center no-repeat;}
 
-#jail{
+
+
+#board > #jail > div{
     background: $lightgreen url('images/jail.svg') right top no-repeat;
     background-size: contain;
     color: transparent;
-}
-
-#jail{
     display: grid;
     grid-template-columns: 1fr 2.8fr;
     grid-template-rows: 2.8fr 1fr;
@@ -1885,6 +1888,15 @@ body[end-turn-available="false"] .end-turn-button{
     padding-top: 60px;
 }
 
+body[get-out-of-jail="true"] .initiate-trade{
+    width: 100%;
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
+    padding-top: 10px;
+}
+
 .end-turn-button{
     width: 100%;
 }
@@ -1899,10 +1911,20 @@ body[get-out-of-jail="false"]{
     }
 }
 
+.roll-doubles-for-jail,
+.get-out-50-button{
+    max-width: 50%;
+    background-size: auto 40px;
+    background-position: center 10px;
+    background-repeat: no-repeat;
+    padding-top: 60px;
+    min-height: 140px;
+    float: left;
+}
+
 body[get-out-of-jail="true"] .current-player-summary{
     .get-out-50-button,
-    .roll-doubles-for-jail,
-    .card-out-of-jail-button{
+    .roll-doubles-for-jail{
         display: initial !important;
     }
 
@@ -1911,13 +1933,46 @@ body[get-out-of-jail="true"] .current-player-summary{
     }
 }
 
-body[card-out-of-jail="false"][get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button,
+//body[card-out-of-jail="false"][get-out-of-jail="true"] .current-player-summary .card-out-of-jail-button,
 body[get-out-of-jail="true"][roll-doubles-for-jail="false"] .roll-doubles-for-jail{
     pointer-events: none;
     display: initial;
     @include disabledButton()
 }
 
+body[card-out-of-jail="false"] .card-out-of-jail-button{
+    display: none;
+}
+
+.get-out-50-button{
+    background-image: url('images/button-icons/get-out-50.svg');
+    //background-position: 10px center;
+    //background-repeat: no-repeat;
+    //background-size: 27px;
+    //padding-left: 50px;
+}
+
+.roll-doubles-for-jail{
+    background-image: url('images/button-icons/doubles.svg');
+    //background-position: 10px center;
+    //background-repeat: no-repeat;
+    //background-size: 27px;
+    //padding-left: 50px;
+}
+
+.card-out-of-jail-button{
+    background-color: $green;
+    background-image: url('images/button-icons/get-out-card.svg');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 27px;
+    padding-left: 50px;
+}
+
+.get-out-50-button,
+.roll-doubles-for-jail{
+    background-color: #c40821;
+}
 
 /* Property overview  --------------------------------------------------------*/
 
