@@ -211,7 +211,8 @@ button {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  transition: 0.3s; }
+  transition: 0.3s;
+  overflow-y: scroll; }
   #about > div {
     padding: 30px;
     max-width: 500px; }
@@ -223,11 +224,15 @@ button {
   right: 10px;
   position: absolute; }
 
-#about:not(.hidden) {
+body[about-panel="true"] #about {
   opacity: 1;
   pointer-events: all; }
 
-#about.hidden {
+body[about-panel="true"] {
+  height: 100vh;
+  overflow: hidden; }
+
+body:not([about-panel="true"]) #about {
   opacity: 0;
   pointer-events: none; }
 

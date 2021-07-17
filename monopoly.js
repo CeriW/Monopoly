@@ -260,7 +260,8 @@ let availableActions = {
     unmortgageProperty: false,
     closePopup: true,
     bankruptcyProceedings: false,
-    testingPanelEnabled: false
+    testingPanelEnabled: false,
+    aboutPanelEnabled: false
 }
 
 let currencySymbol = '₩'
@@ -659,8 +660,10 @@ function addEvents(){
 
                 document.querySelector('#testing-toggle').setAttribute('checked', false)
                 availableActions.testingPanelEnabled = false
+                availableActions.aboutPanelEnabled = false
                 setAvailableActions()
-                document.querySelector('#about').classList.add('hidden')
+                //document.querySelector('#about').classList.add('hidden')
+
 
                 if (document.body.getAttribute('close-popup') === 'true') {
                     closePopup()
@@ -790,6 +793,7 @@ function setAvailableActions(){
     document.body.setAttribute('close-popup', availableActions.closePopup)
     document.body.setAttribute('bankruptcy-proceedings', availableActions.bankruptcyProceedings)
     document.body.setAttribute('testing-panel', availableActions.testingPanelEnabled)
+    document.body.setAttribute('about-panel', availableActions.aboutPanelEnabled)
 }
 
 
@@ -2157,7 +2161,8 @@ function openPopup(message, title){
 }
 
 function aboutToggle(){
-    document.querySelector('#about').classList.toggle('hidden')
+    //document.querySelector('#about').classList.toggle('hidden')
+    availableActions.aboutPanelEnabled = !availableActions.aboutPanelEnabled
 }
 
 
