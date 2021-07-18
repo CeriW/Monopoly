@@ -6,7 +6,8 @@
 .full-portfolio-item,
 #testing-close,
 #bottom-bar form *,
-#music *:not([disabled="true"]) {
+#music *:not([disabled="true"]),
+.player-summary-header .player-token-icon {
   cursor: pointer; }
 
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
@@ -1130,6 +1131,11 @@ button.start-new-game {
 .chance {
   background: #d5e8d4 url("images/chance.svg") center calc(100% - 6px) no-repeat;
   background-size: 50px; }
+
+#go {
+  background: #d5e8d4 url("images/go.svg") center no-repeat;
+  background-size: contain;
+  color: transparent; }
 
 #free-parking {
   background: #d5e8d4 url("images/free-parking.svg") center no-repeat;

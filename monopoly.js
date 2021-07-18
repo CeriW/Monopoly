@@ -520,7 +520,7 @@ function generateBoard(){
         
 
         if (space.group){
-            newSpace.classList.add(space.group)        
+            newSpace.classList.add(space.group)   
         }
 
         if (space.tax){
@@ -555,7 +555,9 @@ function generateBoard(){
             newSpace.innerHTML += '<div class="space-label">' + labelText + '</div>'
         }
 
-
+        /*if (space.type === 'special'){
+            let image = newSpace.appendChild(createElement('img', null, null, 'src', `images/${space.name.toLowerCase()}.svg`)) 
+        }*/
 
 
         // TODO - this generates the house display for spaces it shouldn't and 
