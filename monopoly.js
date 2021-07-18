@@ -197,7 +197,7 @@ let spaces =  [
     {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50},
     {name: 'Community Chest',       type: 'community-chest',    price: null,    group: 'card',         boardArea: 'south'},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50},
-    {name: 'Income tax',            type: 'special',            price: null,    group: 'tax',         boardArea: 'south', label: 'Pay £200', tax:200},
+    {name: 'Income tax',            type: 'special',            price: null,    group: 'tax',          boardArea: 'south', label: 'Pay £200', tax:200},
     {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardArea: 'south', rent:[25,50,100,200]},
     {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
     {name: 'Chance',                type: 'chance',             price: null,    group: 'card',         boardArea: 'south'},
@@ -541,7 +541,7 @@ function generateBoard(){
         }
 
 
-        if(space.type === 'property' || space.type === 'utility'){
+        if(space.type === 'property' || space.type === 'utility' || space.type === 'station'){
             newSpace.innerHTML += '<div class="ownership-tag"><svg enable-background="new 0 0 45.533 44" version="1.1" viewBox="0 0 45.533 44" width="20px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><polygon points="1.5 17.427 1.5 1.5 44.033 1.5 44.033 18.429 23.265 41.748" fill="transparent"/></svg></div>'
         }
 
@@ -564,7 +564,7 @@ function generateBoard(){
 
 
         if (space.price){
-            newSpace.innerHTML += '<div class="property-price">' + currencySymbolSpan + space.price + '</div>'
+            newSpace.innerHTML += '<div class="property-price">' + generateMoneyText(space.price) + '</div>'
             newSpace.setAttribute('price', space.price)
         }
 
@@ -774,7 +774,7 @@ function bodyPadding(){
 
     let newHeight = document.querySelector('#bottom-bar').offsetHeight - document.querySelector('#testing-panel').offsetHeight
 
-    document.body.style.paddingBottom = newHeight + 10 + 'px'
+    document.querySelector('main').style.paddingBottom = newHeight + 10 + 'px'
 }
 
 function resizeBoard(){
@@ -848,7 +848,7 @@ function updatePlayerDetails(){
                 animateUpdate(updateNode, 'good')
             }
 
-            updateNode.innerHTML = currencySymbolSpan + player.money
+            updateNode.innerHTML = generateMoneyText(player.money)
 
 
             
@@ -975,6 +975,12 @@ function animateUpdate(node, type){
         node.classList.remove(type + '-change')
     }, 1000)
 }
+
+
+function generateMoneyText(amount){
+    return `<span>${currencySymbolSpan}<span class="money-text">${amount}</span></span>`
+}
+
 
 // TESTING FUNCTIONS ---------------------------------------------------------//
 // A number of functions intended to help with testing.
@@ -1458,7 +1464,7 @@ function generatePlayerSummary(player){
         playerSummaryHeader.appendChild(createElement('h2', null, player.name))
     
         // Player's money
-        playerSummaryHeader.appendChild(createElement('div', 'player-money', currencySymbolSpan + player.money, 'player', player.id))
+        playerSummaryHeader.appendChild(createElement('div', 'player-money', generateMoneyText(player.money), 'player', player.id))
     
         newSummary.appendChild(playerSummaryHeader)
         
@@ -1501,7 +1507,7 @@ function generatePlayerSummary(player){
     
         
         // Create the "Pay £50 to get out of jail" buttons
-        let newGetOut50Button = createElement('button', 'get-out-50-button', 'Pay ' + currencySymbolSpan + '50 to get out of jail')
+        let newGetOut50Button = createElement('button', 'get-out-50-button', 'Pay ' + generateMoneyText(50) + ' to get out of jail')
         newGetOut50Button.classList.add('player-action-button')
         newGetOut50Button.addEventListener('click', function(){getOutOfJail('pay')})
     
@@ -1918,7 +1924,7 @@ function drawCard(type){
         case '+':
             // A card which gains the player money from the bank
             players[turn - 1].money += chosenCard.value
-            addToFeed(players[turn - 1].name + ' got ' + currencySymbolSpan + chosenCard.value + ' from a ' + getReadableCardName(type) + ' card', 'money-plus')
+            addToFeed(players[turn - 1].name + ' got ' + generateMoneyText(chosenCard.value) + ' from a ' + getReadableCardName(type) + ' card', 'money-plus')
             playSound('kerching')
             break
         case '-':
@@ -1927,7 +1933,7 @@ function drawCard(type){
             transactionDetails = {debtorID: players[turn - 1].id, creditorID: 'bank', amount: chosenCard.value}
             payMoney(transactionDetails)
             //players[turn - 1].money -= chosenCard.value
-            addToFeed(players[turn - 1].name + ' lost ' + currencySymbolSpan + chosenCard.value + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
+            addToFeed(players[turn - 1].name + ' lost ' + generateMoneyText(chosenCard.value) + ' to a ' + getReadableCardName(type) +' card', 'money-minus')
             playSound('fail')
             break
         case 'getout':
@@ -2009,7 +2015,7 @@ function drawCard(type){
             let repairMessage = players[turn - 1].name + ' drew a ' + getReadableCardName(type) + ' card'
 
             if (totalRepairCost > 0){
-                repairMessage += ' and spent ' + currencySymbolSpan + totalRepairCost + ' repairing their properties'
+                repairMessage += ' and spent ' + generateMoneyText(totalRepairCost) + ' repairing their properties'
                 playSound('repairs')
 
             } else{
@@ -2378,7 +2384,7 @@ function moveToken(total){
                         endPosition = endPosition - 40
                         players[turn - 1].money += 200
                         updatePlayerDetails()
-                        addToFeed(players[turn - 1].name + ' has passed Go and collected ' + currencySymbolSpan + '200', 'advance')
+                        addToFeed(players[turn - 1].name + ' has passed Go and collected ' + generateMoneyText(200), 'advance')
                     }
                 }
     
@@ -2414,12 +2420,12 @@ function specialEndPositions(endPosition){
         case 4:
             // Income tax
             payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: spaces[4].tax})
-            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + spaces[4].tax + ' income tax', 'money-minus')
+            addToFeed(players[turn-1].name + ' paid ' + generateMoneyText(spaces[4].tax) + ' income tax', 'money-minus')
             playSound('fail')
             break
         case 38:
             // Super tax
-            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + spaces[38].tax + ' super tax', 'money-minus')
+            addToFeed(players[turn-1].name + ' paid ' + generateMoneyText(spaces[38].tax) + ' super tax', 'money-minus')
             payMoney({debtorID: players[turn - 1].id, creditorID: 'bank', amount: spaces[38].tax})
             playSound('fail')
             break
@@ -2560,7 +2566,7 @@ function getOutOfJail(method){
             //player.money -= 50
             payMoney({debtorID: players[turn - 1].id, creditorID:'bank', amount: 50})
             availableActions.rollDice = true
-            addToFeed(players[turn-1].name + ' paid ' + currencySymbolSpan + '50 to get out of jail', 'money-minus')
+            addToFeed(players[turn-1].name + ' paid ' + generateMoneyText(50) + ' to get out of jail', 'money-minus')
             playSound('coins')
             break
         case 'card':
@@ -2721,7 +2727,7 @@ function generatePropertyDetails(number){
             className = className.replace(/\s/g, '-')
             htmlOutput += '<div class="card-icon card-icon-' + className + '"></div>'
             htmlOutput += '<div class="property-overview-title">' + spaces[number].name + '</div>'
-            htmlOutput += '<div class="price">PRICE: ' + currencySymbolSpan + spaces[number].price + '</div>'
+            htmlOutput += '<div class="price">PRICE: ' + generateMoneyText(spaces[number].price) + '</div>'
 
             spaces[number].rent.forEach(function(content){
                 htmlOutput += '<div style="max-width: 250px; float: none; margin: 0 auto;"><br>' + content + '</div>'
@@ -2735,15 +2741,15 @@ function generatePropertyDetails(number){
 
             htmlOutput += '<div class="card-icon card-icon-station"></div>'
             htmlOutput += '<div class="property-overview-title">' + spaces[number].name + '</div>'
-            htmlOutput += '<div class="price">PRICE: ' + currencySymbolSpan + spaces[number].price + '</div>'
+            htmlOutput += '<div class="price">PRICE: ' + generateMoneyText(spaces[number].price) + '</div>'
             htmlOutput += '<br>'
 
             // Rent table
             htmlOutput += '<table class="property-overview-table">'
-            htmlOutput += '<tr><td>RENT</td><td>' + currencySymbolSpan + spaces[number].rent[0] + '</td></tr>'
+            htmlOutput += '<tr><td>RENT</td><td>' + generateMoneyText(spaces[number].rent[0]) + '</td></tr>'
 
             for (i = 2; i <=4; i++){
-                htmlOutput += '<tr><td>If ' + i + ' stations are owned</td><td>' + currencySymbolSpan + spaces[number].rent[i - 1] + '</td></tr>'
+                htmlOutput += '<tr><td>If ' + i + ' stations are owned</td><td>' + generateMoneyText(spaces[number].rent[i-1]) + '</td></tr>'
             }
 
             htmlOutput += '</table>'
@@ -2764,20 +2770,20 @@ function generateRentTable(number){
 
     // Rent table
     htmlOutput += '<div class="' + spaces[number].group + ' property-overview-color"><span class="title-deed">TITLE DEED</span><br><div class="property-overview-title">' + spaces[number].name + '</div></div>'
-    htmlOutput += '<div class="price">PRICE: ' + currencySymbolSpan + spaces[number].price + '</div>'
+    htmlOutput += '<div class="price">PRICE: ' + generateMoneyText(spaces[number].price) + '</div>'
     htmlOutput += '<table class="rent-table" style="border-bottom: 1px solid #000; padding-bottom: 10px;"><tr>'
-    htmlOutput += '<td style="text-align: left">Rent</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].rent[0] + '</td>'
-    htmlOutput += '<tr><td style="text-align: left">Rent with colour set</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].rent[1] + '</td>'
+    htmlOutput += '<td style="text-align: left">Rent</td><td style="text-align: right">' + generateMoneyText(spaces[number].rent[0]) + '</td>'
+    htmlOutput += '<tr><td style="text-align: left">Rent with colour set</td><td style="text-align: right">' + generateMoneyText(spaces[number].rent[1]) + '</td>'
     for (i = 2; i <=6; i++){
-        htmlOutput += '<tr><td style="text-align: left">Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td style="text-align: right">' + currencySymbolSpan + spaces[number].rent[i] + '</td></tr>'
+        htmlOutput += '<tr><td style="text-align: left">Rent with <span class="property-overview-house-icon">' + (i-1) + '</span></td><td style="text-align: right">' + generateMoneyText(spaces[number].rent[i]) + '</td></tr>'
     }
 
     htmlOutput += '</table>'
 
     // Houses table
     htmlOutput += '<table class="house-price-table">'
-    htmlOutput += '<tr><td style="text-align: left">Houses cost</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
-    htmlOutput += '<tr><td style="text-align: left">Hotels cost</td><td style="text-align: right">' + currencySymbolSpan + spaces[number].houseCost + '</td></tr>'
+    htmlOutput += '<tr><td style="text-align: left">Houses cost</td><td style="text-align: right">' + generateMoneyText(spaces[number].houseCost) + '</td></tr>'
+    htmlOutput += '<tr><td style="text-align: left">Hotels cost</td><td style="text-align: right">' + generateMoneyText(spaces[number].houseCost) + '</td></tr>'
     htmlOutput += '</table>'
 
 
@@ -2868,7 +2874,7 @@ function generateFullPortfolioView(playerID){
             }
         }
 
-        propertyContainer.appendChild(createElement('div', 'portfolio-item-value', 'value: ' + currencySymbolSpan + value))
+        propertyContainer.appendChild(createElement('div', 'portfolio-item-value', 'value: ' + generateMoneyText(value)))
 
         // If this is a station or utility, add these to an array to be looped
         // through and added at the end of the list.
@@ -3025,7 +3031,7 @@ function displayPropertyOptions(number){
             // text even if we determine mortgaging isn't allowed on
             // this property
 
-            let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' + (spaces[number].price / 2) + '</span>', null, null)
+            let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property for ' + generateMoneyText(spaces[number].price / 2), null, null)
             mortgageButton.addEventListener('click', function(){
                 mortgageProperty(spaces[number])
             })
@@ -3033,7 +3039,7 @@ function displayPropertyOptions(number){
 
             // Create the unmortgage button
 
-            let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage property for ' + currencySymbolSpan + '<span style="font-size: 108%">' +  (Math.round((spaces[number].price / 2) * 1.1)) + '</span>', null, null)
+            let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage property for ' + generateMoneyText((Math.round((spaces[number].price / 2) * 1.1))), null, null)
             unmortgageButton.addEventListener('click', function(){
                 unmortgageProperty(spaces[number])
             })
@@ -3130,7 +3136,7 @@ function mortgageProperty(property, bankruptcy){
 
     // Set the property as mortgaged and add this info to the feed.
     gameState[property.position].mortgaged = true
-    addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'mortgage')
+    addToFeed(players[turn - 1].name + ' mortgaged ' + property.name + ' for ' + generateMoneyText(mortgageValue), 'mortgage')
 
     // Give the player the money if we are not dealing with bankruptcy.
     // If we ARE dealing with bankruptcy, that function will deal with handing
@@ -3664,7 +3670,7 @@ function unmortgageProperty(property, player, multiple){
     }
 
     let playerName = player ? player.name : players[turn - 1].name 
-    addToFeed(playerName + ' unmortgaged ' + property.name + ' for ' + currencySymbolSpan + mortgageValue, 'money-minus')
+    addToFeed(playerName + ' unmortgaged ' + property.name + ' for ' + generateMoneyText(mortgageValue), 'money-minus')
     
     //updatePlayerDetails()
 
@@ -3753,12 +3759,12 @@ function buyProperty(number, player, method, price){
             case 'purchase':
                 //player.money -= spaces[number].price
                 //price = spaces[number].price
-                addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'buy-property')
+                addToFeed(player.name + ' bought ' + spaces[number].name + ' for ' + generateMoneyText(property.price), 'buy-property')
                 break
             case 'auction':
                 //player.money -= price
                 //property.price = price
-                addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + currencySymbolSpan + property.price, 'auction')
+                addToFeed(player.name + ' won an auction for ' + spaces[number].name + ' for ' + generateMoneyText(property.price), 'auction')
                 transactionDetails.method = 'auction'
         }
 
@@ -3805,7 +3811,7 @@ function auctionProperty(number, proceedsToAll){
 
     currentBidContainer.appendChild(createElement('h3', 'current-bid-heading', 'Current bid:'))
 
-    let currentBidAmount = createElement('div', 'current-bid-amount', currencySymbolSpan + currentBid)
+    let currentBidAmount = createElement('div', 'current-bid-amount', generateMoneyText(currentBid))
     currentBidContainer.appendChild(currentBidAmount)
 
     auctionBidArea.appendChild(currentBidContainer)
@@ -3831,7 +3837,7 @@ function auctionProperty(number, proceedsToAll){
             playerBidInterface.appendChild(createElement('h3', 'player-heading', players[i].name))
 
             // Generate the player's money
-            playerBidInterface.appendChild(createElement('div', 'player-money', currencySymbolSpan + players[i].money, 'player', players[i].id))
+            playerBidInterface.appendChild(createElement('div', 'player-money', generateMoneyText(players[i].money), 'player', players[i].id))
 
             // Generate the input field for the player's bid.
             let bidInput = createElement('input', 'bid-input', null, 'type', 'number')
@@ -3913,7 +3919,7 @@ function auctionProperty(number, proceedsToAll){
                     // has been made, they have won.
                     declareAuctionWinner()
                 } else{
-                    currentBidAmount.innerHTML = currencySymbolSpan + currentBid
+                    currentBidAmount.innerHTML = generateMoneyText(currentBid)
                 }
 
             }
@@ -4117,8 +4123,8 @@ function landOnProperty(position){
             //currentPlayer.money -= rentAmount
 
             let feedMessage = currentPlayer.money > rentAmount
-                            ? currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner.id - 1].name + ' ' + currencySymbolSpan + rentAmount + ' in rent'
-                            : currentPlayer.name + ' landed on ' + spaces[position].name + ' but does not have ' + currencySymbolSpan + rentAmount + ' to pay rent.'
+                            ? currentPlayer.name + ' landed on ' + spaces[position].name + ' and paid ' + players[owner.id - 1].name + ' ' + generateMoneyText(rentAmount) + ' in rent'
+                            : currentPlayer.name + ' landed on ' + spaces[position].name + ' but does not have ' + generateMoneyText(rentAmount) + ' to pay rent.'
             addToFeed(feedMessage, 'rent')
 
             //updatePlayerDetails()
@@ -4234,7 +4240,7 @@ function initiateTrade(bankruptcy, debtorID){
     playerIdentity.appendChild(createElement('h2', '', initiator.name, '', ''))
 
     // Money
-    playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan +  initiator.money, '', ''))
+    playerIdentity.appendChild(createElement('div', 'money', generateMoneyText(initiator.money), '', ''))
 
     // Portfolio
     currentPlayerSummary.appendChild(createElement('h3', '', 'YOU HAVE:', '', ''))
@@ -4277,7 +4283,7 @@ function initiateTrade(bankruptcy, debtorID){
             let playerIdentity = createElement('div', 'player-identity')
             playerIdentity.appendChild(createElement('div', 'player-token-icon', '', 'token', player.token))
             playerIdentity.appendChild(createElement('h3', '', player.name, '', ''))
-            playerIdentity.appendChild(createElement('div', 'money', currencySymbolSpan + player.money, '', ''))
+            playerIdentity.appendChild(createElement('div', 'money', generateMoneyText(player.money), '', ''))
             playerIdentity.style.backgroundColor = player.colour
             playerIdentity.setAttribute('best-token-colour', lightOrDark(player.colour))
             summary.appendChild(playerIdentity)
@@ -4777,14 +4783,14 @@ function negotiateTrade(e, bankruptcy){
 
         let money = parseInt(tradeProposal[0][42])
         if (money){
-            nameList0.push(currencySymbolSpan + money)
+            nameList0.push(generateMoneyText(money))
             players[turn - 1].money -= money
             players[receiver - 1].money += money
         }
 
         money = parseInt(tradeProposal[1][42])
         if (money){
-            nameList1.push(currencySymbolSpan + money)
+            nameList1.push(generateMoneyText(money))
             players[receiver - 1].money -= money
             players[turn - 1].money += money
         }
@@ -4951,26 +4957,26 @@ function negotiateTrade(e, bankruptcy){
                     entry.appendChild(name)
     
                     let unmortgageCost = Math.floor((property.price / 2) * 1.1)
-                    let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage for ' + currencySymbolSpan +  unmortgageCost, '', '')
+                    let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage for ' + generateMoneyText(unmortgageCost), '', '')
                     
                     unmortgageButton.addEventListener('click', function(){
                         unmortgageProperty(property, players[gameState[property.position].ownerID - 1])
                         unmortgageButton.classList.add('disabled-button')
-                        unmortgageButton.innerHTML = 'Unmortgaged for ' + currencySymbolSpan + unmortgageCost
+                        unmortgageButton.innerHTML = 'Unmortgaged for ' + generateMoneyText(unmortgageCost)
                         entry.removeChild(keepMortgageButton)
                     })
     
                     entry.appendChild(unmortgageButton)
                     
                     let keepMortgageCost = Math.floor((property.price / 2) / 10)
-                    let keepMortgageButton = createElement('button', 'mortgage-button', 'Keep mortgage for ' + currencySymbolSpan + keepMortgageCost)
+                    let keepMortgageButton = createElement('button', 'mortgage-button', 'Keep mortgage for ' + generateMoneyText(keepMortgageCost))
                     keepMortgageButton.addEventListener('click', function(){
-                        keepMortgageButton.innerHTML = 'Mortgage kept for ' + currencySymbolSpan + keepMortgageCost
+                        keepMortgageButton.innerHTML = 'Mortgage kept for ' + generateMoneyText(keepMortgageCost)
                         keepMortgageButton.classList.add('disabled-button')
                         entry.removeChild(unmortgageButton)
                         players[playerID - 1].money -= keepMortgageCost
                         updatePlayerDetails()
-                        addToFeed(players[playerID - 1].name + ' received ' + property.name + ' in a trade. They chose to keep the mortgage on it and have paid the bank ' + currencySymbolSpan + keepMortgageCost, 'money-minus')
+                        addToFeed(players[playerID - 1].name + ' received ' + property.name + ' in a trade. They chose to keep the mortgage on it and have paid the bank ' + generateMoneyText(keepMortgageCost), 'money-minus')
                     })
     
                     entry.appendChild(keepMortgageButton)
@@ -5045,15 +5051,15 @@ function openBankruptcyProceedings(transactionDetails){
 
     let message = ''
     if (creditorID === 'allOtherPlayers'){
-        message += players[debtorID - 1].name + ', you owe ' + currencySymbolSpan + (transactionDetails.amount / (players.length - 1)) + ' each  to ' + creditorName + '. '
+        message += players[debtorID - 1].name + ', you owe ' +generateMoneyText((transactionDetails.amount / (players.length - 1))) + ' each  to ' + creditorName + '. '
     } else{
-        message += players[debtorID - 1].name + ', you owe ' + currencySymbolSpan + amount + ' to ' + creditorName + '. '
+        message += players[debtorID - 1].name + ', you owe ' + generateMoneyText(amount) + ' to ' + creditorName + '. '
     }
 
 
     let bankruptcyDescription = createElement('div', 'bankruptcy-description',
         message
-        + 'However you only have ' + currencySymbolSpan + (players[debtorID - 1].money) + '. <br>'
+        + 'However you only have ' + generateMoneyText(players[debtorID - 1].money) + '. <br>'
 
     )
 
@@ -5075,15 +5081,13 @@ function openBankruptcyProceedings(transactionDetails){
 
     let financialDetails = createElement('div', 'bankruptcy-financial-details')
     financialDetails.innerHTML =
-        'You will need to raise at least <div class="amount-to-raise-display" style="font-size:2em; line-height: 1; color: #DB0926;">' + currencySymbolSpan 
-        + currentDebt
-        + '</div> if you wish to stay in the game.'
+        'You will need to raise at least <div class="amount-to-raise-display" style="font-size:2em; line-height: 1; color: #DB0926;">' + generateMoneyText(currentDebt) + '</div> if you wish to stay in the game.'
 
     bankruptcyMessage.appendChild(financialDetails)
 
 
     let worthDetails = createElement('div', 'bankruptcy-worth-details', '')
-    worthDetails.innerHTML = '<span style="font-size: 1.3em;">Your current worth is <b>' + currencySymbolSpan + (calculatePlayerWorth(debtorID)) + '</b>.</span><br>'
+    worthDetails.innerHTML = '<span style="font-size: 1.3em;">Your current worth is <b>' + generateMoneyText((calculatePlayerWorth(debtorID))) + '</b>.</span><br>'
 
     if (currentDebt > calculatePlayerWorth(debtorID)){
         worthDetails.innerHTML += 'You are unable to raise enough money for this unless another player agrees to trade properties for more than they\'re worth.'
@@ -5141,7 +5145,7 @@ function openBankruptcyProceedings(transactionDetails){
             sellHouseButton.setAttribute('houses', gameState[property.position].houses)
             changeSellHouseButtonText(sellHouseButton)
             toggleHouseBuildButtons(property.group)
-            display.innerHTML = currencySymbolSpan + currentDebt
+            display.innerHTML = generateMoneyText(currentDebt)
             animateUpdate(display, 'good')
 
 
@@ -5174,7 +5178,7 @@ function openBankruptcyProceedings(transactionDetails){
 
         // Mortgage button -----------------------*/
 
-        let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property (' + currencySymbolSpan + property.price/2 + ')')
+        let mortgageButton = createElement('button', 'mortgage-button', 'Mortgage property (' + generateMoneyText(property.price/2) + ')')
 
         // If the property is already mortgaged, disable this button
         if (gameState[property.position].mortgaged){
@@ -5193,7 +5197,7 @@ function openBankruptcyProceedings(transactionDetails){
 
 
             
-            display.innerHTML = currencySymbolSpan + currentDebt
+            display.innerHTML = generateMoneyText(currentDebt)
             animateUpdate(display, 'good')
 
             bankruptcyEscapeCheck()
@@ -5213,6 +5217,8 @@ function openBankruptcyProceedings(transactionDetails){
 
             // Hand over the excess money they raised
             debtor.money -= currentDebt
+
+            console.log(creditorID)
             
             // If the creditor is an object, that means it's another player,
             // who should receive the proceeds.
@@ -5228,8 +5234,7 @@ function openBankruptcyProceedings(transactionDetails){
                 players.forEach(function(player){
                     player.money += shareOfProceeds
                 })
-
-            }
+            } 
 
 
             // Close the bankruptcy window
@@ -5519,7 +5524,7 @@ function updateCurrentDebt(amount){
 
     // Update the display
     let display = document.querySelector('.amount-to-raise-display')
-    display.innerHTML = currencySymbolSpan + currentDebt
+    display.innerHTML = generateMoneyText(currentDebt)
 }
 
 function mortgagesAfterBankruptcyTransfer(transactionDetails, mortgagedProperties, debtorName){
@@ -5537,10 +5542,10 @@ function mortgagesAfterBankruptcyTransfer(transactionDetails, mortgagedPropertie
         let propertyName = createElement('div', 'property-name', property.name)
         row.appendChild(propertyName)
 
-        let keepMortgageButton = createElement('button', 'keep-mortgage-button', 'Keep mortgage (' + currencySymbolSpan + (Math.ceil((property.price/2) * 0.1)) + ')', 'property', property.position)
+        let keepMortgageButton = createElement('button', 'keep-mortgage-button', 'Keep mortgage (' + generateMoneyText((Math.ceil((property.price/2) * 0.1))) + ')', 'property', property.position)
         row.appendChild(keepMortgageButton)
 
-        let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage (' + currencySymbolSpan + (Math.ceil(property.price * 1.05)) + ')', 'property', property.position)
+        let unmortgageButton = createElement('button', 'unmortgage-button', 'Unmortgage (' + generateMoneyText((Math.ceil(property.price * 1.05))) + ')', 'property', property.position)
         row.appendChild(unmortgageButton)
 
         mortgageTable.appendChild(row)

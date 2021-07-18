@@ -81,7 +81,7 @@ main{
 @media(max-width: 1400px){
     main{
         grid-template-columns: 225px 1fr;
-        grid-template-rows: 112px 1fr 275px;
+        grid-template-rows: 112px 1fr auto;
         grid-template-areas:
           "bank centre-panel"
           "feed centre-panel"
@@ -1261,6 +1261,12 @@ $columnsize: 80px;
 
 #board[size="super-mini"] .card .property-initials{
     display: none;
+}
+
+@media (max-width: 450px){
+    .property-initials{
+        display: none;
+    }
 }
 
 #board:not([size="super-mini"]) > div.utility > div,
