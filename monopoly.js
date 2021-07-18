@@ -5051,7 +5051,7 @@ function openBankruptcyProceedings(transactionDetails){
 
     let message = ''
     if (creditorID === 'allOtherPlayers'){
-        message += players[debtorID - 1].name + ', you owe ' +generateMoneyText((transactionDetails.amount / (players.length - 1))) + ' each  to ' + creditorName + '. '
+        message += players[debtorID - 1].name + ', you owe ' + generateMoneyText((transactionDetails.amount / (players.length - 1))) + ' each  to ' + creditorName + '. '
     } else{
         message += players[debtorID - 1].name + ', you owe ' + generateMoneyText(amount) + ' to ' + creditorName + '. '
     }
@@ -5215,10 +5215,9 @@ function openBankruptcyProceedings(transactionDetails){
 
         if (currentDebt <= 0){
 
-            // Hand over the excess money they raised
+            // Hand over the excess money raised
             debtor.money -= currentDebt
 
-            console.log(creditorID)
             
             // If the creditor is an object, that means it's another player,
             // who should receive the proceeds.
@@ -5234,7 +5233,7 @@ function openBankruptcyProceedings(transactionDetails){
                 players.forEach(function(player){
                     player.money += shareOfProceeds
                 })
-            } 
+            }
 
 
             // Close the bankruptcy window
