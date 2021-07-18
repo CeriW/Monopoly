@@ -195,12 +195,12 @@ let chanceCards =
 let spaces =  [
     {name: 'Go',                    type: 'special',            price: null,    group: 'corner',       boardArea: 'south'},
     {name: 'Old Kent Road',         type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[2,4,10,30,90,160,250],         houseCost: 50, hotelCost: 50},
-    {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'south'},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    group: 'card',         boardArea: 'south'},
     {name: 'Whitechapel Road',      type: 'property',           price: 60,      group: 'brown',        boardArea: 'south', rent:[4,8,20,60,180,320,450],        houseCost: 50, hotelCost: 50},
-    {name: 'Income tax',            type: 'special',            price: null,    group: null,           boardArea: 'south', label: 'Pay £200', tax:200},
+    {name: 'Income tax',            type: 'special',            price: null,    group: 'tax',         boardArea: 'south', label: 'Pay £200', tax:200},
     {name: 'Kings Cross Station',   type: 'station',            price: 200,     group: 'train-station',boardArea: 'south', rent:[25,50,100,200]},
     {name: 'The Angel Islington',   type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
-    {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'south'},
+    {name: 'Chance',                type: 'chance',             price: null,    group: 'card',         boardArea: 'south'},
     {name: 'Euston Road',           type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[6,12,30,90,270,400,550],       houseCost: 50, hotelCost: 50},
     {name: 'Pentonville Road',      type: 'property',           price: 100,     group: 'lightblue',    boardArea: 'south', rent:[8,16,40,100,300,450,600],      houseCost: 50, hotelCost: 50},
 
@@ -211,13 +211,13 @@ let spaces =  [
     {name: 'Northumberland Avenue', type: 'property',           price: 150,     group: 'pink',         boardArea: 'west', rent:[12,24,60,180,500,700,900],      houseCost: 100, hotelCost: 100},
     {name: 'Marylebone Station',    type: 'station',            price: 200,     group: 'train-station',boardArea: 'west', rent:[25,50,100,200],                 owner: null},
     {name: 'Bow Street',            type: 'property',           price: 180,     group: 'orange',       boardArea: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100},
-    {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'west'},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    group: 'card',         boardArea: 'west'},
     {name: 'Marlborough Street',    type: 'property',           price: 180,     group: 'orange',       boardArea: 'west', rent:[14,28,70,200,550,750,950],      houseCost: 100, hotelCost: 100},
     {name: 'Vine Street',           type: 'property',           price: 200,     group: 'orange',       boardArea: 'west', rent:[16,32,80,220,600,800,1000],     houseCost: 100, hotelCost: 100},
 
     {name: 'Free Parking',          type: 'special',            price: null,    group: 'corner',       boardArea: 'north'},
     {name: 'Strand',                type: 'property',           price: 220,     group: 'red',          boardArea: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150},
-    {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'north'},
+    {name: 'Chance',                type: 'chance',             price: null,    group: 'card',         boardArea: 'north'},
     {name: 'Fleet Street',          type: 'property',           price: 220,     group: 'red',          boardArea: 'north', rent:[18,36,90,250,700,875,1050],    houseCost: 150, hotelCost: 150},
     {name: 'Trafalgar Square',      type: 'property',           price: 240,     group: 'red',          boardArea: 'north', rent:[20,40,100,300,750,925,1100],   houseCost: 150, hotelCost: 150},
     {name: 'Fenchurch St. Station', type: 'station',            price: 200,     group: 'train-station',boardArea: 'north', rent:[25,50,100,200],                owner: null},
@@ -229,12 +229,12 @@ let spaces =  [
     {name: 'Go To Jail',            type: 'special',            price: null,    group: 'corner',       boardArea: 'east'},
     {name: 'Regent Street',         type: 'property',           price: 300,     group: 'green',        boardArea: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200},
     {name: 'Oxford Street',         type: 'property',           price: 300,     group: 'green',        boardArea: 'east', rent:[26,52,130,390,900,1100,1275],   houseCost: 200, hotelCost: 200},
-    {name: 'Community Chest',       type: 'community-chest',    price: null,    group: null,           boardArea: 'east'},
+    {name: 'Community Chest',       type: 'community-chest',    price: null,    group: 'card',         boardArea: 'east'},
     {name: 'Bond Street',           type: 'property',           price: 320,     group: 'green',        boardArea: 'east', rent:[28,56,150,450,1000,1200,1400],  houseCost: 200, hotelCost: 200},
     {name: 'Liverpool St. Station', type: 'station',            price: 200,     group: 'train-station',boardArea: 'east', rent:[25,50,100,200],                 houseCost: 50, hotelCost: 250},
-    {name: 'Chance',                type: 'chance',             price: null,    group: null,           boardArea: 'east'},
+    {name: 'Chance',                type: 'chance',             price: null,    group: 'card',         boardArea: 'east'},
     {name: 'Park Lane',             type: 'property',           price: 350,     group: 'darkblue',     boardArea: 'east', rent:[35,70,175,500,1100,1300,1500],  houseCost: 200, hotelCost: 200},
-    {name: 'Super Tax',             type: 'special',            price: null,    group: null,           boardArea: 'east', label:'Pay £100', tax:100},
+    {name: 'Super Tax',             type: 'special',            price: null,    group: 'tax',         boardArea: 'east', label:'Pay £100', tax:100},
     {name: 'Mayfair',               type: 'property',           price: 400,     group: 'darkblue',     boardArea: 'east', rent:[50,100,200,600,1400,1700,2000], houseCost: 200, hotelCost: 200},
 ]
 
@@ -414,6 +414,8 @@ function loadSavedGame(){
 
     playMusic()
     playSound('ping')
+
+    resizeBoard()
 }
 
 
@@ -458,8 +460,6 @@ function initialisePage(){
     shuffleArray(chanceCards)
     cardCurrency()
 
-    // Make the board the same height as its width
-    resizeBoard()
 
     // Add all of the required event listeners
     addEvents()
@@ -470,6 +470,10 @@ function initialisePage(){
     // Add some padding to the bottom of the page to account for the fixed
     //bottom bar
     bodyPadding()
+
+    // Make the board the same height as its width
+    resizeBoard()
+
 }
 
 function cardCurrency(){
@@ -517,6 +521,9 @@ function generateBoard(){
 
         newSpace.setAttribute('area', space.boardArea)
 
+        if (space.group !== 'corner'){
+            newSpace.innerHTML += '<div class="property-initials">' + space.initials + '</div>'
+        }
         
 
         if (space.group){
@@ -528,17 +535,31 @@ function generateBoard(){
             newSpace.setAttribute('tax', space.tax)
         }
 
-        if (space.type === "property" || space.type === "station" || space.type === "utility"){
-            newSpace.innerHTML += '<div class="ownership-tag"><svg enable-background="new 0 0 45.533 44" version="1.1" viewBox="0 0 45.533 44" width="20px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><polygon points="1.5 17.427 1.5 1.5 44.033 1.5 44.033 18.429 23.265 41.748" fill="transparent"/></svg></div>'
-        } else if (space.type === 'jail'){
-
-            newSpace.appendChild(createElement('div', 'just-visiting'))
-            newSpace.appendChild(createElement('div', 'in-jail'))
-        }
-        
         if (space.type !== 'special' && space.type !== 'jail'){
             newSpace.innerHTML += '<div class="property-name">' + space.name.toUpperCase() + '</div>'
             newSpace.innerHTML += '<div class="property-nickname">' + space.shortName.toUpperCase() + '</div>'
+        }
+
+
+        if(space.type === 'property' || space.type === 'utility'){
+            newSpace.innerHTML += '<div class="ownership-tag"><svg enable-background="new 0 0 45.533 44" version="1.1" viewBox="0 0 45.533 44" width="20px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><polygon points="1.5 17.427 1.5 1.5 44.033 1.5 44.033 18.429 23.265 41.748" fill="transparent"/></svg></div>'
+        }
+
+        if(space.type === 'chance' || space.type === 'community-chest' || space.type === 'station'){
+            //newSpace.appendChild(createElement('img', null, null, 'src', `images/${space.type.replace(' ', '-')}.svg`))
+            let spaceImage = newSpace.appendChild(createElement('div', 'space-image'))
+            spaceImage.style.background = `url('images/${space.type.replace(' ', '-')}.svg') no-repeat center center / contain`
+        }
+
+        if(space.type === 'utility' || space.tax){
+            let spaceImage = newSpace.appendChild(createElement('div', 'space-image'))
+            spaceImage.style.background = `url('images/${space.name.replace(' ', '-').toLowerCase()}.svg') no-repeat center center / contain`
+            //newSpace.appendChild(createElement('img', null, null, 'src', `images/${space.name.replace(' ', '-')}.svg`))
+        }
+
+        if(space.type === 'jail'){
+            newSpace.appendChild(createElement('div', 'just-visiting'))
+            newSpace.appendChild(createElement('div', 'in-jail'))
         }
 
 
@@ -555,9 +576,6 @@ function generateBoard(){
             newSpace.innerHTML += '<div class="space-label">' + labelText + '</div>'
         }
 
-        /*if (space.type === 'special'){
-            let image = newSpace.appendChild(createElement('img', null, null, 'src', `images/${space.name.toLowerCase()}.svg`)) 
-        }*/
 
 
         // TODO - this generates the house display for spaces it shouldn't and 
@@ -609,7 +627,7 @@ function generateBoard(){
             newName = newName.replace('Avenue',  'Ave.')
             newName = newName.replace('Road',    'Rd.')
             newName = newName.replace('Station', 'Stat.')
-            newName = newName.replace('The', '')
+            newName = newName.replace('The ', '')
             newName = newName.replace('Square', 'Sq.')
             newName = newName.replace('Company', 'Co.')
             newName = newName.replace('Lane', 'Ln.')
@@ -625,16 +643,23 @@ function generateBoard(){
             }
 
             space.shortName = newName
+
+
+            let initials = space.name
+            initials = initials.replace(/^The\s/m, '') // Replace any leading 'The's
+            initials = initials.split(" ").map((n)=>n[0]).join('').toUpperCase()
+            space.initials = initials
+
         })
 
     }
-
 }
 
 
+/*
 function closeWindow(){
     return 'hey'
-}
+}*/
 
 
 function addEvents(){
@@ -758,11 +783,11 @@ function resizeBoard(){
     
     let boardWidth = board.offsetWidth
 
-    //board.style.height = boardWidth + 'px'
+    //board.style.minHeight = (board.offsetWidth - document.querySelector('#bottom-bar').offsetHeight) + 'px'
 
     //feed.parentNode.style.height = (board.offsetWidth - bank.parentNode.offsetHeight - 3) + 'px'
 
-    if (boardWidth < 900 && boardWidth > 800){
+    if (boardWidth < 875 && boardWidth > 800){
         board.setAttribute('size', 'mini')
     } else if (boardWidth <= 800){
         board.setAttribute('size', 'super-mini')

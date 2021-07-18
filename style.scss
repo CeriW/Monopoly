@@ -44,6 +44,7 @@ $border: 3px solid $black;
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
 
+
 body{
     font-family: 'Kabel-Heavy', Poppins, sans-serif;
     font-size: 24px;
@@ -52,6 +53,7 @@ body{
     margin: 0;
     background: $lightgreen;
     overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 main{
@@ -64,6 +66,7 @@ main{
     text-align: center;
     //min-height: 100vh;
     box-sizing: border-box;
+    min-height: calc(100vh - 45px);
 
     display: grid; 
     grid-template-columns: 275px 1fr min-content; 
@@ -876,6 +879,7 @@ $columnsize: 80px;
     border: $border;
     grid-area: centre-panel;
     max-width: 896px;
+    box-sizing: border-box;
 }
 
 #board > div[area][name]:not(.token){
@@ -901,17 +905,17 @@ $columnsize: 80px;
 #board > .station,
 #board > .chance,
 #board > .utility{
-    padding: 5px;
+    //padding: 5px;
     text-align: center;
     font-size: 10px;
     min-height: 50px;
 }
 
-#board div[name="long"] .property-nickname{
+#board div[name="long"] .property-nickname,{
     display: none;
 }
 
-#board div[name="short"] .property-name{
+#board div[name="short"] .property-name,{
     display: none;
 }
 
@@ -922,16 +926,34 @@ $columnsize: 80px;
 }
 
 #board[size="super-mini"]{
+    width: 100%;
+
+    .space{
+        font-size: 12px;
+    }
+    
     .property-price,
-    .property-name{
+    .property-name,
+    .space-label{
         display: none;
     }
 }
 
-#board:not([size="super-mini"]) > .tooltipped .tooltip-window{
-    display: none;
+#board:not([size="super-mini"]){
+    & > .tooltipped .tooltip-window{
+        display: none;
+    }
+
+    .property-initials{
+        display: none;
+    }
 }
 
+#board > div .property-name{
+    max-width: 100%;
+    overflow: hidden;
+    padding: 2px;
+}
 
 @for $i from 0 through 40 {
 
@@ -948,8 +970,8 @@ $columnsize: 80px;
 
 #board {
     display: grid;
-    grid-template-columns: 80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 80px;
-    grid-template-rows: 80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 80px;
+    grid-template-columns: 80px repeat(9, minmax(0, 1fr)) 80px;
+    grid-template-rows: 80px repeat(9, minmax(0, 1fr)) 80px;
     gap: 3px 3px;
     background: #000;
     grid-template-areas:
@@ -979,14 +1001,15 @@ $columnsize: 80px;
 @media (max-width: 925px){
 
     #board{
-        grid-template-columns: 55px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 55px;
-        grid-template-rows: 55px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 55px;
+        grid-template-columns: 55px repeat(9, minmax(0, 1fr)) 55px;
+        //grid-template-rows: 55px repeat(9, minmax(0, 1fr)) 55px;
     }
 
     #board > div[position]{
         min-height: 30px;
     }
 }
+
 
 
 
@@ -1152,7 +1175,7 @@ $columnsize: 80px;
 
 /* Special property ----------------------------------------------------------*/
 
-.community-chest{
+/*.community-chest{
     background: $lightgreen url('images/community-chest.svg') center no-repeat;
     background-position: center bottom;
     background-size: 50px;
@@ -1166,7 +1189,91 @@ $columnsize: 80px;
 .chance{
     background: $lightgreen url('images/chance.svg') center calc(100% - 6px) no-repeat;
     background-size: 50px;
+}*/
+
+/*#board > div img{
+    max-width: 25px;
+    max-height: 100%;
+    margin: 2px 0;
+    //display: none;
 }
+
+#board > div.card img{
+    max-width: 40px;
+} 
+
+#board > div.station img{
+    max-width: 30px;
+}
+
+#board > .space{
+    &.card,
+    &.station,
+    &.utility{
+
+        & > div{
+            padding: 3px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+    }
+}*/
+
+
+#board > .space{
+    &.card,
+    &.station,
+    &.utility,
+    &.tax{
+
+        & > div{
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+    }
+}
+
+.space-image{
+    width: 100%;
+    //height: 20px;
+}
+
+#income-tax .space-image{
+    background-size: 20px !important;
+}
+
+#board > div.card > div,
+#board > div.utility > div,
+#board > div.station > div,
+#board > div.tax > div{
+    display: grid;
+}
+
+#board:not([size="super-mini"]) > div.card > div{
+    grid-template-rows: min-content auto;
+    gap: 3px 0;
+}
+
+#board[size="super-mini"] .card .property-initials{
+    display: none;
+}
+
+#board:not([size="super-mini"]) > div.utility > div,
+#board:not([size="super-mini"]) > div.station > div,
+#board:not([size="super-mini"]) > div.tax > div{
+    grid-template-rows: min-content auto min-content;
+    gap: 3px 0;
+}
+
+#board[size="super-mini"] .space.tax > div{
+    grid-template-rows: min-content auto;
+}
+
 
 #go{
     background: $lightgreen url('images/go.svg') center no-repeat;
@@ -1186,7 +1293,7 @@ $columnsize: 80px;
     color: transparent;
 }
 
-#electric-company{
+/*#electric-company{
     background: $lightgreen url('images/electric-company.svg') center 60% no-repeat;
     background-size: 35%;
     display: flex;
@@ -1216,7 +1323,7 @@ $columnsize: 80px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
+}*/
 
 /* Currency symbol -----------------------------------------------------------*/
 

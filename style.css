@@ -24,13 +24,15 @@ body {
   padding: 0;
   margin: 0;
   background: #d5e8d4;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  box-sizing: border-box; }
 
 main {
   padding: 15px;
   margin: 0;
   text-align: center;
   box-sizing: border-box;
+  min-height: calc(100vh - 45px);
   display: grid;
   grid-template-columns: 275px 1fr min-content;
   grid-template-rows: 160px 1fr;
@@ -781,7 +783,8 @@ button.start-new-game {
 #board {
   border: 3px solid #000;
   grid-area: centre-panel;
-  max-width: 896px; }
+  max-width: 896px;
+  box-sizing: border-box; }
 
 #board > div[area][name]:not(.token) {
   position: relative; }
@@ -800,7 +803,6 @@ button.start-new-game {
 #board > .station,
 #board > .chance,
 #board > .utility {
-  padding: 5px;
   text-align: center;
   font-size: 10px;
   min-height: 50px; }
@@ -814,12 +816,25 @@ button.start-new-game {
 #board[size="mini"] .property-price {
   display: none; }
 
-#board[size="super-mini"] .property-price,
-#board[size="super-mini"] .property-name {
-  display: none; }
+#board[size="super-mini"] {
+  width: 100%; }
+  #board[size="super-mini"] .space {
+    font-size: 12px; }
+  #board[size="super-mini"] .property-price,
+  #board[size="super-mini"] .property-name,
+  #board[size="super-mini"] .space-label {
+    display: none; }
 
 #board:not([size="super-mini"]) > .tooltipped .tooltip-window {
   display: none; }
+
+#board:not([size="super-mini"]) .property-initials {
+  display: none; }
+
+#board > div .property-name {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 2px; }
 
 #board > div[position="0"] {
   grid-area: position-0; }
@@ -950,8 +965,8 @@ button.start-new-game {
 
 #board {
   display: grid;
-  grid-template-columns: 80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 80px;
-  grid-template-rows: 80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 80px;
+  grid-template-columns: 80px repeat(9, minmax(0, 1fr)) 80px;
+  grid-template-rows: 80px repeat(9, minmax(0, 1fr)) 80px;
   gap: 3px 3px;
   background: #000;
   grid-template-areas: "position-20 position-21 position-22 position-23 position-24 position-25 position-26 position-27 position-28 position-29 position-30" "position-19 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-31" "position-18 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-32" "position-17 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-33" "position-16 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-34" "position-15 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-35" "position-14 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-36" "position-13 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-37" "position-12 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-38" "position-11 board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre board-centre position-39" "position-10 position-9 position-8 position-7 position-6 position-5 position-4 position-3 position-2 position-1 position-0"; }
@@ -965,8 +980,7 @@ button.start-new-game {
 
 @media (max-width: 925px) {
   #board {
-    grid-template-columns: 55px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 55px;
-    grid-template-rows: 55px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 55px; }
+    grid-template-columns: 55px repeat(9, minmax(0, 1fr)) 55px; }
   #board > div[position] {
     min-height: 30px; } }
 
@@ -1119,18 +1133,83 @@ button.start-new-game {
   left: 0; }
 
 /* Special property ----------------------------------------------------------*/
-.community-chest {
-  background: #d5e8d4 url("images/community-chest.svg") center no-repeat;
-  background-position: center bottom;
-  background-size: 50px; }
+/*.community-chest{
+    background: $lightgreen url('images/community-chest.svg') center no-repeat;
+    background-position: center bottom;
+    background-size: 50px;
+}
 
-.station {
-  background: #d5e8d4 url("images/station.svg") center calc(100% - 2px) no-repeat;
-  background-size: 40px; }
+.station{
+    background: $lightgreen url('images/station.svg') center calc(100% - 2px) no-repeat;
+    background-size: 40px;
+}
 
-.chance {
-  background: #d5e8d4 url("images/chance.svg") center calc(100% - 6px) no-repeat;
-  background-size: 50px; }
+.chance{
+    background: $lightgreen url('images/chance.svg') center calc(100% - 6px) no-repeat;
+    background-size: 50px;
+}*/
+/*#board > div img{
+    max-width: 25px;
+    max-height: 100%;
+    margin: 2px 0;
+    //display: none;
+}
+
+#board > div.card img{
+    max-width: 40px;
+} 
+
+#board > div.station img{
+    max-width: 30px;
+}
+
+#board > .space{
+    &.card,
+    &.station,
+    &.utility{
+
+        & > div{
+            padding: 3px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+    }
+}*/
+#board > .space.card > div, #board > .space.station > div, #board > .space.utility > div, #board > .space.tax > div {
+  padding: 4px;
+  box-sizing: border-box; }
+
+.space-image {
+  width: 100%; }
+
+#income-tax .space-image {
+  background-size: 20px !important; }
+
+#board > div.card > div,
+#board > div.utility > div,
+#board > div.station > div,
+#board > div.tax > div {
+  display: grid; }
+
+#board:not([size="super-mini"]) > div.card > div {
+  grid-template-rows: min-content auto;
+  gap: 3px 0; }
+
+#board[size="super-mini"] .card .property-initials {
+  display: none; }
+
+#board:not([size="super-mini"]) > div.utility > div,
+#board:not([size="super-mini"]) > div.station > div,
+#board:not([size="super-mini"]) > div.tax > div {
+  grid-template-rows: min-content auto min-content;
+  gap: 3px 0; }
+
+#board[size="super-mini"] .space.tax > div {
+  grid-template-rows: min-content auto; }
 
 #go {
   background: #d5e8d4 url("images/go.svg") center no-repeat;
@@ -1147,34 +1226,37 @@ button.start-new-game {
   background-size: contain;
   color: transparent; }
 
-#electric-company {
-  background: #d5e8d4 url("images/electric-company.svg") center 60% no-repeat;
-  background-size: 35%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; }
+/*#electric-company{
+    background: $lightgreen url('images/electric-company.svg') center 60% no-repeat;
+    background-size: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-#water-works {
-  background: #d5e8d4 url("images/water-works.svg") center 60% no-repeat;
-  background-size: 35%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; }
+#water-works{
+    background: $lightgreen url('images/water-works.svg') center 60% no-repeat;
+    background-size: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-#super-tax {
-  background: #d5e8d4 url("images/super-tax.svg") center no-repeat;
-  background-size: 60%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; }
+#super-tax{
+    background: $lightgreen url('images/super-tax.svg') center no-repeat;
+    background-size: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-#income-tax {
-  background: #d5e8d4 url("images/income-tax.svg") center no-repeat;
-  background-size: 22%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; }
-
+#income-tax{
+    background: $lightgreen url('images/income-tax.svg') center no-repeat;
+    background-size: 22%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}*/
 /* Currency symbol -----------------------------------------------------------*/
 .currencySymbol {
   display: inline-block;
