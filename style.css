@@ -1268,6 +1268,9 @@ button.start-new-game {
   transform: rotate(180deg) translateY(5%);
   margin-top: -10%; }
 
+.money-text {
+  display: inline-block; }
+
 /* Dice ----------------------------------------------------------------------*/
 .dice {
   width: 35px;
@@ -2172,6 +2175,9 @@ body[unmortgage-property="false"] .property-options .unmortgage-button {
   background-repeat: no-repeat;
   background-size: 27px;
   padding-left: 45px; }
+  .mortgage-button .money-text,
+  .unmortgage-button .money-text {
+    font-size: 1.05em; }
 
 .unmortgage-button {
   background-image: url("images/button-icons/unmortgage.svg"); }

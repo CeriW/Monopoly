@@ -167,6 +167,8 @@ button{
     color: #fff;
 }
 
+
+
 /* BOTTOM BAR ----------------------------------------------------------------*/
 
 #bottom-bar{
@@ -1340,6 +1342,10 @@ $columnsize: 80px;
     margin-top: -10%;
 }
 
+.money-text{
+    display: inline-block;
+}
+
 /* Dice ----------------------------------------------------------------------*/
 
 .dice{
@@ -2308,6 +2314,10 @@ body[unmortgage-property="false"] .property-options .unmortgage-button{
     background-repeat: no-repeat;
     background-size: 27px;
     padding-left: 45px;
+
+    .money-text{
+        font-size: 1.05em;
+    }
 }
 
 .unmortgage-button{

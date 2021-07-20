@@ -978,7 +978,7 @@ function animateUpdate(node, type){
 
 
 function generateMoneyText(amount){
-    return `<span>${currencySymbolSpan}<span class="money-text">${amount}</span></span>`
+    return `<span class="money-text">${currencySymbolSpan}<span class="money-text">${amount}</span></span>`
 }
 
 
@@ -2612,6 +2612,7 @@ function getOutOfJail(method){
 
     player.inJail = 0
     setAvailableActions()
+    updatePlayerDetails()
   
   }
 
@@ -4485,7 +4486,7 @@ function negotiateTrade(e, bankruptcy){
     function updateProposal(e){
 
 
-        let item = e.target.parentNode
+        let item = e.target.closest('.full-portfolio-item')
         
 
         // Check whether this is the money being updated
@@ -4516,7 +4517,7 @@ function negotiateTrade(e, bankruptcy){
         } 
         
         // If we're adding/removing a property to the proposal
-        else if (item.classList.contains('full-portfolio-item')){
+        else if (item){
 
             // Check which property we're dealing with
             let property = item.getAttribute('property')
