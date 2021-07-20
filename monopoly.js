@@ -26,6 +26,9 @@ const bankContainer = document.querySelector('#bank')
 const bank = document.querySelector('#bank-content')
 const playerCreator = document.querySelector('#player-creator')
 
+const boardCentre = document.querySelector('#board-centre > div')
+const turnIndicator = document.querySelector('#turn-indicator')
+
 const warningMessage = document.querySelector('#warning-message')
 const warningTitle = document.querySelector('#warning-title')
 
@@ -409,6 +412,8 @@ function loadSavedGame(){
     toggleCurrentPlayerButtons()
 
     fakePlayerMoney()
+
+    updateTurnIndicator()
 
     addToFeed('Saved game loaded', 'save')
 
@@ -2279,17 +2284,17 @@ function rollDice(){
             diceContainer.className = "double0"
             break
         case 1:
-            diceDoubles.innerText = "1st double"
+            diceDoubles.innerText = "First double"
             diceContainer.className ="double1"
             addToFeed(players[turn-1].name + ' rolled doubles', 'doubles')
             break
         case 2:
-            diceDoubles.innerText = "2nd double"
+            diceDoubles.innerText = "Second double"
             diceContainer.className = "double2"
             addToFeed(players[turn-1].name + ' rolled their second double. Careful!', 'doubles-2nd')
             break
         case 3:
-            diceDoubles.innerText = "3rd double! Go to jail."
+            diceDoubles.innerText = "Third double! Go to jail."
             diceContainer.className = "double3"
             
             //goToJail()
@@ -2672,11 +2677,36 @@ function increasePlayerTurn(){
     document.body.setAttribute('turn', 'player' + turn)
 
     toggleCurrentPlayerButtons()
+
+    updateTurnIndicator()
     
     // TODO - check whether this is being run twice?
     checkJail()
 
     saveGame()
+
+
+    
+}
+
+function updateTurnIndicator(){
+
+
+    turnIndicator.innerHTML = ''
+    let currentPlayer = players[turn - 1]
+    console.log(currentPlayer)
+
+    // Token
+    let token = turnIndicator.appendChild(createElement('div', 'player-token-icon', null, 'token', currentPlayer.token))
+    token.setAttribute('best-token-colour', currentPlayer.bestTokenColour)
+
+    // Appropriate token/text colours
+    boardCentre.style.backgroundColor = currentPlayer.colour
+    boardCentre.setAttribute('best-token-colour', currentPlayer.bestTokenColour)
+
+    turnIndicator.appendChild(createElement('div', 'turn-indicator-text', `${currentPlayer.name}'s turn`))
+
+
 }
 
 function toggleCurrentPlayerButtons(){

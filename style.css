@@ -496,6 +496,7 @@ body:not([about-panel="true"]) #about {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
 
+.player-token-icon[token="dog"],
 .saved-game-summary .token[token="dog"],
 .bankruptcy-title .token[token="dog"],
 .options-panel-owner .token[token="dog"],
@@ -509,6 +510,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="dog"][best-token-colour="light"] {
   background-image: url("images/tokens/dog-light.svg"); }
 
+.player-token-icon[token="iron"],
 .saved-game-summary .token[token="iron"],
 .bankruptcy-title .token[token="iron"],
 .options-panel-owner .token[token="iron"],
@@ -522,6 +524,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="iron"][best-token-colour="light"] {
   background-image: url("images/tokens/iron-light.svg"); }
 
+.player-token-icon[token="thimble"],
 .saved-game-summary .token[token="thimble"],
 .bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
@@ -535,6 +538,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="thimble"][best-token-colour="light"] {
   background-image: url("images/tokens/thimble-light.svg"); }
 
+.player-token-icon[token="car"],
 .saved-game-summary .token[token="car"],
 .bankruptcy-title .token[token="car"],
 .options-panel-owner .token[token="car"],
@@ -548,6 +552,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="car"][best-token-colour="light"] {
   background-image: url("images/tokens/car-light.svg"); }
 
+.player-token-icon[token="battleship"],
 .saved-game-summary .token[token="battleship"],
 .bankruptcy-title .token[token="battleship"],
 .options-panel-owner .token[token="battleship"],
@@ -561,6 +566,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="battleship"][best-token-colour="light"] {
   background-image: url("images/tokens/battleship-light.svg"); }
 
+.player-token-icon[token="hat"],
 .saved-game-summary .token[token="hat"],
 .bankruptcy-title .token[token="hat"],
 .options-panel-owner .token[token="hat"],
@@ -574,6 +580,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="hat"][best-token-colour="light"] {
   background-image: url("images/tokens/hat-light.svg"); }
 
+.player-token-icon[token="penguin"],
 .saved-game-summary .token[token="penguin"],
 .bankruptcy-title .token[token="penguin"],
 .options-panel-owner .token[token="penguin"],
@@ -587,6 +594,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="penguin"][best-token-colour="light"] {
   background-image: url("images/tokens/penguin-light.svg"); }
 
+.player-token-icon[token="dinosaur"],
 .saved-game-summary .token[token="dinosaur"],
 .bankruptcy-title .token[token="dinosaur"],
 .options-panel-owner .token[token="dinosaur"],
@@ -600,6 +608,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="dinosaur"][best-token-colour="light"] {
   background-image: url("images/tokens/dinosaur-light.svg"); }
 
+.player-token-icon[token="cat"],
 .saved-game-summary .token[token="cat"],
 .bankruptcy-title .token[token="cat"],
 .options-panel-owner .token[token="cat"],
@@ -613,6 +622,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="cat"][best-token-colour="light"] {
   background-image: url("images/tokens/cat-light.svg"); }
 
+.player-token-icon[token="ducky"],
 .saved-game-summary .token[token="ducky"],
 .bankruptcy-title .token[token="ducky"],
 .options-panel-owner .token[token="ducky"],
@@ -626,6 +636,7 @@ body:not([about-panel="true"]) #about {
 .token-selector-chosen-indicator[chosentoken="ducky"][best-token-colour="light"] {
   background-image: url("images/tokens/ducky-light.svg"); }
 
+.player-token-icon[token="thimble"],
 .saved-game-summary .token[token="thimble"],
 .bankruptcy-title .token[token="thimble"],
 .options-panel-owner .token[token="thimble"],
@@ -1271,7 +1282,29 @@ button.start-new-game {
 .money-text {
   display: inline-block; }
 
-/* Dice ----------------------------------------------------------------------*/
+/* Board centre (turn indicator and dice -------------------------------------*/
+#board-centre {
+  grid-area: board-centre;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; }
+  #board-centre > div {
+    border: 3px solid #000;
+    padding: 10px; }
+
+#turn-indicator {
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  #turn-indicator .player-token-icon {
+    width: 45px;
+    height: 45px;
+    background-size: contain;
+    background-position: center center;
+    margin-right: 5px; }
+
 .dice {
   width: 35px;
   height: 35px;
@@ -1307,16 +1340,20 @@ button.start-new-game {
   background-image: url("images/dice-6.svg"); }
 
 #doubles {
-  font-size: 0.8em; }
+  font-size: 0.85em;
+  grid-area: doubles-indicator;
+  text-transform: uppercase; }
 
 #dice-roll {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  grid-area: board-centre; }
-  #dice-roll span {
-    padding: 10px; }
+  display: grid;
+  grid-template-columns: 35px 1fr 35px 1fr 1fr;
+  grid-template-rows: min-content min-content;
+  gap: 0px 0px;
+  grid-template-areas: "dice-1 plus dice-2 equals result" "doubles-indicator doubles-indicator doubles-indicator doubles-indicator doubles-indicator";
+  padding-top: 20px;
+  gap: 15px 0px; }
+  #dice-roll span:not(#doubles) {
+    margin: 7px; }
   #dice-roll #dice-total {
     font-weight: bold;
     font-size: 1.2em; }
